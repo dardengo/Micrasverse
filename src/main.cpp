@@ -225,7 +225,7 @@ int main() {
 
         // Run simulation
         if (isRunning) {
-            world.runStep(1.0f/120.0f, 8);
+            world.runStep(1.0f/60.0f, 4);
             
             // ** To-do: pass these to a .update() method in the MicrasBody class
             for (auto& sensor : micrasBody.distanceSensors) {
@@ -233,7 +233,7 @@ int main() {
             }
             micrasBody.processInput(deltaTime);
             for (auto& motor : micrasBody.motors) {
-                motor.update();
+                motor.update(deltaTime);
             }
             micrasBody.updateFriction();
         }
@@ -310,37 +310,67 @@ int main() {
             //ImGui::BulletText("This example assumes 60 FPS. Higher FPS requires larger buffer size.");
             static ScrollingBuffer sdata1, sdata2;
             static RollingBuffer   rdata1, rdata2;
+            static RollingBuffer   rdata3, rdata4, rdata5;
             static float t = 0;
             t += ImGui::GetIO().DeltaTime;
             sdata1.AddPoint(t, micrasBody.motors[0].getCurrent());
-            rdata1.AddPoint(t, micrasBody.distanceSensors[2].getReading());
             sdata2.AddPoint(t, micrasBody.motors[1].getCurrent());
-            rdata2.AddPoint(t, micrasBody.distanceSensors[3].getReading());
+
+            rdata1.AddPoint(t, micrasBody.motors[0].getAngularVelocity());
+            rdata2.AddPoint(t, micrasBody.motors[1].getAngularVelocity());
+
+            rdata3.AddPoint(t, micrasBody.motors[0].bodyAngularVelocity);
+            rdata4.AddPoint(t, micrasBody.motors[0].bodyLinearVelocity);
+            rdata5.AddPoint(t, micrasBody.motors[0].t_angle);
+
 
             static float history = 10.0f;
             ImGui::SliderFloat("History",&history,1,30,"%.1f s");
             rdata1.Span = history;
             rdata2.Span = history;
+            rdata3.Span = history;
+            rdata4.Span = history;
+            rdata5.Span = history;
 
             static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
 
             if (ImPlot::BeginPlot("##Scrolling", ImVec2(-1,150))) {
                 ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
                 ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
-                ImPlot::SetupAxisLimits(ImAxis_Y1,-0.2f,+0.2f);
-                ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL,0.5f);
-                ImPlot::PlotShaded("Current motor 0", &sdata1.Data[0].x, &sdata1.Data[0].y, sdata1.Data.size(), -INFINITY, 0, sdata1.Offset, 2 * sizeof(float));
+                ImPlot::SetupAxisLimits(ImAxis_Y1,-0.015f,+0.015f);
+                ImPlot::PlotLine("Current motor 0", &sdata1.Data[0].x, &sdata1.Data[0].y, sdata1.Data.size(), 0, sdata1.Offset, 2*sizeof(float));
                 ImPlot::PlotLine("Current motor 1", &sdata2.Data[0].x, &sdata2.Data[0].y, sdata2.Data.size(), 0, sdata2.Offset, 2*sizeof(float));
                 ImPlot::EndPlot();
             }
             if (ImPlot::BeginPlot("##Rolling", ImVec2(-1,150))) {
                 ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
                 ImPlot::SetupAxisLimits(ImAxis_X1,0,history, ImGuiCond_Always);
-                ImPlot::SetupAxisLimits(ImAxis_Y1,0,1);
-                ImPlot::PlotLine("Distance sensor 2", &rdata1.Data[0].x, &rdata1.Data[0].y, rdata1.Data.size(), 0, 0, 2 * sizeof(float));
-                ImPlot::PlotLine("Distance sensor 3", &rdata2.Data[0].x, &rdata2.Data[0].y, rdata2.Data.size(), 0, 0, 2 * sizeof(float));
+                ImPlot::SetupAxisLimits(ImAxis_Y1,-50,50);
+                ImPlot::PlotLine("Angular velocity motor 0", &rdata1.Data[0].x, &rdata1.Data[0].y, rdata1.Data.size(), 0, 0, 2 * sizeof(float));
+                ImPlot::PlotLine("Angular velocity motor 1", &rdata2.Data[0].x, &rdata2.Data[0].y, rdata2.Data.size(), 0, 0, 2 * sizeof(float));
                 ImPlot::EndPlot();
-            }       
+            }    
+            if (ImPlot::BeginPlot("##Rolling2", ImVec2(-1,150))) {
+                ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+                ImPlot::SetupAxisLimits(ImAxis_X1,0,history, ImGuiCond_Always);
+                ImPlot::SetupAxisLimits(ImAxis_Y1,-30,30);
+                ImPlot::PlotLine("Body angular velocity", &rdata3.Data[0].x, &rdata3.Data[0].y, rdata3.Data.size(), 0, 0, 2 * sizeof(float));
+                ImPlot::EndPlot();
+            }         
+            if (ImPlot::BeginPlot("##Rolling3", ImVec2(-1,150))) {
+                ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+                ImPlot::SetupAxisLimits(ImAxis_X1,0,history, ImGuiCond_Always);
+                ImPlot::SetupAxisLimits(ImAxis_Y1,-5,5);
+                ImPlot::PlotLine("Body linear velocity", &rdata4.Data[0].x, &rdata4.Data[0].y, rdata4.Data.size(), 0, 0, 2 * sizeof(float));
+                ImPlot::EndPlot();
+            }         
+            if (ImPlot::BeginPlot("##Rolling4", ImVec2(-1,150))) {
+                ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+                ImPlot::SetupAxisLimits(ImAxis_X1,0,history, ImGuiCond_Always);
+                ImPlot::SetupAxisLimits(ImAxis_Y1,-6,6);
+                ImPlot::PlotLine("Body angular position", &rdata5.Data[0].x, &rdata5.Data[0].y, rdata5.Data.size(), 0, 0, 2 * sizeof(float));
+                ImPlot::EndPlot();
+            }         
         }
 
         // ** To-do: pass this to a GUI class (probably inside screen class)

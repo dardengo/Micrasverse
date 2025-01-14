@@ -71,22 +71,16 @@ void RectangleBody::processInput(const float deltaTime) {
     b2Vec2 frontNormal = b2Normalize({cos(b2Rot_GetAngle(b2Body_GetRotation(bodyId))+ B2_PI / 2.0f), sin(b2Rot_GetAngle(b2Body_GetRotation(bodyId))+ B2_PI / 2.0f)});
 
     if (render::Keyboard::key(GLFW_KEY_W)) {
-        //b2Vec2 force = 0.2f* deltaTime * frontNormal;   // N
-        //b2Body_ApplyForceToCenter(bodyId, force, true);
         for (auto& motor : motors) {
             motor.setCommand(10.0f);
         }
     }
     if (render::Keyboard::key(GLFW_KEY_S)) {
-        //b2Vec2 force = - 0.2f* deltaTime * frontNormal; // N
-        //b2Body_ApplyForceToCenter(bodyId, force, true);
         for (auto& motor : motors) {
             motor.setCommand(-10.0f);
         }
     }
     if (render::Keyboard::key(GLFW_KEY_A)) {
-        //b2Body_ApplyTorque(bodyId, 0.00006f, true);     // Nm
-
         for (auto& motor : motors) {
             if (motor.leftWheel) {
                 motor.setCommand(-2.5f);
@@ -96,13 +90,33 @@ void RectangleBody::processInput(const float deltaTime) {
         }
     }
     if (render::Keyboard::key(GLFW_KEY_D)) {
-        //b2Body_ApplyTorque(bodyId, -0.00006f, true);    // Nm
         for (auto& motor : motors) {
             if (motor.leftWheel) {
                 motor.setCommand( 2.5f);
             } else {
                 motor.setCommand(-2.5f);
             }
+        }
+    }
+
+    if (render::Keyboard::keyWentUp(GLFW_KEY_W)) {
+        for (auto& motor : motors) {
+            motor.setCommand( 0.0f);
+        }
+    }
+    if (render::Keyboard::keyWentUp(GLFW_KEY_S)) {
+        for (auto& motor : motors) {
+            motor.setCommand( 0.0f);
+        }
+    }
+    if (render::Keyboard::keyWentUp(GLFW_KEY_A)) {
+        for (auto& motor : motors) {
+            motor.setCommand( 0.0f);
+        }
+    }
+    if (render::Keyboard::keyWentUp(GLFW_KEY_D)) {
+        for (auto& motor : motors) {
+            motor.setCommand( 0.0f);
         }
     }
 }

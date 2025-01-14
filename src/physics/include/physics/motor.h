@@ -27,13 +27,16 @@ private:
 
 
 public:
-    bool leftWheel;         // Is this the left wheel?
+    float bodyLinearVelocity;   // Linear velocity of the body
+    float t_angle;              // Angle of the motor on the body
+    float bodyAngularVelocity;  // Angular velocity of the body
+    bool leftWheel;             // Is this a left wheel?
     Motor(b2BodyId bodyId, b2Vec2 localPosition, bool leftWheel, const float angle = B2_PI / 2.0f, float R = MOTOR_RESISTANCE, float ke = MOTOR_KE, float kt = MOTOR_KT, float maxVoltage = MOTOR_MAX_VOLTAGE);
 
     // Set the motor command (0-100)
     void setCommand(float command);
 
-    void update();
+    void update(float deltaTime);
 
     float getCurrent();
 
