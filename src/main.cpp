@@ -10,10 +10,10 @@
 #include "models/micrasmodel.h"
 
 #include "box2d/box2d.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/implot.h"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include "implot.h"
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -39,7 +39,7 @@ int main() {
 
     // Load maze design from file
     // ** To-do: make possible to load different mazes from file (and through GUI) during the simulation
-    maze.loadFromFile("../assets/mazes/classic/br2024-robochallenge-day3.txt");
+    maze.loadFromFile("../external/mazefiles/classic/br2024-robochallenge-day3.txt");
     
     // Create Box2d objects for walls and lattice points
     maze.createBox2dObjects();
@@ -127,7 +127,6 @@ int main() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImPlot::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(screen.getWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 330");
