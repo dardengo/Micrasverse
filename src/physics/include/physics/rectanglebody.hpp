@@ -21,7 +21,7 @@ public:
     RectangleBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const b2MassData mass, const float restitution, const float friction);
 
     // Destructor
-    ~RectangleBody();
+    virtual ~RectangleBody();
 
     // Accessor for the Box2D body
     b2BodyId getBodyId() const;

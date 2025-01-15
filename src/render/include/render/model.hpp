@@ -22,9 +22,9 @@ public:
 
     Model(const glm::vec3 position = glm::vec3(0.0f), const glm::vec3 size = glm::vec3(1.0f), const glm::vec3 color = glm::vec3(1.0f));
 
-    void init();
+    virtual void init();
 
-    void render(Shader shader, const bool setModel = true);
+    virtual void render(Shader shader, const bool setModel = true);
 
     void cleanUp();
 
