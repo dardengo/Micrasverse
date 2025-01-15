@@ -1,0 +1,9 @@
+# Ignore all text files
+*.txt
+
+# Ignore all files in the build/ directory
+external/box2d/build-dir/
+external/box2d/build/
+
+# Ignore executable files
+*.exe
