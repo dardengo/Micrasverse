@@ -4,6 +4,7 @@
 #include "physics/rectanglebody.hpp"
 #include "physics/distancesensor.hpp"
 #include "physics/motor.hpp"
+#include "physics/dipswitch.hpp"
 #include "core/constants.hpp"
 #include "models/rectangle.hpp"
 #include "render/shader.hpp"
@@ -18,9 +19,18 @@ private:
     render::Rectangle micrasRender;
     render::Shader shader;
 
+
 public:
+    DipSwitch dipSwitch;
     std::vector<DistanceSensor> distanceSensors;
     std::vector<Motor> motors;
+
+    enum Switch : uint8_t {
+        DIAGONAL = 0,  // Whether the robot will be able to move in diagonal paths.
+        FAN = 1,       // Turn the fan on.
+        STOP = 2,      // Whether the robot will stop at each intersection when solving the maze.
+        TURBO = 3,     // Increase the robot speed.
+    };
 
     // Constructor
     MicrasBody(const b2WorldId worldId,
@@ -41,6 +51,8 @@ public:
     void attachDistanceSensor(b2Vec2 localPosition, float angle);
 
     void attachMotor(b2Vec2 localPosition, bool leftWheel);
+
+    void attachDipSwitch(size_t numSwitches);
     
     void update(const float deltaTime);
 

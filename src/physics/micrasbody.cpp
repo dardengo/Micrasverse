@@ -16,6 +16,8 @@ MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2V
     this->attachMotor({micrasverse::MICRAS_HALFWIDTH, 0.0f}, false);
     this->attachMotor({-micrasverse::MICRAS_HALFWIDTH,  0.0f}, true);
 
+    this->attachDipSwitch(4);
+
     micrasverse::render::Shader flatColorShader("./render/assets/vertex-core.glsl", "./render/assets/fragment-core.glsl");
 
     this->shader = flatColorShader;
@@ -69,6 +71,11 @@ void MicrasBody::attachMotor(b2Vec2 localPosition, bool leftWheel){
     motors.push_back(motor);
 }
 
+void MicrasBody::attachDipSwitch(size_t numSwitches){
+    DipSwitch dipSwitch = DipSwitch(numSwitches);
+    this->dipSwitch = dipSwitch;
+}
+
 void MicrasBody::update(const float deltaTime) {
     this->processInput(deltaTime);
     this->updateFriction();
@@ -84,6 +91,10 @@ void MicrasBody::update(const float deltaTime) {
 }
 
 void MicrasBody::processInput(const float deltaTime) {
+
+    if (render::Keyboard::keyWentDown(GLFW_KEY_SPACE)) {
+        this->dipSwitch.toggleSwitch(Switch::FAN);
+    }
 
     if (render::Keyboard::key(GLFW_KEY_W)) {
         for (auto& motor : motors) {
