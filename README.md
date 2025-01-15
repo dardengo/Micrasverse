@@ -3,7 +3,7 @@
 
 ![micras_simulation_blue](https://github.com/Team-Micras/micras_simulation/assets/62271285/655d90d7-ae21-47df-b6ab-64d46ef4a559)
 
-A micromouse simulator built for Micras, the micromouse!
+A micromouse simulator built for [Micras](https://github.com/Team-Micras/), the micromouse!
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-c-plus-plus.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/built-with-grammas-recipe.svg)](https://forthebadge.com)
