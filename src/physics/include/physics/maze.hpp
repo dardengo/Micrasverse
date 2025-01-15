@@ -1,3 +1,6 @@
+#ifndef MAZE_HPP
+#define MAZE_HPP
+
 
 #include "box2d/box2d.h"
 
@@ -22,7 +25,6 @@ public:
     std::vector<b2BodyId> mazeBodies;  // List of maze bodies
     
     // Constructor
-    Maze(const b2WorldId worldId);
 
     // Parse maze from file
     void loadFromFile(const std::string& filename);
@@ -37,3 +39,5 @@ public:
 };
 
 } // namespace micrasverse::physics
+
+#endif // MAZE_HPP

@@ -1,4 +1,4 @@
-#include "render/mouse.h"
+#include "render/mouse.hpp"
 
 namespace micrasverse::render {
 

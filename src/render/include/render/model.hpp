@@ -1,7 +1,7 @@
-#ifndef MODEL_H
-#define MODEL_H
+#ifndef MODEL_HPP
+#define MODEL_HPP
 
-#include "render/mesh.h"
+#include "render/mesh.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -34,4 +34,4 @@ protected:
 
 } // micrasverse::render
 
-#endif // MODEL_H
+#endif // MODEL_HPP

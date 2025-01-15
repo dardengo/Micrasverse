@@ -1,6 +1,6 @@
-#include "physics/maze.h"
-#include "core/constants.h"
-#include "physics/rectanglebody.h"
+#include "physics/maze.hpp"
+#include "core/constants.hpp"
+#include "physics/rectanglebody.hpp"
 
 #include "box2d/box2d.h"
 

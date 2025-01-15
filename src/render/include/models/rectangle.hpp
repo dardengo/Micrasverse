@@ -1,7 +1,7 @@
-#ifndef RECTANGLE_H
-#define RECTANGLE_H
+#ifndef RECTANGLE_HPP
+#define RECTANGLE_HPP
 
-#include "render/model.h"
+#include "render/model.hpp"
 #include "box2d/box2d.h"
 
 namespace micrasverse::render {
@@ -71,4 +71,4 @@ public:
 
 } // micrasverse::render
 
-#endif // RECTANGLE_H
+#endif // RECTANGLE_HPP

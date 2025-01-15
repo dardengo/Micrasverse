@@ -1,4 +1,4 @@
-#include "physics/world.h"
+#include "physics/world.hpp"
 
 namespace micrasverse::physics {
 

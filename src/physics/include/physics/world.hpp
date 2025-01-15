@@ -1,8 +1,9 @@
-#ifndef WORLD_H
-#define WORLD_H
+#ifndef WORLD_HPP
+#define WORLD_HPP
+
+#include "core/constants.hpp"
 
 #include "box2d/box2d.h"
-#include "core/constants.h"
 
 namespace micrasverse::physics {
 
@@ -23,4 +24,4 @@ public:
 
 } // namespace micrasverse::physics
 
-#endif // WORLD_H
+#endif // WORLD_HPP

@@ -1,5 +1,5 @@
-#ifndef KEYBOARD_H
-#define KEYBOARD_H
+#ifndef KEYBOARD_HPP
+#define KEYBOARD_HPP
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -23,4 +23,4 @@ private:
 
 }// micrasverse::renderer
 
-#endif // KEYBOARD_H
+#endif // KEYBOARD_HPP

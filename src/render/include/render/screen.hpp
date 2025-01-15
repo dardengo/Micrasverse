@@ -1,5 +1,6 @@
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef SCREEN_HPP
+#define SCREEN_HPP
+
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -20,7 +21,6 @@ public:
 
     void setParameters();
 
-    void update();
 
     void newFrame();
 
@@ -30,12 +30,10 @@ public:
 
     GLFWwindow* getWindow();
 
-private:
-    GLFWwindow* window;
 
 };
 
 
 } // namespace micrasverse::render
 
-#endif // SCREEN_H
+#endif // SCREEN_HPP

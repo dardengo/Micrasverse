@@ -1,5 +1,5 @@
-#ifndef SHADER_H
-#define SHADER_H
+#ifndef SHADER_HPP
+#define SHADER_HPP
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -37,4 +37,4 @@ public:
 
 } // micrasverse::renderer
 
-#endif // SHADER_H
+#endif // SHADER_HPP

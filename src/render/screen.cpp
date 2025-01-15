@@ -1,6 +1,6 @@
-#include "render/screen.h"
-#include "render/mouse.h"
-#include "render/keyboard.h"
+#include "render/screen.hpp"
+#include "render/mouse.hpp"
+#include "render/keyboard.hpp"
 
 #include <iostream>
 

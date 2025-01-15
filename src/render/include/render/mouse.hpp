@@ -1,5 +1,5 @@
-#ifndef MOUSE_H
-#define MOUSE_H
+#ifndef MOUSE_HPP
+#define MOUSE_HPP
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -50,4 +50,4 @@ private:
 
 } // micrasverse::renderer
 
-#endif // MOUSE_H
+#endif // MOUSE_HPP

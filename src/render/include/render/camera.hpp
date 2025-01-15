@@ -1,7 +1,7 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef CAMERA_HPP
+#define CAMERA_HPP
 
-#include "core/constants.h"
+#include "core/constants.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -71,7 +71,6 @@ public:
     // Get zoom value for camera
     float getZoom();
 
-    void processInput(const double dt);
 
 private:
     // Private modifier
@@ -82,4 +81,4 @@ private:
 
 } // namespace micrasverse::render
 
-#endif // CAMERA_H
+#endif // CAMERA_HPP

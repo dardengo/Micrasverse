@@ -1,8 +1,9 @@
-#ifndef MOTOR_H
-#define MOTOR_H
+#ifndef MOTOR_HPP
+#define MOTOR_HPP
+
+#include "core/constants.hpp"
 
 #include "box2d/box2d.h"
-#include "core/constants.h"
 #include <algorithm>
 
 namespace micrasverse::physics {
@@ -34,16 +35,13 @@ public:
     Motor(b2BodyId bodyId, b2Vec2 localPosition, bool leftWheel, const float angle = B2_PI / 2.0f, float R = MOTOR_RESISTANCE, float ke = MOTOR_KE, float kt = MOTOR_KT, float maxVoltage = MOTOR_MAX_VOLTAGE);
 
     // Set the motor command (0-100)
-    void setCommand(float command);
 
     void update(float deltaTime);
 
-    float getCurrent();
 
-    float getAngularVelocity();
 };
 
 } // namespace micrasverse::physics
 
 
-#endif // MOTOR_H
+#endif // MOTOR_HPP

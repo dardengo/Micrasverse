@@ -1,4 +1,4 @@
-#include "physics/motor.h"
+#include "physics/motor.hpp"
 
 namespace micrasverse::physics {
 

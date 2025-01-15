@@ -1,6 +1,6 @@
-#include "render/camera.h"
-#include "render/keyboard.h"
-#include "render/mouse.h"
+#include "render/camera.hpp"
+#include "render/keyboard.hpp"
+#include "render/mouse.hpp"
 
 namespace micrasverse::render {
 

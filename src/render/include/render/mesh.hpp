@@ -1,7 +1,7 @@
-#ifndef MESH_H
-#define MESH_H
+#ifndef MESH_HPP
+#define MESH_HPP
 
-#include "render/shader.h"
+#include "render/shader.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -42,4 +42,4 @@ private:
 };
 
 } // micrasverse::render
-#endif // MESH_H
+#endif // MESH_HPP

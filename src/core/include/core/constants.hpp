@@ -1,5 +1,5 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef CONSTANTS_HPP
+#define CONSTANTS_HPP
 
 #include "box2d/box2d.h"
 
@@ -42,4 +42,4 @@ namespace micrasverse {
 
 }
 
-#endif // CONSTANTS_H
+#endif // CONSTANTS_HPP

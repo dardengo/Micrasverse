@@ -1,7 +1,7 @@
-#ifndef DISTANCE_SENSOR_H
-#define DISTANCE_SENSOR_H
+#ifndef DISTANCE_SENSOR_HPP
+#define DISTANCE_SENSOR_HPP
 
-#include "models/rectangle.h"
+#include "models/rectangle.hpp"
 
 #include "box2d/box2d.h"
 
@@ -39,4 +39,4 @@ private:
     
 }
 
-#endif // DISTANCE_SENSOR_H
+#endif // DISTANCE_SENSOR_HPP

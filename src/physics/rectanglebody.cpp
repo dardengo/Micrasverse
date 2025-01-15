@@ -1,9 +1,6 @@
-#include "physics/rectanglebody.h"
-#include "render/keyboard.h"
-#include "core/constants.h"
-
-#include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
+#include "physics/rectanglebody.hpp"
+#include "render/keyboard.hpp"
+#include "core/constants.hpp"
 
 #include <iostream>
 

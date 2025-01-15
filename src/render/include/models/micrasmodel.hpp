@@ -1,8 +1,8 @@
-#ifndef MICRASMODEL_H
-#define MICRASMODEL_H
+#ifndef MICRASMODEL_HPP
+#define MICRASMODEL_HPP
 
-#include "render/model.h"
-#include "core/constants.h"
+#include "render/model.hpp"
+#include "core/constants.hpp"
 
 namespace micrasverse::render {
 
@@ -1114,4 +1114,4 @@ public:
 
 } // micrasverse::render
 
-#endif // RECTANGLE_H
+#endif // RECTANGLE_HPP
