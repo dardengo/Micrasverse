@@ -50,10 +50,10 @@ void Motor::update(float deltaTime) {
     this->current = (inputVoltage - std::copysign(backEMF, angularVelocity)) / this->resistance;
 
     // Compute torque
-    float torque = this->kt * this->current;
+    this->torque = this->kt * this->current;
 
     // Compute force applied at each wheel (divided by 2 because there are two wheels)
-    float force = (torque * MICRAS_GEAR_RATIO) / (MICRAS_WHEEL_RADIUS * 2.0f);
+    float force = (this->torque * MICRAS_GEAR_RATIO) / (MICRAS_WHEEL_RADIUS * 2.0f);
 
     // Compute maximum frictional force (divided by 4 because there are 4 wheels, and multiplied by 9.81 to convert to N)
     constexpr float maxFrictionForce = MICRAS_FRICTION * MICRAS_MASS * 9.81f / 4.0f;
@@ -70,11 +70,11 @@ void Motor::update(float deltaTime) {
     b2Body_ApplyForce(this->bodyId, forceVector, b2Body_GetWorldPoint(this->bodyId, this->localPosition + (b2Vec2){0.0f, -MICRAS_WHEEL_RADIUS}), true);
 }
 
-float Motor::getCurrent() {
+float Motor::getCurrent() const {
     return this->current;
 }
 
-float Motor::getAngularVelocity() {
+float Motor::getAngularVelocity() const {
     return this->angularVelocity;
 }
 

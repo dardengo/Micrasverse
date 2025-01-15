@@ -12,6 +12,7 @@
 namespace micrasverse::physics {
 
 class RectangleBody {
+protected:
     b2BodyId bodyId;
     b2ShapeId shapeId;  // Rectangle shape
 
@@ -23,12 +24,18 @@ public:
     ~RectangleBody();
 
     // Accessor for the Box2D body
+    b2BodyId getBodyId() const;
 
     b2ShapeId getShapeId();
 
     // Optional: Add methods to modify the body
     void setPose(const b2Vec2& position, const b2Rot& rotation);
 
+    b2Vec2 getPosition() const;
+
+    b2Rot getRotation() const;
+
+    b2Vec2 getSize() const;
 
 };
 

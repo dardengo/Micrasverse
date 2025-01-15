@@ -92,28 +92,10 @@ void Camera::updateCameraVectors() {
     cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
 }
 
-void Camera::processInput(const double dt) {
-
-// Directions reverse so it moves the maze not the camera
-    if (Keyboard::key(GLFW_KEY_UP)) {
-        updateCameraPos(CameraDirection::UP, dt);
-    }
-
-    if (micrasverse::render::Keyboard::key(GLFW_KEY_DOWN)) {
-        updateCameraPos(CameraDirection::DOWN, dt);
-    }
-
-    if (micrasverse::render::Keyboard::key(GLFW_KEY_LEFT)) {
-        updateCameraPos(CameraDirection::LEFT, dt);
-    }
-
-    if (micrasverse::render::Keyboard::key(GLFW_KEY_RIGHT)) {
-        updateCameraPos(CameraDirection::RIGHT, dt);
-    }
-
-    double scrollDy = micrasverse::render::Mouse::getScrollDy();
-    if (scrollDy != 0.0) {
-        updateCameraZoom(scrollDy);
+void Camera::update(const micrasverse::physics::MicrasBody& micrasBody) {
+    // Update camera position to follow Micras
+    if (this->followMicras) {
+        this->position = {micrasBody.getPosition().x, micrasBody.getPosition().y, this->position.z};
     }
 }
 

@@ -1,12 +1,10 @@
 
 Physics:
-- Model a DC motor
-- Transfer movement constraints to a Wheel class
 - Model LEDs
 - Model Dip Switch
+- Transfer movement constraints to a Wheel class → still thinking about this
 
 Graphics:
-- Move GUI to a class of itself
 - Include lighting effects to represent LEDs
 - Be able to render text inside the maze (mostly numbers for the cost of each cell)
 

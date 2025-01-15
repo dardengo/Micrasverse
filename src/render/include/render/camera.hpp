@@ -2,6 +2,7 @@
 #define CAMERA_HPP
 
 #include "core/constants.hpp"
+#include "physics/micrasbody.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -46,6 +47,10 @@ public:
     float sensitivity;
     float zoom;
 
+    // Camera behavior
+    bool followMicras {false};
+    bool centerMaze {true};
+
     // Default and initialize with position
     Camera(const glm::vec3 position = glm::vec3(MAZE_FLOOR_HALFWIDTH, MAZE_FLOOR_HALFHEIGHT, 3.75f));
 
@@ -71,6 +76,7 @@ public:
     // Get zoom value for camera
     float getZoom();
 
+    void update(const micrasverse::physics::MicrasBody& micrasBody);
 
 private:
     // Private modifier
