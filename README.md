@@ -14,6 +14,13 @@ A micromouse simulator built for [Micras](https://github.com/Team-Micras/), the 
 ![Animated example of simulation with Micras going forward, then back, and then turning around its center. The GIF shows charts plotting motors' electrical current, motor's angular velocity, Micras' angular velocity, Micras' linear velocity, Micras' angular position, and distance sensors' readings](./docs/assets/Micrasverse%202025-01-14%2023-17-55.gif)
 
 
+## ✨ Features
+- Maze generated through easy-to-modify .txt files.
+- Attachable sensors and actuators.
+- Simple DC motor model with adjustable parameters.
+- Renderable distance sensors.
+- DIP switch.
+- Real-time interactive charts.
 
 
 ## 📁 Folder structure
@@ -34,7 +41,7 @@ Micrasverse depends on the following libraries:
 | [ImGui](https://github.com/ocornut/imgui) | Used for GUI overlay         | MIT         |
 | [ImPlot](https://github.com/epezent/implot) | Used for generating graphs         | MIT         |
 | [GLM](https://github.com/g-truc/glm)   | Used for vector math | MIT         |
-| [Mazefiles](https://github.com/micromouseonline/mazefiles)   | Used for creating the maze |          |
+| [Mazefiles](https://github.com/micromouseonline/mazefiles)   | Used for generating the maze |          |
 
 
 
