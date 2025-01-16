@@ -64,7 +64,7 @@ void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
 
     rdata3.addPoint(t, micrasBody.motors[0].bodyAngularVelocity);
     rdata4.addPoint(t, micrasBody.motors[0].bodyLinearVelocity);
-    rdata5.addPoint(t, b2Length(micrasBody.acceleration));
+    rdata5.addPoint(t, micrasBody.linearAcceleration);
 
     rdata7.addPoint(t, micrasBody.distanceSensors[0].getReading());
     rdata8.addPoint(t, micrasBody.distanceSensors[1].getReading());
@@ -111,7 +111,7 @@ void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
     if (ImPlot::BeginPlot("##Micras' linear acceleration (m/s²)", ImVec2(-1,100))) {
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1,0,300);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,-20,20);
         ImPlot::PlotLine("Micras' linear acceleration (m/s²)", &rdata5.data[0].x, &rdata5.data[0].y, rdata5.data.size(), 0, rdata5.offset, 2 * sizeof(float));
         ImPlot::EndPlot();
     }

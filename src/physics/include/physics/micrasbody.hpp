@@ -26,6 +26,7 @@ public:
     std::vector<Motor> motors;
     b2Vec2 linearVelocity;
     b2Vec2 acceleration;
+    float linearAcceleration;
 
     enum Switch : uint8_t {
         DIAGONAL = 0,  // Whether the robot will be able to move in diagonal paths.

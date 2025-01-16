@@ -82,6 +82,8 @@ void MicrasBody::attachDipSwitch(size_t numSwitches){
 void MicrasBody::update(const float deltaTime) {
     // Compute acceleration
     this->acceleration = (b2Body_GetLinearVelocity(this->bodyId) - this->linearVelocity) * (1/deltaTime);
+    float linearAccelerationDirection = b2Dot(this->acceleration, b2Body_GetWorldVector(this->bodyId, {0,1}));
+    this-> linearAcceleration = std::copysignf(b2Length(this->acceleration), linearAccelerationDirection);
 
     this->linearVelocity = b2Body_GetLinearVelocity(this->bodyId);
 
@@ -110,12 +112,12 @@ void MicrasBody::processInput(const float deltaTime) {
 
     if (render::Keyboard::key(GLFW_KEY_W)) {
         for (auto& motor : motors) {
-            motor.setCommand(20.0f);
+            motor.setCommand(100.0f);
         }
     }
     if (render::Keyboard::key(GLFW_KEY_S)) {
         for (auto& motor : motors) {
-            motor.setCommand(-20.0f);
+            motor.setCommand(-100.0f);
         }
     }
     if (render::Keyboard::key(GLFW_KEY_A)) {
