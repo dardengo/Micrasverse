@@ -4,7 +4,7 @@
 namespace micrasverse::physics {
 
 // Constructor
-MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const b2MassData mass, const float restitution, const float friction) : RectangleBody(worldId, position, size, type, mass, restitution, friction)
+MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction) : RectangleBody(worldId, position, size, type, mass, restitution, friction)
 {
     this->distanceSensors.reserve(4);
     this->attachDistanceSensor({ 0.028f, 0.045f},  B2_PI / 2.0f);

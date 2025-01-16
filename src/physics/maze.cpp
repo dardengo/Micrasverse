@@ -127,7 +127,7 @@ std::vector<Maze::Element> Maze::getElements() {
 void Maze::createBox2dObjects() {
 
     for (const auto& element : this->elements){
-        RectangleBody elementBody(worldId, (b2Vec2){element.position.x, element.position.y}, element.size, b2_staticBody, (b2MassData){0.0f, (b2Vec2){element.size.x / 2.0f, element.size.y / 2.0f}, 0.0f}, 0.0f, 1.0f);
+        RectangleBody elementBody(worldId, (b2Vec2){element.position.x, element.position.y}, element.size, b2_staticBody, 0.0f, 0.0f, 1.0f);
         mazeBodies.push_back(elementBody.getBodyId());
     }
     

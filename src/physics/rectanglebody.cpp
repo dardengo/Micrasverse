@@ -7,7 +7,7 @@
 namespace micrasverse::physics {
 
 // Constructor
-RectangleBody::RectangleBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const b2MassData mass, const float restitution, const float friction) {
+RectangleBody::RectangleBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction) {
 
     //Create a the body definition 
     b2BodyDef bodyDef = b2DefaultBodyDef();
@@ -24,11 +24,6 @@ RectangleBody::RectangleBody(const b2WorldId worldId, const b2Vec2 position, con
     //Set the body id
     this->bodyId = bodyId;
 
-    if (bodyDef.type != b2_staticBody) {
-        //Set the body mass
-        b2Body_SetMassData(bodyId, mass);
-    }
-    
     //Create the body polygon shape    
     b2Polygon shapeBox = b2MakeBox(size.x / 2.0f, size.y / 2.0f);
 
@@ -37,6 +32,7 @@ RectangleBody::RectangleBody(const b2WorldId worldId, const b2Vec2 position, con
 
     shapeDef.friction = friction;
     shapeDef.restitution = restitution;
+    shapeDef.density = mass / (size.x * size.y);
 
     //Create the body shape
     this->shapeId = b2CreatePolygonShape(bodyId, &shapeDef, &shapeBox);
