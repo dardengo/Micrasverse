@@ -33,6 +33,7 @@ void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
     ImGui::Text("Micras position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
     ImGui::Text("Micras linear velocity: (%.2f, %.2f)", b2Body_GetLinearVelocity(micrasBody.getBodyId()).x, b2Body_GetLinearVelocity(micrasBody.getBodyId()).y);
     ImGui::Text("Micras angular velocity: %.2f", b2Body_GetAngularVelocity(micrasBody.getBodyId()));
+    ImGui::Text("FAN is: %.2f", micrasBody.dipSwitch.readSwitch(micrasverse::physics::MicrasBody::Switch::FAN) ? 1.0f : 0.0f);
 
     this->plot.draw(micrasBody);
     

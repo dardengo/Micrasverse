@@ -71,7 +71,7 @@ int main() {
         // Run simulation
         if (isRunning) {
             world.runStep(1.0f/60.0f, 4);
-            micrasBody.update(deltaTime);
+            micrasBody.update(1.0f/60.0f);
         }
 
         // Clear the screen color buffer

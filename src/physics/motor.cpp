@@ -10,13 +10,14 @@ Motor::Motor(b2BodyId bodyId, b2Vec2 localPosition, bool leftWheel, const float 
     this->bodyMass = MICRAS_MASS;
     this->frictionCoefficient = MICRAS_FRICTION;
     this->t_angle = 0.0f;
+    this->isFanOn = false;
 }
 
 void Motor::setCommand(float command) {
     this->inputCommand = std::clamp(command, -100.0f, 100.0f);
 }
 
-void Motor::update(float deltaTime) {
+void Motor::update(float deltaTime, bool isFanOn) {
     // Calculate input voltage based on the command
     float inputVoltage = this->maxVoltage * (this->inputCommand / 100.0f);
 
@@ -26,15 +27,7 @@ void Motor::update(float deltaTime) {
 
     this->bodyLinearVelocity = std::copysignf(b2Length(b2Body_GetLinearVelocity(this->bodyId)), linearVelocityDirection);
 
-    float deltaTheta = b2Rot_GetAngle(b2Body_GetRotation(this->bodyId)) - this->t_angle;
-
-    if (deltaTheta > B2_PI) {
-        deltaTheta -= 2.0f * B2_PI;
-    } else if (deltaTheta < -B2_PI) {
-        deltaTheta += 2.0f * B2_PI;
-    }
-
-    this->bodyAngularVelocity = deltaTheta / deltaTime;
+    this->bodyAngularVelocity = b2Body_GetAngularVelocity(this->bodyId);
 
     t_angle = b2Rot_GetAngle(b2Body_GetRotation(this->bodyId));
 
@@ -55,11 +48,19 @@ void Motor::update(float deltaTime) {
     // Compute force applied at each wheel (divided by 2 because there are two wheels)
     float force = (this->torque * MICRAS_GEAR_RATIO) / (MICRAS_WHEEL_RADIUS * 2.0f);
 
+    float fanEffect = 1.0f;
+
+    if (isFanOn) {
+        fanEffect = 4.0f;
+    }
+
     // Compute maximum frictional force (divided by 4 because there are 4 wheels, and multiplied by 9.81 to convert to N)
-    constexpr float maxFrictionForce = MICRAS_FRICTION * MICRAS_MASS * 9.81f / 4.0f;
+    float maxFrictionForce = fanEffect * MICRAS_FRICTION * MICRAS_MASS * 9.81f / 4.0f;
 
     // Apply the smaller of motor force and friction force
     float appliedForce = ((std::abs(force) < maxFrictionForce) ? force : std::copysign(maxFrictionForce, force));
+
+    this->appliedForce = appliedForce;
 
     // Apply force at the position of the motor in the direction of angle
     const b2Vec2 worldDirection = b2Body_GetWorldVector(this->bodyId, this->localDirection);

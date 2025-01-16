@@ -51,14 +51,17 @@ void MicrasBody::updateFriction(){
     b2Vec2 impulse = b2Body_GetMass(this->bodyId) * -getLateralVelocity();
     b2Body_ApplyLinearImpulse(this->bodyId, impulse, b2Body_GetWorldCenterOfMass(this->bodyId), true);
 
+    /*
     // Apply angular damping
     b2Body_ApplyAngularImpulse(this->bodyId, MICRAS_MASS * b2Body_GetRotationalInertia(this->bodyId) * -b2Body_GetAngularVelocity(this->bodyId), true);
 
     // Apply drag
     b2Vec2 currentVelocity = b2Body_GetLinearVelocity(this->bodyId);
+    b2Vec2 currentDirection = b2Normalize(currentVelocity);
     float currentSpeed = b2Length(currentVelocity);
     float dragForceMagnitude = 0.5f * 1.225f * 0.47f * currentSpeed * currentSpeed; // 0.5 * air density * drag coefficient * speed^2
-    b2Body_ApplyForceToCenter(this->bodyId, -dragForceMagnitude * currentVelocity, true);
+
+    b2Body_ApplyForceToCenter(this->bodyId, -dragForceMagnitude * currentDirection, true);*/
 }
 
 void MicrasBody::attachDistanceSensor(b2Vec2 localPosition, float angle){
@@ -77,14 +80,23 @@ void MicrasBody::attachDipSwitch(size_t numSwitches){
 }
 
 void MicrasBody::update(const float deltaTime) {
+    // Compute acceleration
+    this->acceleration = (b2Body_GetLinearVelocity(this->bodyId) - this->linearVelocity) * (1/deltaTime);
+
+    this->linearVelocity = b2Body_GetLinearVelocity(this->bodyId);
+
     this->processInput(deltaTime);
+
     this->updateFriction();
+    
     for (auto& motor : this->motors) {
-        motor.update(deltaTime);
+        motor.update(deltaTime, this->dipSwitch.readSwitch(Switch::FAN));
     }
+    
     for (auto& sensor : this->distanceSensors) {
         sensor.getReading();
     }
+
 
     // Update position of micrasRender to match micrasBody
     this->micrasRender.setPose(glm::vec3(this->getPosition().x, this->getPosition().y, micrasRender.position.z), this->getRotation());
@@ -98,12 +110,12 @@ void MicrasBody::processInput(const float deltaTime) {
 
     if (render::Keyboard::key(GLFW_KEY_W)) {
         for (auto& motor : motors) {
-            motor.setCommand(100.0f);
+            motor.setCommand(20.0f);
         }
     }
     if (render::Keyboard::key(GLFW_KEY_S)) {
         for (auto& motor : motors) {
-            motor.setCommand(-100.0f);
+            motor.setCommand(-20.0f);
         }
     }
     if (render::Keyboard::key(GLFW_KEY_A)) {

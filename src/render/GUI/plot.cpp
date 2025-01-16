@@ -51,7 +51,7 @@ void Plot::init() {
 
 void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
     static ScrollingBuffer sdata1, sdata2;
-    static ScrollingBuffer rdata1, rdata2, rdata3, rdata4, rdata5, rdata6, rdata7, rdata8, rdata9, rdata10;
+    static ScrollingBuffer rdata1, rdata2, rdata3, rdata4, rdata5, rdata6, rdata7, rdata8, rdata9, rdata10, rdata11, rdata12;
 
     static float t = 0;
     t += ImGui::GetIO().DeltaTime;
@@ -64,12 +64,14 @@ void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
 
     rdata3.addPoint(t, micrasBody.motors[0].bodyAngularVelocity);
     rdata4.addPoint(t, micrasBody.motors[0].bodyLinearVelocity);
-    rdata5.addPoint(t, micrasBody.motors[0].t_angle);
+    rdata5.addPoint(t, b2Length(micrasBody.acceleration));
 
     rdata7.addPoint(t, micrasBody.distanceSensors[0].getReading());
     rdata8.addPoint(t, micrasBody.distanceSensors[1].getReading());
     rdata9.addPoint(t, micrasBody.distanceSensors[2].getReading());
     rdata10.addPoint(t, micrasBody.distanceSensors[3].getReading());
+    rdata11.addPoint(t, micrasBody.motors[0].appliedForce);
+    rdata12.addPoint(t, micrasBody.motors[1].appliedForce);
 
     static float history = 5.0f;
     ImGui::SliderFloat("History",&history,1,30,"%.1f s");
@@ -106,13 +108,22 @@ void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
         ImPlot::PlotLine("Micras' linear velocity (m/s)", &rdata4.data[0].x, &rdata4.data[0].y, rdata4.data.size(), 0, rdata4.offset, 2 * sizeof(float));
         ImPlot::EndPlot();
     }         
-    if (ImPlot::BeginPlot("##Micras' angular position (rad)", ImVec2(-1,100))) {
+    if (ImPlot::BeginPlot("##Micras' linear acceleration (m/s²)", ImVec2(-1,100))) {
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1,-4,4);
-        ImPlot::PlotLine("Micras' angular position (rad)", &rdata5.data[0].x, &rdata5.data[0].y, rdata5.data.size(), 0, rdata5.offset, 2 * sizeof(float));
+        ImPlot::SetupAxisLimits(ImAxis_Y1,0,300);
+        ImPlot::PlotLine("Micras' linear acceleration (m/s²)", &rdata5.data[0].x, &rdata5.data[0].y, rdata5.data.size(), 0, rdata5.offset, 2 * sizeof(float));
         ImPlot::EndPlot();
     }
+    if (ImPlot::BeginPlot("##Micras' applied force (N)", ImVec2(-1,100))) {
+        ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
+        ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,-0.2,0.2);
+        ImPlot::PlotLine("Micras' applied force motor 0 (N)", &rdata11.data[0].x, &rdata11.data[0].y, rdata11.data.size(), 0, rdata11.offset, 2 * sizeof(float));
+        ImPlot::PlotLine("Micras' applied force motor 1 (N)", &rdata12.data[0].x, &rdata12.data[0].y, rdata12.data.size(), 0, rdata12.offset, 2 * sizeof(float));
+        ImPlot::EndPlot();
+    }
+    /*
     if (ImPlot::BeginPlot("##Micras' front distance sensors reading", ImVec2(-1,100))) {
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
@@ -128,7 +139,7 @@ void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
         ImPlot::PlotLine("Side distance sensor 1", &rdata9.data[0].x, &rdata9.data[0].y, rdata9.data.size(), 0, rdata9.offset, 2 * sizeof(float));
         ImPlot::PlotLine("Side distance sensor 2", &rdata10.data[0].x, &rdata10.data[0].y, rdata10.data.size(), 0, rdata10.offset, 2 * sizeof(float));
         ImPlot::EndPlot();
-    }
+    }*/
 
 
 }

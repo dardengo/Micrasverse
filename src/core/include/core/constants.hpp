@@ -24,15 +24,15 @@ namespace micrasverse {
     constexpr float MICRAS_HALFWIDTH = MICRAS_WIDTH / 2.0f;                                 // m
     constexpr float MICRAS_HEIGHT = 0.10f;                                                  // m
     constexpr float MICRAS_HALFHEIGHT = MICRAS_HEIGHT / 2.0f;                               // m
-    constexpr float MICRAS_MASS = 0.0825016710008052f;                                      // kg
+    constexpr float MICRAS_MASS = 0.110f;                                                   // kg
     constexpr float MICRAS_RESTITUTION = 0.3f;                                              // bounciness
-    constexpr float MICRAS_FRICTION = 0.15f;                                                // friction coefficient
-    constexpr float MICRAS_WHEEL_RADIUS = 0.0112F;                                          // m
+    constexpr float MICRAS_FRICTION = 0.95f;                                                // friction coefficient
+    constexpr float MICRAS_WHEEL_RADIUS = 0.0112f;                                          // m
     constexpr float MICRAS_GEAR_RATIO = 2.5f;                                               // reduction ratio
     constexpr float MICRAS_TRACK_WIDTH = 0.067f;                                            // m
 
     constexpr float MOTOR_MAX_VOLTAGE = 12.0f;                                              // V
-    constexpr float MOTOR_STALL_TORQUE = 0.004f;                                            // Nm
+    constexpr float MOTOR_STALL_TORQUE = 0.0008f * 9.81f;                                   // Nm
     constexpr float MOTOR_STALL_CURRENT = 2.0f;                                             // A
     constexpr float MOTOR_MAX_RPM = 17000.0f;                                               // rpm
     constexpr float MOTOR_MAX_ANGULAR_VELOCITY = MOTOR_MAX_RPM * 2.0f * B2_PI / 60.0f;      // rad/s
