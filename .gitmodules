@@ -13,3 +13,6 @@
 [submodule "external/mazefiles"]
 	path = external/mazefiles
 	url = https://github.com/micromouseonline/mazefiles.git
+[submodule "external/MicrasFirmware"]
+	path = external/MicrasFirmware
+	url = https://github.com/Team-Micras/MicrasFirmware.git
