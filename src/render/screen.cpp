@@ -148,7 +148,11 @@ void Screen::update(const micrasverse::physics::MicrasBody& micrasBody) {
     this->view = this->camera.getViewMatrix();
     
     // Update projection matrix
-    this->projection = glm::perspective(glm::radians(this->camera.getZoom()), (float)micrasverse::render::Screen::SCR_WIDTH / (float)micrasverse::render::Screen::SCR_HEIGHT, 0.1f, 100.0f);
+    this->projection = glm::perspective(glm::radians(this->camera.getZoom()),
+                                        (glfwGetWindowAttrib(window, GLFW_ICONIFIED) ? 16.0f / 9.0f : (float)micrasverse::render::Screen::SCR_WIDTH / (float)micrasverse::render::Screen::SCR_HEIGHT),
+                                        0.1f,
+                                        100.0f
+    );
 
 }
 

@@ -14,9 +14,7 @@ DistanceSensor::DistanceSensor(const b2BodyId bodyId, const b2Vec2 localPosition
     this->localDirection = {cos(angle), sin(angle)};
 
     // Create renderable object
-    render::Rectangle ray(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(237.0f, 47.0f, 50.0f) / 255.0f);
-    this->rayRender = ray;
-
+    this->rayRender = render::Rectangle(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(237.0f, 47.0f, 50.0f) / 255.0f);
     this->rayRender.init();
 }
 
