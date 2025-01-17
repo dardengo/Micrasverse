@@ -5,6 +5,7 @@
 #include "physics/distancesensor.hpp"
 #include "physics/motor.hpp"
 #include "physics/dipswitch.hpp"
+#include "micras/proxy/argb.hpp"
 #include "core/constants.hpp"
 #include "models/rectangle.hpp"
 #include "render/shader.hpp"
@@ -24,6 +25,7 @@ public:
     DipSwitch dipSwitch;
     std::vector<DistanceSensor> distanceSensors;
     std::vector<Motor> motors;
+    std::vector<proxy::Argb> argbs;
     b2Vec2 linearVelocity;
     b2Vec2 acceleration;
     float linearAcceleration;
@@ -56,6 +58,8 @@ public:
     void attachMotor(b2Vec2 localPosition, bool leftWheel);
 
     void attachDipSwitch(size_t numSwitches);
+
+    void attachArgb(b2Vec2 localPosition, b2Vec2 size, glm::vec3 color);
     
     void update(const float deltaTime);
 

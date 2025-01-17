@@ -18,6 +18,9 @@ MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2V
 
     this->attachDipSwitch(4);
 
+    this->argbs.reserve(1);
+    this->attachArgb({0.0f, 0.0f}, {0.02f, 0.02f}, {231.0f, 112.0f, 35.0f});
+
     micrasverse::render::Shader flatColorShader("./render/assets/vertex-core.glsl", "./render/assets/fragment-core.glsl");
 
     this->shader = flatColorShader;
@@ -79,6 +82,11 @@ void MicrasBody::attachDipSwitch(size_t numSwitches){
     this->dipSwitch = dipSwitch;
 }
 
+void MicrasBody::attachArgb(b2Vec2 localPosition, b2Vec2 size, glm::vec3 color){
+    proxy::Argb argb = proxy::Argb(this->bodyId, localPosition, size, color);
+    argbs.push_back(argb);
+}
+
 void MicrasBody::update(const float deltaTime) {
     // Compute acceleration
     this->acceleration = (b2Body_GetLinearVelocity(this->bodyId) - this->linearVelocity) * (1/deltaTime);
@@ -97,6 +105,15 @@ void MicrasBody::update(const float deltaTime) {
     
     for (auto& sensor : this->distanceSensors) {
         sensor.getReading();
+    }
+
+    for (auto& argb : this->argbs) {
+        if (this->dipSwitch.readSwitch(Switch::FAN)) {
+            argb.turnOn();
+        } else {
+            argb.turnOff();
+        }        
+        argb.update(this->getPosition(), this->getRotation());
     }
 
 
@@ -170,12 +187,19 @@ void MicrasBody::render(const glm::mat4 view, const glm::mat4 projection) {
     for (auto& sensor : this->distanceSensors) {
         sensor.rayRender.render(this->shader, false);
     }
+
+    for (auto& argb : this->argbs) {
+        argb.argbRenderable.render(this->shader, false);
+    }
 }
 
 void MicrasBody::cleanUp() {
     this->micrasRender.cleanUp();
     for (auto& sensor : this->distanceSensors) {
         sensor.rayRender.cleanUp();
+    }
+    for (auto& argb : this->argbs) {
+        argb.argbRenderable.cleanUp();
     }
 }
 
