@@ -27,7 +27,6 @@ const proxy::WallSensors::Config wall_sensors_config = {
         },
 };
 
-
 } // namespace micras
 
 #endif // MICRAS_TARGET_HPP

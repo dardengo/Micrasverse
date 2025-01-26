@@ -56,22 +56,22 @@ void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
     static float t = 0;
     t += ImGui::GetIO().DeltaTime;
     
-    sdata1.addPoint(t, micrasBody.motors[0].getCurrent());
-    sdata2.addPoint(t, micrasBody.motors[1].getCurrent());
+    sdata1.addPoint(t, micrasBody.locomotion.right_motor.getCurrent());
+    sdata2.addPoint(t, micrasBody.locomotion.left_motor.getCurrent());
 
-    rdata1.addPoint(t, micrasBody.motors[0].getAngularVelocity());
-    rdata2.addPoint(t, micrasBody.motors[1].getAngularVelocity());
+    rdata1.addPoint(t, micrasBody.locomotion.right_motor.getAngularVelocity());
+    rdata2.addPoint(t, micrasBody.locomotion.left_motor.getAngularVelocity());
 
-    rdata3.addPoint(t, micrasBody.motors[0].bodyAngularVelocity);
-    rdata4.addPoint(t, micrasBody.motors[0].bodyLinearVelocity);
+    rdata3.addPoint(t, micrasBody.locomotion.right_motor.bodyAngularVelocity);
+    rdata4.addPoint(t, micrasBody.locomotion.left_motor.bodyLinearVelocity);
     rdata5.addPoint(t, micrasBody.linearAcceleration);
 
     rdata7.addPoint(t, micrasBody.wallSensors.get_sensors()[0].getReading());
     rdata8.addPoint(t, micrasBody.wallSensors.get_sensors()[1].getReading());
     rdata9.addPoint(t, micrasBody.wallSensors.get_sensors()[2].getReading());
     rdata10.addPoint(t, micrasBody.wallSensors.get_sensors()[3].getReading());
-    rdata11.addPoint(t, micrasBody.motors[0].appliedForce);
-    rdata12.addPoint(t, micrasBody.motors[1].appliedForce);
+    rdata11.addPoint(t, micrasBody.locomotion.right_motor.appliedForce);
+    rdata12.addPoint(t, micrasBody.locomotion.left_motor.appliedForce);
 
     static float history = 5.0f;
     ImGui::SliderFloat("History",&history,1,30,"%.1f s");

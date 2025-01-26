@@ -5,11 +5,11 @@
 namespace micrasverse::physics {
 
 // Constructor
-MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction) : RectangleBody(worldId, position, size, type, mass, restitution, friction), wallSensors(micrasverse::wall_sensors_config, this->bodyId)
+MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction)
+    : RectangleBody(worldId, position, size, type, mass, restitution, friction),
+    wallSensors(micrasverse::wall_sensors_config, this->bodyId),
+    locomotion(this->bodyId)
 {
-    this->motors.reserve(2);
-    this->attachMotor({micrasverse::MICRAS_HALFWIDTH, 0.0f}, false);
-    this->attachMotor({-micrasverse::MICRAS_HALFWIDTH,  0.0f}, true);
 
     this->attachDipSwitch(4);
 
@@ -62,15 +62,6 @@ void MicrasBody::updateFriction(){
     b2Body_ApplyForceToCenter(this->bodyId, -dragForceMagnitude * currentDirection, true);*/
 }
 
-void MicrasBody::attachDistanceSensor(b2Vec2 localPosition, float angle){
-    
-}
-
-void MicrasBody::attachMotor(b2Vec2 localPosition, bool leftWheel){
-    Motor motor = Motor(this->bodyId, localPosition, leftWheel);
-    motors.push_back(motor);
-}
-
 void MicrasBody::attachDipSwitch(size_t numSwitches){
     DipSwitch dipSwitch = DipSwitch(numSwitches);
     this->dipSwitch = dipSwitch;
@@ -93,10 +84,8 @@ void MicrasBody::update(const float deltaTime) {
 
     this->updateFriction();
     
-    for (auto& motor : this->motors) {
-        motor.update(deltaTime, this->dipSwitch.readSwitch(Switch::FAN));
-    }
-    
+    this->locomotion.update(deltaTime, this->dipSwitch.readSwitch(Switch::FAN));
+
     for (auto& sensor : this->wallSensors.get_sensors()) {
         sensor.getReading();
     }
@@ -122,53 +111,29 @@ void MicrasBody::processInput(const float deltaTime) {
     }
 
     if (render::Keyboard::key(GLFW_KEY_W)) {
-        for (auto& motor : motors) {
-            motor.setCommand(100.0f);
-        }
+        this->locomotion.setCommand(100.0f, 0.0f);
     }
     if (render::Keyboard::key(GLFW_KEY_S)) {
-        for (auto& motor : motors) {
-            motor.setCommand(-100.0f);
-        }
+        this->locomotion.setCommand(-100.0f, 0.0f);
     }
     if (render::Keyboard::key(GLFW_KEY_A)) {
-        for (auto& motor : motors) {
-            if (motor.leftWheel) {
-                motor.setCommand(-2.5f);
-            } else {
-                motor.setCommand( 2.5f);
-            }
-        }
+        this->locomotion.setCommand(0.0f, 2.5f);
     }
     if (render::Keyboard::key(GLFW_KEY_D)) {
-        for (auto& motor : motors) {
-            if (motor.leftWheel) {
-                motor.setCommand( 2.5f);
-            } else {
-                motor.setCommand(-2.5f);
-            }
-        }
+        this->locomotion.setCommand(0.0f, -2.5f);
     }
 
     if (render::Keyboard::keyWentUp(GLFW_KEY_W)) {
-        for (auto& motor : motors) {
-            motor.setCommand( 0.0f);
-        }
+        this->locomotion.stop();
     }
     if (render::Keyboard::keyWentUp(GLFW_KEY_S)) {
-        for (auto& motor : motors) {
-            motor.setCommand( 0.0f);
-        }
+        this->locomotion.stop();
     }
     if (render::Keyboard::keyWentUp(GLFW_KEY_A)) {
-        for (auto& motor : motors) {
-            motor.setCommand( 0.0f);
-        }
+        this->locomotion.stop();
     }
     if (render::Keyboard::keyWentUp(GLFW_KEY_D)) {
-        for (auto& motor : motors) {
-            motor.setCommand( 0.0f);
-        }
+        this->locomotion.stop();
     }
 }
 

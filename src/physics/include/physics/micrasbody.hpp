@@ -10,6 +10,7 @@
 #include "models/rectangle.hpp"
 #include "render/shader.hpp"
 #include "proxy/wall_sensors.hpp"
+#include "proxy/locomotion.hpp"
 
 #include "box2d/box2d.h"
 #include "glm/glm.hpp"
@@ -28,7 +29,7 @@ private:
 public:
     DipSwitch dipSwitch;
     proxy::TWallSensors<4> wallSensors;
-    std::vector<Motor> motors;
+    proxy::Locomotion locomotion;
     std::vector<Argb> argbs;
     b2Vec2 linearVelocity;
     b2Vec2 acceleration;
@@ -56,10 +57,6 @@ public:
     b2Vec2 getLateralVelocity() const;
 
     void updateFriction();
-
-    void attachDistanceSensor(b2Vec2 localPosition, float angle);
-
-    void attachMotor(b2Vec2 localPosition, bool leftWheel);
 
     void attachDipSwitch(size_t numSwitches);
 
