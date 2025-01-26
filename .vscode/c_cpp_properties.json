@@ -3,7 +3,20 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/external/box2d/include",
+                "${workspaceFolder}/external/glm",
+                "${workspaceFolder}/external/imgui",
+                "${workspaceFolder}/external/imgui/backends",
+                "${workspaceFolder}/external/implot",
+                "${workspaceFolder}/external/box2d/build/_deps/glfw-src/deps",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/src/render/include",
+                "${workspaceFolder}/src/physics/include",
+                "${workspaceFolder}/src/core/include",
+                "${workspaceFolder}/src/config/include",
+                "${workspaceFolder}/src/proxy/include",
+                "${workspaceFolder}/src/render/GUI/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -13,8 +26,7 @@
             "compilerPath": "C:/msys64/ucrt64/bin/g++.exe",
             "cStandard": "c23",
             "cppStandard": "c++23",
-            "intelliSenseMode": "${default}",
-            "configurationProvider": "ms-vscode.cpptools"
+            "intelliSenseMode": "${default}"
         }
     ],
     "version": 4
