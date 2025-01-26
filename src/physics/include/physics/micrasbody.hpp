@@ -5,8 +5,8 @@
 #include "physics/distancesensor.hpp"
 #include "physics/motor.hpp"
 #include "physics/dipswitch.hpp"
-#include "micras/proxy/argb.hpp"
-#include "core/constants.hpp"
+#include "physics/argb.hpp"
+#include "config/constants.hpp"
 #include "models/rectangle.hpp"
 #include "render/shader.hpp"
 #include "proxy/wall_sensors.hpp"
@@ -29,7 +29,7 @@ public:
     DipSwitch dipSwitch;
     proxy::TWallSensors<4> wallSensors;
     std::vector<Motor> motors;
-    std::vector<proxy::Argb> argbs;
+    std::vector<Argb> argbs;
     b2Vec2 linearVelocity;
     b2Vec2 acceleration;
     float linearAcceleration;

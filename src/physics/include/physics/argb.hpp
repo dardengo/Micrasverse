@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace micrasverse::proxy {
+namespace micrasverse::physics {
 
 class Argb {
 public:

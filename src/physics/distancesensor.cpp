@@ -1,5 +1,5 @@
 #include "physics/distancesensor.hpp"
-#include "core/constants.hpp"
+#include "config/constants.hpp"
 
 #include "glm/glm.hpp"
 

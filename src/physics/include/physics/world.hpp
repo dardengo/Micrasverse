@@ -1,7 +1,7 @@
 #ifndef WORLD_HPP
 #define WORLD_HPP
 
-#include "core/constants.hpp"
+#include "config/constants.hpp"
 
 #include "box2d/box2d.h"
 

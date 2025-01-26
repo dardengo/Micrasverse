@@ -1,5 +1,5 @@
 #include "physics/maze.hpp"
-#include "core/constants.hpp"
+#include "config/constants.hpp"
 #include "physics/rectanglebody.hpp"
 #include "models/rectangle.hpp"
 

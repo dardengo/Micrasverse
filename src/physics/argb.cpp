@@ -1,6 +1,6 @@
-#include "micras/proxy/argb.hpp"
+#include "physics/argb.hpp"
 
-namespace micrasverse::proxy {
+namespace micrasverse::physics {
 
 Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, glm::vec3 lightColor)
     : bodyId(bodyId), localPosition(localPosition), size(size) {

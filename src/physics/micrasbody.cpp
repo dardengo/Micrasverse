@@ -77,7 +77,7 @@ void MicrasBody::attachDipSwitch(size_t numSwitches){
 }
 
 void MicrasBody::attachArgb(b2Vec2 localPosition, b2Vec2 size, glm::vec3 color){
-    proxy::Argb argb = proxy::Argb(this->bodyId, localPosition, size, color);
+    Argb argb = Argb(this->bodyId, localPosition, size, color);
     argbs.push_back(argb);
 }
 

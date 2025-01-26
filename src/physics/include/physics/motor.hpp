@@ -1,7 +1,7 @@
 #ifndef MOTOR_HPP
 #define MOTOR_HPP
 
-#include "core/constants.hpp"
+#include "config/constants.hpp"
 
 #include "box2d/box2d.h"
 #include <algorithm>

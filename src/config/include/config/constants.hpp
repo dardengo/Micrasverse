@@ -25,7 +25,7 @@ namespace micrasverse {
     constexpr float MICRAS_HEIGHT = 0.10f;                                                  // m
     constexpr float MICRAS_HALFHEIGHT = MICRAS_HEIGHT / 2.0f;                               // m
     constexpr float MICRAS_MASS = 0.110f;                                                   // kg
-    constexpr float MICRAS_RESTITUTION = 0.1f;                                              // bounciness
+    constexpr float MICRAS_RESTITUTION = 0.0f;                                             // bounciness
     constexpr float MICRAS_FRICTION = 0.95f;                                                // friction coefficient
     constexpr float MICRAS_WHEEL_RADIUS = 0.0112f;                                          // m
     constexpr float MICRAS_GEAR_RATIO = 2.5f;                                               // reduction ratio

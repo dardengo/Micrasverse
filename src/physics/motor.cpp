@@ -48,11 +48,7 @@ void Motor::update(float deltaTime, bool isFanOn) {
     // Compute force applied at each wheel (divided by 2 because there are two wheels)
     float force = (this->torque * MICRAS_GEAR_RATIO) / (MICRAS_WHEEL_RADIUS * 2.0f);
 
-    float fanEffect = 1.0f;
-
-    if (isFanOn) {
-        fanEffect = 4.0f;
-    }
+    float fanEffect = isFanOn ? 4.0f : 1.0f;
 
     // Compute maximum frictional force (divided by 4 because there are 4 wheels, and multiplied by 9.81 to convert to N)
     float maxFrictionForce = fanEffect * MICRAS_FRICTION * MICRAS_MASS * 9.81f / 4.0f;

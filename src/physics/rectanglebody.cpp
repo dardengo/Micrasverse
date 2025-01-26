@@ -1,6 +1,6 @@
 #include "physics/rectanglebody.hpp"
 #include "render/keyboard.hpp"
-#include "core/constants.hpp"
+#include "config/constants.hpp"
 
 #include <iostream>
 
