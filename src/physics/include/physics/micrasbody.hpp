@@ -11,6 +11,7 @@
 #include "render/shader.hpp"
 #include "proxy/wall_sensors.hpp"
 #include "proxy/locomotion.hpp"
+#include "proxy/argb.hpp"
 
 #include "box2d/box2d.h"
 #include "glm/glm.hpp"
@@ -30,7 +31,7 @@ public:
     DipSwitch dipSwitch;
     proxy::TWallSensors<4> wallSensors;
     proxy::Locomotion locomotion;
-    std::vector<Argb> argbs;
+    proxy::TArgb<1> argb;
     b2Vec2 linearVelocity;
     b2Vec2 acceleration;
     float linearAcceleration;
@@ -60,8 +61,6 @@ public:
 
     void attachDipSwitch(size_t numSwitches);
 
-    void attachArgb(b2Vec2 localPosition, b2Vec2 size, glm::vec3 color);
-    
     void update(const float deltaTime);
 
     void processInput(const float deltaTime);

@@ -8,13 +8,11 @@ namespace micrasverse::physics {
 MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction)
     : RectangleBody(worldId, position, size, type, mass, restitution, friction),
     wallSensors(micrasverse::wall_sensors_config, this->bodyId),
-    locomotion(this->bodyId)
+    locomotion(this->bodyId),
+    argb(micrasverse::argb_config, this->bodyId)
 {
 
     this->attachDipSwitch(4);
-
-    this->argbs.reserve(1);
-    this->attachArgb({0.0f, 0.0f}, {0.02f, 0.02f}, {231.0f, 112.0f, 35.0f});
 
     micrasverse::render::Shader flatColorShader("./render/assets/vertex-core.glsl", "./render/assets/fragment-core.glsl");
 
@@ -67,11 +65,6 @@ void MicrasBody::attachDipSwitch(size_t numSwitches){
     this->dipSwitch = dipSwitch;
 }
 
-void MicrasBody::attachArgb(b2Vec2 localPosition, b2Vec2 size, glm::vec3 color){
-    Argb argb = Argb(this->bodyId, localPosition, size, color);
-    argbs.push_back(argb);
-}
-
 void MicrasBody::update(const float deltaTime) {
     // Compute acceleration
     this->acceleration = (b2Body_GetLinearVelocity(this->bodyId) - this->linearVelocity) * (1/deltaTime);
@@ -90,7 +83,7 @@ void MicrasBody::update(const float deltaTime) {
         sensor.getReading();
     }
 
-    for (auto& argb : this->argbs) {
+    for (auto& argb : this->argb.argbs) {
         if (this->dipSwitch.readSwitch(Switch::FAN)) {
             argb.turnOn();
         } else {
@@ -147,7 +140,7 @@ void MicrasBody::render(const glm::mat4 view, const glm::mat4 projection) {
         sensor.rayRender.render(this->shader, false);
     }
 
-    for (auto& argb : this->argbs) {
+    for (auto& argb : this->argb.argbs) {
         argb.argbRenderable.render(this->shader, false);
     }
 }
@@ -159,7 +152,7 @@ void MicrasBody::cleanUp() {
         sensor.rayRender.cleanUp();
     }
 
-    for (auto& argb : this->argbs) {
+    for (auto& argb : this->argb.argbs) {
         argb.argbRenderable.cleanUp();
     }
 }

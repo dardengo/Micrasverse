@@ -2,11 +2,13 @@
 #define MICRAS_TARGET_HPP
 
 #include "proxy/wall_sensors.hpp"
+#include "proxy/argb.hpp"
 
 namespace micrasverse {
 
 namespace proxy{
     using WallSensors = micrasverse::proxy::TWallSensors<4>;
+    using Argb = micrasverse::proxy::TArgb<1>;
 }
 
 const proxy::WallSensors::Config wall_sensors_config = {
@@ -25,6 +27,10 @@ const proxy::WallSensors::Config wall_sensors_config = {
             0.08916F,
             0.28704F,
         },
+};
+
+const proxy::Argb::Config argb_config = {
+    .max_brightness = 100.0F,
 };
 
 } // namespace micras

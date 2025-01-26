@@ -34,7 +34,7 @@ void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
     ImGui::Text("Micras linear velocity: (%.2f, %.2f)", b2Body_GetLinearVelocity(micrasBody.getBodyId()).x, b2Body_GetLinearVelocity(micrasBody.getBodyId()).y);
     ImGui::Text("Micras angular velocity: %.2f", b2Body_GetAngularVelocity(micrasBody.getBodyId()));
     ImGui::Text("FAN is: %.2f", micrasBody.dipSwitch.readSwitch(micrasverse::physics::MicrasBody::Switch::FAN) ? 1.0f : 0.0f); ImGui::SameLine();
-    ImGui::ColorEdit3("LED color", &micrasBody.argbs[0].lightColor[0]);
+    ImGui::ColorEdit3("LED color", &micrasBody.argb.argbs[0].lightColor[0]);
 
     this->plot.draw(micrasBody);
     

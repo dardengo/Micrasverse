@@ -1,5 +1,5 @@
-#ifndef MICRAS_PROXY_ARGB_HPP
-#define MICRAS_PROXY_ARGB_HPP
+#ifndef ARGB_HPP
+#define ARGB_HPP
 
 #include "models/rectangle.hpp"
 
@@ -43,4 +43,4 @@ private:
 
 } // namespace micras::proxy
 
-#endif // MICRAS_PROXY_ARGB_HPP
+#endif // ARGB_HPP
