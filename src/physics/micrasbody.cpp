@@ -1,17 +1,12 @@
 #include "physics/micrasbody.hpp"
 #include "render/keyboard.hpp"
+#include "config/target.hpp"
 
 namespace micrasverse::physics {
 
 // Constructor
-MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction) : RectangleBody(worldId, position, size, type, mass, restitution, friction)
+MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction) : RectangleBody(worldId, position, size, type, mass, restitution, friction), wallSensors(micrasverse::wall_sensors_config, this->bodyId)
 {
-    this->distanceSensors.reserve(4);
-    this->attachDistanceSensor({ 0.028f, 0.045f},  B2_PI / 2.0f);
-    this->attachDistanceSensor({-0.028f, 0.045f},  B2_PI / 2.0f);
-    this->attachDistanceSensor({ 0.009f,  0.05f}, B2_PI / 6.0f);
-    this->attachDistanceSensor({-0.009f,  0.05f}, 5.0f * B2_PI / 6.0f);
-
     this->motors.reserve(2);
     this->attachMotor({micrasverse::MICRAS_HALFWIDTH, 0.0f}, false);
     this->attachMotor({-micrasverse::MICRAS_HALFWIDTH,  0.0f}, true);
@@ -68,8 +63,7 @@ void MicrasBody::updateFriction(){
 }
 
 void MicrasBody::attachDistanceSensor(b2Vec2 localPosition, float angle){
-    DistanceSensor sensor = DistanceSensor(this->bodyId, localPosition, angle);
-    distanceSensors.push_back(sensor);
+    
 }
 
 void MicrasBody::attachMotor(b2Vec2 localPosition, bool leftWheel){
@@ -103,7 +97,7 @@ void MicrasBody::update(const float deltaTime) {
         motor.update(deltaTime, this->dipSwitch.readSwitch(Switch::FAN));
     }
     
-    for (auto& sensor : this->distanceSensors) {
+    for (auto& sensor : this->wallSensors.get_sensors()) {
         sensor.getReading();
     }
 
@@ -184,7 +178,7 @@ void MicrasBody::render(const glm::mat4 view, const glm::mat4 projection) {
     
     this->micrasRender.render(this->shader, false);
 
-    for (auto& sensor : this->distanceSensors) {
+    for (auto& sensor : this->wallSensors.get_sensors()) {
         sensor.rayRender.render(this->shader, false);
     }
 
@@ -195,9 +189,11 @@ void MicrasBody::render(const glm::mat4 view, const glm::mat4 projection) {
 
 void MicrasBody::cleanUp() {
     this->micrasRender.cleanUp();
-    for (auto& sensor : this->distanceSensors) {
+    
+    for (auto& sensor : this->wallSensors.get_sensors()) {
         sensor.rayRender.cleanUp();
     }
+
     for (auto& argb : this->argbs) {
         argb.argbRenderable.cleanUp();
     }

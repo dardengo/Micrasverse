@@ -9,9 +9,13 @@
 #include "core/constants.hpp"
 #include "models/rectangle.hpp"
 #include "render/shader.hpp"
+#include "proxy/wall_sensors.hpp"
 
 #include "box2d/box2d.h"
 #include "glm/glm.hpp"
+
+#include <cstdint>
+#include <vector>
 
 namespace micrasverse::physics {
 
@@ -23,7 +27,7 @@ private:
 
 public:
     DipSwitch dipSwitch;
-    std::vector<DistanceSensor> distanceSensors;
+    proxy::TWallSensors<4> wallSensors;
     std::vector<Motor> motors;
     std::vector<proxy::Argb> argbs;
     b2Vec2 linearVelocity;

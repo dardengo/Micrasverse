@@ -66,10 +66,10 @@ void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
     rdata4.addPoint(t, micrasBody.motors[0].bodyLinearVelocity);
     rdata5.addPoint(t, micrasBody.linearAcceleration);
 
-    rdata7.addPoint(t, micrasBody.distanceSensors[0].getReading());
-    rdata8.addPoint(t, micrasBody.distanceSensors[1].getReading());
-    rdata9.addPoint(t, micrasBody.distanceSensors[2].getReading());
-    rdata10.addPoint(t, micrasBody.distanceSensors[3].getReading());
+    rdata7.addPoint(t, micrasBody.wallSensors.get_sensors()[0].getReading());
+    rdata8.addPoint(t, micrasBody.wallSensors.get_sensors()[1].getReading());
+    rdata9.addPoint(t, micrasBody.wallSensors.get_sensors()[2].getReading());
+    rdata10.addPoint(t, micrasBody.wallSensors.get_sensors()[3].getReading());
     rdata11.addPoint(t, micrasBody.motors[0].appliedForce);
     rdata12.addPoint(t, micrasBody.motors[1].appliedForce);
 
