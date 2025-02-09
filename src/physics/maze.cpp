@@ -1,11 +1,9 @@
 #include "physics/maze.hpp"
 #include "config/constants.hpp"
 #include "physics/rectanglebody.hpp"
-#include "models/rectangle.hpp"
 
 #include "box2d/box2d.h"
 
-#include <iostream>
 #include <fstream>
 #include <stdexcept>
 #include <regex>
@@ -15,25 +13,7 @@ namespace micrasverse::physics {
 // Constructor
 Maze::Maze(const b2WorldId worldId, const std::string& filename) {
     this->worldId = worldId;
-
-    // Create renderable object for the maze floor
-    micrasverse::render::Rectangle mazeFloorRender(
-        glm::vec3(MAZE_FLOOR_HALFWIDTH, MAZE_FLOOR_HALFHEIGHT, 0.01f), // Position of the center
-        glm::vec3(MAZE_FLOOR_WIDTH, MAZE_FLOOR_HEIGHT, 0.01f),        // Size
-        glm::vec3(15.0f, 15.0f, 15.0f) / 255.0f                       // Color (RGB from 0 to 1)
-    );
-
-    this->mazeFloorRender = mazeFloorRender;
-
-    micrasverse::render::Shader flatColorShader("./render/assets/vertex-core.glsl", "./render/assets/fragment-core.glsl");
-
-    this->shader = flatColorShader;
-
     this->loadFromFile(filename);
-}
-
-Maze::~Maze() {
-    this->cleanUp();
 }
 
 // Parse maze from file
@@ -95,24 +75,6 @@ void Maze::loadFromFile(const std::string& filename) {
     }
 
     this->createBox2dObjects();
-
-    // Create renderable objects for walls and lattice points
-    this->mazeWalls.reserve(this->elements.size());
-    
-    for (auto& element : this->elements) {
-        micrasverse::render::Rectangle newWall(
-            glm::vec3(element.position.x, element.position.y, 0.0f),    // Position of the center
-            glm::vec3(element.size.x, element.size.y, 0.01f),           // Size
-            glm::vec3(125.0f, 15.0f, 15.0f) / 255.0f                    // Color (RGB from 0 to 1)
-        );
-        this->mazeWalls.push_back(newWall);
-    }
-
-    // Initialize renderable objects
-    this->mazeFloorRender.init();
-    for (auto& wall : this->mazeWalls) {
-        wall.init();
-    }
 }
 
 const b2WorldId Maze::getWorldId() {
@@ -131,25 +93,6 @@ void Maze::createBox2dObjects() {
         mazeBodies.push_back(elementBody.getBodyId());
     }
     
-}
-
-void Maze::render(const glm::mat4 view, const glm::mat4 projection) {
-
-    this->shader.activate(view, projection);
-    
-    this->mazeFloorRender.render(shader, true);
-
-    for (auto& wall : this->mazeWalls) {
-        wall.render(shader, true);
-    }
-}
-
-void Maze::cleanUp() {
-    this->mazeFloorRender.cleanUp();
-    
-    for (auto& wall : this->mazeWalls) {
-        wall.cleanUp();
-    }
 }
 
 } // namespace micrasverse::physics

@@ -7,14 +7,11 @@
 #include "physics/dipswitch.hpp"
 #include "physics/argb.hpp"
 #include "config/constants.hpp"
-#include "models/rectangle.hpp"
-#include "render/shader.hpp"
 #include "proxy/wall_sensors.hpp"
 #include "proxy/locomotion.hpp"
 #include "proxy/argb.hpp"
 
 #include "box2d/box2d.h"
-#include "glm/glm.hpp"
 
 #include <cstdint>
 #include <vector>
@@ -22,11 +19,6 @@
 namespace micrasverse::physics {
 
 class MicrasBody : public RectangleBody {
-private:
-    render::Rectangle micrasRender;
-    render::Shader shader;
-
-
 public:
     DipSwitch dipSwitch;
     proxy::TWallSensors<4> wallSensors;
@@ -53,8 +45,6 @@ public:
                const float friction = MICRAS_FRICTION
     );
 
-    ~MicrasBody();
-
     b2Vec2 getLateralVelocity() const;
 
     void updateFriction();
@@ -64,10 +54,6 @@ public:
     void update(const float deltaTime);
 
     void processInput(const float deltaTime);
-
-    void render(const glm::mat4 view, const glm::mat4 projection);
-
-    void cleanUp();
 };
 
 } // namespace micrasverse::physics

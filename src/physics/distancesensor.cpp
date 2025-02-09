@@ -1,10 +1,6 @@
 #include "physics/distancesensor.hpp"
 #include "config/constants.hpp"
 
-#include "glm/glm.hpp"
-
-#include <iostream>
-
 namespace micrasverse::physics {
 
 DistanceSensor::DistanceSensor(const b2BodyId bodyId, const b2Vec2 localPosition, const float angle){
@@ -12,10 +8,6 @@ DistanceSensor::DistanceSensor(const b2BodyId bodyId, const b2Vec2 localPosition
     this->localPosition = localPosition;
     this->angle = angle;
     this->localDirection = {cos(angle), sin(angle)};
-
-    // Create renderable object
-    this->rayRender = render::Rectangle(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(237.0f, 47.0f, 50.0f) / 255.0f);
-    this->rayRender.init();
 }
 
 float DistanceSensor::getReading() {
@@ -29,13 +21,10 @@ float DistanceSensor::getReading() {
     
     this->reading = b2Length(intersectionPoint - origin);
 
-    this->rayRender.setPose(
-        glm::vec3(origin.x + (intersectionPoint.x - origin.x)*0.5f, origin.y + (intersectionPoint.y - origin.y) *0.5f, 0.01f),
-        b2Rot{ .c = -worldDirection.y, .s = worldDirection.x }
-    );
-    
-    this->rayRender.setSize(glm::vec3(0.002f, this->reading, 0.01f));
-    
+    this->rayMidPoint = b2Vec2{origin.x + (intersectionPoint.x - origin.x)*0.5f, origin.y + (intersectionPoint.y - origin.y) *0.5f};
+
+    this->rayDirection = b2Rot{ .c = -worldDirection.y, .s = worldDirection.x };
+
     return this->reading;
 }
 

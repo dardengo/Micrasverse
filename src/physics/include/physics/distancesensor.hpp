@@ -1,8 +1,6 @@
 #ifndef DISTANCE_SENSOR_HPP
 #define DISTANCE_SENSOR_HPP
 
-#include "models/rectangle.hpp"
-
 #include "box2d/box2d.h"
 
 namespace micrasverse::physics {
@@ -10,8 +8,8 @@ namespace micrasverse::physics {
 class DistanceSensor {
 public:
     float reading;
-
-    render::Rectangle rayRender;
+    b2Vec2 rayMidPoint;
+    b2Rot rayDirection;
 
     DistanceSensor(const b2BodyId bodyId, const b2Vec2 localPosition, const float angle);
 

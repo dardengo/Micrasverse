@@ -11,28 +11,7 @@ MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2V
     locomotion(this->bodyId),
     argb(micrasverse::argb_config, this->bodyId)
 {
-
     this->attachDipSwitch(4);
-
-    micrasverse::render::Shader flatColorShader("./render/assets/vertex-core.glsl", "./render/assets/fragment-core.glsl");
-
-    this->shader = flatColorShader;
-    
-    // Create renderable object
-    micrasverse::render::Rectangle micrasRender(
-        glm::vec3(position.x , position.y, 0.02f),  // Position of the center
-        glm::vec3(size.x, size.y, 0.01f),           // Size
-        glm::vec3(15.0f, 125.0f, 15.0f) / 255.0f    // Color (RGB from 0 to 1)
-    );
-
-    this->micrasRender = micrasRender;
-
-    // Initialize renderable object
-    this->micrasRender.init();
-}
-
-MicrasBody::~MicrasBody() {
-    this->cleanUp();
 }
 
 b2Vec2 MicrasBody::getLateralVelocity() const {
@@ -89,12 +68,8 @@ void MicrasBody::update(const float deltaTime) {
         } else {
             argb.turnOff();
         }        
-        argb.update(this->getPosition(), this->getRotation());
+        argb.update(this->getPosition());
     }
-
-
-    // Update position of micrasRender to match micrasBody
-    this->micrasRender.setPose(glm::vec3(this->getPosition().x, this->getPosition().y, micrasRender.position.z), this->getRotation());
 }
 
 void MicrasBody::processInput(const float deltaTime) {
@@ -127,33 +102,6 @@ void MicrasBody::processInput(const float deltaTime) {
     }
     if (render::Keyboard::keyWentUp(GLFW_KEY_D)) {
         this->locomotion.stop();
-    }
-}
-
-void MicrasBody::render(const glm::mat4 view, const glm::mat4 projection) {
-
-    this->shader.activate(view, projection);
-    
-    this->micrasRender.render(this->shader, false);
-
-    for (auto& sensor : this->wallSensors.get_sensors()) {
-        sensor.rayRender.render(this->shader, false);
-    }
-
-    for (auto& argb : this->argb.argbs) {
-        argb.argbRenderable.render(this->shader, false);
-    }
-}
-
-void MicrasBody::cleanUp() {
-    this->micrasRender.cleanUp();
-    
-    for (auto& sensor : this->wallSensors.get_sensors()) {
-        sensor.rayRender.cleanUp();
-    }
-
-    for (auto& argb : this->argb.argbs) {
-        argb.argbRenderable.cleanUp();
     }
 }
 
