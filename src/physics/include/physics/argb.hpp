@@ -1,8 +1,11 @@
 #ifndef ARGB_HPP
 #define ARGB_HPP
 
+#include "core/types.hpp"
+
 #include "box2d/box2d.h"
-#include "glm/glm.hpp"
+
+#include <array>
 
 namespace micrasverse::physics {
 
@@ -11,18 +14,20 @@ public:
     b2Vec2 worldPosition;
     b2Vec2 size;
     bool isOn {false};
-    glm::vec3 baseColor;
-    glm::vec3 lightColor;
+    core::Color baseColor;
+    core::Color lightColor;
+    std::array<float, 3> baseColorArray;
+    std::array<float, 3> lightColorArray;
 
-    Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, glm::vec3 color);
+    Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, core::Color& color);
 
-    void setColor(const glm::vec3 color);
+    void setColor(const core::Color color);
 
     void update(b2Vec2 micrasPosition);
 
     void turnOn();
 
-    void turnOn(const glm::vec3 color);
+    void turnOn(const core::Color color);
 
     void turnOff();
 
@@ -31,7 +36,6 @@ public:
 private:
     b2BodyId bodyId;
     b2Vec2 localPosition;
-    glm::vec3 mapColor(glm::vec3 color);
 };
 
 

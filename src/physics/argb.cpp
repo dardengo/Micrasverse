@@ -2,15 +2,18 @@
 
 namespace micrasverse::physics {
 
-Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, glm::vec3 lightColor)
+Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, core::Color& lightColor)
     : bodyId(bodyId), localPosition(localPosition), size(size) {
         this->worldPosition = b2Body_GetWorldPoint(bodyId, localPosition);
-        this->lightColor = mapColor(lightColor);
-        this->baseColor = mapColor(glm::vec3(176.0f, 198.0f, 214.0f));
+        this->lightColor = lightColor;
+        this->lightColorArray = lightColor.toArray();
+        this->baseColor = core::Color(176.0f, 198.0f, 214.0f);
+        this->baseColorArray = this->baseColor.toArray();
     }
 
-void Argb::setColor(const glm::vec3 color){
-    this->lightColor = mapColor(color);
+void Argb::setColor(const core::Color color){
+    this->lightColor = color;
+    this->lightColorArray = color.toArray();
 }
 
 void Argb::update(b2Vec2 micrasPosition){
@@ -24,8 +27,9 @@ void Argb::turnOn(){
     this->isOn = true;
 }
 
-void Argb::turnOn(const glm::vec3 color){
-    this->lightColor = mapColor(color);
+void Argb::turnOn(const core::Color color){
+    this->lightColor = color;
+    this->lightColorArray = color.toArray();
     this->isOn = true;
 }
 
@@ -40,10 +44,6 @@ void Argb::toggle(){
     } else {
         this->turnOn();
     }
-}
-
-glm::vec3 Argb::mapColor(glm::vec3 color){
-    return color / 255.0f;
 }
 
 } // namespace micras::proxy

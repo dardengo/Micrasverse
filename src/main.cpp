@@ -67,7 +67,7 @@ int main() {
     std::vector<micrasverse::render::ARGBRender> argbsSceneObjs;
 
     for (auto& argb : micrasBody.argb.argbs) {
-        argbsSceneObjs.push_back(micrasverse::render::ARGBRender(argb.worldPosition, argb.size, argb.lightColor, argb.baseColor, argb.isOn));
+        argbsSceneObjs.push_back(micrasverse::render::ARGBRender(argb.worldPosition, argb.size, argb.lightColorArray, argb.baseColorArray, argb.isOn));
     }  
 
     // Create Lidar scene objects
@@ -107,7 +107,7 @@ int main() {
             micrasRender.update(micrasBody.getPosition(), micrasBody.getRotation());
             
             for (size_t i = 0; i < micrasBody.argb.argbs.size(); i++) {
-                argbsSceneObjs[i].update(micrasBody.argb.argbs[i].worldPosition, micrasBody.getRotation(), micrasBody.argb.argbs[i].lightColor, micrasBody.argb.argbs[i].isOn);
+                argbsSceneObjs[i].update(micrasBody.argb.argbs[i].worldPosition, micrasBody.getRotation(), micrasBody.argb.argbs[i].lightColorArray, micrasBody.argb.argbs[i].isOn);
             }
 
             for (size_t i = 0; i < micrasBody.wallSensors.get_sensors().size(); i++) {
