@@ -1,6 +1,6 @@
-#include "render/mouse.hpp"
+#include "io/mouse.hpp"
 
-namespace micrasverse::render {
+namespace micrasverse::io {
 
 double Mouse::x = 0;
 double Mouse::y = 0;
@@ -106,4 +106,4 @@ bool Mouse::buttonWentDown(int button){
 
 
 
-} // micrasverse::renderer
+} // micrasverse::io

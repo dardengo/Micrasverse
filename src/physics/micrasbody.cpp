@@ -1,5 +1,5 @@
 #include "physics/micrasbody.hpp"
-#include "render/keyboard.hpp"
+#include "io/keyboard.hpp"
 #include "config/target.hpp"
 
 namespace micrasverse::physics {
@@ -74,33 +74,33 @@ void MicrasBody::update(const float deltaTime) {
 
 void MicrasBody::processInput(const float deltaTime) {
 
-    if (render::Keyboard::keyWentDown(GLFW_KEY_SPACE)) {
+    if (io::Keyboard::keyWentDown(GLFW_KEY_SPACE)) {
         this->dipSwitch.toggleSwitch(Switch::FAN);
     }
 
-    if (render::Keyboard::key(GLFW_KEY_W)) {
+    if (io::Keyboard::key(GLFW_KEY_W)) {
         this->locomotion.setCommand(100.0f, 0.0f);
     }
-    if (render::Keyboard::key(GLFW_KEY_S)) {
+    if (io::Keyboard::key(GLFW_KEY_S)) {
         this->locomotion.setCommand(-100.0f, 0.0f);
     }
-    if (render::Keyboard::key(GLFW_KEY_A)) {
+    if (io::Keyboard::key(GLFW_KEY_A)) {
         this->locomotion.setCommand(0.0f, 2.5f);
     }
-    if (render::Keyboard::key(GLFW_KEY_D)) {
+    if (io::Keyboard::key(GLFW_KEY_D)) {
         this->locomotion.setCommand(0.0f, -2.5f);
     }
 
-    if (render::Keyboard::keyWentUp(GLFW_KEY_W)) {
+    if (io::Keyboard::keyWentUp(GLFW_KEY_W)) {
         this->locomotion.stop();
     }
-    if (render::Keyboard::keyWentUp(GLFW_KEY_S)) {
+    if (io::Keyboard::keyWentUp(GLFW_KEY_S)) {
         this->locomotion.stop();
     }
-    if (render::Keyboard::keyWentUp(GLFW_KEY_A)) {
+    if (io::Keyboard::keyWentUp(GLFW_KEY_A)) {
         this->locomotion.stop();
     }
-    if (render::Keyboard::keyWentUp(GLFW_KEY_D)) {
+    if (io::Keyboard::keyWentUp(GLFW_KEY_D)) {
         this->locomotion.stop();
     }
 }

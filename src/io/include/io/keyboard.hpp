@@ -5,7 +5,7 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-namespace micrasverse::render {
+namespace micrasverse::io {
 
 class Keyboard {
 public:
@@ -21,6 +21,6 @@ private:
     static bool keysChanged[];
 };
 
-}// micrasverse::renderer
+}// micrasverse::io
 
 #endif // KEYBOARD_HPP

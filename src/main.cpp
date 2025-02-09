@@ -2,7 +2,7 @@
 #include "physics/maze.hpp"
 #include "physics/micrasbody.hpp"
 #include "render/screen.hpp"
-#include "render/keyboard.hpp"
+#include "io/keyboard.hpp"
 #include "render/micrasrender.hpp"
 #include "render/argbrender.hpp"
 #include "render/lidarrender.hpp"
@@ -94,7 +94,7 @@ int main() {
         screen.processInput(deltaTime);
 
         // Run simulation after pressing 'R'
-        if (micrasverse::render::Keyboard::keyWentDown(GLFW_KEY_R)) {
+        if (micrasverse::io::Keyboard::keyWentDown(GLFW_KEY_R)) {
             isRunning = !isRunning;
         }
 

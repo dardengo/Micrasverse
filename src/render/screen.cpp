@@ -1,6 +1,6 @@
 #include "render/screen.hpp"
-#include "render/mouse.hpp"
-#include "render/keyboard.hpp"
+#include "io/mouse.hpp"
+#include "io/keyboard.hpp"
 
 #include <iostream>
 
@@ -85,10 +85,10 @@ void Screen::setParameters() {
     //glViewport(0, 0, mode->width, mode->height); //for windowed fullscreen
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    glfwSetKeyCallback(window, Keyboard::key_callback);
-    glfwSetCursorPosCallback(window, Mouse::cursor_position_callback);
-    glfwSetMouseButtonCallback(window, Mouse::mouse_button_callback);
-    glfwSetScrollCallback(window, Mouse::scroll_callback);
+    glfwSetKeyCallback(window, io::Keyboard::key_callback);
+    glfwSetCursorPosCallback(window, io::Mouse::cursor_position_callback);
+    glfwSetMouseButtonCallback(window, io::Mouse::mouse_button_callback);
+    glfwSetScrollCallback(window, io::Mouse::scroll_callback);
 
 
     // Create and initialize GUI after user callbacks are set so to not overwrite ImGui's callbacks 
@@ -98,37 +98,37 @@ void Screen::setParameters() {
 }
 
 void Screen::processInput(const float deltaTime) {
-    if (micrasverse::render::Keyboard::keyWentDown(GLFW_KEY_ESCAPE)) {
+    if (io::Keyboard::keyWentDown(GLFW_KEY_ESCAPE)) {
         this->setShouldClose(true);
     }
     
-    if (micrasverse::render::Keyboard::keyWentDown(GLFW_KEY_F)) {
+    if (io::Keyboard::keyWentDown(GLFW_KEY_F)) {
         this->camera.followMicras = !this->camera.followMicras;
     }
 
     // Center the camera on the maze when 'C' is pressed
-    if (micrasverse::render::Keyboard::keyWentDown(GLFW_KEY_C)) {
+    if (io::Keyboard::keyWentDown(GLFW_KEY_C)) {
         this->camera.followMicras = false;
         this->camera.position = glm::vec3(-0.3f, micrasverse::MAZE_FLOOR_HALFHEIGHT, 4.75f);
     }
 
-    if (Keyboard::key(GLFW_KEY_UP)) {
+    if (io::Keyboard::key(GLFW_KEY_UP)) {
         this->camera.updateCameraPos(CameraDirection::UP, deltaTime);
     }
 
-    if (Keyboard::key(GLFW_KEY_DOWN)) {
+    if (io::Keyboard::key(GLFW_KEY_DOWN)) {
         this->camera.updateCameraPos(CameraDirection::DOWN, deltaTime);
     }
 
-    if (Keyboard::key(GLFW_KEY_LEFT)) {
+    if (io::Keyboard::key(GLFW_KEY_LEFT)) {
         this->camera.updateCameraPos(CameraDirection::LEFT, deltaTime);
     }
 
-    if (Keyboard::key(GLFW_KEY_RIGHT)) {
+    if (io::Keyboard::key(GLFW_KEY_RIGHT)) {
         this->camera.updateCameraPos(CameraDirection::RIGHT, deltaTime);
     }
 
-    double scrollDy = Mouse::getScrollDy();
+    double scrollDy = io::Mouse::getScrollDy();
     if (scrollDy != 0.0) {
         this->camera.updateCameraZoom(scrollDy);
     }

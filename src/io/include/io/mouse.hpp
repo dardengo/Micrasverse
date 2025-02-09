@@ -6,7 +6,7 @@
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 
-namespace micrasverse::render {
+namespace micrasverse::io {
 
 class Mouse {
 public:
@@ -48,6 +48,6 @@ private:
     static bool buttonsChanged[];
 };
 
-} // micrasverse::renderer
+} // micrasverse::io
 
 #endif // MOUSE_HPP

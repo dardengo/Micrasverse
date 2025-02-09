@@ -1,6 +1,4 @@
 #include "render/camera.hpp"
-#include "render/keyboard.hpp"
-#include "render/mouse.hpp"
 
 namespace micrasverse::render {
 

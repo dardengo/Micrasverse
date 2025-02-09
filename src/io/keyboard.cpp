@@ -1,6 +1,6 @@
-#include "render/keyboard.hpp"
+#include "io/keyboard.hpp"
 
-namespace micrasverse::render {
+namespace micrasverse::io {
 
 bool Keyboard::keys[GLFW_KEY_LAST] = {false};
 bool Keyboard::keysChanged[GLFW_KEY_LAST] = {false};
@@ -35,4 +35,4 @@ bool Keyboard::keyWentDown(int key) {
     return keys[key] && keyChanged(key);
 }
 
-} // micrasverse::renderer
+} // micrasverse::io
