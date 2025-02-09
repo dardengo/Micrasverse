@@ -25,7 +25,7 @@ public:
          0.5f,  0.5f, 0.0f, color[0], color[1], color[2]  //top right
         };
 
-        noVertices = sizeof(vertices) / sizeof(float) / 3;
+        noVertices = sizeof(vertices) / sizeof(float) / 6;
 
         std::vector<unsigned int> indices(noVertices);
 
