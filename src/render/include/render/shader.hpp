@@ -32,7 +32,9 @@ public:
     
     // Set uniforms
     void setMat4(const std::string& name, const glm::mat4 value);
-
+    void setFloat(const std::string& name, const float value);
+    void set3Float(const std::string& name, const glm::vec3 value);
+    void set3Float(const std::string& name, const float x, const float y, const float z);
 };
 
 } // micrasverse::renderer

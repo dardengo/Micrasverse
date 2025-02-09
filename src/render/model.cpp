@@ -2,8 +2,8 @@
 
 namespace micrasverse::render {
 
-Model::Model(const glm::vec3 position, const glm::vec3 size, const glm::vec3 color)
-    : position(position), size(size), color(color) {}
+Model::Model(Material material, glm::vec3 position, glm::vec3 size)
+    : position(position), size(size), material(material) {}
 
 void Model::init() {}
 

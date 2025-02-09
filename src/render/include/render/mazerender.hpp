@@ -17,7 +17,7 @@ public:
 
     ~MazeRender();
 
-    void render(const glm::mat4 view, const glm::mat4 projection) override;
+    void render(const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) override;
 };
 
 } // namespace micrasverse::render

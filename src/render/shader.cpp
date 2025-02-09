@@ -90,4 +90,16 @@ void Shader::setMat4(const std::string& name, const glm::mat4 value) {
     glUniformMatrix4fv(glGetUniformLocation(id, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
+void Shader::setFloat(const std::string& name, const float value) {
+    glUniform1f(glGetUniformLocation(id, name.c_str()), value);
+}
+
+void Shader::set3Float(const std::string& name, const glm::vec3 value) {
+    set3Float(name, value.x, value.y, value.z);
+}
+
+void Shader::set3Float(const std::string& name, const float x, const float y, const float z) {
+    glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z);
+}
+
 } // namespace micrasverse::renderer

@@ -1,18 +1,25 @@
 #ifndef LIDAR_RENDER_HPP
 #define LIDAR_RENDER_HPP
 
-#include "render/sceneobj.hpp"
+#include "render/lightobj.hpp"
+#include "render/camera.hpp"
 
 #include "box2d/box2d.h"
+#include "glm/glm.hpp"
 
 namespace micrasverse::render {
 
-class LidarRender: public SceneObj {
+class LidarRender: public LightObj {
 
 public:
-    LidarRender(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading);
+    glm::vec3 lightColor;
+    Camera camera;
+
+    LidarRender(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading, const Camera& camera);
     
     void update(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading);
+
+    void render(const glm::mat4 view, const glm::mat4 projection) override;
 };
 
 } // namespace micrasverse::render

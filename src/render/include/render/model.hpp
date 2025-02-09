@@ -2,6 +2,7 @@
 #define MODEL_HPP
 
 #include "render/mesh.hpp"
+#include "render/material.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -18,9 +19,9 @@ public:
     glm::vec3 position;
     glm::vec3 size;
     float rotation{0.0f};
-    glm::vec3 color;
+    Material material;
 
-    Model(const glm::vec3 position = glm::vec3(0.0f), const glm::vec3 size = glm::vec3(1.0f), const glm::vec3 color = glm::vec3(1.0f));
+    Model(Material material = Material::black_plastic, glm::vec3 position = glm::vec3(0.0f), glm::vec3 size = glm::vec3(1.0f));
 
     virtual void init();
 

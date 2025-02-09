@@ -2,7 +2,7 @@
 #define MICRASMODEL_HPP
 
 #include "render/model.hpp"
-#include "core/constants.hpp"
+#include "config/constants.hpp"
 
 namespace micrasverse::render {
 

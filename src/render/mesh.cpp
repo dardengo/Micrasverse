@@ -12,10 +12,14 @@ std::vector<Vertex> Vertex::genList(float* vertices, int noVertices) {
                                            vertices[i * stride + 1],
                                            vertices[i * stride + 2]
         );
-        vertexList[i].color = glm::vec3(vertices[i * stride + 3],
-                                        vertices[i * stride + 4],
-                                        vertices[i * stride + 5]
+        vertexList[i].normal = glm::vec3(vertices[i * stride + 3],
+                                         vertices[i * stride + 4],
+                                         vertices[i * stride + 5]
         );
+        /*vertexList[i].color = glm::vec3(vertices[i * stride + 6],
+                                        vertices[i * stride + 7],
+                                        vertices[i * stride + 8]
+        );*/
     }
 
     return vertexList;
@@ -53,12 +57,16 @@ void Mesh::setup() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
 
-    // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    // Normal attribute
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+
+    /*// Color attribute
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    glEnableVertexAttribArray(2);*/
 
     glBindVertexArray(0);
 }

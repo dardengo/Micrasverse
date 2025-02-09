@@ -15,7 +15,7 @@ namespace micrasverse::render {
 struct Vertex
 {
     glm::vec3 position;
-    glm::vec3 color;
+    glm::vec3 normal;
 
     static std::vector<Vertex> genList(float* vertices, int noVertices);
 

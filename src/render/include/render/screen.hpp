@@ -18,10 +18,10 @@ private:
     GLFWwindow* window;
     GLFWmonitor* monitor;
     const GLFWvidmode* mode;
-    Camera camera;
     GUI gui;
-
+    
 public:
+    Camera camera;
     static unsigned int SCR_WIDTH;
     static unsigned int SCR_HEIGHT;
     glm::mat4 view;
