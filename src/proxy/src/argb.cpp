@@ -3,15 +3,12 @@
 
 #include "proxy/argb.hpp"
 
-#include <memory>
-
-namespace micrasverse::proxy {
+namespace micras::proxy {
 template <uint8_t num_of_leds>
 TArgb<num_of_leds>::TArgb(const Config& config, b2BodyId bodyId) :
     brightness{config.max_brightness / 100.0F},
     bodyId{bodyId} {
 
-    this->argbs.reserve(num_of_leds);
     this->attachArgb({0.0f, 0.0f}, {0.02f, 0.02f}, {static_cast<uint8_t>(235 * this->brightness), static_cast<uint8_t>(100 * this->brightness), static_cast<uint8_t>(25 * this->brightness)});
     
     for (auto& argb : this->argbs) {

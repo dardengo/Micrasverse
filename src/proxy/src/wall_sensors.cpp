@@ -5,9 +5,7 @@
 #include "core/types.hpp"
 #include "config/target.hpp"
 
-#include <memory>
-
-namespace micrasverse::proxy {
+namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
 TWallSensors<num_of_sensors>::TWallSensors(const Config& config, const b2BodyId bodyId) :
@@ -16,7 +14,6 @@ TWallSensors<num_of_sensors>::TWallSensors(const Config& config, const b2BodyId 
     wall_threshold{config.wall_threshold},
     free_space_threshold{config.free_threshold} {
 
-    this->sensors.reserve(num_of_sensors);
     this->attach_sensor({ 0.028f, 0.045f},  B2_PI / 2.0f);
     this->attach_sensor({-0.028f, 0.045f},  B2_PI / 2.0f);
     this->attach_sensor({ 0.009f,  0.049f}, B2_PI / 6.0f);

@@ -9,7 +9,6 @@ namespace micrasverse::render {
 Plot::ScrollingBuffer::ScrollingBuffer(int maxSize) {
     this->maxSize = maxSize;
     this->offset = 0;
-    this->data.reserve(maxSize);
 }
 
 void Plot::ScrollingBuffer::addPoint(const float x, const float y) {
@@ -30,7 +29,6 @@ void Plot::ScrollingBuffer::erase() {
 
 Plot::RollingBuffer::RollingBuffer(int span, int maxSize) {
     this->span = span;
-    this->data.reserve(maxSize);
 }
 
 void Plot::RollingBuffer::addPoint(float x, float y) {
