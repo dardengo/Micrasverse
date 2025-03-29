@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-namespace micrasverse::proxy {
+namespace micras::proxy {
 
 Locomotion::Locomotion(const b2BodyId bodyId)
     : bodyId{bodyId},
@@ -23,9 +23,9 @@ void Locomotion::disable() {
 
 void Locomotion::attachMotor(b2Vec2 localPosition, bool leftWheel) {
     if (leftWheel) {
-        this->left_motor = physics::Motor(this->bodyId, localPosition, leftWheel);
+        this->left_motor = micrasverse::physics::Motor(this->bodyId, localPosition, leftWheel);
     } else {
-        this->right_motor = physics::Motor(this->bodyId, localPosition, leftWheel);
+        this->right_motor = micrasverse::physics::Motor(this->bodyId, localPosition, leftWheel);
     }
 }
 

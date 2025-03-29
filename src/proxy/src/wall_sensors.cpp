@@ -44,18 +44,18 @@ void TWallSensors<num_of_sensors>::update() {
 }
 
 template <uint8_t num_of_sensors>
-core::Observation TWallSensors<num_of_sensors>::get_observation(uint8_t sensor_index) const {
+micrasverse::core::Observation TWallSensors<num_of_sensors>::get_observation(uint8_t sensor_index) const {
     const float reading = this->sensors.at(sensor_index).reading;
 
     if (reading > this->wall_threshold.at(sensor_index)) {
-        return core::Observation::WALL;
+        return micrasverse::core::Observation::WALL;
     }
 
     if (reading < this->free_space_threshold.at(sensor_index)) {
-        return core::Observation::FREE_SPACE;
+        return micrasverse::core::Observation::FREE_SPACE;
     }
 
-    return core::Observation::UNKNOWN;
+    return micrasverse::core::Observation::UNKNOWN;
 }
 
 template <uint8_t num_of_sensors>
@@ -116,12 +116,12 @@ void TWallSensors<num_of_sensors>::update_thresholds() {
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::attach_sensor(const b2Vec2 localPosition, const float angle) {
-    physics::DistanceSensor sensor = physics::DistanceSensor(this->bodyId, localPosition, angle);
+    micrasverse::physics::DistanceSensor sensor = micrasverse::physics::DistanceSensor(this->bodyId, localPosition, angle);
     this->sensors.push_back(sensor);
 }
 
 template <uint8_t num_of_sensors>
-std::vector<physics::DistanceSensor>& TWallSensors<num_of_sensors>::get_sensors() {
+std::vector<micrasverse::physics::DistanceSensor>& TWallSensors<num_of_sensors>::get_sensors() {
     return this->sensors;
 }
 

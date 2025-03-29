@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <vector>
 
-namespace micrasverse::proxy {
+namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
 class TWallSensors {
@@ -53,10 +53,10 @@ public:
 
     void attach_sensor(const b2Vec2 localPosition, const float angle);
 
-    std::vector<physics::DistanceSensor>& get_sensors();
+    std::vector<micrasverse::physics::DistanceSensor>& get_sensors();
 
 private:
-    std::vector<physics::DistanceSensor> sensors;
+    std::vector<micrasverse::physics::DistanceSensor> sensors;
     b2BodyId bodyId;
     
     float uncertainty;

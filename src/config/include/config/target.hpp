@@ -4,14 +4,12 @@
 #include "proxy/wall_sensors.hpp"
 #include "proxy/argb.hpp"
 
-namespace micrasverse {
+namespace micras::proxy{
+    using WallSensors = micras::proxy::TWallSensors<4>;
+    using Argb = micras::proxy::TArgb<1>;
 
-namespace proxy{
-    using WallSensors = micrasverse::proxy::TWallSensors<4>;
-    using Argb = micrasverse::proxy::TArgb<1>;
-}
 
-const proxy::WallSensors::Config wall_sensors_config = {
+const WallSensors::Config wall_sensors_config = {
     .uncertainty = 0.35F,
     .wall_threshold =
         {
@@ -29,10 +27,10 @@ const proxy::WallSensors::Config wall_sensors_config = {
         },
 };
 
-const proxy::Argb::Config argb_config = {
+const Argb::Config argb_config = {
     .max_brightness = 100.0F,
 };
 
-} // namespace micras
+} // namespace micras::proxy
 
 #endif // MICRAS_TARGET_HPP

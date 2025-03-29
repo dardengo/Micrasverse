@@ -10,7 +10,7 @@
 #include <array>
 #include <cstdint>
 
-namespace micrasverse::proxy {
+namespace micras::proxy {
 
 template <uint8_t num_of_leds>
 class TArgb {
@@ -24,24 +24,24 @@ public:
     struct Colors {
         Colors() = delete;
 
-        static constexpr core::Color red{255, 0, 0};
-        static constexpr core::Color green{0, 255, 0};
-        static constexpr core::Color blue{0, 0, 255};
-        static constexpr core::Color yellow{255, 255, 0};
-        static constexpr core::Color cyan{0, 255, 255};
-        static constexpr core::Color magenta{255, 0, 255};
-        static constexpr core::Color white{255, 255, 255};
+        static constexpr micrasverse::core::Color red{255, 0, 0};
+        static constexpr micrasverse::core::Color green{0, 255, 0};
+        static constexpr micrasverse::core::Color blue{0, 0, 255};
+        static constexpr micrasverse::core::Color yellow{255, 255, 0};
+        static constexpr micrasverse::core::Color cyan{0, 255, 255};
+        static constexpr micrasverse::core::Color magenta{255, 0, 255};
+        static constexpr micrasverse::core::Color white{255, 255, 255};
     };
 
     explicit TArgb(const Config& config, b2BodyId bodyId);
 
-    void attachArgb(b2Vec2 localPosition, b2Vec2 size, core::Color color);
+    void attachArgb(b2Vec2 localPosition, b2Vec2 size, micrasverse::core::Color color);
 
-    void set_color(const core::Color& color, uint8_t index);
+    void set_color(const micrasverse::core::Color& color, uint8_t index);
 
-    void set_color(const core::Color& color);
+    void set_color(const micrasverse::core::Color& color);
 
-    void set_colors(const std::array<core::Color, num_of_leds>& colors);
+    void set_colors(const std::array<micrasverse::core::Color, num_of_leds>& colors);
 
     void turn_off(uint8_t index);
 
@@ -52,9 +52,9 @@ private:
 
     b2BodyId bodyId;
 
-    void encode_color(const core::Color& color, uint8_t index);
+    void encode_color(const micrasverse::core::Color& color, uint8_t index);
 };
-}  // namespace micrasverse::proxy
+}  // namespace micras::proxy
 
 #include "../../src/argb.cpp"
 

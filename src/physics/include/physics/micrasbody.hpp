@@ -21,9 +21,9 @@ namespace micrasverse::physics {
 class MicrasBody : public RectangleBody {
 public:
     DipSwitch dipSwitch;
-    proxy::TWallSensors<4> wallSensors;
-    proxy::Locomotion locomotion;
-    proxy::TArgb<1> argb;
+    micras::proxy::TWallSensors<4> wallSensors;
+    micras::proxy::Locomotion locomotion;
+    micras::proxy::TArgb<1> argb;
     b2Vec2 linearVelocity;
     b2Vec2 acceleration;
     float linearAcceleration;

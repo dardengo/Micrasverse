@@ -4,7 +4,7 @@
 #include "physics/motor.hpp"
 #include "box2d/box2d.h"
 
-namespace micrasverse::proxy {
+namespace micras::proxy {
 
 class Locomotion {
 public:
@@ -25,8 +25,8 @@ public:
 
     void stop();
 
-    physics::Motor left_motor;
-    physics::Motor right_motor;
+    micrasverse::physics::Motor left_motor;
+    micrasverse::physics::Motor right_motor;
 
 private:
     b2BodyId bodyId;

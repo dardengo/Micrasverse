@@ -7,9 +7,9 @@ namespace micrasverse::physics {
 // Constructor
 MicrasBody::MicrasBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction)
     : RectangleBody(worldId, position, size, type, mass, restitution, friction),
-    wallSensors(micrasverse::wall_sensors_config, this->bodyId),
+    wallSensors(micras::proxy::wall_sensors_config, this->bodyId),
     locomotion(this->bodyId),
-    argb(micrasverse::argb_config, this->bodyId)
+    argb(micras::proxy::argb_config, this->bodyId)
 {
     this->attachDipSwitch(4);
 }
