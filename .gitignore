@@ -3,6 +3,9 @@
 
 # Ignore all files in the build/ directory
 external/box2d/build*
+build/
+build/*
 
 # Ignore executable files
 *.exe
+*.ini
