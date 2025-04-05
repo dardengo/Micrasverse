@@ -1,6 +1,8 @@
 #ifndef SCREEN_HPP
 #define SCREEN_HPP
 
+#include "simulation/simulation_control.hpp"
+
 #include "render/camera.hpp"
 #include "GUI/gui.hpp"
 #include "physics/rectanglebody.hpp"
@@ -19,6 +21,7 @@ private:
     GLFWmonitor* monitor;
     const GLFWvidmode* mode;
     GUI gui;
+    std::shared_ptr<micrasverse::simulation::SimulationControl> simulationControl;
     
 public:
     Camera camera;
@@ -26,18 +29,21 @@ public:
     static unsigned int SCR_HEIGHT;
     glm::mat4 view;
     glm::mat4 projection;    
+    float deltaTime{ 0.0f };
+    float lastFrame{ 0.0f };
       
+    
+    Screen(const std::shared_ptr<micrasverse::simulation::SimulationControl>& simulationControl);
+    
+    ~Screen();
+    
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     
-    Screen();
-
-    ~Screen();
-
     bool init();
 
     void setParameters();
 
-    void processInput(const float deltaTime);
+    void processInput();
 
     void update(const micrasverse::physics::MicrasBody& micrasBody);
 

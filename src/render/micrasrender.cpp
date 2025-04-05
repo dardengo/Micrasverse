@@ -5,7 +5,8 @@ namespace micrasverse::render {
 
 MicrasRender::MicrasRender(const b2Vec2 position, const b2Vec2 size)
     : SceneObj() {
-    this->shader = Shader("./render/assets/vertex-core.glsl", "./render/assets/fragment-core.glsl");
+    this->shader = Shader();
+    this->shader.generate("src/render/assets/vertex-core.glsl", "src/render/assets/fragment-core.glsl");
     
     this->renderModel = Rectangle(
         Material::green_plastic,

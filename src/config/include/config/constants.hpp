@@ -5,6 +5,8 @@
 
 namespace micrasverse {
 
+    constexpr float STEP = 1.0f / 60.0f;                                                    // s — simulation step time
+
     constexpr b2Vec2 GRAVITY = {0.0f, +0.0f};                                               // m/s^2 — set to {0.0f} for top-down view
     
     constexpr int MAZE_CELLS_HEIGHT = 16;                                                   // number of cells
@@ -25,7 +27,7 @@ namespace micrasverse {
     constexpr float MICRAS_HEIGHT = 0.10f;                                                  // m
     constexpr float MICRAS_HALFHEIGHT = MICRAS_HEIGHT / 2.0f;                               // m
     constexpr float MICRAS_MASS = 0.110f;                                                   // kg
-    constexpr float MICRAS_RESTITUTION = 0.0f;                                             // bounciness
+    constexpr float MICRAS_RESTITUTION = 0.0f;                                              // bounciness
     constexpr float MICRAS_FRICTION = 0.95f;                                                // friction coefficient
     constexpr float MICRAS_WHEEL_RADIUS = 0.0112f;                                          // m
     constexpr float MICRAS_GEAR_RATIO = 2.5f;                                               // reduction ratio

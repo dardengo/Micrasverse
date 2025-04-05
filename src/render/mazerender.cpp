@@ -4,9 +4,18 @@
 
 namespace micrasverse::render {
 
-MazeRender::MazeRender(const std::vector<physics::Maze::Element>& elements): SceneObj() {
+MazeRender::MazeRender(const std::vector<physics::Maze::Element>& elements): SceneObj(), elements(elements) {}
+
+MazeRender::~MazeRender() {
+    for (auto& wall : this->mazeWalls) {
+        wall.cleanUp();
+    }
+}
+
+void MazeRender::init() {
     
-    this->shader = Shader("./render/assets/vertex-core.glsl", "./render/assets/fragment-core.glsl");
+    this->shader = Shader();
+    this->shader.generate("src/render/assets/vertex-core.glsl", "src/render/assets/fragment-core.glsl");
     
     this->renderModel = Rectangle(
         Material::black_rubber,                                        // Material
@@ -14,7 +23,7 @@ MazeRender::MazeRender(const std::vector<physics::Maze::Element>& elements): Sce
         glm::vec3(MAZE_FLOOR_WIDTH, MAZE_FLOOR_HEIGHT, 0.01f)          // Size
     );
      
-    for (auto& element : elements) {
+    for (auto& element : this->elements) {
         Rectangle newWall(
             Material::red_plastic,                                      // Material
             glm::vec3(element.position.x, element.position.y, 0.0f),    // Position of the center
@@ -28,13 +37,8 @@ MazeRender::MazeRender(const std::vector<physics::Maze::Element>& elements): Sce
     for (auto& wall : this->mazeWalls) {
         wall.init();
     }
-    
-}
 
-MazeRender::~MazeRender() {
-    for (auto& wall : this->mazeWalls) {
-        wall.cleanUp();
-    }
+
 }
 
 void MazeRender::render(const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) {

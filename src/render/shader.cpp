@@ -5,10 +5,6 @@ namespace micrasverse::render {
 // Constructor
 Shader::Shader() {}
 
-Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
-    generate(vertexShaderPath, fragmentShaderPath);
-}
-
 void Shader::generate(const char* vertexShaderPath, const char* fragmentShaderPath) {
     
     // Compile vertex shader

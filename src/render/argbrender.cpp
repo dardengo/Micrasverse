@@ -9,7 +9,8 @@ ARGBRender::ARGBRender(const b2Vec2 position, const b2Vec2 size, const glm::vec3
     this->baseColor = baseColor;
     this->isOn = isOn;
 
-    this->shader = Shader("./render/assets/vertex-core.glsl", "./render/assets/fragment-led.glsl");
+    this->shader = Shader();
+    this->shader.generate("src/render/assets/vertex-core.glsl", "src/render/assets/fragment-led.glsl");
     
     this->renderModel = Led(
         isOn ? this->lightColor : this->baseColor,
@@ -30,7 +31,8 @@ ARGBRender::ARGBRender(const b2Vec2 position, const b2Vec2 size, const std::arra
     this->baseColor = {baseColor[0], baseColor[1], baseColor[2]};
     this->isOn = isOn;
 
-    this->shader = Shader("./render/assets/vertex-core.glsl", "./render/assets/fragment-led.glsl");
+    this->shader = Shader();
+    this->shader.generate("src/render/assets/vertex-core.glsl", "src/render/assets/fragment-led.glsl");
     
     this->renderModel = Led(
         isOn ? this->lightColor : this->baseColor,

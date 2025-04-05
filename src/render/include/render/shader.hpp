@@ -20,9 +20,7 @@ public:
 
     Shader();
 
-    Shader(const char* vertexShaderPath, const char* fragmentShaderPath);
-
-    void generate (const char* vertexShaderPath, const char* fragmentShaderPath);
+    void generate(const char* vertexShaderPath, const char* fragmentShaderPath);
 
     void activate(const glm::mat4 view, const glm::mat4 projection);
 

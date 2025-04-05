@@ -7,7 +7,8 @@ namespace micrasverse::render {
 LidarRender::LidarRender(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading, const Camera& camera)
     : LightObj(), lightColor(glm::vec3(237.0f, 47.0f, 50.0f) / 255.0f), camera(camera) {
 
-    this->shader = Shader("./render/assets/vertex-core.glsl", "./render/assets/fragment-led.glsl");
+    this->shader = Shader();
+    this->shader.generate("src/render/assets/vertex-core.glsl", "src/render/assets/fragment-led.glsl");
     this->renderModel = Led(
         this->lightColor,
         glm::vec3(1.0f),
