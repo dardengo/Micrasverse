@@ -2,6 +2,10 @@
 #include "io/mouse.hpp"
 #include "io/keyboard.hpp"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 #include <iostream>
 
 namespace micrasverse::render {
@@ -9,16 +13,17 @@ namespace micrasverse::render {
 unsigned int Screen::SCR_WIDTH = 1366;
 unsigned int Screen::SCR_HEIGHT = 768;
 
+
+Screen::Screen(const std::shared_ptr<micrasverse::simulation::SimulationControl>& simulationControl) : window(nullptr), camera(), simulationControl(simulationControl) {}
+
+Screen::~Screen() {
+    this->destroy();
+}
+
 void Screen::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
     SCR_WIDTH = width;
     SCR_HEIGHT = height;
-}
-
-Screen::Screen() : window(nullptr) {}
-
-Screen::~Screen() {
-    this->destroy();
 }
 
 bool Screen::init() {
@@ -73,10 +78,6 @@ bool Screen::init() {
     this->view = glm::mat4(1.0f);
     this->projection = glm::mat4(1.0f);
 
-    // Create and initialize camera
-    micrasverse::render::Camera camera(glm::vec3(-0.3f, micrasverse::MAZE_FLOOR_HALFHEIGHT, 4.75f));
-    this->camera = camera;
-
     return true;
 };
 
@@ -92,12 +93,16 @@ void Screen::setParameters() {
 
 
     // Create and initialize GUI after user callbacks are set so to not overwrite ImGui's callbacks 
-    GUI gui;
-    this->gui = gui;
+    this->gui.setSimulationControl(this->simulationControl);
     this->gui.init(this->window);
 }
 
-void Screen::processInput(const float deltaTime) {
+void Screen::processInput() {
+    // compute delta time
+    float currentFrame = glfwGetTime();
+    this->deltaTime = currentFrame - this->lastFrame;
+    this->lastFrame = currentFrame;
+
     if (io::Keyboard::keyWentDown(GLFW_KEY_ESCAPE)) {
         this->setShouldClose(true);
     }
@@ -129,7 +134,7 @@ void Screen::processInput(const float deltaTime) {
     }
 
     double scrollDy = io::Mouse::getScrollDy();
-    if (scrollDy != 0.0) {
+    if (scrollDy != 0.0 & !ImGui::GetIO().WantCaptureMouse) {
         this->camera.updateCameraZoom(scrollDy);
     }
 }

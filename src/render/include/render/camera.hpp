@@ -52,7 +52,7 @@ public:
     bool centerMaze {true};
 
     // Default and initialize with position
-    Camera(const glm::vec3 position = glm::vec3(MAZE_FLOOR_HALFWIDTH, MAZE_FLOOR_HALFHEIGHT, 3.75f));
+    Camera(const glm::vec3 position = glm::vec3(-0.3f, micrasverse::MAZE_FLOOR_HALFHEIGHT, 4.75f));
 
     // Modifiers
 
