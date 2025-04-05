@@ -10,9 +10,10 @@ namespace micrasverse::physics {
 class World {
 private:
     b2WorldId worldId;
+    b2Vec2 gravity;
 
 public:
-    explicit World(const b2Vec2 gravity);
+    explicit World();
 
     ~World();
 

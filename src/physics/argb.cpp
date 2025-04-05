@@ -16,11 +16,8 @@ void Argb::setColor(const core::Color color){
     this->lightColorArray = color.toArray();
 }
 
-void Argb::update(b2Vec2 micrasPosition){
-    this->worldPosition = b2Vec2{
-        micrasPosition.x + this->localPosition.x,
-        micrasPosition.y + this->localPosition.y
-    };
+void Argb::update(){
+    this->worldPosition = b2Body_GetWorldPoint(this->bodyId, this->localPosition);
 }
 
 void Argb::turnOn(){
@@ -39,11 +36,7 @@ void Argb::turnOff(){
 }
 
 void Argb::toggle(){
-    if (this->isOn) {
-        this->turnOff();
-    } else {
-        this->turnOn();
-    }
+    this->isOn = !this->isOn;
 }
 
 } // namespace micras::proxy

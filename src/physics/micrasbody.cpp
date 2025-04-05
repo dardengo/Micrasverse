@@ -67,8 +67,9 @@ void MicrasBody::update(const float deltaTime) {
             argb.turnOn();
         } else {
             argb.turnOff();
-        }        
-        argb.update(this->getPosition());
+        }
+        
+        argb.update();
     }
 }
 

@@ -23,7 +23,7 @@ public:
 
     void setColor(const core::Color color);
 
-    void update(b2Vec2 micrasPosition);
+    void update();
 
     void turnOn();
 

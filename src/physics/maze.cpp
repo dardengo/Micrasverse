@@ -7,6 +7,8 @@
 #include <fstream>
 #include <stdexcept>
 #include <regex>
+#include <iostream>
+#include <filesystem>
 
 namespace micrasverse::physics {
 
@@ -18,6 +20,11 @@ Maze::Maze(const b2WorldId worldId, const std::string& filename) {
 
 // Parse maze from file
 void Maze::loadFromFile(const std::string& filename) {
+    
+    if (!std::filesystem::exists(filename)) {
+        throw std::runtime_error("File does not exist: " + filename);
+    }
+
     std::ifstream file(filename);
     if (!file.is_open()) {
         throw std::runtime_error("Unable to open maze file");

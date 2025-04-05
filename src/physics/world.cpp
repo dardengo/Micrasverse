@@ -2,9 +2,10 @@
 
 namespace micrasverse::physics {
 
-    World::World(const b2Vec2 gravity) {
+    World::World() {
         b2WorldDef worldDef = b2DefaultWorldDef();
-        worldDef.gravity = gravity;
+        worldDef.gravity = micrasverse::GRAVITY;
+        this->gravity = worldDef.gravity;
         this->worldId = b2CreateWorld(&worldDef);
     }
 
