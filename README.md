@@ -23,7 +23,7 @@ A micromouse simulator built for [Micras](https://github.com/Team-Micras/), the 
 - Addressable RGB.
 - Fan control.
 - Real-time interactive charts.
-- Can run headless.
+- Simulation control through GUI.
 
 
 ## 📁 Folder structure
@@ -45,8 +45,6 @@ Micrasverse depends on the following libraries:
 | [ImPlot](https://github.com/epezent/implot) | Used for generating graphs         | MIT         |
 | [GLM](https://github.com/g-truc/glm)   | Used for vector math | MIT         |
 | [Mazefiles](https://github.com/micromouseonline/mazefiles)   | Used for generating the maze |          |
-
-⚡ If you're running it headless, only [Box2D](https://github.com/erincatto/box2d) and the maze file are needed.
 
 ## 🙏 Credits
 This project was inspired by [Artful Bytes' Bots2D](https://github.com/artfulbytes/bots2d) and built with the help of [Michael Grieco's](https://www.youtube.com/@MichaelGrieco) awesome openGL tutoritals.
