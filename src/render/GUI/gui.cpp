@@ -60,10 +60,16 @@ void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
             }
     
             // Restart simulation with selected maze
-            /*
-            if (ImGui::Button("Restart Maze")) {
+            
+            if (ImGui::Button("Load Maze")) {
                 simulationControl->resetSimulation(mazePaths[selectedMazeIdx]);
-            }*/
+            }
+
+            if (ImGui::Button("Reset Simulation"))
+            {
+                simulationControl->resetSimulation();
+            }
+            
         } else {
             ImGui::TextColored(ImVec4(1,0.5f,0.5f,1), "No maze files found!");
         }

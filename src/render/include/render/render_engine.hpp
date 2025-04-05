@@ -24,6 +24,8 @@ class RenderEngine {
 
     void renderFrame();
 
+    void reloadMaze(const std::string& mazeFilePath);
+
     std::unique_ptr<Screen> screen;
     
     private:

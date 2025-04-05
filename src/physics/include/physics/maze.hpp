@@ -29,12 +29,17 @@ public:
     // Parse maze from file
     void loadFromFile(const std::string& filename);
 
-    std::vector<Element> getElements();
+    std::vector<Element>& getElements();
 
     const b2WorldId getWorldId();
 
     // Create Box2D objects
     void createBox2dObjects();
+
+    // Destroy Box2D objects
+    void destroy();
+
+    void reloadFromFile(const std::string& filename);
 
 };
 

@@ -19,6 +19,8 @@ public:
 
     void init();
 
+    void reloadElements(const std::vector<physics::Maze::Element>& elements);
+
     void render(const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) override;
 
 private:

@@ -88,7 +88,7 @@ const b2WorldId Maze::getWorldId() {
     return worldId;
 }
 
-std::vector<Maze::Element> Maze::getElements() {
+std::vector<Maze::Element>& Maze::getElements() {
     return elements;
 };
 
@@ -100,6 +100,20 @@ void Maze::createBox2dObjects() {
         mazeBodies.push_back(elementBody.getBodyId());
     }
     
+}
+
+// Destroy Box2D objects
+void Maze::destroy() {
+    for (const auto& bodyId : mazeBodies) {
+        b2DestroyBody(bodyId); // Destroy the Box2D body
+    }
+    mazeBodies.clear(); // Clear the list of maze bodies
+    elements.clear();   // Clear the list of maze elements
+}
+
+void Maze::reloadFromFile(const std::string& filename) {
+    this->destroy(); // Destroy existing Box2D objects
+    this->loadFromFile(filename); // Load the maze from the new file
 }
 
 } // namespace micrasverse::physics

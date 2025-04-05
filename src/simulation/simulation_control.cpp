@@ -38,7 +38,6 @@ const std::string& SimulationControl::getCurrentMazePath() const{
     return this->currentMazePath;
 }
 
-
 void SimulationControl::loadMaze(const std::string& mazeFilePath){
     this->currentMazePath = mazeFilePath;
     this->physicsEngine = std::make_shared<physics::PhysicsEngine>(mazeFilePath);
@@ -56,8 +55,6 @@ void SimulationControl::updateSimulation(float step){
     if (this->isRunning) {
         this->physicsEngine->update(step);
     }
-    
-    
 }
 
 void SimulationControl::stepThroughSimulation(float step){
@@ -67,11 +64,16 @@ void SimulationControl::stepThroughSimulation(float step){
 
 
 void SimulationControl::resetSimulation(){
-    this->loadMaze(currentMazePath);
+    this->isRunning = false;
+    this->physicsEngine->resetMicrasPosition();
 }
 
 void SimulationControl::resetSimulation(const std::string& mazeFilePath){
-    this->loadMaze(mazeFilePath);
+    this->physicsEngine->resetMicrasPosition();
+    this->physicsEngine->loadMaze(mazeFilePath);
+    this->currentMazePath = mazeFilePath;
+    this->isRunning = false;
+    this->wasReset = true;
 }
 
 } // namespace micrasverse::simulation

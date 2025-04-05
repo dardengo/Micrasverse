@@ -44,6 +44,8 @@ public:
     std::shared_ptr<physics::PhysicsEngine> physicsEngine;
     
     bool isRunning{false};
+    bool wasReset{false};
+
     private:
     // Private member variables to manage simulation state
     std::vector<std::string> mazePaths{};

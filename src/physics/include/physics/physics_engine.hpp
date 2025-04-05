@@ -19,6 +19,10 @@ public:
 
     void update(float step = 1.0f/60.0f);
 
+    void loadMaze(const std::string& mazePath);
+
+    void resetMicrasPosition();
+
 };
 
 }

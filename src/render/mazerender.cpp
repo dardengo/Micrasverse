@@ -41,6 +41,12 @@ void MazeRender::init() {
 
 }
 
+void MazeRender::reloadElements(const std::vector<physics::Maze::Element>& elements) {
+    this->mazeWalls.clear();
+    this->elements = elements;
+    this->init();
+}
+
 void MazeRender::render(const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) {
     this->shader.activate(view, projection);
 

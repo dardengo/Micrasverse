@@ -59,6 +59,10 @@ namespace micrasverse::render {
         for (size_t i = 0; i < this->simulationControl->physicsEngine->p_Micras.wallSensors.get_sensors().size(); i++) {
             this->lidarsSceneObjs[i]->update(this->simulationControl->physicsEngine->p_Micras.wallSensors.get_sensors()[i].rayMidPoint, this->simulationControl->physicsEngine->p_Micras.wallSensors.get_sensors()[i].rayDirection, this->simulationControl->physicsEngine->p_Micras.wallSensors.get_sensors()[i].reading);
         }
+
+        if(this->simulationControl->wasReset) {
+            this->reloadMaze(this->simulationControl->getCurrentMazePath());
+        }
     }
 
     void RenderEngine::renderFrame() {
@@ -86,6 +90,11 @@ namespace micrasverse::render {
 
         //Swap front (screen) buffer and back (rendering) buffer + poll events like window resize, key and mouse input etc.
         screen->newFrame();      
+    }
+
+    void RenderEngine::reloadMaze(const std::string& mazeFilePath) {
+            this->mazeRender->reloadElements(this->simulationControl->physicsEngine->p_Maze.getElements());
+            this->simulationControl->wasReset = false;
     }
 
 
