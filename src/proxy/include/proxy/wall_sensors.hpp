@@ -53,7 +53,7 @@ public:
 
     void attach_sensor(const b2Vec2 localPosition, const float angle);
 
-    std::vector<micrasverse::physics::DistanceSensor>& get_sensors();
+     std::vector<micrasverse::physics::DistanceSensor>& get_sensors();
 
 private:
     std::vector<micrasverse::physics::DistanceSensor> sensors;

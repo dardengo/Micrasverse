@@ -1,14 +1,15 @@
-#include "simulation/simulation_control.hpp"
+#include "simulation/simulation_engine.hpp"
 #include "render/render_engine.hpp"
 #include "config/constants.hpp"
 
 int main() {
-    auto simulationControl = std::make_shared<micrasverse::simulation::SimulationControl>();
+    
+    auto simulationEngine = std::make_shared<micrasverse::simulation::SimulationEngine>();
 
-    micrasverse::render::RenderEngine renderEngine(simulationControl);
+    micrasverse::render::RenderEngine renderEngine(simulationEngine);
 
     while (not renderEngine.screen->shouldClose()) {
-        simulationControl->updateSimulation(micrasverse::STEP);
+        simulationEngine->updateSimulation();
         renderEngine.update();
         renderEngine.renderFrame();
     }

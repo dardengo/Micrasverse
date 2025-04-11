@@ -10,8 +10,8 @@ namespace micrasverse::render {
 
 GUI::GUI() {}
 
-void GUI::setSimulationControl(const std::shared_ptr<micrasverse::simulation::SimulationControl>& simulationControl) {
-    this->simulationControl = simulationControl;
+void GUI::setSimulationEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine) {
+    this->simulationEngine = simulationEngine;
 }
 
 void GUI::init(GLFWwindow* window) {
@@ -37,10 +37,10 @@ void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
     ImGui::Text("Press 'C' to center camera on maze");
     ImGui::Text("Press 'ESC' to exit");
 
-    if (this->simulationControl) {
-        ImGui::SeparatorText("Simulation Control");
+    if (this->simulationEngine) {
+        ImGui::SeparatorText("Simulation Controls");
     
-        const auto& mazePaths = simulationControl->getMazePaths();
+        const auto& mazePaths = simulationEngine->getMazePaths();
         static int selectedMazeIdx = 0;
     
         if (!mazePaths.empty()) {
@@ -62,12 +62,12 @@ void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
             // Restart simulation with selected maze
             
             if (ImGui::Button("Load Maze")) {
-                simulationControl->resetSimulation(mazePaths[selectedMazeIdx]);
+                simulationEngine->resetSimulation(mazePaths[selectedMazeIdx]);
             }
 
             if (ImGui::Button("Reset Simulation"))
             {
-                simulationControl->resetSimulation();
+                simulationEngine->resetSimulation();
             }
             
         } else {
@@ -75,18 +75,18 @@ void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
         }
     
         // Toggle simulation running
-        if (ImGui::Button(simulationControl->isRunning ? "Pause" : "Start")) {
-            simulationControl->toggleSimulation();
+        if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {
+            simulationEngine->togglePause();
         }
     
         ImGui::SameLine();
     
         // Step one frame
         if (ImGui::Button("Step")) {
-            simulationControl->stepThroughSimulation();
+            simulationEngine->stepThroughSimulation();
         }
     
-        ImGui::Text("Simulation is %s", simulationControl->isRunning ? "Running" : "Paused");
+        ImGui::Text("Simulation is %s", simulationEngine->isPaused ? "Paused" : "Running");
     }
     
 

@@ -2,7 +2,7 @@
 #define CAMERA_HPP
 
 #include "config/constants.hpp"
-#include "physics/micrasbody.hpp"
+#include "physics/box2d_micrasbody.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"

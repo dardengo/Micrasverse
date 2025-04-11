@@ -1,7 +1,7 @@
 #ifndef MAZE_RENDER_HPP
 #define MAZE_RENDER_HPP
 
-#include "physics/maze.hpp"
+#include "physics/box2d_maze.hpp"
 #include "render/sceneobj.hpp"
 
 #include <vector>

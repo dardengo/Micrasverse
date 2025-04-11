@@ -1,7 +1,7 @@
 #ifndef PLOT_HPP
 #define PLOT_HPP
 
-#include "physics/micrasbody.hpp"
+#include "physics/box2d_micrasbody.hpp"
 
 #include "imgui.h"
 

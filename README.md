@@ -1,4 +1,3 @@
-
 <div align="center" >
 
 ![micras_simulation_blue](https://github.com/Team-Micras/micras_simulation/assets/62271285/655d90d7-ae21-47df-b6ab-64d46ef4a559)
@@ -48,3 +47,57 @@ Micrasverse depends on the following libraries:
 
 ## 🙏 Credits
 This project was inspired by [Artful Bytes' Bots2D](https://github.com/artfulbytes/bots2d) and built with the help of [Michael Grieco's](https://www.youtube.com/@MichaelGrieco) awesome openGL tutoritals.
+
+## Building with CMake
+
+### Requirements
+- CMake 3.14 or higher
+- C++17 compatible compiler
+- GLFW3
+- Box2D
+- OpenGL development libraries
+
+### Build Steps
+
+#### Linux
+```bash
+# Create build directory
+mkdir -p build && cd build
+
+# Configure
+cmake ..
+
+# Build
+cmake --build .
+
+# Run
+./bin/micrasverse
+```
+
+#### Windows
+```bash
+# Create build directory
+mkdir build
+cd build
+
+# Configure
+cmake ..
+
+# Build
+cmake --build . --config Release
+
+# Run
+.\bin\Release\micrasverse.exe
+```
+
+### Project Structure
+The CMake build system organizes the project into several static libraries:
+- `config_module`: Configuration constants and settings
+- `core_module`: Core functionality
+- `io_module`: Input/output handling
+- `physics_engine`: Physics simulation using Box2D
+- `proxy_module`: Interface between components
+- `render_engine`: Rendering using OpenGL
+- `simulation_engine`: Main simulation logic
+
+Each module only links to the dependencies it actually needs, making the codebase more maintainable.

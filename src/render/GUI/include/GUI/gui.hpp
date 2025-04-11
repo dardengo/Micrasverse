@@ -1,9 +1,9 @@
 #ifndef GUI_HPP
 #define GUI_HPP
 
-#include "simulation/simulation_control.hpp"
+#include "simulation/simulation_Engine.hpp"
 #include "GUI/plot.hpp"
-#include "physics/micrasbody.hpp"
+#include "physics/box2d_micrasbody.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -20,7 +20,7 @@ public:
     
     GUI();
 
-    void setSimulationControl(const std::shared_ptr<micrasverse::simulation::SimulationControl>& simulationControl);
+    void setSimulationEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine);
 
     void init(GLFWwindow* window);
     
@@ -35,7 +35,7 @@ public:
     void destroy();
 
 private:
-    std::shared_ptr<micrasverse::simulation::SimulationControl> simulationControl;
+    std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
 };
 
 } // namespace micrasverse::render

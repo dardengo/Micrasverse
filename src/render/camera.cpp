@@ -52,6 +52,8 @@ void Camera::updateCameraPos(const CameraDirection direction, const double dt) {
     case CameraDirection::DOWN:
         position -= cameraUp * velocity;
         break;
+    case CameraDirection::NONE:
+        break;
     }
 }
 

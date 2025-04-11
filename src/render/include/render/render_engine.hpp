@@ -1,8 +1,8 @@
 #ifndef RENDER_ENGINE_HPP
 #define RENDER_ENGINE_HPP
 
-#include "simulation/simulation_control.hpp"
-#include "physics/physics_engine.hpp"
+#include "simulation/simulation_engine.hpp"
+#include "physics/i_physics_engine.hpp"
 #include "render/screen.hpp"
 #include "render/micrasrender.hpp"
 #include "render/argbrender.hpp"
@@ -18,7 +18,7 @@ namespace micrasverse::render {
 
 class RenderEngine {
     public:
-    RenderEngine(const std::shared_ptr<micrasverse::simulation::SimulationControl>& simulationControl);
+    RenderEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine);
 
     void update();
 
@@ -29,7 +29,7 @@ class RenderEngine {
     std::unique_ptr<Screen> screen;
     
     private:
-    std::shared_ptr<micrasverse::simulation::SimulationControl> simulationControl;
+    std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
     std::unique_ptr<MazeRender> mazeRender;
     std::unique_ptr<MicrasRender> micrasRender;
     std::vector<std::unique_ptr<ARGBRender>> argbsSceneObjs;

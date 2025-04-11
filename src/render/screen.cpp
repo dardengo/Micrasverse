@@ -14,7 +14,7 @@ unsigned int Screen::SCR_WIDTH = 1366;
 unsigned int Screen::SCR_HEIGHT = 768;
 
 
-Screen::Screen(const std::shared_ptr<micrasverse::simulation::SimulationControl>& simulationControl) : window(nullptr), camera(), simulationControl(simulationControl) {}
+Screen::Screen(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine) : window(nullptr), camera(), simulationEngine(simulationEngine) {}
 
 Screen::~Screen() {
     this->destroy();
@@ -93,7 +93,7 @@ void Screen::setParameters() {
 
 
     // Create and initialize GUI after user callbacks are set so to not overwrite ImGui's callbacks 
-    this->gui.setSimulationControl(this->simulationControl);
+    this->gui.setSimulationEngine(this->simulationEngine);
     this->gui.init(this->window);
 }
 
@@ -134,7 +134,7 @@ void Screen::processInput() {
     }
 
     double scrollDy = io::Mouse::getScrollDy();
-    if (scrollDy != 0.0 & !ImGui::GetIO().WantCaptureMouse) {
+    if ((scrollDy != 0.0) & (!ImGui::GetIO().WantCaptureMouse)) {
         this->camera.updateCameraZoom(scrollDy);
     }
 }

@@ -1,11 +1,11 @@
 #ifndef SCREEN_HPP
 #define SCREEN_HPP
 
-#include "simulation/simulation_control.hpp"
+#include "simulation/simulation_engine.hpp"
 
 #include "render/camera.hpp"
 #include "GUI/gui.hpp"
-#include "physics/rectanglebody.hpp"
+#include "physics/box2d_rectanglebody.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
@@ -21,7 +21,7 @@ private:
     GLFWmonitor* monitor;
     const GLFWvidmode* mode;
     GUI gui;
-    std::shared_ptr<micrasverse::simulation::SimulationControl> simulationControl;
+    std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
     
 public:
     Camera camera;
@@ -33,7 +33,7 @@ public:
     float lastFrame{ 0.0f };
       
     
-    Screen(const std::shared_ptr<micrasverse::simulation::SimulationControl>& simulationControl);
+    Screen(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine);
     
     ~Screen();
     
