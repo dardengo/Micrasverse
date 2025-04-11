@@ -10,10 +10,9 @@
 namespace micrasverse::simulation {
 
 SimulationEngine::SimulationEngine() {
-    std::string mazePath = "../../../external/mazefiles/classic/japan2016-eq.txt";
-    this->setPhysicsEngine(std::make_shared<micrasverse::physics::Box2DPhysicsEngine>(mazePath));
-    this->updateMazePaths("../../../external/mazefiles/classic");
-    this->currentMazePath = mazePath;
+    this->setPhysicsEngine(std::make_shared<micrasverse::physics::Box2DPhysicsEngine>("external/mazefiles/classic/br2024-robochallenge-day3.txt"));
+    this->updateMazePaths("external/mazefiles/classic");
+    this->currentMazePath = "external/mazefiles/classic/br2024-robochallenge-day3.txt";
 }
 
 void SimulationEngine::updateMazePaths(const std::string& folderPath){
