@@ -1,7 +1,7 @@
 #ifndef GUI_HPP
 #define GUI_HPP
 
-#include "simulation/simulation_Engine.hpp"
+#include "simulation/simulation_engine.hpp"
 #include "GUI/plot.hpp"
 #include "physics/box2d_micrasbody.hpp"
 

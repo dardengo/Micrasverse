@@ -1,0 +1,16 @@
+
+Physics:
+- Fix where the wheels are
+- Fix where the distance sensors are
+- Model LEDs
+- Transfer movement constraints to a Wheel class → still thinking about this
+
+Graphics:
+- Be able to render text inside the maze (mostly numbers for the cost of each cell)
+- Include lighting effects to represent LEDs
+
+General:
+- Change screen to a scene that contain scene elements, in a way the the scene can access&modify the scene elements through GUI
+- Make possible to load a different maze from file (and through GUI)
+- Create a "known" maze to represent what micras currently knows about the maze
+- Integrate with MicrasController (need proxies' interface)

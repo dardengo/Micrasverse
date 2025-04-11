@@ -32,7 +32,7 @@ Plot::RollingBuffer::RollingBuffer(int span, int maxSize) {
 }
 
 void Plot::RollingBuffer::addPoint(float x, float y) {
-    float xmod = std::fmodf(x, this->span);
+    float xmod = std::fmod(x, this->span);
 
     if (!this->data.empty() && xmod < this->data.back().x) {
         this->data.shrink(0);

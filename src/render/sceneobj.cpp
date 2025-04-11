@@ -1,4 +1,4 @@
-#include "render/sceneObj.hpp"
+#include "render/sceneobj.hpp"
 
 namespace micrasverse::render {
 
