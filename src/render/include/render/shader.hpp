@@ -22,6 +22,10 @@ public:
 
     void generate(const char* vertexShaderPath, const char* fragmentShaderPath);
 
+    // Activate the shader
+    void use();
+    
+    // Activate with view and projection matrices
     void activate(const glm::mat4 view, const glm::mat4 projection);
 
     // Utility functions

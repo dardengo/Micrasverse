@@ -38,6 +38,7 @@ const std::string& SimulationEngine::getCurrentMazePath() const{
 void SimulationEngine::loadMaze(const std::string& mazeFilePath){
     this->currentMazePath = mazeFilePath;
     this->physicsEngine->loadMaze(mazeFilePath);
+    this->wasReset = true;
 }
 
 void SimulationEngine::togglePause(){

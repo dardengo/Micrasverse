@@ -14,27 +14,32 @@ public:
         : Model(material, position, size) {}
 
     void init() {
-        int noVertices {0};
-
+        // Clear any previous meshes
+        meshes.clear();
+        
+        // Simplify the calculation for vertices/indices
         float vertices[] = {
         // Positions        // Normals         
        -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Bottom left
         0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Bottom right
        -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Top left
-        0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Bottom right
-       -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Top left
-        0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Top right
+        0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // Top right
         };
 
-        noVertices = sizeof(vertices) / sizeof(float) / 6;
-
-        std::vector<unsigned int> indices(noVertices);
-
-        for (unsigned int i = 0; i < noVertices; i++) {
-            indices[i] = i;
-        }
-
-        meshes.push_back(Mesh(Vertex::genList(vertices, noVertices), indices));
+        unsigned int indices[] = {
+            0, 1, 2,  // First triangle
+            1, 3, 2   // Second triangle
+        };
+        
+        int noVertices = 4;
+        int noIndices = 6;
+        
+        // Create vertices and indices lists from the arrays
+        std::vector<Vertex> vertexList = Vertex::genList(vertices, noVertices);
+        std::vector<unsigned int> indexList(indices, indices + noIndices);
+        
+        // Add the mesh to the model
+        meshes.push_back(Mesh(vertexList, indexList));
     }
 
     void setPose(const glm::vec3 position, const b2Rot rotation) {
@@ -44,7 +49,6 @@ public:
 
     void setMaterial(const Material material) {
         this->material = material;
-        this->init();
     }
 
     void setSize(const glm::vec3 size) {
@@ -52,21 +56,29 @@ public:
     }
     
     void render(Shader shader, const bool setModel = false) {
+        // Ensure shaders are properly set up before rendering
+        if (meshes.empty()) {
+            return; // Skip rendering if not initialized
+        }
+        
+        // Set up the model matrix
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(position.x , position.y, position.z));
+        model = glm::translate(model, position);
         model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, size);
 
+        // Set uniforms
         shader.setMat4("model", model);
-
         shader.set3Float("material.ambient", this->material.ambient);
         shader.set3Float("material.diffuse", this->material.diffuse);
         shader.set3Float("material.specular", this->material.specular);
         shader.setFloat("material.shininess", this->material.shininess);
 
-        Model::render(shader, setModel);
+        // Render the meshes
+        for (Mesh& mesh : meshes) {
+            mesh.render();
+        }
     }
-    
 };
 
 } // micrasverse::render

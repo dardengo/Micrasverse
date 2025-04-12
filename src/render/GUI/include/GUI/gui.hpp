@@ -36,6 +36,8 @@ public:
 
 private:
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
+    bool showStyleEditor;
+    GLFWwindow* currentWindow;  // Store the GLFW window for size queries
 };
 
 } // namespace micrasverse::render

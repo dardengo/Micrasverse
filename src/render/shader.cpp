@@ -32,6 +32,10 @@ void Shader::generate(const char* vertexShaderPath, const char* fragmentShaderPa
     glDeleteShader(fragmentShader);
 }
 
+void Shader::use() {
+    glUseProgram(this->id);
+}
+
 void Shader::activate(const glm::mat4 view, const glm::mat4 projection) {
     glUseProgram(this->id);
     this->setMat4("view", view);

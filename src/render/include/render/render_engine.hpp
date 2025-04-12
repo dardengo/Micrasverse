@@ -10,9 +10,11 @@
 #include "render/mazerender.hpp"
 #include "models/led.hpp"
 #include "render/shader.hpp"
+#include "render/boundingbox.hpp"
 
 #include <vector>
 #include <memory>
+#include <array>
 
 namespace micrasverse::render {
 
@@ -29,6 +31,13 @@ class RenderEngine {
     std::unique_ptr<Screen> screen;
     
     private:
+    // Frustum culling check for optimization
+    bool isObjectInView(const BoundingBox& bbox);
+    
+    // Performance optimization flags
+    bool isFullscreen;
+    bool frustumCullingEnabled;
+    
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
     std::unique_ptr<MazeRender> mazeRender;
     std::unique_ptr<MicrasRender> micrasRender;

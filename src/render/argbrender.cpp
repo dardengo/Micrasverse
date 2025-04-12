@@ -17,8 +17,8 @@ ARGBRender::ARGBRender(const b2Vec2 position, const b2Vec2 size, const glm::vec3
         glm::vec3(1.0f),
         glm::vec3(1.0f),
         glm::vec3(1.0f),
-        glm::vec3(position.x, position.y, 0.02f),
-        glm::vec3(size.x, size.y, 0.0f)
+        glm::vec3(position.x, position.y, 0.021f),
+        glm::vec3(size.x, size.y, 0.01f)
     );
 
     this->renderModel.init();
@@ -40,7 +40,7 @@ ARGBRender::ARGBRender(const b2Vec2 position, const b2Vec2 size, const std::arra
         glm::vec3(1.0f),
         glm::vec3(1.0f),
         glm::vec3(position.x, position.y, 0.02f),
-        glm::vec3(size.x, size.y, 0.0f)
+        glm::vec3(size.x, size.y, 0.01f)
     );
 
     this->renderModel.init();
@@ -63,6 +63,9 @@ glm::vec3 ARGBRender::colorToVec3(const core::Color& color) {
 }
 
 void ARGBRender::render(const glm::mat4 view, const glm::mat4 projection) {
+    // Add depth test disable to ensure LEDs are always visible on top
+    glDisable(GL_DEPTH_TEST);
+    
     this->shader.set3Float("lightPosition", this->renderModel.position);
     this->shader.set3Float("viewPosition", this->camera.position);
     this->shader.set3Float("light.ambient", this->renderModel.ambient);
@@ -72,6 +75,9 @@ void ARGBRender::render(const glm::mat4 view, const glm::mat4 projection) {
     this->shader.activate(view, projection);
     
     this->renderModel.render(shader, true);
+    
+    // Restore depth testing for other objects
+    glEnable(GL_DEPTH_TEST);
 }
 
 } // namespace micrasverse::render

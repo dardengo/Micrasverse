@@ -23,6 +23,18 @@ private:
     GUI gui;
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
     
+    // FPS counting
+    float fps = 0.0f;
+    float lastFrameTime;
+    int frameCount;
+    
+    // Fullscreen tracking
+    bool isFullscreen;
+    int lastWidth;
+    int lastHeight;
+    
+    void updateAndDisplayFPS();
+    
 public:
     Camera camera;
     static unsigned int SCR_WIDTH;
@@ -44,6 +56,8 @@ public:
     void setParameters();
 
     void processInput();
+    
+    void toggleFullscreen();
 
     void update(const micrasverse::physics::MicrasBody& micrasBody);
 

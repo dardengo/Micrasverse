@@ -23,7 +23,7 @@ struct Vertex
 
 class Mesh {
 public:
-    unsigned int VAO;
+    unsigned int VAO = 0;
     std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
 
@@ -35,8 +35,8 @@ public:
     void cleanUp();
 
 private:
-    unsigned int VBO;
-    unsigned int EBO;
+    unsigned int VBO = 0;
+    unsigned int EBO = 0;
 
     void setup();
 };

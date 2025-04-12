@@ -14,6 +14,7 @@ class LidarRender: public LightObj {
 public:
     glm::vec3 lightColor;
     Camera camera;
+    bool visible;  // Flag to show/hide the lidar beam
 
     LidarRender(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading, const Camera& camera);
     

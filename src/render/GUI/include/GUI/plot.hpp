@@ -36,6 +36,10 @@ public:
     void draw(micrasverse::physics::MicrasBody& micrasBody);
 
     void destroy();
+    
+    bool showPlots;
+    float updateInterval;
+    float timeSinceLastUpdate;
 };
 
 
