@@ -1,13 +1,12 @@
 #ifndef DIPSWITCH_HPP
 #define DIPSWITCH_HPP
 
+#include "physics/i_dipswitch.hpp"
 #include <vector>
-#include <string>
-#include <unordered_map>
 
 namespace micrasverse::physics {
 
-class DipSwitch {
+class DipSwitch : public IDipSwitch {
 private:
     std::vector<bool> switches;                      // Stores the state of each switch
 
@@ -16,14 +15,10 @@ public:
     DipSwitch();
     DipSwitch(size_t numSwitches);
 
-    // Read the state of a switch by index
-    bool readSwitch(size_t switchIndex) const;
-
-    // Set the state of a switch by index
-    void setSwitch(size_t switchIndex, bool state);
-
-    // Toggle the state of a switch by index
-    void toggleSwitch(size_t switchIndex);
+    // Implement IDipSwitch interface
+    bool readSwitch(size_t switchIndex) const override;
+    void setSwitch(size_t switchIndex, bool state) override;
+    void toggleSwitch(size_t switchIndex) override;
 };
 
 } // namespace micrasverse::physics

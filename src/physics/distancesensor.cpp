@@ -8,9 +8,10 @@ DistanceSensor::DistanceSensor(const b2BodyId bodyId, const b2Vec2 localPosition
     this->localPosition = localPosition;
     this->angle = angle;
     this->localDirection = {cos(angle), sin(angle)};
+    this->reading = 0.0f; // Initialize reading to 0
 }
 
-float DistanceSensor::getReading() {
+float DistanceSensor::update() {
     const b2Vec2 origin = b2Body_GetWorldPoint(this->bodyId, this->localPosition);
     const b2Vec2 worldDirection = b2Body_GetWorldVector(this->bodyId, this->localDirection);
     const b2Vec2 translation = MAZE_FLOOR_WIDTH * worldDirection;
@@ -28,28 +29,40 @@ float DistanceSensor::getReading() {
     return this->reading;
 }
 
-b2Vec2 DistanceSensor::getLocalPosition(){
-    return this->localPosition;
+float DistanceSensor::getReading() const {
+    return this->reading;
 }
 
-b2Vec2 DistanceSensor::getDirection(){
-    return this->localDirection;
+core::Vec2 DistanceSensor::getLocalPosition() const {
+    return {this->localPosition.x, this->localPosition.y};
 }
 
-float DistanceSensor::getAngle(){ 
+core::Vec2 DistanceSensor::getDirection() const {
+    return {this->localDirection.x, this->localDirection.y};
+}
+
+float DistanceSensor::getAngle() const { 
     return this->angle;
 }
 
-void DistanceSensor::setLocalPosition(const b2Vec2 localPosition){ 
-    this->localPosition = localPosition;
+void DistanceSensor::setLocalPosition(const core::Vec2& localPosition) { 
+    this->localPosition = {localPosition.x, localPosition.y};
 }
 
-void DistanceSensor::setDirection(const b2Vec2 direction){ 
-    this->localDirection = direction;
+void DistanceSensor::setDirection(const core::Vec2& direction) { 
+    this->localDirection = {direction.x, direction.y};
 }
 
-void DistanceSensor::setAngle(const float angle){ 
+void DistanceSensor::setAngle(float angle) { 
     this->angle = angle;
+}
+
+core::Vec2 DistanceSensor::getRayMidPoint() const {
+    return {this->rayMidPoint.x, this->rayMidPoint.y};
+}
+
+core::Rotation DistanceSensor::getRayDirection() const {
+    return {this->rayDirection.c, this->rayDirection.s};
 }
 
 } // namespace micrasverse::physics

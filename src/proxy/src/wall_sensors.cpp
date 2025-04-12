@@ -39,7 +39,7 @@ void TWallSensors<num_of_sensors>::turn_off() {
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::update() {
     for (auto& sensor : this->sensors) {
-        sensor.getReading();
+        sensor.update();
     }
 }
 

@@ -58,7 +58,7 @@ void MicrasBody::update(const float deltaTime) {
     this->locomotion.update(deltaTime, this->dipSwitch.readSwitch(Switch::FAN));
 
     for (auto& sensor : this->wallSensors.get_sensors()) {
-        sensor.getReading();
+        sensor.update();
     }
 
     for (auto& argb : this->argb.argbs) {

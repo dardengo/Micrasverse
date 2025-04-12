@@ -11,9 +11,13 @@ Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, core::Color& ligh
         this->baseColorArray = this->baseColor.toArray();
     }
 
-void Argb::setColor(const core::Color color){
+void Argb::setColor(const core::Color& color){
     this->lightColor = color;
     this->lightColorArray = color.toArray();
+}
+
+core::Color Argb::getColor() const {
+    return this->lightColor;
 }
 
 void Argb::update(){
@@ -21,22 +25,33 @@ void Argb::update(){
 }
 
 void Argb::turnOn(){
-    this->isOn = true;
+    this->isLedOn = true;
 }
 
-void Argb::turnOn(const core::Color color){
+void Argb::turnOn(const core::Color& color){
     this->lightColor = color;
     this->lightColorArray = color.toArray();
-    this->isOn = true;
+    this->isLedOn = true;
 }
 
-
 void Argb::turnOff(){
-    this->isOn = false;
+    this->isLedOn = false;
 }
 
 void Argb::toggle(){
-    this->isOn = !this->isOn;
+    this->isLedOn = !this->isLedOn;
 }
 
-} // namespace micras::proxy
+bool Argb::isOn() const {
+    return this->isLedOn;
+}
+
+core::Vec2 Argb::getWorldPosition() const {
+    return {this->worldPosition.x, this->worldPosition.y};
+}
+
+core::Vec2 Argb::getSize() const {
+    return {this->size.x, this->size.y};
+}
+
+} // namespace micrasverse::physics

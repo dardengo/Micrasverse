@@ -19,6 +19,14 @@ namespace micrasverse::physics {
 
     void Box2DPhysicsEngine::loadMaze(const std::string& mazePath) {
         this->p_Maze.reloadFromFile(mazePath);
+        
+        // Also turn off lidar rays when loading a new maze
+        for (auto& lidar : p_Micras.wallSensors.get_sensors()) {
+            // Set reading to 0 to make rays invisible
+            lidar.reading = 0.0f;
+            // Still update position
+            lidar.update();
+        }
     }
 
     void Box2DPhysicsEngine::resetMicrasPosition() {
@@ -27,7 +35,15 @@ namespace micrasverse::physics {
         b2Body_SetAngularVelocity(p_Micras.getBodyId(), 0.0f);
 
         for (auto& argb : p_Micras.argb.argbs) {
-            argb.update(); // or pass the body ID to use GetWorldPoint
+            argb.update();
+        }
+
+        // Force all lidar rays to be hidden by setting readings to 0
+        for (auto& lidar : p_Micras.wallSensors.get_sensors()) {
+            // Set reading to 0 to make rays invisible
+            lidar.reading = 0.0f;
+            // Still update position
+            lidar.update();
         }
     }
 

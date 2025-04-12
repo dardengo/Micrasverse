@@ -49,6 +49,6 @@ struct Color {
     }
 };
 
-}  // namespace micras::core
+}  // namespace micrasverse::core
 
 #endif  // MICRAS_CORE_TYPES_HPP

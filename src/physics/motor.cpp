@@ -11,6 +11,10 @@ Motor::Motor(b2BodyId bodyId, b2Vec2 localPosition, bool leftWheel, const float 
     this->frictionCoefficient = MICRAS_FRICTION;
     this->t_angle = 0.0f;
     this->isFanOn = false;
+    this->appliedForce = 0.0f;
+    this->torque = 0.0f;
+    this->bodyLinearVelocity = 0.0f;
+    this->bodyAngularVelocity = 0.0f;
 }
 
 void Motor::setCommand(float command) {
@@ -18,6 +22,8 @@ void Motor::setCommand(float command) {
 }
 
 void Motor::update(float deltaTime, bool isFanOn) {
+    this->isFanOn = isFanOn;
+    
     // Calculate input voltage based on the command
     float inputVoltage = this->maxVoltage * (this->inputCommand / 100.0f);
 
@@ -73,6 +79,30 @@ float Motor::getCurrent() const {
 
 float Motor::getAngularVelocity() const {
     return this->angularVelocity;
+}
+
+float Motor::getAppliedForce() const {
+    return this->appliedForce;
+}
+
+float Motor::getTorque() const {
+    return this->torque;
+}
+
+float Motor::getBodyLinearVelocity() const {
+    return this->bodyLinearVelocity;
+}
+
+float Motor::getBodyAngularVelocity() const {
+    return this->bodyAngularVelocity;
+}
+
+bool Motor::isLeftWheel() const {
+    return this->leftWheel;
+}
+
+bool Motor::getFanState() const {
+    return this->isFanOn;
 }
 
 } // namespace micrasverse::physics
