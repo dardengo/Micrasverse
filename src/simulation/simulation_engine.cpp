@@ -24,7 +24,7 @@ void SimulationEngine::updateMazePaths(const std::string& folderPath){
         }
     }
 
-    //std::sort(mazePaths.begin(), mazePaths.end()); // optional: sort alphabetically
+    std::sort(mazePaths.begin(), mazePaths.end());
 }
 
 const std::vector<std::string>& SimulationEngine::getMazePaths() const{
