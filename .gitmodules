@@ -16,3 +16,8 @@
 [submodule "external/MicrasFirmware"]
 	path = external/MicrasFirmware
 	url = https://github.com/Team-Micras/MicrasFirmware.git
+	branch = feature/stopwatch-proxy
+[submodule "MicrasFirmware"]
+	path = MicrasFirmware
+	url = https://github.com/Team-Micras/MicrasFirmware.git
+	branch = feature/stopwatch-proxy

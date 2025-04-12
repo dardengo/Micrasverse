@@ -79,4 +79,4 @@ elif [ -f "bin/$BUILD_TYPE/micrasverse" ]; then
 else
   echo "Executable not found. Check the build output for errors."
   echo "Expected locations: ./bin/micrasverse or ./bin/$BUILD_TYPE/micrasverse"
-fi 
+fi
