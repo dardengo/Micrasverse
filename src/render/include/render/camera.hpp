@@ -76,7 +76,7 @@ public:
     // Get zoom value for camera
     float getZoom();
 
-    void update(const micrasverse::physics::MicrasBody& micrasBody);
+    void update(const micrasverse::physics::Box2DMicrasBody& micrasBody);
 
 private:
     // Private modifier

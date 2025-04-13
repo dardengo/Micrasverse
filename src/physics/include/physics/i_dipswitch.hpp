@@ -1,5 +1,5 @@
-#ifndef I_DIPSWITCH_HPP
-#define I_DIPSWITCH_HPP
+#ifndef MICRASVERSE_PHYSICS_I_DIPSWITCH_HPP
+#define MICRASVERSE_PHYSICS_I_DIPSWITCH_HPP
 
 #include <cstddef>
 
@@ -21,4 +21,4 @@ public:
 
 } // namespace micrasverse::physics
 
-#endif // I_DIPSWITCH_HPP 
+#endif // MICRASVERSE_PHYSICS_I_DIPSWITCH_HPP 

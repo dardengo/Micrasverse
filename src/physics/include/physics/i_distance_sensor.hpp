@@ -1,33 +1,87 @@
-#ifndef I_DISTANCE_SENSOR_HPP
-#define I_DISTANCE_SENSOR_HPP
+#ifndef MICRASVERSE_PHYSICS_I_DISTANCE_SENSOR_HPP
+#define MICRASVERSE_PHYSICS_I_DISTANCE_SENSOR_HPP
 
-#include "core/types.hpp"
+#include "micrasverse_core/types.hpp"
+#include "physics/i_sensor.hpp"
 
 namespace micrasverse::physics {
 
-class IDistanceSensor {
+/**
+ * @brief Interface for distance sensors.
+ */
+class IDistanceSensor : public ISensor {
 public:
     virtual ~IDistanceSensor() = default;
 
-    // Update method that performs the actual calculation
-    virtual float update() = 0;
-    
-    // Method that simply returns the last cached reading
+    /**
+     * @brief Get the local position of the sensor.
+     *
+     * @return The local position of the sensor.
+     */
+    virtual micrasverse::types::Vec2 getLocalPosition() const = 0;
+
+    /**
+     * @brief Get the direction of the sensor.
+     *
+     * @return The direction of the sensor.
+     */
+    virtual micrasverse::types::Vec2 getDirection() const = 0;
+
+    /**
+     * @brief Set the local position of the sensor.
+     *
+     * @param localPosition The new local position of the sensor.
+     */
+    virtual void setLocalPosition(const micrasverse::types::Vec2& localPosition) = 0;
+
+    /**
+     * @brief Set the direction of the sensor.
+     *
+     * @param direction The new direction of the sensor.
+     */
+    virtual void setDirection(const micrasverse::types::Vec2& direction) = 0;
+
+    /**
+     * @brief Get the midpoint of the ray.
+     *
+     * @return The midpoint of the ray.
+     */
+    virtual micrasverse::types::Vec2 getRayMidPoint() const = 0;
+
+    /**
+     * @brief Get the direction of the ray.
+     *
+     * @return The direction of the ray.
+     */
+    virtual micrasverse::types::Vec2 getRayDirection() const = 0;
+
+    /**
+     * @brief Update the sensor reading.
+     */
+    virtual void update() = 0;
+
+    /**
+     * @brief Get the current reading of the sensor.
+     *
+     * @return The current reading.
+     */
     virtual float getReading() const = 0;
 
-    // Get/set position and direction
-    virtual core::Vec2 getLocalPosition() const = 0;
-    virtual core::Vec2 getDirection() const = 0;
+    /**
+     * @brief Get the angle of the sensor.
+     *
+     * @return The angle of the sensor.
+     */
     virtual float getAngle() const = 0;
-    virtual void setLocalPosition(const core::Vec2& localPosition) = 0;
-    virtual void setDirection(const core::Vec2& direction) = 0;
-    virtual void setAngle(float angle) = 0;
 
-    // Visualization data accessors
-    virtual core::Vec2 getRayMidPoint() const = 0;
-    virtual core::Rotation getRayDirection() const = 0;
+    /**
+     * @brief Set the angle of the sensor.
+     *
+     * @param angle The new angle of the sensor.
+     */
+    virtual void setAngle(float angle) = 0;
 };
-    
+
 } // namespace micrasverse::physics
 
-#endif // I_DISTANCE_SENSOR_HPP 
+#endif // MICRASVERSE_PHYSICS_I_DISTANCE_SENSOR_HPP 

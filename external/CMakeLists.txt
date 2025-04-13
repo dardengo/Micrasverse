@@ -47,3 +47,9 @@ if(NOT TARGET implot)
   target_include_directories(implot PUBLIC ${IMPLOT_DIR})
   target_link_libraries(implot PUBLIC imgui)
 endif() 
+
+# MicrasFirmware
+if(NOT TARGET micras_nav)
+  add_subdirectory(MicrasFirmware/micras_core)
+  add_subdirectory(MicrasFirmware/micras_nav)
+endif() 

@@ -1,5 +1,5 @@
-#ifndef I_ROBOT_CONTROLLER_HPP
-#define I_ROBOT_CONTROLLER_HPP
+#ifndef MICRASVERSE_PHYSICS_I_ROBOT_CONTROLLER_HPP
+#define MICRASVERSE_PHYSICS_I_ROBOT_CONTROLLER_HPP
 
 #include <vector>
 #include <memory>
@@ -31,4 +31,4 @@ public:
 
 } // namespace micrasverse::physics
 
-#endif // I_ROBOT_CONTROLLER_HPP 
+#endif // MICRASVERSE_PHYSICS_I_ROBOT_CONTROLLER_HPP 

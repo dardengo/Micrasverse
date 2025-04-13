@@ -1,8 +1,8 @@
 #ifndef MICRAS_TARGET_HPP
 #define MICRAS_TARGET_HPP
 
-#include "proxy/wall_sensors.hpp"
-#include "proxy/argb.hpp"
+#include "micras/proxy/wall_sensors.hpp"
+#include "micras/proxy/argb.hpp"
 
 namespace micras::proxy{
     using WallSensors = micras::proxy::TWallSensors<4>;

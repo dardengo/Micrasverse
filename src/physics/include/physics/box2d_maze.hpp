@@ -27,14 +27,14 @@ public:
     std::vector<std::unique_ptr<RectangleBody>> mazeBodiesObjects; // List of maze bodies objects
     
     // Constructor
-    Maze(const b2WorldId worldId, const std::string& filename);
+    Maze(b2WorldId worldId, const std::string& filename);
 
     // Parse maze from file
     void loadFromFile(const std::string& filename);
 
     const std::vector<Element>& getElements() const;
 
-    const b2WorldId getWorldId();
+    b2WorldId getWorldId() const { return worldId; }
 
     // Create Box2D objects
     void createBox2dObjects();

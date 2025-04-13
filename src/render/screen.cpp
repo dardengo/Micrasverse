@@ -190,7 +190,7 @@ void Screen::updateAndDisplayFPS() {
     }
 }
 
-void Screen::update(const micrasverse::physics::MicrasBody& micrasBody) {
+void Screen::update(const micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // Clear the screen
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -224,7 +224,7 @@ void Screen::update(const micrasverse::physics::MicrasBody& micrasBody) {
     updateAndDisplayFPS();
 }
 
-void Screen::renderGUI(micrasverse::physics::MicrasBody& micrasBody) {
+void Screen::renderGUI(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // Now render GUI
     this->gui.draw(micrasBody);
     this->gui.render();

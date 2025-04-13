@@ -1,5 +1,5 @@
-#ifndef PHYSICS_TYPES_HPP
-#define PHYSICS_TYPES_HPP
+#ifndef MICRASVERSE_PHYSICS_PHYSICS_TYPES_HPP
+#define MICRASVERSE_PHYSICS_PHYSICS_TYPES_HPP
 
 namespace micrasverse::physics {
 
@@ -19,4 +19,4 @@ namespace micrasverse::physics {
 
 } // namespace micrasverse::physics
 
-#endif // PHYSICS_TYPES_HPP
+#endif // MICRASVERSE_PHYSICS_PHYSICS_TYPES_HPP

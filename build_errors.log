@@ -1,0 +1,756 @@
+Configuring CMake with build type: Debug
+-- The C compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libOpenGL.so   
+-- CMake C compiler: GNU
+-- CMake C++ compiler: GNU
+-- CMake system name: Linux
+-- CMake host system processor: x86_64
+-- Box2D using Unix
+-- GLM: Version 1.0.2
+-- GLM: Build with C++ features auto detection
+-- Configuring done (2.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/darde/repos/Micrasverse/build
+Building with 16 jobs...
+[  1%] Building C object src/CMakeFiles/glad.dir/glad.c.o
+[  3%] Building CXX object external/CMakeFiles/imgui.dir/imgui/imgui.cpp.o
+[  4%] Building CXX object external/glm/glm/CMakeFiles/glm.dir/detail/glm.cpp.o
+[  1%] Building CXX object external/MicrasFirmware/micras_core/CMakeFiles/micras_core.dir/src/fsm.cpp.o
+[  6%] Building CXX object external/MicrasFirmware/micras_core/CMakeFiles/micras_core.dir/src/butterworth_filter.cpp.o
+[  6%] Building CXX object external/MicrasFirmware/micras_core/CMakeFiles/micras_core.dir/src/pid_controller.cpp.o
+[  7%] Building CXX object external/CMakeFiles/imgui.dir/imgui/imgui_demo.cpp.o
+[  6%] Building CXX object src/config/CMakeFiles/config_module.dir/empty.cpp.o
+[ 10%] Building C object external/box2d/src/CMakeFiles/box2d.dir/array.c.o
+[ 10%] Building CXX object external/CMakeFiles/imgui.dir/imgui/imgui_widgets.cpp.o
+[ 10%] Building C object external/box2d/src/CMakeFiles/box2d.dir/bitset.c.o
+[ 12%] Building C object external/box2d/src/CMakeFiles/box2d.dir/aabb.c.o
+[ 12%] Building C object external/box2d/src/CMakeFiles/box2d.dir/body.c.o
+[ 12%] Building CXX object external/CMakeFiles/imgui.dir/imgui/imgui_tables.cpp.o
+[ 12%] Building CXX object external/CMakeFiles/imgui.dir/imgui/imgui_draw.cpp.o
+[ 13%] Building CXX object external/CMakeFiles/imgui.dir/imgui/backends/imgui_impl_glfw.cpp.o
+[ 14%] Linking CXX static library ../../lib/libconfig_module.a
+[ 16%] Building C object external/box2d/src/CMakeFiles/box2d.dir/broad_phase.c.o
+[ 16%] Building C object external/box2d/src/CMakeFiles/box2d.dir/constraint_graph.c.o
+[ 16%] Building C object external/box2d/src/CMakeFiles/box2d.dir/contact.c.o
+[ 16%] Built target config_module
+[ 17%] Building C object external/box2d/src/CMakeFiles/box2d.dir/contact_solver.c.o
+[ 18%] Building C object external/box2d/src/CMakeFiles/box2d.dir/core.c.o
+[ 19%] Building C object external/box2d/src/CMakeFiles/box2d.dir/distance.c.o
+[ 20%] Linking C static library ../lib/libglad.a
+[ 21%] Building C object external/box2d/src/CMakeFiles/box2d.dir/distance_joint.c.o
+[ 22%] Building C object external/box2d/src/CMakeFiles/box2d.dir/dynamic_tree.c.o
+[ 22%] Building C object external/box2d/src/CMakeFiles/box2d.dir/geometry.c.o
+[ 23%] Building CXX object external/CMakeFiles/imgui.dir/imgui/backends/imgui_impl_opengl3.cpp.o
+[ 24%] Building C object external/box2d/src/CMakeFiles/box2d.dir/hull.c.o
+[ 24%] Built target glad
+[ 25%] Building C object external/box2d/src/CMakeFiles/box2d.dir/id_pool.c.o
+[ 26%] Building CXX object src/core/CMakeFiles/micrasverse_core.dir/empty.cpp.o
+[ 27%] Linking CXX static library ../../lib/libmicrasverse_core.a
+[ 28%] Building C object external/box2d/src/CMakeFiles/box2d.dir/island.c.o
+[ 29%] Building C object external/box2d/src/CMakeFiles/box2d.dir/joint.c.o
+[ 30%] Building C object external/box2d/src/CMakeFiles/box2d.dir/manifold.c.o
+[ 30%] Building C object external/box2d/src/CMakeFiles/box2d.dir/math_functions.c.o
+[ 31%] Building C object external/box2d/src/CMakeFiles/box2d.dir/motor_joint.c.o
+[ 32%] Building C object external/box2d/src/CMakeFiles/box2d.dir/mouse_joint.c.o
+[ 33%] Building C object external/box2d/src/CMakeFiles/box2d.dir/prismatic_joint.c.o
+[ 33%] Built target micrasverse_core
+[ 34%] Building C object external/box2d/src/CMakeFiles/box2d.dir/revolute_joint.c.o
+[ 35%] Building C object external/box2d/src/CMakeFiles/box2d.dir/shape.c.o
+[ 35%] Building C object external/box2d/src/CMakeFiles/box2d.dir/solver.c.o
+[ 36%] Building C object external/box2d/src/CMakeFiles/box2d.dir/solver_set.c.o
+[ 37%] Building C object external/box2d/src/CMakeFiles/box2d.dir/stack_allocator.c.o
+[ 38%] Building C object external/box2d/src/CMakeFiles/box2d.dir/table.c.o
+[ 39%] Building C object external/box2d/src/CMakeFiles/box2d.dir/timer.c.o
+[ 40%] Building C object external/box2d/src/CMakeFiles/box2d.dir/types.c.o
+[ 40%] Building C object external/box2d/src/CMakeFiles/box2d.dir/weld_joint.c.o
+[ 41%] Building C object external/box2d/src/CMakeFiles/box2d.dir/wheel_joint.c.o
+[ 42%] Building C object external/box2d/src/CMakeFiles/box2d.dir/world.c.o
+[ 43%] Linking C static library ../../../lib/libbox2dd.a
+/usr/bin/ar qc ../../../lib/libbox2dd.a CMakeFiles/box2d.dir/aabb.c.o CMakeFiles/box2d.dir/array.c.o CMakeFiles/box2d.dir/bitset.c.o CMakeFiles/box2d.dir/body.c.o CMakeFiles/box2d.dir/broad_phase.c.o CMakeFiles/box2d.dir/constraint_graph.c.o CMakeFiles/box2d.dir/contact.c.o CMakeFiles/box2d.dir/contact_solver.c.o CMakeFiles/box2d.dir/core.c.o CMakeFiles/box2d.dir/distance.c.o CMakeFiles/box2d.dir/distance_joint.c.o CMakeFiles/box2d.dir/dynamic_tree.c.o CMakeFiles/box2d.dir/geometry.c.o CMakeFiles/box2d.dir/hull.c.o CMakeFiles/box2d.dir/id_pool.c.o CMakeFiles/box2d.dir/island.c.o CMakeFiles/box2d.dir/joint.c.o CMakeFiles/box2d.dir/manifold.c.o CMakeFiles/box2d.dir/math_functions.c.o CMakeFiles/box2d.dir/motor_joint.c.o CMakeFiles/box2d.dir/mouse_joint.c.o CMakeFiles/box2d.dir/prismatic_joint.c.o CMakeFiles/box2d.dir/revolute_joint.c.o CMakeFiles/box2d.dir/shape.c.o CMakeFiles/box2d.dir/solver.c.o CMakeFiles/box2d.dir/solver_set.c.o CMakeFiles/box2d.dir/stack_allocator.c.o CMakeFiles/box2d.dir/table.c.o CMakeFiles/box2d.dir/timer.c.o CMakeFiles/box2d.dir/types.c.o CMakeFiles/box2d.dir/weld_joint.c.o CMakeFiles/box2d.dir/wheel_joint.c.o CMakeFiles/box2d.dir/world.c.o
+[ 44%] Linking CXX static library ../../../lib/libmicras_core.a
+/usr/bin/ranlib ../../../lib/libbox2dd.a
+[ 44%] Built target box2d
+[ 44%] Built target micras_core
+[ 49%] Building CXX object external/MicrasFirmware/micras_nav/CMakeFiles/micras_nav.dir/src/maze.cpp.o
+[ 49%] Building CXX object external/MicrasFirmware/micras_nav/CMakeFiles/micras_nav.dir/src/look_at_point.cpp.o
+[ 49%] Building CXX object external/MicrasFirmware/micras_nav/CMakeFiles/micras_nav.dir/src/mapping.cpp.o
+[ 49%] Building CXX object external/MicrasFirmware/micras_nav/CMakeFiles/micras_nav.dir/src/grid_pose.cpp.o
+[ 49%] Building CXX object external/MicrasFirmware/micras_nav/CMakeFiles/micras_nav.dir/src/follow_wall.cpp.o
+[ 49%] Building CXX object external/MicrasFirmware/micras_nav/CMakeFiles/micras_nav.dir/src/go_to_point.cpp.o
+[ 50%] Building CXX object external/MicrasFirmware/micras_nav/CMakeFiles/micras_nav.dir/src/odometry.cpp.o
+[ 50%] Building CXX object external/MicrasFirmware/micras_nav/CMakeFiles/micras_nav.dir/src/state.cpp.o
+[ 51%] Linking CXX static library ../../../lib/libmicras_nav.a
+[ 51%] Built target micras_nav
+[ 52%] Linking CXX static library ../lib/libimgui.a
+[ 52%] Built target imgui
+[ 54%] Building CXX object external/CMakeFiles/implot.dir/implot/implot_items.cpp.o
+[ 54%] Building CXX object external/CMakeFiles/implot.dir/implot/implot_demo.cpp.o
+[ 54%] Building CXX object external/CMakeFiles/implot.dir/implot/implot.cpp.o
+[ 55%] Linking CXX static library ../../../lib/libglm.a
+[ 55%] Built target glm
+[ 57%] Building CXX object src/io/CMakeFiles/io_module.dir/mouse.cpp.o
+[ 57%] Building CXX object src/io/CMakeFiles/io_module.dir/keyboard.cpp.o
+[ 57%] Linking CXX static library ../../lib/libio_module.a
+[ 57%] Built target io_module
+[ 60%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_dipswitch.cpp.o
+[ 60%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/argb.cpp.o
+[ 63%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_distance_sensor.cpp.o
+[ 63%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_led.cpp.o
+[ 63%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_micrasbody.cpp.o
+[ 63%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_maze.cpp.o
+[ 64%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_physics_factory.cpp.o
+[ 63%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_motor.cpp.o
+[ 63%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_physics_engine.cpp.o
+[ 67%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_world.cpp.o
+[ 67%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_robot.cpp.o
+[ 65%] Building CXX object src/physics/CMakeFiles/physics_engine.dir/box2d_rectanglebody.cpp.o
+[ 67%] Linking CXX static library ../../lib/libphysics_engine.a
+[ 67%] Built target physics_engine
+[ 71%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/argb.cpp.o
+[ 71%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/battery.cpp.o
+[ 71%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/button.cpp.o
+[ 72%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/dip_switch.cpp.o
+[ 72%] Building CXX object src/simulation/CMakeFiles/simulation_engine.dir/simulation_engine.cpp.o
+[ 74%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/buzzer.cpp.o
+[ 74%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/gui_controller.cpp.o
+[ 76%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/led.cpp.o
+[ 76%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/imu.cpp.o
+[ 76%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/rotary_sensor.cpp.o
+[ 76%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/fan.cpp.o
+[ 77%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/motor.cpp.o
+[ 78%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/stopwatch.cpp.o
+[ 80%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/storage.cpp.o
+[ 80%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/locomotion.cpp.o
+[ 81%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/torque_sensors.cpp.o
+[ 82%] Building CXX object src/proxy/CMakeFiles/proxy_module.dir/src/wall_sensors.cpp.o
+[ 83%] Linking CXX static library ../../lib/libproxy_module.a
+[ 84%] Linking CXX static library ../../lib/libsimulation_engine.a
+[ 84%] Built target simulation_engine
+[ 84%] Built target proxy_module
+[ 85%] Linking CXX static library ../lib/libimplot.a
+[ 85%] Built target implot
+[ 88%] Building CXX object src/render/CMakeFiles/render_engine.dir/lidarrender.cpp.o
+[ 88%] Building CXX object src/render/CMakeFiles/render_engine.dir/camera.cpp.o
+[ 92%] Building CXX object src/render/CMakeFiles/render_engine.dir/micrasrender.cpp.o
+[ 94%] Building CXX object src/render/CMakeFiles/render_engine.dir/lightobj.cpp.o
+[ 92%] Building CXX object src/render/CMakeFiles/render_engine.dir/mazerender.cpp.o
+[ 92%] Building CXX object src/render/CMakeFiles/render_engine.dir/argbrender.cpp.o
+[ 92%] Building CXX object src/render/CMakeFiles/render_engine.dir/GUI/plot.cpp.o
+[ 94%] Building CXX object src/render/CMakeFiles/render_engine.dir/model.cpp.o
+[ 94%] Building CXX object src/render/CMakeFiles/render_engine.dir/mesh.cpp.o
+[ 94%] Building CXX object src/render/CMakeFiles/render_engine.dir/sceneobj.cpp.o
+[ 95%] Building CXX object src/render/CMakeFiles/render_engine.dir/GUI/gui.cpp.o
+[ 95%] Building CXX object src/render/CMakeFiles/render_engine.dir/screen.cpp.o
+[ 96%] Building CXX object src/render/CMakeFiles/render_engine.dir/shader.cpp.o
+[ 88%] Building CXX object src/render/CMakeFiles/render_engine.dir/material.cpp.o
+[ 97%] Building CXX object src/render/CMakeFiles/render_engine.dir/render_engine.cpp.o
+In file included from /home/darde/repos/Micrasverse/src/render/GUI/plot.cpp:1:
+/home/darde/repos/Micrasverse/src/render/GUI/include/GUI/plot.hpp:36:15: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   36 |     void draw(micrasverse::physics::MicrasBody& micrasBody);
+      |               ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/GUI/plot.cpp:54:6: error: variable or field ‘draw’ declared void
+   54 | void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
+      |      ^~~~
+/home/darde/repos/Micrasverse/src/render/GUI/plot.cpp:54:39: error: ‘MicrasBody’ is not a member of ‘micrasverse::physics’; did you mean ‘Box2DMicrasBody’?
+   54 | void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
+      |                                       ^~~~~~~~~~
+      |                                       Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/GUI/plot.cpp:54:51: error: ‘micrasBody’ was not declared in this scope; did you mean ‘micras’?
+   54 | void Plot::draw(micrasverse::physics::MicrasBody& micrasBody){
+      |                                                   ^~~~~~~~~~
+      |                                                   micras
+gmake[2]: *** [src/render/CMakeFiles/render_engine.dir/build.make:90: src/render/CMakeFiles/render_engine.dir/GUI/plot.cpp.o] Error 1
+gmake[2]: *** Waiting for unfinished jobs....
+In file included from /home/darde/repos/Micrasverse/src/render/camera.cpp:1:
+/home/darde/repos/Micrasverse/src/render/include/render/camera.hpp:79:45: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+   79 |     void update(const micrasverse::physics::MicrasBody& micrasBody);
+      |                                             ^~~~~~~~~~
+      |                                             Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/camera.cpp:95:49: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+   95 | void Camera::update(const micrasverse::physics::MicrasBody& micrasBody) {
+      |                                                 ^~~~~~~~~~
+      |                                                 Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/camera.cpp: In member function ‘void micrasverse::render::Camera::update(const int&)’:
+/home/darde/repos/Micrasverse/src/render/camera.cpp:98:38: error: request for member ‘getPosition’ in ‘micrasBody’, which is of non-class type ‘const int’
+   98 |         this->position = {micrasBody.getPosition().x, micrasBody.getPosition().y, this->position.z};
+      |                                      ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/camera.cpp:98:66: error: request for member ‘getPosition’ in ‘micrasBody’, which is of non-class type ‘const int’
+   98 |         this->position = {micrasBody.getPosition().x, micrasBody.getPosition().y, this->position.z};
+      |                                                                  ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/camera.cpp:98:99: error: no match for ‘operator=’ (operand types are ‘glm::vec3’ {aka ‘glm::vec<3, float, glm::packed_highp>’} and ‘<brace-enclosed initializer list>’)
+   98 |         this->position = {micrasBody.getPosition().x, micrasBody.getPosition().y, this->position.z};
+      |                                                                                                   ^
+In file included from /home/darde/repos/Micrasverse/external/glm/glm/./ext/vector_bool3.hpp:5,
+                 from /home/darde/repos/Micrasverse/external/glm/glm/vec3.hpp:5,
+                 from /home/darde/repos/Micrasverse/external/glm/glm/glm.hpp:118,
+                 from /home/darde/repos/Micrasverse/src/render/include/render/camera.hpp:10:
+/home/darde/repos/Micrasverse/external/glm/glm/./ext/../detail/type_vec3.hpp:188:68: note: candidate: ‘template<class U> constexpr glm::vec<3, T, Q>& glm::vec<3, T, Q>::operator=(const glm::vec<3, U, Q>&) [with T = float; glm::qualifier Q = glm::packed_highp]’
+  188 |                 GLM_FUNC_DISCARD_DECL GLM_CONSTEXPR vec<3, T, Q> & operator=(vec<3, U, Q> const& v);
+      |                                                                    ^~~~~~~~
+/home/darde/repos/Micrasverse/external/glm/glm/./ext/../detail/type_vec3.hpp:188:68: note:   template argument deduction/substitution failed:
+/home/darde/repos/Micrasverse/src/render/camera.cpp:98:99: note:   couldn’t deduce template parameter ‘U’
+   98 |         this->position = {micrasBody.getPosition().x, micrasBody.getPosition().y, this->position.z};
+      |                                                                                                   ^
+/home/darde/repos/Micrasverse/external/glm/glm/./ext/../detail/type_vec3.hpp:185:69: note: candidate: ‘constexpr glm::vec<3, T, Q>& glm::vec<3, T, Q>::operator=(const glm::vec<3, T, Q>&) [with T = float; glm::qualifier Q = glm::packed_highp]’
+  185 |                 GLM_DEFAULTED_FUNC_DECL GLM_CONSTEXPR vec<3, T, Q>& operator=(vec<3, T, Q> const& v) GLM_DEFAULT;
+      |                                                                     ^~~~~~~~
+/home/darde/repos/Micrasverse/external/glm/glm/./ext/../detail/type_vec3.hpp:185:99: note:   no known conversion for argument 1 from ‘<brace-enclosed initializer list>’ to ‘const glm::vec<3, float, glm::packed_highp>&’
+  185 |                 GLM_DEFAULTED_FUNC_DECL GLM_CONSTEXPR vec<3, T, Q>& operator=(vec<3, T, Q> const& v) GLM_DEFAULT;
+      |                                                                               ~~~~~~~~~~~~~~~~~~~~^
+In file included from /home/darde/repos/Micrasverse/src/render/GUI/include/GUI/gui.hpp:5,
+                 from /home/darde/repos/Micrasverse/src/render/GUI/gui.cpp:1:
+/home/darde/repos/Micrasverse/src/render/GUI/include/GUI/plot.hpp:36:15: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   36 |     void draw(micrasverse::physics::MicrasBody& micrasBody);
+      |               ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/GUI/include/GUI/gui.hpp:31:15: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   31 |     void draw(micrasverse::physics::MicrasBody& micrasBody);
+      |               ^~~~~~~~~~~
+In file included from /home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:6,
+                 from /home/darde/repos/Micrasverse/src/render/screen.cpp:1:
+/home/darde/repos/Micrasverse/src/render/include/render/camera.hpp:79:45: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+   79 |     void update(const micrasverse::physics::MicrasBody& micrasBody);
+      |                                             ^~~~~~~~~~
+      |                                             Box2DMicrasBody
+gmake[2]: *** [src/render/CMakeFiles/render_engine.dir/build.make:118: src/render/CMakeFiles/render_engine.dir/camera.cpp.o] Error 1
+In file included from /home/darde/repos/Micrasverse/src/render/GUI/include/GUI/gui.hpp:5,
+                 from /home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:7:
+/home/darde/repos/Micrasverse/src/render/GUI/include/GUI/plot.hpp:36:15: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   36 |     void draw(micrasverse::physics::MicrasBody& micrasBody);
+      |               ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/GUI/include/GUI/gui.hpp:31:15: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   31 |     void draw(micrasverse::physics::MicrasBody& micrasBody);
+      |               ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:62:45: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+   62 |     void update(const micrasverse::physics::MicrasBody& micrasBody);
+      |                                             ^~~~~~~~~~
+      |                                             Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:64:20: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   64 |     void renderGUI(micrasverse::physics::MicrasBody& micrasBody);
+      |                    ^~~~~~~~~~~
+In file included from /home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:6,
+                 from /home/darde/repos/Micrasverse/src/render/include/render/render_engine.hpp:6,
+                 from /home/darde/repos/Micrasverse/src/render/render_engine.cpp:4:
+/home/darde/repos/Micrasverse/src/render/include/render/camera.hpp:79:45: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+   79 |     void update(const micrasverse::physics::MicrasBody& micrasBody);
+      |                                             ^~~~~~~~~~
+      |                                             Box2DMicrasBody
+In file included from /home/darde/repos/Micrasverse/src/render/GUI/include/GUI/gui.hpp:5,
+                 from /home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:7:
+/home/darde/repos/Micrasverse/src/render/GUI/include/GUI/plot.hpp:36:15: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   36 |     void draw(micrasverse::physics::MicrasBody& micrasBody);
+      |               ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/GUI/include/GUI/gui.hpp:31:15: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   31 |     void draw(micrasverse::physics::MicrasBody& micrasBody);
+      |               ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:62:45: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+   62 |     void update(const micrasverse::physics::MicrasBody& micrasBody);
+      |                                             ^~~~~~~~~~
+      |                                             Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:64:20: error: ‘micrasverse::physics::MicrasBody’ has not been declared
+   64 |     void renderGUI(micrasverse::physics::MicrasBody& micrasBody);
+      |                    ^~~~~~~~~~~
+In file included from /home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:6,
+                 from /home/darde/repos/Micrasverse/src/render/argbrender.cpp:1:
+/home/darde/repos/Micrasverse/src/render/include/render/camera.hpp:79:45: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+   79 |     void update(const micrasverse::physics::MicrasBody& micrasBody);
+      |                                             ^~~~~~~~~~
+      |                                             Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:33: error: ‘core’ does not name a type
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                                 ^~~~
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:44: error: expected unqualified-id before ‘&’ token
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                                            ^
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:44: error: expected ‘)’ before ‘&’ token
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                          ~                 ^
+      |                                            )
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:44: error: expected ‘;’ at end of member declaration
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                                            ^
+      |                                             ;
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:46: error: ‘color’ does not name a type
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                                              ^~~~~
+/home/darde/repos/Micrasverse/src/render/argbrender.cpp:61:41: error: ‘core’ does not name a type
+   61 | glm::vec3 ARGBRender::colorToVec3(const core::Color& color) {
+      |                                         ^~~~
+/home/darde/repos/Micrasverse/src/render/argbrender.cpp:61:52: error: expected unqualified-id before ‘&’ token
+   61 | glm::vec3 ARGBRender::colorToVec3(const core::Color& color) {
+      |                                                    ^
+/home/darde/repos/Micrasverse/src/render/argbrender.cpp:61:52: error: expected ‘)’ before ‘&’ token
+   61 | glm::vec3 ARGBRender::colorToVec3(const core::Color& color) {
+      |                                  ~                 ^
+      |                                                    )
+/home/darde/repos/Micrasverse/src/render/argbrender.cpp:61:54: error: expected initializer before ‘color’
+   61 | glm::vec3 ARGBRender::colorToVec3(const core::Color& color) {
+      |                                                      ^~~~~
+In file included from /home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:5,
+                 from /home/darde/repos/Micrasverse/src/render/lidarrender.cpp:1:
+/home/darde/repos/Micrasverse/src/render/include/render/camera.hpp:79:45: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+   79 |     void update(const micrasverse::physics::MicrasBody& micrasBody);
+      |                                             ^~~~~~~~~~
+      |                                             Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/screen.cpp:193:49: error: ‘MicrasBody’ in namespace ‘micrasverse::physics’ does not name a type; did you mean ‘Box2DMicrasBody’?
+  193 | void Screen::update(const micrasverse::physics::MicrasBody& micrasBody) {
+      |                                                 ^~~~~~~~~~
+      |                                                 Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/screen.cpp:227:6: error: variable or field ‘renderGUI’ declared void
+  227 | void Screen::renderGUI(micrasverse::physics::MicrasBody& micrasBody) {
+      |      ^~~~~~
+/home/darde/repos/Micrasverse/src/render/screen.cpp:227:46: error: ‘MicrasBody’ is not a member of ‘micrasverse::physics’; did you mean ‘Box2DMicrasBody’?
+  227 | void Screen::renderGUI(micrasverse::physics::MicrasBody& micrasBody) {
+      |                                              ^~~~~~~~~~
+      |                                              Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/screen.cpp:227:58: error: ‘micrasBody’ was not declared in this scope; did you mean ‘micras’?
+  227 | void Screen::renderGUI(micrasverse::physics::MicrasBody& micrasBody) {
+      |                                                          ^~~~~~~~~~
+      |                                                          micras
+In file included from /home/darde/repos/Micrasverse/src/render/include/render/render_engine.hpp:8:
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:33: error: ‘core’ does not name a type
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                                 ^~~~
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:44: error: expected unqualified-id before ‘&’ token
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                                            ^
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:44: error: expected ‘)’ before ‘&’ token
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                          ~                 ^
+      |                                            )
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:44: error: expected ‘;’ at end of member declaration
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                                            ^
+      |                                             ;
+/home/darde/repos/Micrasverse/src/render/include/render/argbrender.hpp:27:46: error: ‘color’ does not name a type; did you mean ‘ImColor’?
+   27 |     glm::vec3 colorToVec3(const core::Color& color);
+      |                                              ^~~~~
+      |                                              ImColor
+/home/darde/repos/Micrasverse/src/render/GUI/gui.cpp:51:6: error: variable or field ‘draw’ declared void
+   51 | void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
+      |      ^~~
+/home/darde/repos/Micrasverse/src/render/GUI/gui.cpp:51:38: error: ‘MicrasBody’ is not a member of ‘micrasverse::physics’; did you mean ‘Box2DMicrasBody’?
+   51 | void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
+      |                                      ^~~~~~~~~~
+      |                                      Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/GUI/gui.cpp:51:50: error: ‘micrasBody’ was not declared in this scope; did you mean ‘micras’?
+   51 | void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
+      |                                                  ^~~~~~~~~~
+      |                                                  micras
+gmake[2]: *** [src/render/CMakeFiles/render_engine.dir/build.make:258: src/render/CMakeFiles/render_engine.dir/screen.cpp.o] Error 1
+gmake[2]: *** [src/render/CMakeFiles/render_engine.dir/build.make:104: src/render/CMakeFiles/render_engine.dir/argbrender.cpp.o] Error 1
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp: In constructor ‘micrasverse::render::RenderEngine::RenderEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>&)’:
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:49:78: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   49 |         for (auto& argb : this->simulationEngine->physicsEngine->getMicras().argb.argbs) {
+      |                                                                              ^~~~
+In file included from /home/darde/repos/Micrasverse/src/physics/include/physics/i_physics_engine.hpp:5,
+                 from /home/darde/repos/Micrasverse/src/simulation/include/simulation/simulation_engine.hpp:4,
+                 from /home/darde/repos/Micrasverse/src/render/include/render/render_engine.hpp:4:
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:49:78: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   49 |         for (auto& argb : this->simulationEngine->physicsEngine->getMicras().argb.argbs) {
+      |                                                                              ^~~~
+      |                                                                              getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:50:81: error: ‘b2Vec2 micrasverse::physics::Argb::worldPosition’ is private within this context
+   50 |             this->argbsSceneObjs.emplace_back(std::make_unique<ARGBRender>(argb.worldPosition, argb.size, argb.lightColorArray, argb.baseColorArray, argb.isOn(), screen->camera));
+      |                                                                                 ^~~~~~~~~~~~~
+In file included from /home/darde/repos/Micrasverse/src/proxy/include/micras/proxy/argb.hpp:7,
+                 from /home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:7:
+/home/darde/repos/Micrasverse/src/physics/include/physics/argb.hpp:49:12: note: declared private here
+   49 |     b2Vec2 worldPosition;
+      |            ^~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:50:101: error: ‘b2Vec2 micrasverse::physics::Argb::size’ is private within this context
+   50 |             this->argbsSceneObjs.emplace_back(std::make_unique<ARGBRender>(argb.worldPosition, argb.size, argb.lightColorArray, argb.baseColorArray, argb.isOn(), screen->camera));
+      |                                                                                                     ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/argb.hpp:50:12: note: declared private here
+   50 |     b2Vec2 size;
+      |            ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:50:112: error: ‘std::array<float, 3> micrasverse::physics::Argb::lightColorArray’ is private within this context
+   50 |             this->argbsSceneObjs.emplace_back(std::make_unique<ARGBRender>(argb.worldPosition, argb.size, argb.lightColorArray, argb.baseColorArray, argb.isOn(), screen->camera));
+      |                                                                                                                ^~~~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/argb.hpp:54:26: note: declared private here
+   54 |     std::array<float, 3> lightColorArray;
+      |                          ^~~~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:50:134: error: ‘std::array<float, 3> micrasverse::physics::Argb::baseColorArray’ is private within this context
+   50 |             this->argbsSceneObjs.emplace_back(std::make_unique<ARGBRender>(argb.worldPosition, argb.size, argb.lightColorArray, argb.baseColorArray, argb.isOn(), screen->camera));
+      |                                                                                                                                      ^~~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/argb.hpp:55:26: note: declared private here
+   55 |     std::array<float, 3> baseColorArray;
+      |                          ^~~~~~~~~~~~~~
+gmake[2]: *** [src/render/CMakeFiles/render_engine.dir/build.make:132: src/render/CMakeFiles/render_engine.dir/lidarrender.cpp.o] Error 1
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:54:79: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+   54 |         for (auto& lidar : this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()) {
+      |                                                                               ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:54:79: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+   54 |         for (auto& lidar : this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()) {
+      |                                                                               ^~~~~~~~~~~
+      |                                                                               getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:55:84: error: ‘b2Vec2 micrasverse::physics::Box2DDistanceSensor::rayMidPoint’ is private within this context
+   55 |             this->lidarsSceneObjs.emplace_back(std::make_unique<LidarRender>(lidar.rayMidPoint, lidar.rayDirection, lidar.reading, screen->camera));
+      |                                                                                    ^~~~~~~~~~~
+In file included from /home/darde/repos/Micrasverse/src/proxy/include/micras/proxy/wall_sensors.hpp:4,
+                 from /home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:6:
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:109:12: note: declared private here
+  109 |     b2Vec2 rayMidPoint;
+      |            ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:55:103: error: ‘b2Vec2 micrasverse::physics::Box2DDistanceSensor::rayDirection’ is private within this context
+   55 |             this->lidarsSceneObjs.emplace_back(std::make_unique<LidarRender>(lidar.rayMidPoint, lidar.rayDirection, lidar.reading, screen->camera));
+      |                                                                                                       ^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:110:12: note: declared private here
+  110 |     b2Vec2 rayDirection;
+      |            ^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:55:123: error: ‘float micrasverse::physics::Box2DDistanceSensor::reading’ is private within this context
+   55 |             this->lidarsSceneObjs.emplace_back(std::make_unique<LidarRender>(lidar.rayMidPoint, lidar.rayDirection, lidar.reading, screen->camera));
+      |                                                                                                                           ^~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:107:11: note: declared private here
+  107 |     float reading;
+      |           ^~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:55:123: note: field ‘float micrasverse::physics::Box2DDistanceSensor::reading’ can be accessed via ‘virtual float micrasverse::physics::Box2DDistanceSensor::getReadingVisual() const’
+   55 |             this->lidarsSceneObjs.emplace_back(std::make_unique<LidarRender>(lidar.rayMidPoint, lidar.rayDirection, lidar.reading, screen->camera));
+      |                                                                                                                           ^~~~~~~
+      |                                                                                                                           getReadingVisual()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp: In member function ‘void micrasverse::render::RenderEngine::update()’:
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:75:64: error: ‘class micrasverse::physics::Box2DMicrasBody’ has no member named ‘getRotation’; did you mean ‘getPosition’?
+   75 |             this->simulationEngine->physicsEngine->getMicras().getRotation()
+      |                                                                ^~~~~~~~~~~
+      |                                                                getPosition
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:82:91: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   82 |                 for (size_t i = 0; i < this->simulationEngine->physicsEngine->getMicras().argb.argbs.size(); i++) {
+      |                                                                                           ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:82:91: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   82 |                 for (size_t i = 0; i < this->simulationEngine->physicsEngine->getMicras().argb.argbs.size(); i++) {
+      |                                                                                           ^~~~
+      |                                                                                           getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:84:76: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   84 |                         this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].worldPosition,
+      |                                                                            ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:84:76: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   84 |                         this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].worldPosition,
+      |                                                                            ^~~~
+      |                                                                            getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:84:90: error: ‘b2Vec2 micrasverse::physics::Argb::worldPosition’ is private within this context
+   84 |                         this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].worldPosition,
+      |                                                                                          ^~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/argb.hpp:49:12: note: declared private here
+   49 |     b2Vec2 worldPosition;
+      |            ^~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:85:76: error: ‘class micrasverse::physics::Box2DMicrasBody’ has no member named ‘getRotation’; did you mean ‘getPosition’?
+   85 |                         this->simulationEngine->physicsEngine->getMicras().getRotation(),
+      |                                                                            ^~~~~~~~~~~
+      |                                                                            getPosition
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:86:76: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   86 |                         this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].lightColorArray,
+      |                                                                            ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:86:76: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   86 |                         this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].lightColorArray,
+      |                                                                            ^~~~
+      |                                                                            getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:86:90: error: ‘std::array<float, 3> micrasverse::physics::Argb::lightColorArray’ is private within this context
+   86 |                         this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].lightColorArray,
+      |                                                                                          ^~~~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/argb.hpp:54:26: note: declared private here
+   54 |     std::array<float, 3> lightColorArray;
+      |                          ^~~~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:87:76: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   87 |                         this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].isOn()
+      |                                                                            ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:87:76: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   87 |                         this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].isOn()
+      |                                                                            ^~~~
+      |                                                                            getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:93:87: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   93 |             for (size_t i = 0; i < this->simulationEngine->physicsEngine->getMicras().argb.argbs.size(); i++) {
+      |                                                                                       ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:93:87: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   93 |             for (size_t i = 0; i < this->simulationEngine->physicsEngine->getMicras().argb.argbs.size(); i++) {
+      |                                                                                       ^~~~
+      |                                                                                       getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:95:72: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   95 |                     this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].worldPosition,
+      |                                                                        ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:95:72: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   95 |                     this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].worldPosition,
+      |                                                                        ^~~~
+      |                                                                        getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:95:86: error: ‘b2Vec2 micrasverse::physics::Argb::worldPosition’ is private within this context
+   95 |                     this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].worldPosition,
+      |                                                                                      ^~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/argb.hpp:49:12: note: declared private here
+   49 |     b2Vec2 worldPosition;
+      |            ^~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:96:72: error: ‘class micrasverse::physics::Box2DMicrasBody’ has no member named ‘getRotation’; did you mean ‘getPosition’?
+   96 |                     this->simulationEngine->physicsEngine->getMicras().getRotation(),
+      |                                                                        ^~~~~~~~~~~
+      |                                                                        getPosition
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:97:72: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   97 |                     this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].lightColorArray,
+      |                                                                        ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:97:72: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   97 |                     this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].lightColorArray,
+      |                                                                        ^~~~
+      |                                                                        getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:97:86: error: ‘std::array<float, 3> micrasverse::physics::Argb::lightColorArray’ is private within this context
+   97 |                     this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].lightColorArray,
+      |                                                                                      ^~~~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/argb.hpp:54:26: note: declared private here
+   54 |     std::array<float, 3> lightColorArray;
+      |                          ^~~~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:98:72: error: ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ is private within this context
+   98 |                     this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].isOn()
+      |                                                                        ^~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:41:29: note: declared private here
+   41 |     micras::proxy::TArgb<1> argb;
+      |                             ^~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:98:72: note: field ‘micras::proxy::TArgb<1> micrasverse::physics::Box2DMicrasBody::argb’ can be accessed via ‘micras::proxy::TArgb<1>& micrasverse::physics::Box2DMicrasBody::getArgb()’
+   98 |                     this->simulationEngine->physicsEngine->getMicras().argb.argbs[i].isOn()
+      |                                                                        ^~~~
+      |                                                                        getArgb()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:107:87: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  107 |             for (size_t i = 0; i < this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors().size(); i++) {
+      |                                                                                       ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:107:87: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  107 |             for (size_t i = 0; i < this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors().size(); i++) {
+      |                                                                                       ^~~~~~~~~~~
+      |                                                                                       getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:112:84: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  112 |                 float reading = this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].reading;
+      |                                                                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:112:84: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  112 |                 float reading = this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].reading;
+      |                                                                                    ^~~~~~~~~~~
+      |                                                                                    getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:112:113: error: ‘float micrasverse::physics::Box2DDistanceSensor::reading’ is private within this context
+  112 |                 float reading = this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].reading;
+      |                                                                                                                 ^~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:107:11: note: declared private here
+  107 |     float reading;
+      |           ^~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:112:113: note: field ‘float micrasverse::physics::Box2DDistanceSensor::reading’ can be accessed via ‘virtual float micrasverse::physics::Box2DDistanceSensor::getReadingVisual() const’
+  112 |                 float reading = this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].reading;
+      |                                                                                                                 ^~~~~~~
+      |                                                                                                                 getReadingVisual()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:116:76: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  116 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                            ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:116:76: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  116 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                            ^~~~~~~~~~~
+      |                                                                            getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:116:105: error: ‘b2Vec2 micrasverse::physics::Box2DDistanceSensor::rayMidPoint’ is private within this context
+  116 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                                                         ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:109:12: note: declared private here
+  109 |     b2Vec2 rayMidPoint;
+      |            ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:117:76: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  117 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                            ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:117:76: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  117 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                            ^~~~~~~~~~~
+      |                                                                            getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:117:105: error: ‘b2Vec2 micrasverse::physics::Box2DDistanceSensor::rayDirection’ is private within this context
+  117 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                                                         ^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:110:12: note: declared private here
+  110 |     b2Vec2 rayDirection;
+      |            ^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:117:105: error: cannot convert ‘b2Vec2’ to ‘b2Rot’
+  117 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+In file included from /home/darde/repos/Micrasverse/src/render/include/render/render_engine.hpp:9:
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:21:55: note:   initializing argument 2 of ‘void micrasverse::render::LidarRender::update(b2Vec2, b2Rot, float)’
+   21 |     void update(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading);
+      |                                           ~~~~~~~~~~~~^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:123:76: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  123 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                            ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:123:76: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  123 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                            ^~~~~~~~~~~
+      |                                                                            getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:123:105: error: ‘b2Vec2 micrasverse::physics::Box2DDistanceSensor::rayMidPoint’ is private within this context
+  123 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                                                         ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:109:12: note: declared private here
+  109 |     b2Vec2 rayMidPoint;
+      |            ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:124:76: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  124 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                            ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:124:76: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  124 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                            ^~~~~~~~~~~
+      |                                                                            getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:124:105: error: ‘b2Vec2 micrasverse::physics::Box2DDistanceSensor::rayDirection’ is private within this context
+  124 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                                                         ^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:110:12: note: declared private here
+  110 |     b2Vec2 rayDirection;
+      |            ^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:124:105: error: cannot convert ‘b2Vec2’ to ‘b2Rot’
+  124 |                         this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:21:55: note:   initializing argument 2 of ‘void micrasverse::render::LidarRender::update(b2Vec2, b2Rot, float)’
+   21 |     void update(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading);
+      |                                           ~~~~~~~~~~~~^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:131:87: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  131 |             for (size_t i = 0; i < this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors().size(); i++) {
+      |                                                                                       ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:131:87: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  131 |             for (size_t i = 0; i < this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors().size(); i++) {
+      |                                                                                       ^~~~~~~~~~~
+      |                                                                                       getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:133:72: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  133 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                        ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:133:72: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  133 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                        ^~~~~~~~~~~
+      |                                                                        getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:133:101: error: ‘b2Vec2 micrasverse::physics::Box2DDistanceSensor::rayMidPoint’ is private within this context
+  133 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayMidPoint,
+      |                                                                                                     ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:109:12: note: declared private here
+  109 |     b2Vec2 rayMidPoint;
+      |            ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:134:72: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  134 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                        ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:134:72: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  134 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                        ^~~~~~~~~~~
+      |                                                                        getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:134:101: error: ‘b2Vec2 micrasverse::physics::Box2DDistanceSensor::rayDirection’ is private within this context
+  134 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+      |                                                                                                     ^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:110:12: note: declared private here
+  110 |     b2Vec2 rayDirection;
+      |            ^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:135:72: error: ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ is private within this context
+  135 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].reading
+      |                                                                        ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_micrasbody.hpp:39:36: note: declared private here
+   39 |     micras::proxy::TWallSensors<4> wallSensors;
+      |                                    ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:135:72: note: field ‘micras::proxy::TWallSensors<4> micrasverse::physics::Box2DMicrasBody::wallSensors’ can be accessed via ‘micras::proxy::TWallSensors<4>& micrasverse::physics::Box2DMicrasBody::getWallSensors()’
+  135 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].reading
+      |                                                                        ^~~~~~~~~~~
+      |                                                                        getWallSensors()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:135:101: error: ‘float micrasverse::physics::Box2DDistanceSensor::reading’ is private within this context
+  135 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].reading
+      |                                                                                                     ^~~~~~~
+/home/darde/repos/Micrasverse/src/physics/include/physics/box2d_distance_sensor.hpp:107:11: note: declared private here
+  107 |     float reading;
+      |           ^~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:135:101: note: field ‘float micrasverse::physics::Box2DDistanceSensor::reading’ can be accessed via ‘virtual float micrasverse::physics::Box2DDistanceSensor::getReadingVisual() const’
+  135 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].reading
+      |                                                                                                     ^~~~~~~
+      |                                                                                                     getReadingVisual()
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:134:101: error: cannot convert ‘b2Vec2’ to ‘b2Rot’
+  134 |                     this->simulationEngine->physicsEngine->getMicras().wallSensors.get_sensors()[i].rayDirection,
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:21:55: note:   initializing argument 2 of ‘void micrasverse::render::LidarRender::update(b2Vec2, b2Rot, float)’
+   21 |     void update(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading);
+      |                                           ~~~~~~~~~~~~^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp: In member function ‘void micrasverse::render::RenderEngine::renderFrame()’:
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:198:72: error: cannot convert ‘micrasverse::physics::Box2DMicrasBody’ to ‘const int&’
+  198 |         screen->update(this->simulationEngine->physicsEngine->getMicras());
+      |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+      |                                                                        |
+      |                                                                        micrasverse::physics::Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:62:57: note:   initializing argument 1 of ‘void micrasverse::render::Screen::update(const int&)’
+   62 |     void update(const micrasverse::physics::MicrasBody& micrasBody);
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:273:75: error: cannot convert ‘micrasverse::physics::Box2DMicrasBody’ to ‘int&’
+  273 |         screen->renderGUI(this->simulationEngine->physicsEngine->getMicras());
+      |                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+      |                                                                           |
+      |                                                                           micrasverse::physics::Box2DMicrasBody
+/home/darde/repos/Micrasverse/src/render/include/render/screen.hpp:64:54: note:   initializing argument 1 of ‘void micrasverse::render::Screen::renderGUI(int&)’
+   64 |     void renderGUI(micrasverse::physics::MicrasBody& micrasBody);
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+gmake[2]: *** [src/render/CMakeFiles/render_engine.dir/build.make:76: src/render/CMakeFiles/render_engine.dir/GUI/gui.cpp.o] Error 1
+In file included from /usr/include/c++/13/memory:78,
+                 from /home/darde/repos/Micrasverse/src/physics/include/physics/box2d_maze.hpp:9,
+                 from /home/darde/repos/Micrasverse/src/physics/include/physics/i_physics_engine.hpp:4:
+/usr/include/c++/13/bits/unique_ptr.h: In instantiation of ‘std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...) [with _Tp = micrasverse::render::LidarRender; _Args = {b2Vec2&, b2Vec2&, float&, micrasverse::render::Camera&}; __detail::__unique_ptr_t<_Tp> = __detail::__unique_ptr_t<micrasverse::render::LidarRender>]’:
+/home/darde/repos/Micrasverse/src/render/render_engine.cpp:55:77:   required from here
+/usr/include/c++/13/bits/unique_ptr.h:1070:30: error: no matching function for call to ‘micrasverse::render::LidarRender::LidarRender(b2Vec2&, b2Vec2&, float&, micrasverse::render::Camera&)’
+ 1070 |     { return unique_ptr<_Tp>(new _Tp(std::forward<_Args>(__args)...)); }
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:19:5: note: candidate: ‘micrasverse::render::LidarRender::LidarRender(b2Vec2, b2Rot, float, const micrasverse::render::Camera&)’
+   19 |     LidarRender(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading, const Camera& camera);
+      |     ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:19:55: note:   no known conversion for argument 2 from ‘b2Vec2’ to ‘b2Rot’
+   19 |     LidarRender(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading, const Camera& camera);
+      |                                           ~~~~~~~~~~~~^~~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:12:7: note: candidate: ‘constexpr micrasverse::render::LidarRender::LidarRender(const micrasverse::render::LidarRender&)’
+   12 | class LidarRender: public LightObj {
+      |       ^~~~~~~~~~~
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:12:7: note:   candidate expects 1 argument, 4 provided
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:12:7: note: candidate: ‘constexpr micrasverse::render::LidarRender::LidarRender(micrasverse::render::LidarRender&&)’
+/home/darde/repos/Micrasverse/src/render/include/render/lidarrender.hpp:12:7: note:   candidate expects 1 argument, 4 provided
+gmake[2]: *** [src/render/CMakeFiles/render_engine.dir/build.make:230: src/render/CMakeFiles/render_engine.dir/render_engine.cpp.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:562: src/render/CMakeFiles/render_engine.dir/all] Error 2
+gmake: *** [Makefile:136: all] Error 2

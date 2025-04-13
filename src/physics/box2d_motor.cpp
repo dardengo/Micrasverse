@@ -3,7 +3,7 @@
 
 namespace micrasverse::physics {
 
-Box2DMotor::Box2DMotor(b2BodyId bodyId, const core::Vec2& localPosition, bool leftWheel, 
+Box2DMotor::Box2DMotor(b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, 
                        float angle, float R, float ke, float kt, float maxVoltage)
     : resistance(R), ke(ke), kt(kt), maxVoltage(maxVoltage), inputCommand(0.0f),
       current(0.0f), angularVelocity(0.0f), frictionCoefficient(0.3f),
@@ -19,7 +19,7 @@ Box2DMotor::Box2DMotor(b2BodyId bodyId, const core::Vec2& localPosition, bool le
     bodyMass = b2Body_GetMass(bodyId);
 }
 
-core::Vec2 Box2DMotor::getPosition() const {
+types::Vec2 Box2DMotor::getPosition() const {
     b2Vec2 worldPos = b2Body_GetWorldPoint(bodyId, localPosition);
     return {worldPos.x, worldPos.y};
 }
@@ -29,7 +29,10 @@ void Box2DMotor::setCommand(float command) {
     inputCommand = std::max(-100.0f, std::min(100.0f, command));
 }
 
-void Box2DMotor::update(float deltaTime) {
+void Box2DMotor::update(float deltaTime, bool isFanOn) {
+    // Update fan state
+    this->isFanOn = isFanOn;
+    
     // Skip update if delta time is zero
     if (deltaTime <= 0.0f) return;
     

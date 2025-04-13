@@ -3,12 +3,13 @@
 #include "physics/box2d_motor.hpp"
 #include "physics/box2d_led.hpp"
 #include "physics/i_robot_controller.hpp"
+#include "physics/i_sensor.hpp"
 #include "config/constants.hpp"
 #include <cmath>
 
 namespace micrasverse::physics {
 
-Box2DRobot::Box2DRobot(b2WorldId worldId, const core::Vec2& position, const core::Vec2& size)
+Box2DRobot::Box2DRobot(b2WorldId worldId, const types::Vec2& position, const types::Vec2& size)
     : size(size), linearAcceleration(0.0f), controller(nullptr) {
     
     // Create the Box2D body
@@ -24,7 +25,7 @@ Box2DRobot::~Box2DRobot() {
     // Box2D cleanup will be handled by the world
 }
 
-core::Vec2 Box2DRobot::getPosition() const {
+types::Vec2 Box2DRobot::getPosition() const {
     b2Vec2 position = b2Body_GetPosition(bodyId);
     return {position.x, position.y};
 }
@@ -35,7 +36,7 @@ float Box2DRobot::getRotation() const {
     return b2Rot_GetAngle(transform.q);
 }
 
-core::Vec2 Box2DRobot::getSize() const {
+types::Vec2 Box2DRobot::getSize() const {
     return size;
 }
 
@@ -121,7 +122,7 @@ b2BodyId Box2DRobot::getBodyId() const {
     return bodyId;
 }
 
-void Box2DRobot::createBody(b2WorldId worldId, const core::Vec2& position) {
+void Box2DRobot::createBody(b2WorldId worldId, const types::Vec2& position) {
     // Create body definition using Box2D API
     b2BodyDef bodyDef = b2DefaultBodyDef();
     
@@ -155,8 +156,8 @@ void Box2DRobot::setupDistanceSensors() {
     auto frontLeftSensor = std::make_shared<Box2DDistanceSensor>(
         b2Body_GetWorld(bodyId),
         bodyId,
-        core::Vec2{size.x * 0.5f, size.y * 0.5f},
-        core::Vec2{1.0f, 1.0f},
+        types::Vec2{size.x * 0.5f, size.y * 0.5f},
+        types::Vec2{1.0f, 1.0f},
         sensorMaxDistance
     );
     sensors.push_back(frontLeftSensor);
@@ -165,8 +166,8 @@ void Box2DRobot::setupDistanceSensors() {
     auto frontRightSensor = std::make_shared<Box2DDistanceSensor>(
         b2Body_GetWorld(bodyId),
         bodyId,
-        core::Vec2{size.x * 0.5f, -size.y * 0.5f},
-        core::Vec2{1.0f, -1.0f},
+        types::Vec2{size.x * 0.5f, -size.y * 0.5f},
+        types::Vec2{1.0f, -1.0f},
         sensorMaxDistance
     );
     sensors.push_back(frontRightSensor);
@@ -175,8 +176,8 @@ void Box2DRobot::setupDistanceSensors() {
     auto backLeftSensor = std::make_shared<Box2DDistanceSensor>(
         b2Body_GetWorld(bodyId),
         bodyId,
-        core::Vec2{-size.x * 0.5f, size.y * 0.5f},
-        core::Vec2{-1.0f, 1.0f},
+        types::Vec2{-size.x * 0.5f, size.y * 0.5f},
+        types::Vec2{-1.0f, 1.0f},
         sensorMaxDistance
     );
     sensors.push_back(backLeftSensor);
@@ -185,8 +186,8 @@ void Box2DRobot::setupDistanceSensors() {
     auto backRightSensor = std::make_shared<Box2DDistanceSensor>(
         b2Body_GetWorld(bodyId),
         bodyId,
-        core::Vec2{-size.x * 0.5f, -size.y * 0.5f},
-        core::Vec2{-1.0f, -1.0f},
+        types::Vec2{-size.x * 0.5f, -size.y * 0.5f},
+        types::Vec2{-1.0f, -1.0f},
         sensorMaxDistance
     );
     sensors.push_back(backRightSensor);
@@ -196,14 +197,14 @@ void Box2DRobot::setupMotors() {
     // Create left and right motors
     auto leftMotor = std::make_shared<Box2DMotor>(
         bodyId,
-        core::Vec2{0.0f, size.y * 0.5f},
+        types::Vec2{0.0f, size.y * 0.5f},
         true
     );
     actuators.push_back(leftMotor);
     
     auto rightMotor = std::make_shared<Box2DMotor>(
         bodyId,
-        core::Vec2{0.0f, -size.y * 0.5f},
+        types::Vec2{0.0f, -size.y * 0.5f},
         false
     );
     actuators.push_back(rightMotor);
@@ -216,18 +217,18 @@ void Box2DRobot::setupLEDs() {
     // Front LED
     auto frontLED = std::make_shared<Box2DLED>(
         bodyId,
-        core::Vec2{size.x * 0.5f, 0.0f},
-        core::Vec2{ledSize, ledSize},
-        core::Color(0.0f, 1.0f, 0.0f)  // Green by default
+        types::Vec2{size.x * 0.5f, 0.0f},
+        types::Vec2{ledSize, ledSize},
+        types::Color(0.0f, 1.0f, 0.0f)  // Green by default
     );
     actuators.push_back(frontLED);
     
     // Back LED
     auto backLED = std::make_shared<Box2DLED>(
         bodyId,
-        core::Vec2{-size.x * 0.5f, 0.0f},
-        core::Vec2{ledSize, ledSize},
-        core::Color(1.0f, 0.0f, 0.0f)  // Red by default
+        types::Vec2{-size.x * 0.5f, 0.0f},
+        types::Vec2{ledSize, ledSize},
+        types::Color(1.0f, 0.0f, 0.0f)  // Red by default
     );
     actuators.push_back(backLED);
 }

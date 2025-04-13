@@ -1,4 +1,5 @@
 #include "GUI/gui.hpp"
+#include "physics/box2d_micrasbody.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -48,111 +49,311 @@ void GUI::update() {
     ImGui::NewFrame();
 }
 
-void GUI::draw(micrasverse::physics::MicrasBody& micrasBody) {
-    // Get screen size directly from stored GLFW window
+void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
+    // Check if we're in fullscreen mode for optimizations
     int width, height;
-    if (currentWindow) {
-        glfwGetFramebufferSize(currentWindow, &width, &height);
-        bool isLargeScreen = (width > 1600 || height > 900);
+    glfwGetFramebufferSize(currentWindow, &width, &height);
+    bool isLargeScreen = (width > 1600 || height > 900);
+    
+    // Main control panel
+    ImGui::Begin("Micrasverse Control Panel");
+    
+    // Display FPS
+    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+    
+    // Display robot position and velocity
+    ImGui::SeparatorText("Robot Status");
+    ImGui::Text("Position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
+    ImGui::Text("Rotation: %.2f", micrasBody.getAngle());
+    ImGui::Text("Linear Velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
+    
+    // Robot Control Panel
+    ImGui::SeparatorText("Robot Controls");
+    
+    // Movement Controls
+    if (ImGui::TreeNode("Movement Controls")) {
+        static float moveSpeed = 1.0f;
+        ImGui::SliderFloat("Movement Speed", &moveSpeed, 0.1f, 2.0f);
         
-        // Optimize GUI for large screens
-        if (isLargeScreen) {
-            // Use smaller windows and simpler controls in fullscreen
-            ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize(ImVec2(250, 350), ImGuiCond_FirstUseEver);
+        // Display WASD controls
+        ImGui::Text("Use WASD keys to control the robot:");
+        ImGui::BulletText("W - Forward");
+        ImGui::BulletText("S - Backward");
+        ImGui::BulletText("A - Turn Left");
+        ImGui::BulletText("D - Turn Right");
+        ImGui::BulletText("Space - Stop");
+        
+        // Display current movement state
+        ImGui::Separator();
+        ImGui::Text("Current Movement:");
+        
+        // Get keyboard state
+        bool wPressed = ImGui::IsKeyDown(ImGuiKey_W);
+        bool sPressed = ImGui::IsKeyDown(ImGuiKey_S);
+        bool aPressed = ImGui::IsKeyDown(ImGuiKey_A);
+        bool dPressed = ImGui::IsKeyDown(ImGuiKey_D);
+        bool spacePressed = ImGui::IsKeyDown(ImGuiKey_Space);
+        
+        // Apply movement based on key state
+        if (spacePressed) {
+            micrasBody.getLocomotion().stop();
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "STOPPED");
         } else {
-            ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize(ImVec2(350, 450), ImGuiCond_FirstUseEver);
-        }
-
-        ImGui::Begin("Micrasverse");
-        ImGui::Text("Press 'R' to run simulation");
-        ImGui::Text("Press 'F' to follow Micras");
-        ImGui::Text("Press 'C' to center camera on maze");
-        ImGui::Text("Press 'ESC' to exit");
-        ImGui::Text("Press 'F11' to toggle fullscreen");
-
-        if (this->simulationEngine) {
-            ImGui::SeparatorText("Simulation Controls");
-        
-            const auto& mazePaths = simulationEngine->getMazePaths();
-            static int selectedMazeIdx = 0;
-        
-            if (!mazePaths.empty()) {
-                // Only use filenames for the dropdown
-                std::string currentMazeFile = std::filesystem::path(mazePaths[selectedMazeIdx]).filename().string();
-        
-                if (ImGui::BeginCombo("Maze", currentMazeFile.c_str())) {
-                    for (int i = 0; i < mazePaths.size(); ++i) {
-                        std::string label = std::filesystem::path(mazePaths[i]).filename().string();
-                        bool selected = (selectedMazeIdx == i);
-                        if (ImGui::Selectable(label.c_str(), selected)) {
-                            selectedMazeIdx = i;
-                        }
-                        if (selected) ImGui::SetItemDefaultFocus();
-                    }
-                    ImGui::EndCombo();
-                }
-        
-                // Restart simulation with selected maze
-                
-                if (ImGui::Button("Load Maze")) {
-                    simulationEngine->resetSimulation(mazePaths[selectedMazeIdx]);
-                }
-
-                if (ImGui::Button("Reset Simulation"))
-                {
-                    simulationEngine->resetSimulation();
-                }
-                
+            // Forward/Backward
+            if (wPressed) {
+                micrasBody.getLocomotion().setCommand(moveSpeed, 0.0f);
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "FORWARD");
+            } else if (sPressed) {
+                micrasBody.getLocomotion().setCommand(-moveSpeed, 0.0f);
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "BACKWARD");
             } else {
-                ImGui::TextColored(ImVec4(1,0.5f,0.5f,1), "No maze files found!");
+                // No forward/backward movement
             }
-        
-            // Toggle simulation running
-            if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {
-                simulationEngine->togglePause();
+            
+            // Left/Right
+            if (aPressed) {
+                micrasBody.getLocomotion().setCommand(0.0f, moveSpeed);
+                ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING LEFT");
+            } else if (dPressed) {
+                micrasBody.getLocomotion().setCommand(0.0f, -moveSpeed);
+                ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING RIGHT");
+            } else {
+                // No turning
             }
-        
-            ImGui::SameLine();
-        
-            // Step one frame
-            if (ImGui::Button("Step")) {
-                simulationEngine->stepThroughSimulation();
+            
+            // If no keys are pressed, stop the robot
+            if (!wPressed && !sPressed && !aPressed && !dPressed) {
+                micrasBody.getLocomotion().stop();
+                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "IDLE");
             }
-        
-            ImGui::Text("Simulation is %s", simulationEngine->isPaused ? "Paused" : "Running");
         }
         
-        ImGui::Text("Micras position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
-        ImGui::Text("Micras linear velocity: (%.2f, %.2f)", b2Body_GetLinearVelocity(micrasBody.getBodyId()).x, b2Body_GetLinearVelocity(micrasBody.getBodyId()).y);
-        ImGui::Text("Micras angular velocity: %.2f", b2Body_GetAngularVelocity(micrasBody.getBodyId()));
-        ImGui::Text("FAN is: %.2f", micrasBody.dipSwitch.readSwitch(micrasverse::physics::MicrasBody::Switch::FAN) ? 1.0f : 0.0f); ImGui::SameLine();
-        
-        // Skip color editor in fullscreen mode to improve performance
-        if (!isLargeScreen) {
-            ImGui::ColorEdit3("LED color", &micrasBody.argb.argbs[0].lightColorArray[0]);
+        ImGui::TreePop();
+    }
+    
+    // Sensor Controls
+    if (ImGui::TreeNode("Sensor Controls")) {
+        // Wall Sensors Status
+        ImGui::Text("Wall Sensors:");
+        auto& wallSensors = micrasBody.getWallSensors();
+        for (size_t i = 0; i < 4; ++i) {
+            float reading = wallSensors.get_sensors()[i].getReadingVisual();
+            ImGui::ProgressBar(reading, ImVec2(-1, 0), 
+                             ("Sensor " + std::to_string(i) + ": " + std::to_string(reading)).c_str());
         }
+        
+        ImGui::TreePop();
+    }
+    
+    // LED Controls
+    if (ImGui::TreeNode("LED Controls")) {
+        auto& argb = micrasBody.getArgb();
+        static std::array<float, 3> color = argb.argbs[0].getLightColorArray();
+        if (ImGui::ColorEdit3("LED Color", color.data())) {
+            // Update LED color when changed
+            micrasverse::types::Color newColor{color[0], color[1], color[2]};
+            argb.argbs[0].setColor(newColor);
+        }
+        
+        // LED On/Off toggle
+        bool isLedOn = argb.argbs[0].isOn();
+        if (ImGui::Checkbox("LED On/Off", &isLedOn)) {
+            if (!isLedOn) {
+                argb.argbs[0].turnOff();
+            } else {
+                // Turn on with current color
+                micrasverse::types::Color currentColor{color[0], color[1], color[2]};
+                argb.argbs[0].turnOn(currentColor);
+            }
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    // DIP Switch Controls
+    if (ImGui::TreeNode("DIP Switches")) {
+        auto& dipSwitch = micrasBody.getDipSwitch();
+        for (size_t i = 0; i < 4; ++i) {
+            bool switchState = dipSwitch.get_switch_state(i);
+            if (ImGui::Checkbox(("Switch " + std::to_string(i)).c_str(), &switchState)) {
+                dipSwitch.set_switch_state(i, switchState);
+            }
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    // Micras Button Press Settings
+    if (ImGui::TreeNode("Micras Button Press Settings")) {
+        ImGui::Text("Press duration settings for Micras buttons:");
+        
+        // Get the button from the micras body
+        auto& button = micrasBody.getButton();
+        
+        // Short press button
+        if (ImGui::Button("Short Press", ImVec2(120, 30))) {
+            // Simulate a short press
+            button.set_state(true);
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Short press activated");
+        }
+        
+        ImGui::SameLine();
+        ImGui::Text("Duration: 0.5 seconds");
+        
+        // Long press button
+        if (ImGui::Button("Long Press", ImVec2(120, 30))) {
+            // Simulate a long press
+            button.set_state(true);
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Long press activated");
+        }
+        
+        ImGui::SameLine();
+        ImGui::Text("Duration: 1.5 seconds");
+        
+        // Extra long press button
+        if (ImGui::Button("Extra Long Press", ImVec2(120, 30))) {
+            // Simulate an extra long press
+            button.set_state(true);
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Extra long press activated");
+        }
+        
+        ImGui::SameLine();
+        ImGui::Text("Duration: 3.0 seconds");
+        
+        // Display current button state
+        ImGui::Separator();
+        ImGui::Text("Current Button State:");
+        
+        // Get the current button status
+        auto status = button.get_status();
+        std::string statusText;
+        ImVec4 statusColor;
+        
+        switch (status) {
+            case micras::proxy::Button::Status::NO_PRESS:
+                statusText = "No button pressed";
+                statusColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+                break;
+            case micras::proxy::Button::Status::SHORT_PRESS:
+                statusText = "Short press";
+                statusColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
+                break;
+            case micras::proxy::Button::Status::LONG_PRESS:
+                statusText = "Long press";
+                statusColor = ImVec4(0.0f, 0.0f, 1.0f, 1.0f);
+                break;
+            case micras::proxy::Button::Status::EXTRA_LONG_PRESS:
+                statusText = "Extra long press";
+                statusColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
+                break;
+            default:
+                statusText = "Unknown";
+                statusColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+                break;
+        }
+        
+        ImGui::TextColored(statusColor, "%s", statusText.c_str());
+        
+        // Add a button to release the button state
+        if (button.is_pressed()) {
+            if (ImGui::Button("Release Button", ImVec2(120, 30))) {
+                button.set_state(false);
+            }
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    // Display robot controller information if available
+    if (this->simulationEngine) {
+        // Display wall sensor readings
+        ImGui::SeparatorText("Wall Sensors");
+        for (size_t i = 0; i < 4; ++i) {
+            ImGui::Text("Sensor %zu: %.2f", i, micrasBody.getWallSensors().get_sensors()[i].getReadingVisual());
+        }
+    }
 
-        // Option to show style editor (defaults to off)
-        ImGui::Checkbox("Show Style Editor", &showStyleEditor);
+    // Simulation controls
+    if (this->simulationEngine) {
+        ImGui::SeparatorText("Simulation Controls");
+    
+        const auto& mazePaths = simulationEngine->getMazePaths();
+        static int selectedMazeIdx = 0;
+    
+        if (!mazePaths.empty()) {
+            // Only use filenames for the dropdown
+            std::string currentMazeFile = std::filesystem::path(mazePaths[selectedMazeIdx]).filename().string();
+        
+            if (ImGui::BeginCombo("Maze", currentMazeFile.c_str())) {
+                for (int i = 0; i < mazePaths.size(); ++i) {
+                    std::string label = std::filesystem::path(mazePaths[i]).filename().string();
+                    bool selected = (selectedMazeIdx == i);
+                    if (ImGui::Selectable(label.c_str(), selected)) {
+                        selectedMazeIdx = i;
+                    }
+                    if (selected) ImGui::SetItemDefaultFocus();
+                }
+                ImGui::EndCombo();
+            }
+        
+            // Restart simulation with selected maze
+            
+            if (ImGui::Button("Load Maze")) {
+                simulationEngine->resetSimulation(mazePaths[selectedMazeIdx]);
+            }
 
-        // Only draw plots if not in fullscreen mode or if user explicitly enabled them
-        if (!isLargeScreen || (isLargeScreen && this->plot.showPlots)) {
-            this->plot.draw(micrasBody);
+            if (ImGui::Button("Reset Simulation"))
+            {
+                simulationEngine->resetSimulation();
+            }
+            
         } else {
-            // Just show checkbox to enable plots when in fullscreen
-            ImGui::Checkbox("Show Performance Plots", &this->plot.showPlots);
+            ImGui::TextColored(ImVec4(1,0.5f,0.5f,1), "No maze files found!");
         }
-        
-        ImGui::End();
+    
+        // Toggle simulation running
+        if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {
+            simulationEngine->togglePause();
+        }
+    
+        ImGui::SameLine();
+    
+        // Step one frame
+        if (ImGui::Button("Step")) {
+            simulationEngine->stepThroughSimulation();
+        }
+    
+        ImGui::Text("Simulation is %s", simulationEngine->isPaused ? "Paused" : "Running");
+    }
+    
+    ImGui::Text("Micras position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
+    ImGui::Text("Micras linear velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
+    ImGui::Text("FAN is: %.2f", micrasBody.getDipSwitch().get_switch_state(0) ? 1.0f : 0.0f); ImGui::SameLine();
+    
+    // Skip color editor in fullscreen mode to improve performance
+    if (!isLargeScreen) {
+        std::array<float, 3> color = micrasBody.getArgb().argbs[0].getLightColorArray();
+        ImGui::ColorEdit3("LED color", color.data());
+    }
 
-        // Only render style editor when enabled - but never in fullscreen
-        if (showStyleEditor && !isLargeScreen) {
-            ImGui::Begin("Style Editor");
-            ImGui::ShowStyleEditor();
-            ImGui::End();
-        }
+    // Option to show style editor (defaults to off)
+    ImGui::Checkbox("Show Style Editor", &showStyleEditor);
+
+    // Only draw plots if not in fullscreen mode or if user explicitly enabled them
+    if (!isLargeScreen || (isLargeScreen && this->plot.showPlots)) {
+        this->plot.draw(micrasBody);
+    } else {
+        // Just show checkbox to enable plots when in fullscreen
+        ImGui::Checkbox("Show Performance Plots", &this->plot.showPlots);
+    }
+    
+    ImGui::End();
+
+    // Only render style editor when enabled - but never in fullscreen
+    if (showStyleEditor && !isLargeScreen) {
+        ImGui::Begin("Style Editor");
+        ImGui::ShowStyleEditor();
+        ImGui::End();
     }
 }
 

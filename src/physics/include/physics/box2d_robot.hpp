@@ -6,18 +6,18 @@
 #include <memory>
 #include <vector>
 #include <string>
-
+#include "micrasverse_core/types.hpp"
 namespace micrasverse::physics {
 
 class Box2DRobot : public IRobot {
 public:
-    Box2DRobot(b2WorldId worldId, const core::Vec2& position, const core::Vec2& size);
+    Box2DRobot(b2WorldId worldId, const types::Vec2& position, const types::Vec2& size);
     virtual ~Box2DRobot();
 
     // IRobot interface implementation
-    core::Vec2 getPosition() const override;
+    types::Vec2 getPosition() const override;
     float getRotation() const override;
-    core::Vec2 getSize() const override;
+    types::Vec2 getSize() const override;
     
     float getLinearVelocity() const override;
     float getAngularVelocity() const override;
@@ -34,12 +34,12 @@ public:
 
     // Box2D specific methods
     b2BodyId getBodyId() const;
-    void createBody(b2WorldId worldId, const core::Vec2& position);
+    void createBody(b2WorldId worldId, const types::Vec2& position);
 
 private:
     // Robot physical properties
     b2BodyId bodyId;
-    core::Vec2 size;
+    types::Vec2 size;
     float linearAcceleration;
     
     // Hardware components

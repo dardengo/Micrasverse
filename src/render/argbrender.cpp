@@ -58,7 +58,7 @@ void ARGBRender::update(b2Vec2 position, b2Rot rotation, const std::array<float,
     this->renderModel.setPose(glm::vec3(position.x, position.y, 0.02f), rotation);
 }
 
-glm::vec3 ARGBRender::colorToVec3(const core::Color& color) {
+glm::vec3 ARGBRender::colorToVec3(const types::Color& color) {
     return glm::vec3(color.r, color.g, color.b);
 }
 

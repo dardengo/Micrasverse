@@ -1,7 +1,7 @@
-#ifndef I_ROBOT_HPP
-#define I_ROBOT_HPP
+#ifndef MICRASVERSE_PHYSICS_I_ROBOT_HPP
+#define MICRASVERSE_PHYSICS_I_ROBOT_HPP
 
-#include "core/types.hpp"
+#include "micrasverse_core/types.hpp"
 #include <vector>
 #include <memory>
 
@@ -17,9 +17,9 @@ public:
     virtual ~IRobot() = default;
 
     // Position and orientation
-    virtual core::Vec2 getPosition() const = 0;
+    virtual types::Vec2 getPosition() const = 0;
     virtual float getRotation() const = 0;
-    virtual core::Vec2 getSize() const = 0;
+    virtual types::Vec2 getSize() const = 0;
     
     // Physics properties
     virtual float getLinearVelocity() const = 0;
@@ -41,4 +41,4 @@ public:
 
 } // namespace micrasverse::physics
 
-#endif // I_ROBOT_HPP 
+#endif // MICRASVERSE_PHYSICS_I_ROBOT_HPP 

@@ -2,14 +2,15 @@
 #define BOX2D_MOTOR_HPP
 
 #include "physics/i_actuator.hpp"
+#include "physics/i_motor.hpp"
 #include "box2d/box2d.h"
 #include "config/constants.hpp"
-
+#include "micrasverse_core/types.hpp"
 namespace micrasverse::physics {
 
 class Box2DMotor : public IMotor {
 public:
-    Box2DMotor(b2BodyId bodyId, const core::Vec2& localPosition, bool leftWheel, 
+    Box2DMotor(b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, 
                float angle = B2_PI / 2.0f, float R = MOTOR_RESISTANCE, 
                float ke = MOTOR_KE, float kt = MOTOR_KT, 
                float maxVoltage = MOTOR_MAX_VOLTAGE);
@@ -17,13 +18,14 @@ public:
 
     // IActuator interface implementation
     ActuatorType getType() const override { return ActuatorType::MOTOR; }
-    core::Vec2 getPosition() const override;
+    types::Vec2 getPosition() const override;
     
     void setCommand(float command) override;
     float getCommand() const override { return inputCommand; }
     
     bool isActive() const override { return std::abs(inputCommand) > 0.1f; }
-    void update(float deltaTime) override;
+    void update(float deltaTime) override { update(deltaTime, isFanOn); }
+    void update(float deltaTime, bool isFanOn) override;
     
     // IMotor interface implementation
     float getCurrent() const override { return current; }
@@ -54,8 +56,8 @@ private:
 
     // Box2D specific properties
     b2BodyId bodyId;            // Body to apply the force to
-    b2Vec2 localPosition;       // Changed from core::Vec2 to b2Vec2
-    b2Vec2 localDirection;      // Changed from core::Vec2 to b2Vec2
+    b2Vec2 localPosition;       // Changed from types::Vec2 to b2Vec2
+    b2Vec2 localDirection;      // Changed from types::Vec2 to b2Vec2
     float angle;                // Angle of the motor on the body
 };
 

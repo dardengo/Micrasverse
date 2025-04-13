@@ -1,8 +1,8 @@
-#ifndef ARGB_RENDER_HPP
-#define ARGB_RENDER_HPP
+#ifndef MICRAS_RENDER_ARGBRENDER_HPP
+#define MICRAS_RENDER_ARGBRENDER_HPP
 
 #include "render/lightobj.hpp"
-#include "core/types.hpp"
+#include "micrasverse_core/types.hpp"
 #include "render/camera.hpp"
 
 #include <array>
@@ -24,7 +24,7 @@ public:
     void update(b2Vec2 position, b2Rot rotation, const glm::vec3 color, const bool isOn);
     void update(b2Vec2 position, b2Rot rotation, const std::array<float, 3>& color, const bool isOn);
 
-    glm::vec3 colorToVec3(const core::Color& color);
+    glm::vec3 colorToVec3(const types::Color& color);
 
     void render(const glm::mat4 view, const glm::mat4 projection) override;
 };
@@ -32,4 +32,4 @@ public:
 
 } // namespace micrasverse::render
 
-#endif // ARGB_RENDER_HPP
+#endif // MICRAS_RENDER_ARGBRENDER_HPP

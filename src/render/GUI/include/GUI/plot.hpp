@@ -33,7 +33,7 @@ public:
 
     void init();
 
-    void draw(micrasverse::physics::MicrasBody& micrasBody);
+    void draw(micrasverse::physics::Box2DMicrasBody& micrasBody);
 
     void destroy();
     

@@ -9,7 +9,10 @@ int main() {
     micrasverse::render::RenderEngine renderEngine(simulationEngine);
 
     while (not renderEngine.screen->shouldClose()) {
+        // Update simulation
         simulationEngine->updateSimulation();
+        
+        // Update and render
         renderEngine.update();
         renderEngine.renderFrame();
     }

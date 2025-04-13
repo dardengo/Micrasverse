@@ -1,61 +1,86 @@
-#ifndef MICRAS_BODY_HPP
-#define MICRAS_BODY_HPP
-
-#include "physics/box2d_rectanglebody.hpp"
-#include "physics/distancesensor.hpp"
-#include "physics/motor.hpp"
-#include "physics/dipswitch.hpp"
-#include "physics/argb.hpp"
-#include "config/constants.hpp"
-#include "proxy/wall_sensors.hpp"
-#include "proxy/locomotion.hpp"
-#include "proxy/argb.hpp"
+#ifndef BOX2D_MICRASBODY_HPP
+#define BOX2D_MICRASBODY_HPP
 
 #include "box2d/box2d.h"
+#include "micras/proxy/wall_sensors.hpp"
+#include "micras/proxy/locomotion.hpp"
+#include "micras/proxy/argb.hpp"
+#include "micras/proxy/button.hpp"
+#include "micras/proxy/dip_switch.hpp"
+#include "physics/box2d_rectanglebody.hpp"
 
-#include <cstdint>
-#include <vector>
+#include <memory>
 
 namespace micrasverse::physics {
 
-class MicrasBody : public RectangleBody {
-public:
-    DipSwitch dipSwitch;
-    micras::proxy::TWallSensors<4> wallSensors;
-    micras::proxy::Locomotion locomotion;
-    micras::proxy::TArgb<1> argb;
-    b2Vec2 linearVelocity;
-    b2Vec2 acceleration;
-    float linearAcceleration;
+class Box2DMicrasBody {
+private:
+    // Rectangle body to manage the Box2D body
+    std::unique_ptr<RectangleBody> rectBody;
+    
+    // Size of the body
+    b2Vec2 size;
 
-    enum Switch : uint8_t {
-        DIAGONAL = 0,  // Whether the robot will be able to move in diagonal paths.
-        FAN = 1,       // Turn the fan on.
-        STOP = 2,      // Whether the robot will stop at each intersection when solving the maze.
-        TURBO = 3,     // Increase the robot speed.
-    };
+    // Components as unique_ptrs
+    std::unique_ptr<micras::proxy::TWallSensors<4>> wallSensors;
+    std::unique_ptr<micras::proxy::Locomotion> locomotion;
+    std::unique_ptr<micras::proxy::TArgb<1>> argb;
+    std::unique_ptr<micras::proxy::TDipSwitch<4>> dipSwitch;
+    std::unique_ptr<micras::proxy::Button> button;
 
-    // Constructor
-    MicrasBody(const b2WorldId worldId,
-               const b2Vec2 position = (b2Vec2){(CELL_SIZE+WALL_THICKNESS)/2.0f, (CELL_SIZE+WALL_THICKNESS)/2.0f},
-               const b2Vec2 size = (b2Vec2){MICRAS_WIDTH, MICRAS_HEIGHT},
-               const b2BodyType type = b2_dynamicBody,
-               const float mass = MICRAS_MASS,
-               const float restitution = MICRAS_RESTITUTION,
-               const float friction = MICRAS_FRICTION
-    );
-
+    // Acceleration and velocity tracking
+    b2Vec2 linearVelocity = {0.0f, 0.0f};
+    b2Vec2 acceleration = {0.0f, 0.0f};
+    float linearAcceleration = 0.0f;
+    
+    // Update the body's friction
+    void updateFriction();
+    
+    // Get the lateral velocity
     b2Vec2 getLateralVelocity() const;
 
-    void updateFriction();
+public:
+    // Constructor
+    Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size, b2BodyType type, float density, float friction, float restitution);
+    
+    // Get the body ID
+    b2BodyId getBodyId() const;
+    
+    // Update the body
+    void update(float deltaTime);
+    
+    // Process input
+    void processInput(float deltaTime);
+    
+    // Get the body's position
+    b2Vec2 getPosition() const;
+    
+    // Get the body's size
+    b2Vec2 getSize() const { return size; }
+    
+    // Get the body's angle
+    float getAngle() const;
+    
+    // Get the body's rotation
+    b2Rot getRotation() const { return b2MakeRot(getAngle()); }
+    
+    // Get the body's acceleration
+    float getLinearAcceleration() const;
+    
+    // Get the body's linear velocity
+    b2Vec2 getLinearVelocity() const { return linearVelocity; }
 
+    // Attach a DIP switch
     void attachDipSwitch(size_t numSwitches);
-
-    void update(const float deltaTime);
-
-    void processInput(const float deltaTime);
+    
+    // Getters for components
+    micras::proxy::TWallSensors<4>& getWallSensors();
+    micras::proxy::Locomotion& getLocomotion();
+    micras::proxy::TArgb<1>& getArgb();
+    micras::proxy::TDipSwitch<4>& getDipSwitch();
+    micras::proxy::Button& getButton();
 };
 
 } // namespace micrasverse::physics
 
-#endif // MICRAS_BODY_HPP
+#endif // BOX2D_MICRASBODY_HPP

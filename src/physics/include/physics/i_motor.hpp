@@ -1,11 +1,12 @@
-#ifndef I_MOTOR_HPP
-#define I_MOTOR_HPP
+#ifndef MICRASVERSE_PHYSICS_I_MOTOR_HPP
+#define MICRASVERSE_PHYSICS_I_MOTOR_HPP
 
-#include "core/types.hpp"
+#include "physics/i_actuator.hpp"
+#include "micrasverse_core/types.hpp"
 
 namespace micrasverse::physics {
 
-class IMotor {
+class IMotor : public IActuator {
 public:
     virtual ~IMotor() = default;
 
@@ -24,8 +25,12 @@ public:
     virtual float getBodyAngularVelocity() const = 0;
     virtual bool isLeftWheel() const = 0;
     virtual bool getFanState() const = 0;
+
+    virtual float getCommand() const = 0;
+    virtual bool isActive() const = 0;
+    virtual ActuatorType getType() const override { return ActuatorType::MOTOR; }
 };
 
 } // namespace micrasverse::physics
 
-#endif // I_MOTOR_HPP 
+#endif // MICRASVERSE_PHYSICS_I_MOTOR_HPP 

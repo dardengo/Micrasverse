@@ -13,8 +13,31 @@
 namespace micrasverse::physics {
 
 // Constructor
-Maze::Maze(const b2WorldId worldId, const std::string& filename): worldId(worldId) {
+Maze::Maze(b2WorldId worldId, const std::string& filename) {
+    std::cout << "========== MAZE CREATION START ==========" << std::endl;
+    std::cout << "Maze constructor received world ID with index: " << worldId.index1 << std::endl;
+    
+    // Validate the world ID immediately
+    bool isValidWorld = b2World_IsValid(worldId);
+    std::cout << "World validity check in Maze constructor: " << (isValidWorld ? "VALID" : "INVALID") << std::endl;
+    
+    if (!isValidWorld) {
+        std::cerr << "ERROR: Invalid world ID in Maze constructor" << std::endl;
+        throw std::runtime_error("Invalid world ID in Maze constructor");
+    }
+    
+    // Store the world ID
+    this->worldId = worldId;
+    std::cout << "Stored world ID with index: " << this->worldId.index1 << std::endl;
+    
+    std::cout << "Loading maze from file: " << filename << std::endl;
     this->loadFromFile(filename);
+    
+    std::cout << "Creating Box2D objects for maze..." << std::endl;
+    this->createBox2dObjects();
+    
+    std::cout << "Maze created successfully" << std::endl;
+    std::cout << "========== MAZE CREATION END ==========" << std::endl;
 }
 
 // Parse maze from file
@@ -83,33 +106,52 @@ void Maze::loadFromFile(const std::string& filename) {
     this->createBox2dObjects();
 }
 
-const b2WorldId Maze::getWorldId() {
-    return worldId;
-}
-
 const std::vector<Maze::Element>& Maze::getElements() const {
     return elements;
 };
 
 // Create Box2D objects
 void Maze::createBox2dObjects() {
-
-    for (const auto& element : this->elements){
-        //RectangleBody elementBody(worldId, (b2Vec2){element.position.x, element.position.y}, element.size, b2_staticBody, 0.0f, 0.0f, 1.0f);
-        //mazeBodies.push_back(elementBody.getBodyId());
-
-        auto body = std::make_unique<RectangleBody>(
-            worldId,
-            b2Vec2{element.position.x, element.position.y},
-            element.size,
-            b2_staticBody,
-            0.0f, 0.0f, 1.0f
-        );
-        mazeBodies.push_back(body->getBodyId());
-        mazeBodiesObjects.push_back(std::move(body)); // Save it
-
+    std::cout << "========== MAZE OBJECTS CREATION START ==========" << std::endl;
+    std::cout << "Using world ID with index: " << worldId.index1 << std::endl;
+    
+    bool isValidWorld = b2World_IsValid(worldId);
+    std::cout << "World validity check before creating maze objects: " << (isValidWorld ? "VALID" : "INVALID") << std::endl;
+    
+    if (!isValidWorld) {
+        std::cerr << "ERROR: Invalid world ID in createBox2dObjects" << std::endl;
+        throw std::runtime_error("Invalid world ID in createBox2dObjects");
     }
     
+    std::cout << "Creating " << this->elements.size() << " maze elements" << std::endl;
+    
+    for (const auto& element : this->elements){
+        try {
+            std::cout << "Creating maze element at position (" << element.position.x << ", " << element.position.y 
+                      << ") of type '" << element.type << "' and size (" << element.size.x << ", " << element.size.y << ")" << std::endl;
+                      
+            auto rectangleBody = std::make_unique<RectangleBody>(
+                worldId,
+                element.position,
+                element.size,
+                b2_staticBody,
+                100.0f,
+                0.3f,
+                0.5f
+            );
+            
+            b2BodyId bodyId = rectangleBody->getBodyId();
+            std::cout << "Created maze body with ID index: " << bodyId.index1 << std::endl;
+            
+            this->mazeBodies.push_back(bodyId);
+            this->mazeBodiesObjects.push_back(std::move(rectangleBody));
+        } catch (const std::exception& e) {
+            std::cerr << "ERROR creating maze element: " << e.what() << std::endl;
+        }
+    }
+    
+    std::cout << "Created " << this->mazeBodies.size() << " maze bodies" << std::endl;
+    std::cout << "========== MAZE OBJECTS CREATION END ==========" << std::endl;
 }
 
 // Destroy Box2D objects
