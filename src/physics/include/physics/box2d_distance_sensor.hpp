@@ -108,6 +108,7 @@ private:
     float angle;
     b2Vec2 rayMidPoint;
     b2Vec2 rayDirection;
+    b2Vec2 intersectionPoint;
 };
 
 }  // namespace micrasverse::physics

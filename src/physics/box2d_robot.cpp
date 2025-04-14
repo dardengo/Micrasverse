@@ -149,48 +149,48 @@ void Box2DRobot::createBody(b2WorldId worldId, const types::Vec2& position) {
 }
 
 void Box2DRobot::setupDistanceSensors() {
-    // Create 4 distance sensors at each corner of the robot
-    const float sensorMaxDistance = 0.5f;  // 50cm max distance
-    
-    // Front-left sensor
-    auto frontLeftSensor = std::make_shared<Box2DDistanceSensor>(
-        b2Body_GetWorld(bodyId),
-        bodyId,
-        types::Vec2{size.x * 0.5f, size.y * 0.5f},
-        types::Vec2{1.0f, 1.0f},
-        sensorMaxDistance
-    );
-    sensors.push_back(frontLeftSensor);
+    // Create 4 distance sensors at the specified positions and angles
+    const float sensorMaxDistance = 3.0f;
     
     // Front-right sensor
     auto frontRightSensor = std::make_shared<Box2DDistanceSensor>(
         b2Body_GetWorld(bodyId),
         bodyId,
-        types::Vec2{size.x * 0.5f, -size.y * 0.5f},
-        types::Vec2{1.0f, -1.0f},
+        types::Vec2{ 0.028f, 0.045f},
+        types::Vec2{std::cos(B2_PI / 2.0f), std::sin(B2_PI / 2.0f)},
         sensorMaxDistance
     );
     sensors.push_back(frontRightSensor);
     
-    // Back-left sensor
-    auto backLeftSensor = std::make_shared<Box2DDistanceSensor>(
+    // Front-left sensor
+    auto frontLeftSensor = std::make_shared<Box2DDistanceSensor>(
         b2Body_GetWorld(bodyId),
         bodyId,
-        types::Vec2{-size.x * 0.5f, size.y * 0.5f},
-        types::Vec2{-1.0f, 1.0f},
+        types::Vec2{-0.028f, 0.045f},
+        types::Vec2{std::cos(B2_PI / 2.0f), std::sin(B2_PI / 2.0f)},
         sensorMaxDistance
     );
-    sensors.push_back(backLeftSensor);
+    sensors.push_back(frontLeftSensor);
     
-    // Back-right sensor
-    auto backRightSensor = std::make_shared<Box2DDistanceSensor>(
+    // Front-right diagonal sensor
+    auto frontRightDiagonal = std::make_shared<Box2DDistanceSensor>(
         b2Body_GetWorld(bodyId),
         bodyId,
-        types::Vec2{-size.x * 0.5f, -size.y * 0.5f},
-        types::Vec2{-1.0f, -1.0f},
+        types::Vec2{ 0.009f, 0.049f},
+        types::Vec2{std::cos(B2_PI / 6.0f), std::sin(B2_PI / 6.0f)},
         sensorMaxDistance
     );
-    sensors.push_back(backRightSensor);
+    sensors.push_back(frontRightDiagonal);
+    
+    // Front-left diagonal sensor
+    auto frontLeftDiagonal = std::make_shared<Box2DDistanceSensor>(
+        b2Body_GetWorld(bodyId),
+        bodyId,
+        types::Vec2{-0.009f, 0.049f},
+        types::Vec2{std::cos(5.0f * B2_PI / 6.0f), std::sin(5.0f * B2_PI / 6.0f)},
+        sensorMaxDistance
+    );
+    sensors.push_back(frontLeftDiagonal);
 }
 
 void Box2DRobot::setupMotors() {

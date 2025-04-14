@@ -1,6 +1,11 @@
 #include "render/lidarrender.hpp"
 #include "render/material.hpp"
 #include "models/led.hpp"
+#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 namespace micrasverse::render {
 
@@ -27,22 +32,12 @@ LidarRender::LidarRender(const b2Vec2 rayMidPoint, const b2Rot rayDirection, con
 }
 
 void LidarRender::update(const b2Vec2 rayMidPoint, const b2Rot rayDirection, const float reading) {
-    // Always show lidar lines, regardless of reading
-    // This ensures the sensor visualization is continuous
+    // Always show lidar lines
     visible = true;
     
-    // Update position and orientation
-    this->renderModel.setPose(glm::vec3(rayMidPoint.x, rayMidPoint.y, 0.02f), rayDirection);
-    
-    // Set proper color and size for visible beam
     this->renderModel.setColor(glm::vec3(237.0f, 47.0f, 50.0f) / 255.0f);
-    this->renderModel.ambient = glm::vec3(1.0f);
-    this->renderModel.diffuse = glm::vec3(1.0f);
-    this->renderModel.specular = glm::vec3(1.0f);
-    
-    // Use the reading value for the size, but ensure it's never zero
-    float displayLength = (reading > 0.01f) ? reading : 0.01f;
-    this->renderModel.setSize(glm::vec3(0.002f, displayLength, 0.02f));
+    this->renderModel.setPose(glm::vec3(rayMidPoint.x, rayMidPoint.y, 0.02f), rayDirection);
+    this->renderModel.setSize(glm::vec3(0.002f, reading, 0.02f));
 }
 
 void LidarRender::render(const glm::mat4 view, const glm::mat4 projection) {

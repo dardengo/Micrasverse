@@ -1,4 +1,5 @@
 #include "physics/box2d_distance_sensor.hpp"
+#include "config/constants.hpp"
 #include <cmath>
 
 namespace micrasverse::physics {
@@ -65,27 +66,19 @@ micrasverse::types::Vec2 Box2DDistanceSensor::getPosition() const {
 }
 
 void Box2DDistanceSensor::performRayCast() {
-    // Get the world position of the sensor
-    b2Vec2 worldPos = b2Body_GetWorldPoint(bodyId, localPosition);
+    const b2Vec2 origin = b2Body_GetWorldPoint(this->bodyId, this->localPosition);
+    const b2Vec2 worldDirection = b2Body_GetWorldVector(this->bodyId, this->localDirection);
+    const b2Vec2 translation = MAZE_FLOOR_WIDTH * worldDirection;
+    const b2QueryFilter filter = b2DefaultQueryFilter();
+    const b2RayResult output = b2World_CastRayClosest(b2Body_GetWorld(this->bodyId), origin, translation, filter);
+
+    this->intersectionPoint = origin + output.fraction * translation;
     
-    // Calculate the ray direction in world space
-    b2Vec2 worldDir = b2Body_GetWorldVector(bodyId, localDirection);
-    
-    // Store the ray midpoint and direction for visualization
-    rayMidPoint = worldPos;
-    rayDirection = worldDir;
-    
-    // In Box2D 3.1, we use b2World_CastRayClosest for ray casting
-    // The direction vector should include the maxDistance
-    b2Vec2 rayEnd = {worldDir.x * maxDistance, worldDir.y * maxDistance};
-    b2QueryFilter filter = b2DefaultQueryFilter();
-    b2RayResult result = b2World_CastRayClosest(worldId, worldPos, rayEnd, filter);
-    
-    if (result.hit) {
-        reading = result.fraction * maxDistance;
-    } else {
-        reading = maxDistance;
-    }
+    this->reading = b2Length(intersectionPoint - origin);
+
+    this->rayMidPoint = b2Vec2{origin.x + (intersectionPoint.x - origin.x)*0.5f, origin.y + (intersectionPoint.y - origin.y) *0.5f};
+
+    this->rayDirection = {-worldDirection.y, worldDirection.x };
 }
 
 } // namespace micrasverse::physics 
