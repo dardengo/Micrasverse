@@ -87,8 +87,8 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
         argb = std::make_unique<micras::proxy::TArgb<2>>(argbConfig);
         
         // Attach both LEDs with different positions
-        argb->attachArgb(b2Vec2{-micrasverse::MICRAS_HALFWIDTH + 0.01f, 0.0f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::red);  // Left LED
-        argb->attachArgb(b2Vec2{micrasverse::MICRAS_HALFWIDTH - 0.01f, 0.0f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::green);  // Right LED
+        argb->attachArgb(b2Vec2{-micrasverse::MICRAS_HALFWIDTH + 0.02f, 0.02f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::red);  // Left LED
+        argb->attachArgb(b2Vec2{micrasverse::MICRAS_HALFWIDTH - 0.02f, 0.02f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::green);  // Right LED
         
         std::cout << "Initializing DIP switch..." << std::endl;
         auto dipSwitchConfig = micras::proxy::DipSwitchConfig;
