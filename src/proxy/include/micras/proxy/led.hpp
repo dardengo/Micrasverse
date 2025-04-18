@@ -15,19 +15,19 @@ public:
      * @brief Configuration struct for LED.
      */
     struct Config {
-        bool initial_state{false};
-        uint8_t red{255};
-        uint8_t green{255};
-        uint8_t blue{255};
+        b2BodyId bodyId;
+        bool initial_state;
+        uint8_t red;
+        uint8_t green;
+        uint8_t blue;
     };
 
     /**
      * @brief Construct a new Led object.
      *
      * @param config Configuration for the LED.
-     * @param bodyId Box2D body ID for the robot.
      */
-    explicit Led(const Config& config, const b2BodyId bodyId);
+    explicit Led(const Config& config);
 
     /**
      * @brief Turn the LED on.

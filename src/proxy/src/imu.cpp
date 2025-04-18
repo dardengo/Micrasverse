@@ -4,8 +4,8 @@
 
 namespace micras::proxy {
 
-Imu::Imu(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+Imu::Imu(const Config& config) :
+    bodyId{config.bodyId},
     gyroscope_noise{config.gyroscope_noise},
     accelerometer_noise{config.accelerometer_noise} {
 }

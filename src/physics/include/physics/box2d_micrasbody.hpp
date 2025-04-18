@@ -24,7 +24,7 @@ private:
     // Components as unique_ptrs
     std::unique_ptr<micras::proxy::TWallSensors<4>> wallSensors;
     std::unique_ptr<micras::proxy::Locomotion> locomotion;
-    std::unique_ptr<micras::proxy::TArgb<1>> argb;
+    std::unique_ptr<micras::proxy::TArgb<2>> argb;
     std::unique_ptr<micras::proxy::TDipSwitch<4>> dipSwitch;
     std::unique_ptr<micras::proxy::Button> button;
 
@@ -76,7 +76,7 @@ public:
     // Getters for components
     micras::proxy::TWallSensors<4>& getWallSensors();
     micras::proxy::Locomotion& getLocomotion();
-    micras::proxy::TArgb<1>& getArgb();
+    micras::proxy::TArgb<2>& getArgb();
     micras::proxy::TDipSwitch<4>& getDipSwitch();
     micras::proxy::Button& getButton();
 };

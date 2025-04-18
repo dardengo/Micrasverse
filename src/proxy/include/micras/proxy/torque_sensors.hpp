@@ -18,6 +18,7 @@ public:
      * @brief Configuration struct for torque sensors.
      */
     struct Config {
+        b2BodyId bodyId;
         float shunt_resistor;
         float max_torque;
         float filter_cutoff;
@@ -28,9 +29,8 @@ public:
      * @brief Construct a new TorqueSensors object.
      *
      * @param config Configuration for the torque sensors.
-     * @param bodyId Box2D body ID for the robot.
      */
-    explicit TTorqueSensors(const Config& config, const b2BodyId bodyId);
+    explicit TTorqueSensors(const Config& config);
 
     /**
      * @brief Calibrate the torque sensors.

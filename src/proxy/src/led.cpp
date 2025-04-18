@@ -3,8 +3,8 @@
 
 namespace micras::proxy {
 
-Led::Led(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+Led::Led(const Config& config) :
+    bodyId{config.bodyId},
     state{config.initial_state},
     red{config.red},
     green{config.green},

@@ -17,12 +17,13 @@ template <uint8_t num_of_sensors>
 class TWallSensors {
 public:
     struct Config {
-        float                             uncertainty;
+        b2BodyId bodyId;
+        float uncertainty;
         std::array<float, num_of_sensors> wall_threshold;
         std::array<float, num_of_sensors> free_threshold;
     };
 
-    explicit TWallSensors(const Config& config, const b2BodyId bodyId);
+    explicit TWallSensors(const Config& config);
 
     ~TWallSensors();
 

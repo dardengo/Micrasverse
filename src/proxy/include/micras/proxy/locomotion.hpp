@@ -9,8 +9,11 @@ namespace micras::proxy {
 
 class Locomotion {
 public:
+    struct Config {
+        b2BodyId bodyId;
+    };
 
-    explicit Locomotion(const b2BodyId bodyId);
+    explicit Locomotion(const Config& config);
 
     void enable();
 

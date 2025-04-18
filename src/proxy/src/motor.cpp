@@ -3,12 +3,12 @@
 #include <algorithm>
 namespace micras::proxy {
 
-Motor::Motor(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+Motor::Motor(const Config& config) :
+    bodyId{config.bodyId},
     max_speed{config.max_speed},
     max_torque{config.max_torque},
     gear_ratio{config.gear_ratio},
-    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{}, bodyId)} {
+    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{config.bodyId})} {
 }
 
 void Motor::set_speed(float speed) {

@@ -11,6 +11,7 @@ namespace micras::proxy {
 class Imu {
 public:
     struct Config {
+        b2BodyId bodyId;
         float gyroscope_noise;
         float accelerometer_noise;
     };
@@ -21,7 +22,7 @@ public:
         Z
     };
 
-    explicit Imu(const Config& config, const b2BodyId bodyId);
+    explicit Imu(const Config& config);
 
     bool check_whoami();
 

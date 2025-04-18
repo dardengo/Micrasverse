@@ -6,19 +6,17 @@
 
 namespace micras::proxy {
 template <uint8_t num_of_leds>
-TArgb<num_of_leds>::TArgb(const Config& config, const b2BodyId bodyId) : bodyId(bodyId), uncertainty(config.uncertainty), brightness(config.brightness) {
-
-    // Use the first brightness value for the initial ARGB
-    float brightnessValue = this->brightness[0];
-    this->attachArgb({0.0f, 0.0f}, {0.02f, 0.02f}, {static_cast<uint8_t>(235 * brightnessValue), static_cast<uint8_t>(100 * brightnessValue), static_cast<uint8_t>(25 * brightnessValue)});
-    
-    for (auto& argb : this->argbs) {
-        argb.turnOff();
-    }
+TArgb<num_of_leds>::TArgb(const Config& config) : 
+    bodyId(config.bodyId), 
+    uncertainty(config.uncertainty), 
+    brightness(config.brightness) {
+    // No default LED is created, LEDs must be explicitly attached
 }
 
 template <uint8_t num_of_leds>
-TArgb<num_of_leds>::~TArgb() {}
+TArgb<num_of_leds>::~TArgb() {
+    // LEDs are automatically cleaned up when the vector is destroyed
+}
 
 template <uint8_t num_of_leds>
 void TArgb<num_of_leds>::turn_on() {}
@@ -64,7 +62,7 @@ void TArgb<num_of_leds>::set_colors(const std::array<micrasverse::types::Color, 
 
 template <uint8_t num_of_leds>
 void TArgb<num_of_leds>::encode_color(const micrasverse::types::Color& color, uint8_t index) {
-
+    // Implementation for encoding color
 }
 
 }  // namespace micras::proxy

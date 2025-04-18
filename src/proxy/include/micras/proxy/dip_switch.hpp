@@ -17,6 +17,7 @@ public:
      * @brief Configuration struct for the Dip Switch.
      */
     struct Config {
+        b2BodyId bodyId;
         std::array<bool, num_of_switches> initial_states;
     };
 
@@ -24,9 +25,8 @@ public:
      * @brief Construct a new Dip Switch object.
      *
      * @param config Configuration struct for the DipSwitch.
-     * @param bodyId Box2D body ID for the robot.
      */
-    explicit TDipSwitch(const Config& config, const b2BodyId bodyId);
+    explicit TDipSwitch(const Config& config);
 
     /**
      * @brief Get the state of a switch.

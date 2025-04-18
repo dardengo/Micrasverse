@@ -10,12 +10,13 @@ namespace micras::proxy {
 class Motor {
 public:
     struct Config {
-        float max_speed = 100.0f;  // Maximum speed in RPM
-        float max_torque = 1.0f;   // Maximum torque in Nm
-        float gear_ratio = 1.0f;   // Gear ratio
+        b2BodyId bodyId;
+        float max_speed;  // Maximum speed in RPM
+        float max_torque;   // Maximum torque in Nm
+        float gear_ratio;   // Gear ratio
     };
 
-    Motor(const Config& config, const b2BodyId bodyId);
+    explicit Motor(const Config& config);
 
     void set_speed(float speed);
 

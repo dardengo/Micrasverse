@@ -35,16 +35,6 @@ namespace micrasverse::render {
             this->simulationEngine->physicsEngine->getMicras().getSize()
         );
         
-        // Create light
-        this->light = std::make_unique<Led>(
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            glm::vec3(1.0f, 1.0f, 1.0f),
-            glm::vec3(micrasverse::MAZE_FLOOR_HALFWIDTH, micrasverse::MAZE_FLOOR_HALFHEIGHT, screen->camera.position.z - 0.01f),
-            glm::vec3(micrasverse::MAZE_FLOOR_HALFWIDTH, micrasverse::MAZE_FLOOR_HALFHEIGHT, 0.0f)
-        );
-
         // Create ARGB scene objects
         auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb();
         for (auto& led : argb.argbs) {
@@ -231,26 +221,32 @@ namespace micrasverse::render {
         // Use the maze shader for standard objects 
         mazeRender->shader.activate(screen->view, screen->projection);
         
+        // Create a temporary light for rendering purposes
+        glm::vec3 lightPosition = glm::vec3(micrasverse::MAZE_FLOOR_HALFWIDTH, micrasverse::MAZE_FLOOR_HALFHEIGHT, screen->camera.position.z - 0.01f);
+        glm::vec3 lightAmbient = glm::vec3(1.0f, 1.0f, 1.0f);
+        glm::vec3 lightDiffuse = glm::vec3(1.0f, 1.0f, 1.0f);
+        glm::vec3 lightSpecular = glm::vec3(1.0f, 1.0f, 1.0f);
+        
         // 1. Render maze (floor and walls)
         mazeRender->render(
             screen->view, 
             screen->projection, 
-            light->position, 
+            lightPosition, 
             screen->camera.position, 
-            light->ambient, 
-            light->diffuse, 
-            light->specular
+            lightAmbient, 
+            lightDiffuse, 
+            lightSpecular
         );
         
         // 2. Render Micras robot (uses same shader as maze)
         micrasRender->render(
             screen->view, 
             screen->projection, 
-            light->position, 
+            lightPosition, 
             screen->camera.position, 
-            light->ambient, 
-            light->diffuse, 
-            light->specular
+            lightAmbient, 
+            lightDiffuse, 
+            lightSpecular
         );
 
         // Now render everything using the light shader
@@ -285,9 +281,6 @@ namespace micrasverse::render {
                     lidarSceneObj->render(screen->view, screen->projection);
                 }
             }
-
-            // 5. Render light
-            light->render(*lightShader, true);
         }
 
         // 6. Render GUI (ImGui) on top of everything

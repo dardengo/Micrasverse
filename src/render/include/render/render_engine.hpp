@@ -44,7 +44,6 @@ class RenderEngine {
     std::vector<std::unique_ptr<ARGBRender>> argbsSceneObjs;
     std::vector<std::unique_ptr<LidarRender>> lidarsSceneObjs;
     std::unique_ptr<Shader> lightShader;
-    std::unique_ptr<Led> light;
 };
 
 } // namespace micrasverse::render

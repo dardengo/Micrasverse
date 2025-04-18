@@ -3,9 +3,14 @@
 
 namespace micras::proxy {
 
-Buzzer::Buzzer(const Config& config, b2BodyId body) : bodyId(body), volume(config.volume), playing(false), duration(0), current_frequency(0) {
-    tone_timer = std::make_unique<Stopwatch>(Stopwatch::Config{}, body);
-    wait_timer = std::make_unique<Stopwatch>(Stopwatch::Config{}, body);
+Buzzer::Buzzer(const Config& config) : 
+    bodyId(config.bodyId), 
+    volume(config.volume), 
+    playing(false), 
+    duration(0), 
+    current_frequency(0) {
+    tone_timer = std::make_unique<Stopwatch>(Stopwatch::Config{});
+    wait_timer = std::make_unique<Stopwatch>(Stopwatch::Config{});
 }
 
 void Buzzer::play(uint32_t frequency, uint32_t duration_ms) {

@@ -9,13 +9,14 @@ namespace micras::proxy {
 class Battery {
 public:
     struct Config {
+        b2BodyId bodyId;
         float voltage;
         float voltage_divider;
         float filter_cutoff;
         float noise;
     };
 
-    explicit Battery(const Config& config, const b2BodyId bodyId);
+    explicit Battery(const Config& config);
 
     void update();
 

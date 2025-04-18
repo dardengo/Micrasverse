@@ -2,8 +2,8 @@
 
 namespace micras::proxy {
 
-Button::Button(const Config& config, b2BodyId bodyId) :
-    bodyId(bodyId),
+Button::Button(const Config& config) :
+    bodyId(config.bodyId),
     pull_resistor(config.pull_resistor),
     debounce_delay(config.debounce_delay),
     long_press_delay(config.long_press_delay),
@@ -12,8 +12,8 @@ Button::Button(const Config& config, b2BodyId bodyId) :
     last_state(false),
     current_state(false),
     debouncing(false),
-    debounce_timer(std::make_unique<Stopwatch>(Stopwatch::Config{}, bodyId)),
-    press_timer(std::make_unique<Stopwatch>(Stopwatch::Config{}, bodyId)) {
+    debounce_timer(std::make_unique<Stopwatch>(Stopwatch::Config{config.bodyId})),
+    press_timer(std::make_unique<Stopwatch>(Stopwatch::Config{config.bodyId})) {
 }
 
 bool Button::is_pressed() {

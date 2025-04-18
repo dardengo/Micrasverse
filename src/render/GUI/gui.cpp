@@ -145,31 +145,6 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         ImGui::TreePop();
     }
     
-    // LED Controls
-    if (ImGui::TreeNode("LED Controls")) {
-        auto& argb = micrasBody.getArgb();
-        static std::array<float, 3> color = argb.argbs[0].getLightColorArray();
-        if (ImGui::ColorEdit3("LED Color", color.data())) {
-            // Update LED color when changed
-            micrasverse::types::Color newColor{color[0], color[1], color[2]};
-            argb.argbs[0].setColor(newColor);
-        }
-        
-        // LED On/Off toggle
-        bool isLedOn = argb.argbs[0].isOn();
-        if (ImGui::Checkbox("LED On/Off", &isLedOn)) {
-            if (!isLedOn) {
-                argb.argbs[0].turnOff();
-            } else {
-                // Turn on with current color
-                micrasverse::types::Color currentColor{color[0], color[1], color[2]};
-                argb.argbs[0].turnOn(currentColor);
-            }
-        }
-        
-        ImGui::TreePop();
-    }
-    
     // DIP Switch Controls
     if (ImGui::TreeNode("DIP Switches")) {
         auto& dipSwitch = micrasBody.getDipSwitch();
@@ -330,12 +305,6 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     ImGui::Text("Micras linear velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
     ImGui::Text("FAN is: %.2f", micrasBody.getDipSwitch().get_switch_state(0) ? 1.0f : 0.0f); ImGui::SameLine();
     
-    // Skip color editor in fullscreen mode to improve performance
-    if (!isLargeScreen) {
-        std::array<float, 3> color = micrasBody.getArgb().argbs[0].getLightColorArray();
-        ImGui::ColorEdit3("LED color", color.data());
-    }
-
     // Option to show style editor (defaults to off)
     ImGui::Checkbox("Show Style Editor", &showStyleEditor);
 

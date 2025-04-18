@@ -4,11 +4,11 @@
 
 namespace micras::proxy {
 
-RotarySensor::RotarySensor(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+RotarySensor::RotarySensor(const Config& config) :
+    bodyId{config.bodyId},
     resolution{config.resolution},
     noise{config.noise},
-    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{}, bodyId)} {
+    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{})} {
 }
 
 void RotarySensor::update() {

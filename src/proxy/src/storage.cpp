@@ -11,8 +11,8 @@
 
 namespace micras::proxy {
 
-Storage::Storage(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+Storage::Storage(const Config& config) :
+    bodyId{config.bodyId},
     storage_path{config.storage_path} {
     // Create storage directory if it doesn't exist
     std::filesystem::create_directories(storage_path);

@@ -4,8 +4,8 @@
 
 namespace micras::proxy {
 
-Locomotion::Locomotion(const b2BodyId bodyId)
-    : bodyId{bodyId}
+Locomotion::Locomotion(const Config& config)
+    : bodyId{config.bodyId}
 {
     // Initialize motors with unique_ptr
     left_motor = std::make_unique<micrasverse::physics::Box2DMotor>(

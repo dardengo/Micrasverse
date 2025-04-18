@@ -25,17 +25,17 @@ public:
      * @brief Configuration struct for the fan.
      */
     struct Config {
-        float max_acceleration = 100.0f;  // Maximum acceleration in speed units per second
-        float max_speed = 100.0f;         // Maximum speed in speed units
+        b2BodyId bodyId;
+        float max_acceleration;  // Maximum acceleration in speed units per second
+        float max_speed;         // Maximum speed in speed units
     };
 
     /**
      * @brief Construct a new fan object.
      *
      * @param config Configuration for the fan driver.
-     * @param bodyId Box2D body ID for the robot.
      */
-    Fan(const Config& config, const b2BodyId bodyId);
+    explicit Fan(const Config& config);
 
     /**
      * @brief Enable the fan.

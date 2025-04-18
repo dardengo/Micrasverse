@@ -8,8 +8,8 @@
 namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
-TTorqueSensors<num_of_sensors>::TTorqueSensors(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+TTorqueSensors<num_of_sensors>::TTorqueSensors(const Config& config) :
+    bodyId{config.bodyId},
     max_current{3.3f / config.shunt_resistor}, // Assuming 3.3V reference voltage
     max_torque{config.max_torque},
     noise{config.noise},

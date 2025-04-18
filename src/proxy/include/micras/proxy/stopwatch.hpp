@@ -15,7 +15,7 @@ public:
      * @brief Stopwatch configuration struct.
      */
     struct Config {
-        // No configuration needed for simulation
+        b2BodyId bodyId;
     };
 
     /**
@@ -27,9 +27,8 @@ public:
      * @brief Construct a new Stopwatch object.
      *
      * @param config Configuration for the timer.
-     * @param bodyId Box2D body ID for the robot.
      */
-    explicit Stopwatch(const Config& config, const b2BodyId bodyId);
+    explicit Stopwatch(const Config& config);
 
     /**
      * @brief Reset the milliseconds timer counter.

@@ -18,11 +18,12 @@ public:
     std::vector<micrasverse::physics::Argb> argbs;
 
     struct Config {
-        float                             uncertainty;
+        b2BodyId bodyId;
+        float uncertainty;
         std::array<float, num_of_leds> brightness;
     };
 
-    explicit TArgb(const Config& config, const b2BodyId bodyId);
+    explicit TArgb(const Config& config);
 
     ~TArgb();
 

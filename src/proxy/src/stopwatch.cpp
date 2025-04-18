@@ -7,8 +7,8 @@ Stopwatch::Stopwatch() {
     this->reset_ms();
 }
 
-Stopwatch::Stopwatch(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId} {
+Stopwatch::Stopwatch(const Config& config) :
+    bodyId{config.bodyId} {
     this->reset_ms();
 }
 

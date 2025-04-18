@@ -10,10 +10,11 @@ namespace micras::proxy {
 class Buzzer {
 public:
     struct Config {
+        b2BodyId bodyId;
         float volume;
     };
 
-    explicit Buzzer(const Config& config, const b2BodyId bodyId);
+    explicit Buzzer(const Config& config);
 
     void play(uint32_t frequency, uint32_t duration = 0);
 

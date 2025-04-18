@@ -11,6 +11,7 @@
 #include "micras/proxy/button.hpp"
 #include "micras/core/types.hpp"
 #include "io/keyboard.hpp"
+#include "target.hpp"
 
 #include <cstdint>
 #include <vector>
@@ -65,28 +66,34 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
             throw std::runtime_error("Body's world ID mismatch");
         }
         
-        button = std::make_unique<micras::proxy::Button>(micras::proxy::Button::Config{
-            .pull_resistor = micras::proxy::Button::PullResistor::PULL_UP,
-            .debounce_delay = 50,
-            .long_press_delay = 1000,
-            .extra_long_press_delay = 3000,
-            .initial_state = false
-        }, bodyId);
+        // Create a copy of ButtonConfig and set its bodyId
+        auto buttonConfig = micras::proxy::ButtonConfig;
+        buttonConfig.bodyId = bodyId;
+        button = std::make_unique<micras::proxy::Button>(buttonConfig);
         
         std::cout << "Initializing wall sensors..." << std::endl;
-        wallSensors = std::make_unique<micras::proxy::TWallSensors<4>>(
-            micras::proxy::TWallSensors<4>::Config{}, bodyId);
+        auto wallSensorsConfig = micras::proxy::WallSensorsConfig;
+        wallSensorsConfig.bodyId = bodyId;
+        wallSensors = std::make_unique<micras::proxy::TWallSensors<4>>(wallSensorsConfig);
         
         std::cout << "Initializing locomotion..." << std::endl;
-        locomotion = std::make_unique<micras::proxy::Locomotion>(bodyId);
+        auto locomotionConfig = micras::proxy::LocomotionConfig;
+        locomotionConfig.bodyId = bodyId;
+        locomotion = std::make_unique<micras::proxy::Locomotion>(locomotionConfig);
         
         std::cout << "Initializing ARGB LEDs..." << std::endl;
-        argb = std::make_unique<micras::proxy::TArgb<1>>(
-            micras::proxy::TArgb<1>::Config{0.0f, {1.0f}}, bodyId);
+        auto argbConfig = micras::proxy::ArgbConfig;
+        argbConfig.bodyId = bodyId;
+        argb = std::make_unique<micras::proxy::TArgb<2>>(argbConfig);
+        
+        // Attach both LEDs with different positions
+        argb->attachArgb(b2Vec2{-micrasverse::MICRAS_HALFWIDTH + 0.01f, 0.0f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::red);  // Left LED
+        argb->attachArgb(b2Vec2{micrasverse::MICRAS_HALFWIDTH - 0.01f, 0.0f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::green);  // Right LED
         
         std::cout << "Initializing DIP switch..." << std::endl;
-        dipSwitch = std::make_unique<micras::proxy::TDipSwitch<4>>(
-            micras::proxy::TDipSwitch<4>::Config{}, bodyId);
+        auto dipSwitchConfig = micras::proxy::DipSwitchConfig;
+        dipSwitchConfig.bodyId = bodyId;
+        dipSwitch = std::make_unique<micras::proxy::TDipSwitch<4>>(dipSwitchConfig);
     }
     catch (const std::exception& e) {
         std::cerr << "ERROR during component initialization: " << e.what() << std::endl;
@@ -173,9 +180,9 @@ void Box2DMicrasBody::attachDipSwitch(size_t numSwitches) {
     }
     
     // Reset with the same template parameter - using make_unique instead of new
-    b2BodyId bodyId = getBodyId();
-    dipSwitch = std::make_unique<micras::proxy::TDipSwitch<4>>(
-        micras::proxy::TDipSwitch<4>::Config{}, bodyId);
+    auto dipSwitchConfig = micras::proxy::DipSwitchConfig;
+    dipSwitchConfig.bodyId = getBodyId();
+    dipSwitch = std::make_unique<micras::proxy::TDipSwitch<4>>(dipSwitchConfig);
 }
 
 // Getter implementation
@@ -187,7 +194,7 @@ micras::proxy::Locomotion& Box2DMicrasBody::getLocomotion() {
     return *locomotion;
 }
 
-micras::proxy::TArgb<1>& Box2DMicrasBody::getArgb() {
+micras::proxy::TArgb<2>& Box2DMicrasBody::getArgb() {
     return *argb;
 }
 

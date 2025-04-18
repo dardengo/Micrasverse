@@ -28,6 +28,11 @@ public:
          * @brief Path to store the data.
          */
         std::filesystem::path storage_path;
+        
+        /**
+         * @brief ID of the body to store the data for.
+         */
+        b2BodyId bodyId;
     };
 
     /**
@@ -74,9 +79,8 @@ public:
      * @brief Construct a new Storage object.
      *
      * @param config The configuration for the Storage class.
-     * @param bodyId The ID of the body to store the data for.
      */
-    Storage(const Config& config, const b2BodyId bodyId);
+    explicit Storage(const Config& config);
 
     /**
      * @brief Create a new serializable variable.

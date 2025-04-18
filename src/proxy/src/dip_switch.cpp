@@ -7,8 +7,8 @@
 namespace micras::proxy {
 
 template <uint8_t num_of_switches>
-TDipSwitch<num_of_switches>::TDipSwitch(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+TDipSwitch<num_of_switches>::TDipSwitch(const Config& config) :
+    bodyId{config.bodyId},
     switch_states{config.initial_states} { }
 
 template <uint8_t num_of_switches>

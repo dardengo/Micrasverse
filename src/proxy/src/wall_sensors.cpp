@@ -9,8 +9,8 @@
 namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
-TWallSensors<num_of_sensors>::TWallSensors(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+TWallSensors<num_of_sensors>::TWallSensors(const Config& config) :
+    bodyId{config.bodyId},
     uncertainty{config.uncertainty},
     wall_threshold{config.wall_threshold},
     free_space_threshold{config.free_threshold} {

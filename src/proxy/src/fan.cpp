@@ -4,11 +4,11 @@
 
 namespace micras::proxy {
 
-Fan::Fan(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+Fan::Fan(const Config& config) :
+    bodyId{config.bodyId},
     max_acceleration{config.max_acceleration},
     max_speed{config.max_speed},
-    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{}, bodyId)} {
+    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{config.bodyId})} {
     this->stop();
 }
 

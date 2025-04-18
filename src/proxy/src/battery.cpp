@@ -5,8 +5,8 @@
 
 namespace micras::proxy {
 
-Battery::Battery(const Config& config, const b2BodyId bodyId) :
-    bodyId{bodyId},
+Battery::Battery(const Config& config) :
+    bodyId{config.bodyId},
     voltage{config.voltage},
     voltage_divider{config.voltage_divider},
     noise{config.noise},

@@ -22,14 +22,15 @@ public:
     };
 
     struct Config {
-        PullResistor pull_resistor{PullResistor::PULL_UP};
-        uint32_t debounce_delay{50};  // ms
-        uint32_t long_press_delay{1000};  // ms
-        uint32_t extra_long_press_delay{3000};  // ms
-        bool initial_state{false};
+        b2BodyId bodyId;
+        PullResistor pull_resistor;
+        uint32_t debounce_delay;  // ms
+        uint32_t long_press_delay;  // ms
+        uint32_t extra_long_press_delay;  // ms
+        bool initial_state;
     };
 
-    Button(const Config& config, b2BodyId bodyId);
+    explicit Button(const Config& config);
 
     bool is_pressed();
     Status get_status();

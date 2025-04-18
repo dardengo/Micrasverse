@@ -10,11 +10,12 @@ namespace micras::proxy {
 class RotarySensor {
 public:
     struct Config {
-        float resolution = 1.0f;  // Resolution of the encoder in counts per revolution
-        float noise = 0.0f;       // Noise level in counts
+        b2BodyId bodyId;
+        float resolution;  // Resolution of the encoder in counts per revolution
+        float noise;       // Noise level in counts
     };
 
-    RotarySensor(const Config& config, const b2BodyId bodyId);
+    explicit RotarySensor(const Config& config);
 
     void update();
 
