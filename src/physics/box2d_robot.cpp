@@ -4,7 +4,7 @@
 #include "physics/box2d_led.hpp"
 #include "physics/i_robot_controller.hpp"
 #include "physics/i_sensor.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include <cmath>
 
 namespace micrasverse::physics {

@@ -2,7 +2,7 @@
 #define SIMULATION_ENGINE_HPP
 
 #include "physics/i_physics_engine.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include <string>
 #include <memory>
 #include <vector>

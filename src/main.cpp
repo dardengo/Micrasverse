@@ -1,6 +1,6 @@
+#include "constants.hpp"
 #include "simulation/simulation_engine.hpp"
 #include "render/render_engine.hpp"
-#include "config/constants.hpp"
 
 int main() {
     

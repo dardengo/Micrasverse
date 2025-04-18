@@ -19,7 +19,9 @@ target_include_directories(render_engine PUBLIC
     ${CMAKE_SOURCE_DIR}/external/glm
     ${CMAKE_SOURCE_DIR}/src/simulation/include
     ${CMAKE_SOURCE_DIR}/src/physics/include
-    ${CMAKE_SOURCE_DIR}/src/config/include
+    ${CMAKE_SOURCE_DIR}/src/config
+    ${CMAKE_SOURCE_DIR}/src/core/include
+    ${CMAKE_SOURCE_DIR}/src/render/include
     ${CMAKE_SOURCE_DIR}/external/box2d/include
 )
 

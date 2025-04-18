@@ -4,7 +4,7 @@
 #include "physics/box2d_motor.hpp"
 #include "physics/box2d_rectanglebody.hpp"
 #include "physics/box2d_physics_factory.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include "micras/proxy/wall_sensors.hpp"
 #include "micras/proxy/locomotion.hpp"
 #include "micras/proxy/argb.hpp"

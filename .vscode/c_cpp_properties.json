@@ -14,7 +14,7 @@
                 "${workspaceFolder}/src/render/include",
                 "${workspaceFolder}/src/physics/include",
                 "${workspaceFolder}/src/core/include",
-                "${workspaceFolder}/src/config/include",
+                "${workspaceFolder}/src/config",
                 "${workspaceFolder}/src/proxy/include",
                 "${workspaceFolder}/src/render/GUI/include"
             ],
@@ -27,6 +27,26 @@
             "cStandard": "c23",
             "cppStandard": "c++23",
             "intelliSenseMode": "${default}"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/src/config",
+                "${workspaceFolder}/external/box2d/include",
+                "${workspaceFolder}/external/glm",
+                "${workspaceFolder}/src/render/include",
+                "${workspaceFolder}/src/physics/include",
+                "${workspaceFolder}/src/core/include",
+                "${workspaceFolder}/src/proxy/include",
+                "${workspaceFolder}/src/render/GUI/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "linux-gcc-x64"
         }
     ],
     "version": 4

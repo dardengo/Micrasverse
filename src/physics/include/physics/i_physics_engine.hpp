@@ -3,7 +3,7 @@
 
 #include "physics/box2d_maze.hpp"
 #include "physics/box2d_micrasbody.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include <string>
 
 namespace micrasverse::physics {

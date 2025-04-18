@@ -1,7 +1,7 @@
 #ifndef CAMERA_HPP
 #define CAMERA_HPP
 
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include "physics/box2d_micrasbody.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard

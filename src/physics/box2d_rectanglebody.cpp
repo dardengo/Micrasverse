@@ -1,5 +1,5 @@
 #include "physics/box2d_rectanglebody.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include <iostream>
 
 namespace micrasverse::physics {

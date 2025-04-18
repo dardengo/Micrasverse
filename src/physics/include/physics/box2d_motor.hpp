@@ -4,7 +4,7 @@
 #include "physics/i_actuator.hpp"
 #include "physics/i_motor.hpp"
 #include "box2d/box2d.h"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include "micrasverse_core/types.hpp"
 namespace micrasverse::physics {
 

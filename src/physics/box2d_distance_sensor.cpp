@@ -1,5 +1,5 @@
 #include "physics/box2d_distance_sensor.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include <cmath>
 
 namespace micrasverse::physics {

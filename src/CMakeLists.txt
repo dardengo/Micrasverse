@@ -36,7 +36,7 @@ target_link_libraries(micrasverse PRIVATE
 # Make sure it can find all needed headers
 target_include_directories(micrasverse PRIVATE
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/src/config/include
+    ${CMAKE_SOURCE_DIR}/src/config
     ${CMAKE_SOURCE_DIR}/src/core/include
     ${CMAKE_SOURCE_DIR}/src/io/include
     ${CMAKE_SOURCE_DIR}/src/physics/include

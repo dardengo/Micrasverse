@@ -1,5 +1,5 @@
 #include "physics/box2d_world.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include <stdexcept>
 #include <iostream>
 #include <sstream>

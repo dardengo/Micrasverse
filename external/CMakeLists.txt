@@ -48,8 +48,17 @@ if(NOT TARGET implot)
   target_link_libraries(implot PUBLIC imgui)
 endif() 
 
-# MicrasFirmware
+# MicrasFirmware - only include necessary components
 if(NOT TARGET micras_nav)
   add_subdirectory(MicrasFirmware/micras_core)
   add_subdirectory(MicrasFirmware/micras_nav)
+  
+  # Create an interface target for MicrasFirmware that excludes config directory
+  add_library(micras INTERFACE)
+  target_link_libraries(micras INTERFACE micras::core micras::nav)
+  target_include_directories(micras INTERFACE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/MicrasFirmware/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/MicrasFirmware/micras_core/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/MicrasFirmware/micras_nav/include
+  )
 endif() 

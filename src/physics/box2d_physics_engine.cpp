@@ -7,7 +7,7 @@
 #include "micras/proxy/locomotion.hpp"
 #include "micras/proxy/argb.hpp"
 #include "micras/proxy/dip_switch.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include <filesystem>
 #include <stdexcept>
 #include <iostream>

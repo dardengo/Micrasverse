@@ -1,5 +1,5 @@
 #include "render/mazerender.hpp"
-#include "config/constants.hpp"
+#include "constants.hpp"
 #include "render/material.hpp"
 
 namespace micrasverse::render {
