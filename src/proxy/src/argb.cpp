@@ -31,7 +31,12 @@ void TArgb<num_of_leds>::turn_off() {
 }
 
 template <uint8_t num_of_leds>
-void TArgb<num_of_leds>::update() {}
+void TArgb<num_of_leds>::update() {
+    // Update each ARGB component to recalculate its world position
+    for (auto& argb : this->argbs) {
+        argb.update();
+    }
+}
 
 template <uint8_t num_of_leds>
 void TArgb<num_of_leds>::attachArgb(b2Vec2 localPosition, b2Vec2 size, micrasverse::types::Color color) {
