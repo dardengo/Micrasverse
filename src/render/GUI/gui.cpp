@@ -53,7 +53,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // Check if we're in fullscreen mode for optimizations
     int width, height;
     glfwGetFramebufferSize(currentWindow, &width, &height);
-    bool isLargeScreen = (width > 1600 || height > 900);
+    bool isLargeScreen = (width > 1919 || height > 1079);
     
     // Main control panel
     ImGui::Begin("Micrasverse Control Panel");
@@ -72,8 +72,8 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     
     // Movement Controls
     if (ImGui::TreeNode("Movement Controls")) {
-        static float moveSpeed = 1.0f;
-        ImGui::SliderFloat("Movement Speed", &moveSpeed, 0.1f, 2.0f);
+        static float moveSpeed = 5.0f;
+        ImGui::SliderFloat("Movement Speed", &moveSpeed, 0.1f, 10.0f);
         
         // Display WASD controls
         ImGui::Text("Use WASD keys to control the robot:");

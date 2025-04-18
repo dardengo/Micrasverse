@@ -81,7 +81,7 @@ namespace micrasverse::render {
         // Check if we're in fullscreen mode for optimizations
         int width, height;
         glfwGetFramebufferSize(screen->getWindow(), &width, &height);
-        isFullscreen = (width > 1600 || height > 900);
+        isFullscreen = (width > 1919 || height > 1079);
         
         // Update Micras rendering position based on physics
         micrasRender->update(
@@ -127,7 +127,7 @@ namespace micrasverse::render {
                 
                 // Check reading to determine visibility
                 float reading = wallSensors.get_sensors()[i].getReadingVisual();
-                if (reading > 0.1f) {
+                if (reading > 0.005f) {
                     visibleCount++;
                     this->lidarsSceneObjs[i]->update(
                         b2Vec2(wallSensors.get_sensors()[i].getRayMidPoint().x, wallSensors.get_sensors()[i].getRayMidPoint().y),
