@@ -2,7 +2,7 @@
 #define MICRAS_PROXY_STOPWATCH_HPP
 
 #include <cstdint>
-#include "box2d/box2d.h"
+#include <chrono>
 
 namespace micras::proxy {
 
@@ -15,7 +15,7 @@ public:
      * @brief Stopwatch configuration struct.
      */
     struct Config {
-        b2BodyId bodyId;
+        // Empty config struct for compatibility with existing code
     };
 
     /**
@@ -69,8 +69,7 @@ public:
     void sleep_us(uint32_t time);
 
 private:
-    b2BodyId bodyId;
-    float start_time{0.0f};
+    std::chrono::steady_clock::time_point start_time;
 };
 
 }  // namespace micras::proxy

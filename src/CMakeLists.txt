@@ -31,6 +31,7 @@ target_link_libraries(micrasverse PRIVATE
     proxy_module
     config_module
     micrasverse_core
+    micras
 )
 
 # Make sure it can find all needed headers

@@ -6,9 +6,10 @@ namespace micras::proxy {
 
 Fan::Fan(const Config& config) :
     bodyId{config.bodyId},
+    worldId{config.worldId},
     max_acceleration{config.max_acceleration},
     max_speed{config.max_speed},
-    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{config.bodyId})} {
+    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{})} {
     this->stop();
 }
 

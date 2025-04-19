@@ -23,9 +23,9 @@ public:
 
     void update(float deltaTime, bool isFanOn);
 
-    void setWheelCommand(float left_command, float right_command);
+    void set_wheel_command(float left_command, float right_command);
 
-    void setCommand(float linear, float angular);
+    void set_command(float linear, float angular);
 
     void stop();
 

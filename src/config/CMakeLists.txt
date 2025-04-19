@@ -14,4 +14,9 @@ target_include_directories(config_module PUBLIC
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/micras_core/include
     ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/micras_nav/include
+    ${CMAKE_SOURCE_DIR}/src/proxy/include
+    ${CMAKE_SOURCE_DIR}/external/box2d/include
+    ${CMAKE_SOURCE_DIR}/src/core/include          # For micrasverse_core/types.hpp
+    ${CMAKE_SOURCE_DIR}/src/physics/include       # For physics/argb.hpp and other physics headers
+    ${CMAKE_SOURCE_DIR}/src/config                # For local constants.hpp
 ) 

@@ -53,12 +53,12 @@ void Locomotion::update(float deltaTime, bool isFanOn) {
     right_motor->update(deltaTime, isFanOn);
 }
 
-void Locomotion::setWheelCommand(float left_command, float right_command) {
+void Locomotion::set_wheel_command(float left_command, float right_command) {
     left_motor->setCommand(left_command);
     right_motor->setCommand(right_command);
 }
 
-void Locomotion::setCommand(float linear, float angular) {
+void Locomotion::set_command(float linear, float angular) {
     float left_command = linear - angular;
     float right_command = linear + angular;
 
@@ -72,11 +72,11 @@ void Locomotion::setCommand(float linear, float angular) {
         right_command *= 100.0F / std::abs(right_command);
     }
 
-    this->setWheelCommand(left_command, right_command);
+    this->set_wheel_command(left_command, right_command);
 }
 
 void Locomotion::stop() {
-    this->setWheelCommand(0.0F, 0.0F);
+    this->set_wheel_command(0.0F, 0.0F);
 }
 
 }  // namespace micras::proxy

@@ -5,10 +5,11 @@ namespace micras::proxy {
 
 Motor::Motor(const Config& config) :
     bodyId{config.bodyId},
+    worldId{config.worldId},
     max_speed{config.max_speed},
     max_torque{config.max_torque},
     gear_ratio{config.gear_ratio},
-    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{config.bodyId})} {
+    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{})} {
 }
 
 void Motor::set_speed(float speed) {

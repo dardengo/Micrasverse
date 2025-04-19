@@ -23,6 +23,7 @@ public:
 
     struct Config {
         b2BodyId bodyId;
+        b2WorldId worldId;
         PullResistor pull_resistor;
         uint32_t debounce_delay;  // ms
         uint32_t long_press_delay;  // ms
@@ -43,6 +44,7 @@ private:
     bool is_falling_edge() const;
 
     b2BodyId bodyId;
+    b2WorldId worldId;
     PullResistor pull_resistor;
     uint32_t debounce_delay;
     uint32_t long_press_delay;

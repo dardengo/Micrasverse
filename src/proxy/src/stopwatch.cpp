@@ -1,5 +1,5 @@
 #include "micras/proxy/stopwatch.hpp"
-#include "box2d/box2d.h"
+#include <thread>
 
 namespace micras::proxy {
 
@@ -7,57 +7,36 @@ Stopwatch::Stopwatch() {
     this->reset_ms();
 }
 
-Stopwatch::Stopwatch(const Config& config) :
-    bodyId{config.bodyId} {
+Stopwatch::Stopwatch(const Config& config) {
     this->reset_ms();
 }
 
 void Stopwatch::reset_ms() {
-    b2WorldId world = b2Body_GetWorld(bodyId);
-    b2Profile profile = b2World_GetProfile(world);
-    this->start_time = profile.step;
+    this->start_time = std::chrono::steady_clock::now();
 }
 
 void Stopwatch::reset_us() {
-    b2WorldId world = b2Body_GetWorld(bodyId);
-    b2Profile profile = b2World_GetProfile(world);
-    this->start_time = profile.step;
+    this->start_time = std::chrono::steady_clock::now();
 }
 
 uint32_t Stopwatch::elapsed_time_ms() const {
-    b2WorldId world = b2Body_GetWorld(bodyId);
-    b2Profile profile = b2World_GetProfile(world);
-    float current_time = profile.step;
-    return static_cast<uint32_t>((current_time - this->start_time) * 1000.0f);
+    auto current_time = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - this->start_time);
+    return static_cast<uint32_t>(elapsed.count());
 }
 
 uint32_t Stopwatch::elapsed_time_us() const {
-    b2WorldId world = b2Body_GetWorld(bodyId);
-    b2Profile profile = b2World_GetProfile(world);
-    float current_time = profile.step;
-    return static_cast<uint32_t>((current_time - this->start_time) * 1000000.0f);
+    auto current_time = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(current_time - this->start_time);
+    return static_cast<uint32_t>(elapsed.count());
 }
 
 void Stopwatch::sleep_ms(uint32_t time) {
-    b2WorldId world = b2Body_GetWorld(bodyId);
-    b2Profile profile = b2World_GetProfile(world);
-    float start_sleep = profile.step;
-    float sleep_end = start_sleep + (time / 1000.0f);
-    
-    while (b2World_GetProfile(world).step < sleep_end) {
-        // Busy wait
-    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(time));
 }
 
 void Stopwatch::sleep_us(uint32_t time) {
-    b2WorldId world = b2Body_GetWorld(bodyId);
-    b2Profile profile = b2World_GetProfile(world);
-    float start_sleep = profile.step;
-    float sleep_end = start_sleep + (time / 1000000.0f);
-    
-    while (b2World_GetProfile(world).step < sleep_end) {
-        // Busy wait
-    }
+    std::this_thread::sleep_for(std::chrono::microseconds(time));
 }
 
 }  // namespace micras::proxy 

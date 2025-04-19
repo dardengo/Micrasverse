@@ -26,6 +26,7 @@ public:
      */
     struct Config {
         b2BodyId bodyId;
+        b2WorldId worldId;
         float max_acceleration;  // Maximum acceleration in speed units per second
         float max_speed;         // Maximum speed in speed units
     };
@@ -82,6 +83,7 @@ public:
 
 private:
     b2BodyId bodyId;
+    b2WorldId worldId;
     float max_acceleration;
     float max_speed;
     float current_speed = 0.0f;

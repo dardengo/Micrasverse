@@ -11,6 +11,7 @@ class Motor {
 public:
     struct Config {
         b2BodyId bodyId;
+        b2WorldId worldId;
         float max_speed;  // Maximum speed in RPM
         float max_torque;   // Maximum torque in Nm
         float gear_ratio;   // Gear ratio
@@ -26,6 +27,7 @@ public:
 
 private:
     b2BodyId bodyId;
+    b2WorldId worldId;
     float max_speed;
     float max_torque;
     float gear_ratio;

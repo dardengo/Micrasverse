@@ -35,7 +35,7 @@ public:
 
     micras::core::Observation get_observation(uint8_t sensor_index) const;
 
-    float get_reading(uint8_t sensor_index);
+    float get_reading(uint8_t sensor_index) const;
 
     float get_adc_reading(uint8_t sensor_index) const;
 

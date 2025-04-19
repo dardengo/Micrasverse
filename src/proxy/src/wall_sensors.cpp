@@ -60,8 +60,8 @@ micras::core::Observation TWallSensors<num_of_sensors>::get_observation(uint8_t 
 }
 
 template <uint8_t num_of_sensors>
-float TWallSensors<num_of_sensors>::get_reading(uint8_t sensor_index) {
-    return this->sensors.at(sensor_index).getReading();
+float TWallSensors<num_of_sensors>::get_reading(uint8_t sensor_index) const {
+    return get_adc_reading(sensor_index);
 }
 
 template <uint8_t num_of_sensors>

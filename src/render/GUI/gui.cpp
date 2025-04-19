@@ -101,10 +101,10 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         } else {
             // Forward/Backward
             if (wPressed) {
-                micrasBody.getLocomotion().setCommand(moveSpeed, 0.0f);
+                micrasBody.getLocomotion().set_command(moveSpeed, 0.0f);
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "FORWARD");
             } else if (sPressed) {
-                micrasBody.getLocomotion().setCommand(-moveSpeed, 0.0f);
+                micrasBody.getLocomotion().set_command(-moveSpeed, 0.0f);
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "BACKWARD");
             } else {
                 // No forward/backward movement
@@ -112,10 +112,10 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             
             // Left/Right
             if (aPressed) {
-                micrasBody.getLocomotion().setCommand(0.0f, moveSpeed);
+                micrasBody.getLocomotion().set_command(0.0f, moveSpeed);
                 ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING LEFT");
             } else if (dPressed) {
-                micrasBody.getLocomotion().setCommand(0.0f, -moveSpeed);
+                micrasBody.getLocomotion().set_command(0.0f, -moveSpeed);
                 ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING RIGHT");
             } else {
                 // No turning

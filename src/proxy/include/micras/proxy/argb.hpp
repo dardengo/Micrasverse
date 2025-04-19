@@ -23,6 +23,21 @@ public:
         std::array<float, num_of_leds> brightness;
     };
 
+    /**
+     * @brief Predefined colors.
+     */
+    struct Colors {
+        Colors() = delete;
+
+        static constexpr micrasverse::types::Color red{255, 0, 0};
+        static constexpr micrasverse::types::Color green{0, 255, 0};
+        static constexpr micrasverse::types::Color blue{0, 0, 255};
+        static constexpr micrasverse::types::Color yellow{255, 255, 0};
+        static constexpr micrasverse::types::Color cyan{0, 255, 255};
+        static constexpr micrasverse::types::Color magenta{255, 0, 255};
+        static constexpr micrasverse::types::Color white{255, 255, 255};
+    };
+
     explicit TArgb(const Config& config);
 
     ~TArgb();
