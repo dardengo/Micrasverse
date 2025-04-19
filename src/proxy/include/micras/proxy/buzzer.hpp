@@ -18,6 +18,10 @@ public:
 
     void play(uint32_t frequency, uint32_t duration = 0);
 
+    void set_frequency(float frequency);
+
+    void set_duration(uint32_t duration);
+
     void update();
 
     void stop();

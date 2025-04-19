@@ -5,80 +5,68 @@ namespace micras::proxy {
 Button::Button(const Config& config) :
     bodyId(config.bodyId),
     worldId(config.worldId),
-    pull_resistor(config.pull_resistor),
-    debounce_delay(config.debounce_delay),
-    long_press_delay(config.long_press_delay),
-    extra_long_press_delay(config.extra_long_press_delay),
-    simulated_state(config.initial_state),
-    last_state(false),
-    current_state(false),
-    debouncing(false),
-    debounce_timer(std::make_unique<Stopwatch>(Stopwatch::Config{})),
-    press_timer(std::make_unique<Stopwatch>(Stopwatch::Config{})) {
+    current_state(config.initial_state),
+    previous_state(config.initial_state),
+    current_status(Status::NO_PRESS),
+    pull_type(config.pull_type) {
 }
 
-bool Button::is_pressed() {
-    update_state();
-    return current_state;
+bool Button::is_pressed() const {
+    // Return the logical state after applying pull resistor effect
+    return get_logical_state();
 }
 
-Button::Status Button::get_status() {
-    update_state();
-    
-    if (!current_state) {
-        return Status::NO_PRESS;
-    }
-
-    uint32_t press_duration = press_timer->elapsed_time_ms();
-    
-    if (press_duration >= extra_long_press_delay) {
-        return Status::EXTRA_LONG_PRESS;
-    } else if (press_duration >= long_press_delay) {
-        return Status::LONG_PRESS;
-    } else {
-        return Status::SHORT_PRESS;
-    }
+Button::Status Button::get_status() const {
+    return current_status;
 }
 
 void Button::set_state(bool state) {
-    simulated_state = state;
-}
-
-bool Button::get_raw_reading() const {
-    return simulated_state;
-}
-
-void Button::update_state() {
-    bool raw_state = get_raw_reading();
+    // Store previous state for edge detection
+    previous_state = current_state;
+    current_state = state;
     
-    if (raw_state != last_state) {
-        if (!debouncing) {
-            debouncing = true;
-            debounce_timer->reset_ms();
-        } else if (debounce_timer->elapsed_time_ms() >= debounce_delay) {
-            current_state = raw_state;
-            if (current_state) {
-                press_timer->reset_ms();
-            }
-            debouncing = false;
-        }
-    } else if (debouncing && debounce_timer->elapsed_time_ms() >= debounce_delay) {
-        current_state = raw_state;
-        if (current_state) {
-            press_timer->reset_ms();
-        }
-        debouncing = false;
+    // Update status based on logical state (after pull effect)
+    bool logical_state = get_logical_state();
+    
+    if (!logical_state) {
+        // Button is released
+        current_status = Status::NO_PRESS;
+    } else if (current_status == Status::NO_PRESS) {
+        // Button is pressed and was previously released
+        current_status = Status::SHORT_PRESS;
     }
+}
+
+void Button::set_status(Status status) {
+    current_status = status;
     
-    last_state = raw_state;
+    // Update raw state based on status and pull type
+    if (status == Status::NO_PRESS) {
+        // If no press, set raw state based on pull type
+        // For PULL_UP: button not pressed = input pulled high = true
+        // For PULL_DOWN: button not pressed = input pulled low = false
+        current_state = (pull_type == PullType::PULL_UP);
+    } else {
+        // If pressed, set raw state based on pull type (inverted)
+        // For PULL_UP: button pressed = input pulled low = false
+        // For PULL_DOWN: button pressed = input pulled high = true
+        current_state = (pull_type == PullType::PULL_DOWN);
+    }
 }
 
-bool Button::is_rising_edge() const {
-    return current_state && !last_state;
+Button::PullType Button::get_pull_type() const {
+    return pull_type;
 }
 
-bool Button::is_falling_edge() const {
-    return !current_state && last_state;
+void Button::set_pull_type(PullType pull_type) {
+    this->pull_type = pull_type;
+}
+
+bool Button::get_logical_state() const {
+    // Apply pull resistor effect to get logical state
+    // For PULL_UP: true = not pressed, false = pressed
+    // For PULL_DOWN: true = pressed, false = not pressed
+    return (pull_type == PullType::PULL_UP) ? !current_state : current_state;
 }
 
 } // namespace micras::proxy 

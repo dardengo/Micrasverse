@@ -6,56 +6,49 @@ namespace micras::proxy {
 
 Locomotion::Locomotion(const Config& config)
     : bodyId{config.bodyId}
+    , left_motor{config.left_motor}
+    , right_motor{config.right_motor}
 {
-    // Initialize motors with unique_ptr
-    left_motor = std::make_unique<micrasverse::physics::Box2DMotor>(
-        bodyId, 
-        micrasverse::types::Vec2{-micrasverse::MICRAS_HALFWIDTH, 0.0f}, 
-        true
-    );
-    
-    right_motor = std::make_unique<micrasverse::physics::Box2DMotor>(
-        bodyId, 
-        micrasverse::types::Vec2{micrasverse::MICRAS_HALFWIDTH, 0.0f}, 
-        false
-    );
-    
     this->stop();
     this->disable();
 }
 
 void Locomotion::enable() {
-
+    // Set both motors to active state
+    if (left_motor) {
+        left_motor->setCommand(0.0f);  // Initialize with zero command
+    }
+    if (right_motor) {
+        right_motor->setCommand(0.0f);  // Initialize with zero command
+    }
 }
 
 void Locomotion::disable() {
-
-}
-
-void Locomotion::attachMotor(b2Vec2 localPosition, bool leftWheel) {
-    if (leftWheel) {
-        left_motor = std::make_unique<micrasverse::physics::Box2DMotor>(
-            bodyId, 
-            micrasverse::types::Vec2{localPosition.x, localPosition.y}, 
-            leftWheel
-        );
-    } else {
-        right_motor = std::make_unique<micrasverse::physics::Box2DMotor>(
-            bodyId, 
-            micrasverse::types::Vec2{localPosition.x, localPosition.y}, 
-            leftWheel
-        );
+    // Stop and deactivate both motors
+    if (left_motor) {
+        left_motor->setCommand(0.0f);
+    }
+    if (right_motor) {
+        right_motor->setCommand(0.0f);
     }
 }
 
 void Locomotion::update(float deltaTime, bool isFanOn) {
-    left_motor->update(deltaTime, isFanOn);
-    right_motor->update(deltaTime, isFanOn);
+    if (left_motor) {
+        left_motor->update(deltaTime, isFanOn);
+    }
+    if (right_motor) {
+        right_motor->update(deltaTime, isFanOn);
+    }
 }
 
 void Locomotion::set_wheel_command(float left_command, float right_command) {
-    left_motor->setCommand(left_command);
-    right_motor->setCommand(right_command);
+    if (left_motor) {
+        left_motor->setCommand(left_command);
+    }
+    if (right_motor) {
+        right_motor->setCommand(right_command);
+    }
 }
 
 void Locomotion::set_command(float linear, float angular) {

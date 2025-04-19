@@ -2,14 +2,21 @@
 
 namespace micrasverse::physics {
 
-Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, types::Color& lightColor)
-    : bodyId(bodyId), localPosition(localPosition), size(size) {
-        this->worldPosition = b2Body_GetWorldPoint(bodyId, localPosition);
-        this->lightColor = lightColor;
-        this->lightColorArray = lightColor.toArray();
-        this->baseColor = types::Color(176.0f, 198.0f, 214.0f);
-        this->baseColorArray = this->baseColor.toArray();
+Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, const types::Color& lightColor)
+    : bodyId(bodyId)
+    , localPosition(localPosition)
+    , size(size)
+    , lightColor(lightColor)
+    , baseColor(176.0f, 198.0f, 214.0f)
+    , isLedOn(false)
+    , command(0.0f) {
+    if (!b2Body_IsValid(bodyId)) {
+        throw std::runtime_error("Invalid body ID in Argb constructor");
     }
+    this->worldPosition = b2Body_GetWorldPoint(bodyId, localPosition);
+    this->lightColorArray = lightColor.toArray();
+    this->baseColorArray = this->baseColor.toArray();
+}
 
 void Argb::setColor(const types::Color& color){
     this->lightColor = color;

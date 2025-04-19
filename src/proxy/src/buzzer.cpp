@@ -20,6 +20,22 @@ void Buzzer::play(uint32_t frequency, uint32_t duration_ms) {
     tone_timer->reset_ms();
 }
 
+void Buzzer::set_frequency(float frequency) {
+    current_frequency = static_cast<uint32_t>(frequency);
+    if (playing) {
+        // If already playing, update the frequency without changing duration
+        tone_timer->reset_ms();
+    }
+}
+
+void Buzzer::set_duration(uint32_t duration_ms) {
+    duration = duration_ms;
+    if (playing) {
+        // If already playing, update the duration without changing frequency
+        tone_timer->reset_ms();
+    }
+}
+
 void Buzzer::update() {
     if (playing && duration > 0) {
         if (tone_timer->elapsed_time_ms() >= duration) {

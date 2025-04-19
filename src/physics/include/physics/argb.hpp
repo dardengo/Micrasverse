@@ -16,7 +16,7 @@ public:
     Argb() = default;
     
     // Constructor with parameters
-    Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, types::Color& lightColor);
+    Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, const types::Color& lightColor);
     
     virtual ~Argb() = default;
 

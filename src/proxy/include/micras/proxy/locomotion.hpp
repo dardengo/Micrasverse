@@ -11,6 +11,8 @@ class Locomotion {
 public:
     struct Config {
         b2BodyId bodyId;
+        std::shared_ptr<micrasverse::physics::Box2DMotor> left_motor;
+        std::shared_ptr<micrasverse::physics::Box2DMotor> right_motor;
     };
 
     explicit Locomotion(const Config& config);
@@ -18,8 +20,6 @@ public:
     void enable();
 
     void disable();
-
-    void attachMotor(b2Vec2 localPosition, bool leftWheel);
 
     void update(float deltaTime, bool isFanOn);
 
@@ -29,8 +29,8 @@ public:
 
     void stop();
 
-    std::unique_ptr<micrasverse::physics::Box2DMotor> left_motor;
-    std::unique_ptr<micrasverse::physics::Box2DMotor> right_motor;
+    std::shared_ptr<micrasverse::physics::Box2DMotor> left_motor;
+    std::shared_ptr<micrasverse::physics::Box2DMotor> right_motor;
 
 private:
     b2BodyId bodyId;

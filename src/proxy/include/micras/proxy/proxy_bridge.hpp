@@ -1,0 +1,134 @@
+#ifndef MICRAS_PROXY_BRIDGE_HPP
+#define MICRAS_PROXY_BRIDGE_HPP
+
+#include "../../../external/MicrasFirmware/include/micras/micras.hpp"
+#include "micras/proxy/button.hpp"
+#include "micras/proxy/buzzer.hpp"
+#include "micras/proxy/fan.hpp"
+#include "micras/proxy/imu.hpp"
+#include "micras/proxy/rotary_sensor.hpp"
+#include "micras/proxy/wall_sensors.hpp"
+#include "micras/proxy/locomotion.hpp"
+#include "micras/proxy/argb.hpp"
+#include "micras/proxy/dip_switch.hpp"
+#include "micras/proxy/stopwatch.hpp"
+#include "micrasverse_core/types.hpp"
+#include "physics/box2d_micrasbody.hpp"
+
+namespace micras {
+
+/**
+ * @brief Class that provides access to Micras controller proxies.
+ * This class is a friend of the Micras class and can access its private members.
+ */
+class ProxyBridge {
+public:
+    /**
+     * @brief Construct a new ProxyBridge object.
+     * 
+     * @param micras Reference to the Micras controller.
+     * @param micrasBody Reference to the Box2D Micras body.
+     */
+    explicit ProxyBridge(Micras& micras, micrasverse::physics::Box2DMicrasBody& micrasBody);
+
+    // Button access
+    proxy::Button::Status get_button_status() const;
+    bool is_button_pressed() const;
+    void set_button_status(proxy::Button::Status status);
+    proxy::Button::PullType get_button_pull_type() const;
+    void set_button_pull_type(proxy::Button::PullType pull_type);
+
+    // Buzzer access
+    void set_buzzer_frequency(float frequency);
+    void set_buzzer_duration(uint32_t duration);
+    void stop_buzzer();
+    bool is_buzzer_playing() const;
+
+    // Fan access
+    void set_fan_speed(float speed);
+    float get_fan_speed() const;
+    void enable_fan();
+    void disable_fan();
+    void stop_fan();
+
+    // IMU access
+    void update_imu();
+    float get_imu_acceleration_x() const;
+    float get_imu_acceleration_y() const;
+    float get_imu_acceleration_z() const;
+    float get_imu_angular_velocity_x() const;
+    float get_imu_angular_velocity_y() const;
+    float get_imu_angular_velocity_z() const;
+    float get_imu_angular_velocity(proxy::Imu::Axis axis) const;
+    float get_imu_linear_acceleration(proxy::Imu::Axis axis) const;
+    void calibrate_imu();
+
+    // Rotary sensors access
+    void update_rotary_sensors();
+    float get_left_rotary_sensor_velocity() const;
+    float get_right_rotary_sensor_velocity() const;
+
+    // Wall sensors access
+    void update_wall_sensors();
+    float get_wall_sensor_distance(uint8_t index) const;
+    bool is_wall_detected(uint8_t index) const;
+    float get_wall_sensor_reading(uint8_t sensor_index) const;
+    float get_wall_sensor_adc_reading(uint8_t sensor_index) const;
+    void calibrate_front_wall();
+    void calibrate_left_wall();
+    void calibrate_right_wall();
+    void calibrate_front_free_space();
+    void calibrate_left_free_space();
+    void calibrate_right_free_space();
+    void turn_on_wall_sensors();
+    void turn_off_wall_sensors();
+
+    // Locomotion access
+    void set_wheel_command(float left_command, float right_command);
+    void set_command(float linear, float angular);
+    void stop_motors();
+    void enable_motors();
+    void disable_motors();
+
+    // ARGB access
+    void set_led_color(uint8_t index, uint8_t red, uint8_t green, uint8_t blue);
+    void set_led_brightness(uint8_t index, uint8_t brightness);
+    void set_argb_color(const micrasverse::types::Color& color, uint8_t index);
+    void set_argb_color(const micrasverse::types::Color& color);
+    void turn_off_argb(uint8_t index);
+    void turn_off_argb();
+
+    // Dip switch access
+    bool get_dip_switch_state(uint8_t index) const;
+    uint8_t get_dip_switch_value() const;
+
+    // Stopwatch access
+    void reset_stopwatch();
+    uint32_t get_elapsed_time_ms() const;
+    uint32_t get_elapsed_time_us() const;
+
+    // Get the number of ARGB LEDs available
+    size_t get_argb_count() const {
+        return micras.argb.argbs.size();
+    }
+
+    // MicrasController access
+    micras::core::Objective get_objective() const;
+    micras::nav::Mapping::Action get_current_action() const;
+    std::string get_objective_string() const;
+    std::string get_action_type_string() const;
+
+    /**
+     * @brief Synchronize the controller and body proxies.
+     * This method should be called periodically to ensure both proxies stay in sync.
+     */
+    void sync();
+
+private:
+    Micras& micras;
+    micrasverse::physics::Box2DMicrasBody& micrasBody;
+};
+
+} // namespace micras::proxy
+
+#endif // MICRAS_PROXY_BRIDGE_HPP 

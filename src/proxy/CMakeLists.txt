@@ -18,6 +18,8 @@ target_include_directories(proxy_module PUBLIC
     ${CMAKE_SOURCE_DIR}/src/physics/include
     ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/micras_nav/include
     ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/micras_core/include
+    ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/include
+    ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/src
     ${CMAKE_SOURCE_DIR}/external/imgui
     ${CMAKE_SOURCE_DIR}/external/imgui/backends
 )

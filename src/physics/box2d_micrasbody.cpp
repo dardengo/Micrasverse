@@ -39,6 +39,7 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
         auto buttonConfig = micras::button_config;
         buttonConfig.bodyId = bodyId;
         buttonConfig.worldId = worldId;
+        buttonConfig.pull_type = micras::proxy::Button::PullType::PULL_UP;  // Set default pull type
         button = std::make_unique<micras::proxy::Button>(buttonConfig);
         
         // Initialize wall sensors
@@ -49,16 +50,69 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
         // Initialize locomotion
         auto locomotionConfig = micras::locomotion_config;
         locomotionConfig.bodyId = bodyId;
+        
+        // Create motors first
+        auto leftMotor = std::make_shared<micrasverse::physics::Box2DMotor>(
+            bodyId,
+            micrasverse::types::Vec2{-micrasverse::MICRAS_HALFWIDTH, 0.0f},
+            true
+        );
+        
+        auto rightMotor = std::make_shared<micrasverse::physics::Box2DMotor>(
+            bodyId,
+            micrasverse::types::Vec2{micrasverse::MICRAS_HALFWIDTH, 0.0f},
+            false
+        );
+        
+        // Set motors in config
+        locomotionConfig.left_motor = leftMotor;
+        locomotionConfig.right_motor = rightMotor;
+        
         locomotion = std::make_unique<micras::proxy::Locomotion>(locomotionConfig);
         
-        // Initialize ARGB LEDs
-        auto argbConfig = micras::argb_config;
-        argbConfig.bodyId = bodyId;
-        argb = std::make_unique<micras::proxy::TArgb<2>>(argbConfig);
-        
-        // Attach both LEDs with different positions
-        argb->attachArgb(b2Vec2{-micrasverse::MICRAS_HALFWIDTH + 0.02f, 0.02f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::red);  // Left LED
-        argb->attachArgb(b2Vec2{micrasverse::MICRAS_HALFWIDTH - 0.02f, 0.02f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::green);  // Right LED
+        // Initialize ARGB LEDs with proper error handling
+        try {
+            auto argbConfig = micras::argb_config;
+            argbConfig.bodyId = bodyId;
+            argb = std::make_unique<micras::proxy::TArgb<2>>(argbConfig);
+            
+            std::cout << "Initializing ARGB LEDs..." << std::endl;
+            
+            // Attach left LED
+            try {
+                argb->attachArgb(b2Vec2{-micrasverse::MICRAS_HALFWIDTH + 0.02f, 0.02f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::red);
+                std::cout << "Successfully attached left LED" << std::endl;
+            } catch (const std::exception& e) {
+                std::cerr << "Failed to attach left LED: " << e.what() << std::endl;
+                throw;
+            }
+            
+            // Attach right LED
+            try {
+                argb->attachArgb(b2Vec2{micrasverse::MICRAS_HALFWIDTH - 0.02f, 0.02f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::green);
+                std::cout << "Successfully attached right LED" << std::endl;
+            } catch (const std::exception& e) {
+                std::cerr << "Failed to attach right LED: " << e.what() << std::endl;
+                throw;
+            }
+            
+            // Verify LEDs were created
+            if (argb->argbs.empty()) {
+                throw std::runtime_error("Failed to create any ARGB LEDs");
+            } else {
+                std::cout << "Successfully created " << argb->argbs.size() << " ARGB LEDs" << std::endl;
+            }
+            
+            // Initialize the LEDs with default colors
+            for (auto& led : argb->argbs) {
+                led.turnOn();
+            }
+            std::cout << "ARGB LEDs initialized and turned on" << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Error initializing ARGB LEDs: " << e.what() << std::endl;
+            // Re-throw the error since ARGB LEDs are a critical component
+            throw std::runtime_error("Failed to initialize ARGB LEDs: " + std::string(e.what()));
+        }
         
         // Initialize DIP switch
         auto dipSwitchConfig = micras::dip_switch_config;

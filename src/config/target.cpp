@@ -23,11 +23,8 @@ proxy::Battery::Config battery_config = {
 proxy::Button::Config button_config = {
     .bodyId = b2BodyId{0, 0},  // This will be set by Box2DMicrasBody
     .worldId = b2WorldId{0, 0},  // This will be set by Box2DMicrasBody
-    .pull_resistor = proxy::Button::PullResistor::PULL_UP,
-    .debounce_delay = 50,  // ms
-    .long_press_delay = 1000,  // ms
-    .extra_long_press_delay = 3000,  // ms
-    .initial_state = false
+    .initial_state = false,
+    .pull_type = proxy::Button::PullType::PULL_UP
 };
 
 // Buzzer configuration
@@ -118,7 +115,9 @@ proxy::WallSensors::Config wall_sensors_config = {
 
 // Locomotion configuration
 proxy::Locomotion::Config locomotion_config = {
-    .bodyId = b2BodyId{}
+    .bodyId = b2BodyId{},
+    .left_motor = nullptr,
+    .right_motor = nullptr
 };
 
 // Function to initialize all proxy configs with the correct bodyId
