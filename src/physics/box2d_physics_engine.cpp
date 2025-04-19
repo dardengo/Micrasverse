@@ -156,6 +156,13 @@ namespace micrasverse::physics {
         // Reset the ARGB LEDs
         for (auto& argb : p_Micras->getArgb().argbs) {
             argb.setColor(micrasverse::types::Colors::red);
+            // Update the physical position of the ARGB LEDs
+            argb.update();
+        }
+        
+        // Update the physical positions of the wall sensors
+        for (auto& lidar : p_Micras->getWallSensors().get_sensors()) {
+            lidar.update();
         }
     }
 

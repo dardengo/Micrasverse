@@ -292,6 +292,29 @@ namespace micrasverse::render {
 
     void RenderEngine::reloadMaze(const std::string& mazeFilePath) {
         this->mazeRender->reloadElements(this->simulationEngine->physicsEngine->getMaze().getElements());
+        
+        // Update ARGB render positions after reset
+        auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb();
+        for (size_t i = 0; i < argb.argbs.size(); i++) {
+            this->argbsSceneObjs[i]->update(
+                b2Vec2(argb.argbs[i].getWorldPosition().x, argb.argbs[i].getWorldPosition().y),
+                this->simulationEngine->physicsEngine->getMicras().getRotation(),
+                argb.argbs[i].getLightColorArray(),
+                argb.argbs[i].isOn()
+            );
+        }
+        
+        // Update Lidar render positions after reset
+        auto& wallSensors = this->simulationEngine->physicsEngine->getMicras().getWallSensors();
+        for (size_t i = 0; i < wallSensors.get_sensors().size(); i++) {
+            this->lidarsSceneObjs[i]->update(
+                b2Vec2(wallSensors.get_sensors()[i].getRayMidPoint().x, wallSensors.get_sensors()[i].getRayMidPoint().y),
+                b2MakeRot(std::atan2(wallSensors.get_sensors()[i].getRayDirection().y,
+                                   wallSensors.get_sensors()[i].getRayDirection().x)),
+                wallSensors.get_sensors()[i].getReadingVisual()
+            );
+        }
+        
         this->simulationEngine->wasReset = false;
     }
 
