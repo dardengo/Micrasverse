@@ -2,16 +2,7 @@
 
 #include <memory>
 #include <vector>
-#include "box2d/box2d.h"
-#include "micras/proxy/battery.hpp"
-#include "micras/proxy/button.hpp"
-#include "micras/proxy/buzzer.hpp"
-#include "micras/proxy/dip_switch.hpp"
-#include "micras/proxy/fan.hpp"
-#include "micras/proxy/led.hpp"
-#include "micras/proxy/stopwatch.hpp"
-#include "micras/proxy/storage.hpp"
-#include "micras/proxy/torque_sensors.hpp"
+#include "micras/proxy/proxy_bridge.hpp"
 
 namespace micras::proxy {
 
@@ -62,13 +53,7 @@ public:
         } buzzer;
     };
 
-    GuiController(const Config& config,
-                 std::shared_ptr<Button> button,
-                 std::shared_ptr<TDipSwitch<4>> dip_switch,
-                 std::shared_ptr<Led> led,
-                 std::shared_ptr<Battery> battery,
-                 std::shared_ptr<Fan> fan,
-                 std::shared_ptr<Buzzer> buzzer);
+    GuiController(const Config& config, std::shared_ptr<ProxyBridge> proxy_bridge);
 
     void update();
     void render();
@@ -78,14 +63,7 @@ public:
 
 private:
     Config config;
-    
-    // Component references
-    std::shared_ptr<Button> button;
-    std::shared_ptr<TDipSwitch<4>> dip_switch;
-    std::shared_ptr<Led> led;
-    std::shared_ptr<Battery> battery;
-    std::shared_ptr<Fan> fan;
-    std::shared_ptr<Buzzer> buzzer;
+    std::shared_ptr<ProxyBridge> proxy_bridge;
     
     // GUI element states
     bool button_pressed = false;

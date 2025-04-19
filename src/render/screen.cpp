@@ -120,20 +120,23 @@ void Screen::processInput() {
         toggleFullscreen();
     }
 
-    if (io::Keyboard::key(GLFW_KEY_UP)) {
-        this->camera.updateCameraPos(CameraDirection::UP, deltaTime);
-    }
+    // Only process camera movement if ImGui is not capturing keyboard input
+    if (!ImGui::GetIO().WantCaptureKeyboard) {
+        if (io::Keyboard::key(GLFW_KEY_UP)) {
+            this->camera.updateCameraPos(CameraDirection::UP, deltaTime);
+        }
 
-    if (io::Keyboard::key(GLFW_KEY_DOWN)) {
-        this->camera.updateCameraPos(CameraDirection::DOWN, deltaTime);
-    }
+        if (io::Keyboard::key(GLFW_KEY_DOWN)) {
+            this->camera.updateCameraPos(CameraDirection::DOWN, deltaTime);
+        }
 
-    if (io::Keyboard::key(GLFW_KEY_LEFT)) {
-        this->camera.updateCameraPos(CameraDirection::LEFT, deltaTime);
-    }
+        if (io::Keyboard::key(GLFW_KEY_LEFT)) {
+            this->camera.updateCameraPos(CameraDirection::LEFT, deltaTime);
+        }
 
-    if (io::Keyboard::key(GLFW_KEY_RIGHT)) {
-        this->camera.updateCameraPos(CameraDirection::RIGHT, deltaTime);
+        if (io::Keyboard::key(GLFW_KEY_RIGHT)) {
+            this->camera.updateCameraPos(CameraDirection::RIGHT, deltaTime);
+        }
     }
 
     double scrollDy = io::Mouse::getScrollDy();

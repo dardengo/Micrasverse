@@ -73,6 +73,7 @@ public:
 
     GLFWwindow* getWindow();
 
+    GUI& getGUI() { return gui; }
 
 };
 

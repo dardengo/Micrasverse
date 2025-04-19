@@ -1,18 +1,24 @@
 #include "GUI/gui.hpp"
 #include "physics/box2d_micrasbody.hpp"
+#include "micras/proxy/proxy_bridge.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
 #include <filesystem>
+#include <thread>
 
 namespace micrasverse::render {
 
-GUI::GUI() : showStyleEditor(false), currentWindow(nullptr) {}
+GUI::GUI() : showStyleEditor(false), currentWindow(nullptr), proxyBridge(nullptr) {}
 
 void GUI::setSimulationEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine) {
     this->simulationEngine = simulationEngine;
+}
+
+void GUI::setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge) {
+    this->proxyBridge = proxyBridge;
 }
 
 void GUI::init(GLFWwindow* window) {
@@ -50,6 +56,13 @@ void GUI::update() {
 }
 
 void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
+    if (!proxyBridge) {
+        ImGui::Begin("Error");
+        ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "Proxy Bridge not initialized!");
+        ImGui::End();
+        return;
+    }
+
     // Check if we're in fullscreen mode for optimizations
     int width, height;
     glfwGetFramebufferSize(currentWindow, &width, &height);
@@ -61,27 +74,103 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // Display FPS
     ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
     
-    // Display robot position and velocity
-    ImGui::SeparatorText("Robot Status");
-    ImGui::Text("Position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
-    ImGui::Text("Rotation: %.2f", micrasBody.getAngle());
-    ImGui::Text("Linear Velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
+    // Robot Status Section
+    if (ImGui::CollapsingHeader("Robot Status", ImGuiTreeNodeFlags_DefaultOpen)) {
+        ImGui::Text("Position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
+        ImGui::Text("Rotation: %.2f", micrasBody.getAngle());
+        ImGui::Text("Linear Velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
+        
+        // Add MicrasController objective and current_action
+        if (proxyBridge) {
+            ImGui::Separator();
+            ImGui::Text("MicrasController Status:");
+            
+            // Display objective with color coding
+            std::string objectiveText = "Objective: " + proxyBridge->get_objective_string();
+            ImVec4 objectiveColor;
+            
+            switch (proxyBridge->get_objective()) {
+                case micras::core::Objective::EXPLORE:
+                    objectiveColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
+                    break;
+                case micras::core::Objective::RETURN:
+                    objectiveColor = ImVec4(0.0f, 0.0f, 1.0f, 1.0f); // Blue
+                    break;
+                case micras::core::Objective::SOLVE:
+                    objectiveColor = ImVec4(1.0f, 0.5f, 0.0f, 1.0f); // Orange
+                    break;
+                default:
+                    objectiveColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Gray
+                    break;
+            }
+            
+            ImGui::PushStyleColor(ImGuiCol_Text, objectiveColor);
+            ImGui::Text("%s", objectiveText.c_str());
+            ImGui::PopStyleColor();
+            
+            // Display current action with color coding
+            std::string actionText = "Current Action: " + proxyBridge->get_action_type_string();
+            ImVec4 actionColor;
+            
+            switch (proxyBridge->get_current_action().type) {
+                case micras::nav::Mapping::Action::Type::LOOK_AT:
+                    actionColor = ImVec4(0.0f, 1.0f, 1.0f, 1.0f); // Cyan
+                    break;
+                case micras::nav::Mapping::Action::Type::GO_TO:
+                    actionColor = ImVec4(1.0f, 0.0f, 1.0f, 1.0f); // Magenta
+                    break;
+                case micras::nav::Mapping::Action::Type::ALIGN_BACK:
+                    actionColor = ImVec4(1.0f, 1.0f, 0.0f, 1.0f); // Yellow
+                    break;
+                case micras::nav::Mapping::Action::Type::FINISHED:
+                    actionColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
+                    break;
+                case micras::nav::Mapping::Action::Type::ERROR:
+                    actionColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Red
+                    break;
+                default:
+                    actionColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Gray
+                    break;
+            }
+            
+            ImGui::PushStyleColor(ImGuiCol_Text, actionColor);
+            ImGui::Text("%s", actionText.c_str());
+            ImGui::PopStyleColor();
+            
+            // Display action direction if available
+            if (proxyBridge->get_current_action().type == micras::nav::Mapping::Action::Type::LOOK_AT || 
+                proxyBridge->get_current_action().type == micras::nav::Mapping::Action::Type::GO_TO) {
+                std::string directionText = "Direction: ";
+                switch (proxyBridge->get_current_action().direction) {
+                    case 0: directionText += "EAST"; break;
+                    case 1: directionText += "SOUTH"; break;
+                    case 2: directionText += "WEST"; break;
+                    case 3: directionText += "NORTH"; break;
+                    default: directionText += "UNKNOWN"; break;
+                }
+                ImGui::Text("%s", directionText.c_str());
+            }
+        }
+    }
     
-    // Robot Control Panel
-    ImGui::SeparatorText("Robot Controls");
-    
-    // Movement Controls
-    if (ImGui::TreeNode("Movement Controls")) {
+    // Movement Controls Section
+    if (ImGui::CollapsingHeader("Movement Controls", ImGuiTreeNodeFlags_DefaultOpen)) {
         static float moveSpeed = 5.0f;
         ImGui::SliderFloat("Movement Speed", &moveSpeed, 0.1f, 10.0f);
         
-        // Display WASD controls
-        ImGui::Text("Use WASD keys to control the robot:");
-        ImGui::BulletText("W - Forward");
-        ImGui::BulletText("S - Backward");
-        ImGui::BulletText("A - Turn Left");
-        ImGui::BulletText("D - Turn Right");
-        ImGui::BulletText("Space - Stop");
+        // Display WASD controls in a more compact way
+        ImGui::Text("WASD Controls:");
+        ImGui::Columns(2, "controls", false);
+        ImGui::Text("W - Forward");
+        ImGui::NextColumn();
+        ImGui::Text("S - Backward");
+        ImGui::NextColumn();
+        ImGui::Text("A - Turn Left");
+        ImGui::NextColumn();
+        ImGui::Text("D - Turn Right");
+        ImGui::NextColumn();
+        ImGui::Text("Space - Stop");
+        ImGui::Columns(1);
         
         // Display current movement state
         ImGui::Separator();
@@ -96,15 +185,21 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         
         // Apply movement based on key state
         if (spacePressed) {
-            micrasBody.getLocomotion().stop();
+            proxyBridge->stop_motors();
+            proxyBridge->disable_motors();
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "STOPPED");
         } else {
+            // Enable motors if any movement key is pressed
+            if (wPressed || sPressed || aPressed || dPressed) {
+                proxyBridge->enable_motors();
+            }
+
             // Forward/Backward
             if (wPressed) {
-                micrasBody.getLocomotion().set_command(moveSpeed, 0.0f);
+                proxyBridge->set_command(moveSpeed, 0.0f);
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "FORWARD");
             } else if (sPressed) {
-                micrasBody.getLocomotion().set_command(-moveSpeed, 0.0f);
+                proxyBridge->set_command(-moveSpeed, 0.0f);
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "BACKWARD");
             } else {
                 // No forward/backward movement
@@ -112,95 +207,42 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             
             // Left/Right
             if (aPressed) {
-                micrasBody.getLocomotion().set_command(0.0f, moveSpeed);
+                proxyBridge->set_command(0.0f, moveSpeed);
                 ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING LEFT");
             } else if (dPressed) {
-                micrasBody.getLocomotion().set_command(0.0f, -moveSpeed);
+                proxyBridge->set_command(0.0f, -moveSpeed);
                 ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING RIGHT");
             } else {
                 // No turning
             }
             
-            // If no keys are pressed, stop the robot
+            // If no keys are pressed, stop and disable the motors
             if (!wPressed && !sPressed && !aPressed && !dPressed) {
-                micrasBody.getLocomotion().stop();
+                proxyBridge->stop_motors();
+                proxyBridge->disable_motors();
                 ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "IDLE");
             }
         }
-        
-        ImGui::TreePop();
     }
     
-    // Sensor Controls
-    if (ImGui::TreeNode("Sensor Controls")) {
-        // Wall Sensors Status
-        ImGui::Text("Wall Sensors:");
-        auto& wallSensors = micrasBody.getWallSensors();
+    // DIP Switch Controls Section
+    if (ImGui::CollapsingHeader("DIP Switches", ImGuiTreeNodeFlags_DefaultOpen)) {
+        ImGui::Columns(4, "dipswitches", false);
         for (size_t i = 0; i < 4; ++i) {
-            float reading = wallSensors.get_sensors()[i].getReadingVisual();
-            ImGui::ProgressBar(reading, ImVec2(-1, 0), 
-                             ("Sensor " + std::to_string(i) + ": " + std::to_string(reading)).c_str());
-        }
-        
-        ImGui::TreePop();
-    }
-    
-    // DIP Switch Controls
-    if (ImGui::TreeNode("DIP Switches")) {
-        auto& dipSwitch = micrasBody.getDipSwitch();
-        for (size_t i = 0; i < 4; ++i) {
-            bool switchState = dipSwitch.get_switch_state(i);
+            bool switchState = proxyBridge->get_dip_switch_state(i);
             if (ImGui::Checkbox(("Switch " + std::to_string(i)).c_str(), &switchState)) {
-                dipSwitch.set_switch_state(i, switchState);
+                // Note: DIP switches are read-only through the proxy bridge
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "DIP switches are read-only");
             }
+            ImGui::NextColumn();
         }
-        
-        ImGui::TreePop();
+        ImGui::Columns(1);
     }
     
-    // Micras Button Press Settings
-    if (ImGui::TreeNode("Micras Button Press Settings")) {
-        ImGui::Text("Press duration settings for Micras buttons:");
-        
-        // Get the button from the micras body
-        auto& button = micrasBody.getButton();
-        
-        // Short press button
-        if (ImGui::Button("Short Press", ImVec2(120, 30))) {
-            // Simulate a short press
-            button.set_state(true);
-            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Short press activated");
-        }
-        
-        ImGui::SameLine();
-        ImGui::Text("Duration: 0.5 seconds");
-        
-        // Long press button
-        if (ImGui::Button("Long Press", ImVec2(120, 30))) {
-            // Simulate a long press
-            button.set_state(true);
-            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Long press activated");
-        }
-        
-        ImGui::SameLine();
-        ImGui::Text("Duration: 1.5 seconds");
-        
-        // Extra long press button
-        if (ImGui::Button("Extra Long Press", ImVec2(120, 30))) {
-            // Simulate an extra long press
-            button.set_state(true);
-            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Extra long press activated");
-        }
-        
-        ImGui::SameLine();
-        ImGui::Text("Duration: 3.0 seconds");
-        
-        // Display current button state
-        ImGui::Separator();
-        ImGui::Text("Current Button State:");
-        
+    // Button Controls Section
+    if (ImGui::CollapsingHeader("Button Controls", ImGuiTreeNodeFlags_DefaultOpen)) {
         // Get the current button status
-        auto status = button.get_status();
+        auto status = proxyBridge->get_button_status();
         std::string statusText;
         ImVec4 statusColor;
         
@@ -210,15 +252,15 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
                 statusColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
                 break;
             case micras::proxy::Button::Status::SHORT_PRESS:
-                statusText = "Short press";
+                statusText = "SHORT PRESS";
                 statusColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
                 break;
             case micras::proxy::Button::Status::LONG_PRESS:
-                statusText = "Long press";
+                statusText = "LONG PRESS";
                 statusColor = ImVec4(0.0f, 0.0f, 1.0f, 1.0f);
                 break;
             case micras::proxy::Button::Status::EXTRA_LONG_PRESS:
-                statusText = "Extra long press";
+                statusText = "EXTRA LONG PRESS";
                 statusColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
                 break;
             default:
@@ -227,25 +269,61 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
                 break;
         }
         
-        ImGui::TextColored(statusColor, "%s", statusText.c_str());
+        // Display button status with a more prominent style
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
+        ImGui::PushStyleColor(ImGuiCol_Button, statusColor);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(statusColor.x * 1.2f, statusColor.y * 1.2f, statusColor.z * 1.2f, statusColor.w));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(statusColor.x * 0.8f, statusColor.y * 0.8f, statusColor.z * 0.8f, statusColor.w));
         
-        // Add a button to release the button state
-        if (button.is_pressed()) {
-            if (ImGui::Button("Release Button", ImVec2(120, 30))) {
-                button.set_state(false);
-            }
+        // Create a button that shows the status (non-interactive)
+        ImGui::Button(statusText.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 40));
+        
+        ImGui::PopStyleColor(3);
+        ImGui::PopStyleVar();
+
+        // Add interactive buttons for each status
+        ImGui::Separator();
+        ImGui::Text("Set Button Status:");
+        
+        // Create a grid of buttons
+        float buttonWidth = (ImGui::GetContentRegionAvail().x - 20) / 2; // 2 buttons per row with spacing
+        float buttonHeight = 30;
+        
+        // First row
+        if (ImGui::Button("Short Press", ImVec2(buttonWidth, buttonHeight))) {
+            proxyBridge->set_button_status(micras::proxy::Button::Status::SHORT_PRESS);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Long Press", ImVec2(buttonWidth, buttonHeight))) {
+            proxyBridge->set_button_status(micras::proxy::Button::Status::LONG_PRESS);
         }
         
-        ImGui::TreePop();
+        // Second row
+        if (ImGui::Button("Extra Long Press", ImVec2(buttonWidth, buttonHeight))) {
+            proxyBridge->set_button_status(micras::proxy::Button::Status::EXTRA_LONG_PRESS);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("No Press", ImVec2(buttonWidth, buttonHeight))) {
+            proxyBridge->set_button_status(micras::proxy::Button::Status::NO_PRESS);
+        }
+        
+        // Debug information
+        ImGui::Separator();
+        ImGui::Text("Debug Information:");
+        ImGui::Text("Current Status: %s", statusText.c_str());
+        ImGui::Text("Button Pressed: %s", proxyBridge->is_button_pressed() ? "Yes" : "No");
     }
     
-    // Display robot controller information if available
-    if (this->simulationEngine) {
-        // Display wall sensor readings
-        ImGui::SeparatorText("Wall Sensors");
+    // Wall Sensors Section
+    if (this->simulationEngine && ImGui::CollapsingHeader("Wall Sensors", ImGuiTreeNodeFlags_DefaultOpen)) {
+        ImGui::Columns(2, "wallsensors", false);
         for (size_t i = 0; i < 4; ++i) {
-            ImGui::Text("Sensor %zu: %.2f", i, micrasBody.getWallSensors().get_sensors()[i].getReadingVisual());
+            ImGui::Text("Sensor %zu:", i);
+            ImGui::NextColumn();
+            ImGui::Text("%.2f", proxyBridge->get_wall_sensor_reading(i));
+            ImGui::NextColumn();
         }
+        ImGui::Columns(1);
     }
 
     // Simulation controls
@@ -317,13 +395,6 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     }
     
     ImGui::End();
-
-    // Only render style editor when enabled - but never in fullscreen
-    if (showStyleEditor && !isLargeScreen) {
-        ImGui::Begin("Style Editor");
-        ImGui::ShowStyleEditor();
-        ImGui::End();
-    }
 }
 
 void GUI::render() {
