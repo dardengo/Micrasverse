@@ -3,11 +3,13 @@
 
 #include "micras/proxy/argb.hpp"
 #include "physics/argb.hpp"
+#include "physics/box2d_micrasbody.hpp"
 #include <iostream>
+
 namespace micras::proxy {
 template <uint8_t num_of_leds>
 TArgb<num_of_leds>::TArgb(const Config& config) : 
-    bodyId(config.bodyId), 
+    micrasBody(config.micrasBody), 
     uncertainty(config.uncertainty), 
     brightness(config.brightness) {
     // LEDs will be initialized by Box2DMicrasBody

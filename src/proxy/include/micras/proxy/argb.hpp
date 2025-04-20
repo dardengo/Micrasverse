@@ -1,10 +1,10 @@
 #ifndef MICRAS_PROXY_ARGB_HPP
 #define MICRAS_PROXY_ARGB_HPP
 
-#include "box2d/box2d.h"
 #include "micrasverse_core/types.hpp"
 #include "micras/core/types.hpp"
 #include "physics/argb.hpp"
+#include "physics/box2d_micrasbody.hpp"
 
 #include <vector>
 #include <array>
@@ -18,7 +18,7 @@ public:
     std::vector<micrasverse::physics::Argb> argbs;
 
     struct Config {
-        b2BodyId bodyId;
+        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;    
         float uncertainty;
         std::array<float, num_of_leds> brightness;
     };
@@ -59,7 +59,7 @@ public:
     void encode_color(const micrasverse::types::Color& color, uint8_t index);
 
 private:
-    b2BodyId bodyId;
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
     float uncertainty;
     std::array<float, num_of_leds> brightness;
 };

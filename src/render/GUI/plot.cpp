@@ -1,5 +1,6 @@
 #include "GUI/plot.hpp"
-
+#include "physics/box2d_motor.hpp"
+#include "physics/box2d_distance_sensor.hpp"
 #include "implot.h"
 
 #include <cmath>
@@ -67,22 +68,22 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody){
     t += deltaTime;
     
     // Always add data points (not doing this causes buffer access issues)
-    sdata1.addPoint(t, micrasBody.getLocomotion().right_motor->getCurrent());
-    sdata2.addPoint(t, micrasBody.getLocomotion().left_motor->getCurrent());
+    sdata1.addPoint(t, micrasBody.getRightMotor().getCurrent());
+    sdata2.addPoint(t, micrasBody.getLeftMotor().getCurrent());
 
-    rdata1.addPoint(t, micrasBody.getLocomotion().right_motor->getAngularVelocity());
-    rdata2.addPoint(t, micrasBody.getLocomotion().left_motor->getAngularVelocity());
+    rdata1.addPoint(t, micrasBody.getRightMotor().getAngularVelocity());
+    rdata2.addPoint(t, micrasBody.getLeftMotor().getAngularVelocity());
 
-    rdata3.addPoint(t, micrasBody.getLocomotion().right_motor->getBodyAngularVelocity());
-    rdata4.addPoint(t, micrasBody.getLocomotion().left_motor->getBodyLinearVelocity());
+    rdata3.addPoint(t, micrasBody.getRightMotor().getBodyAngularVelocity());
+    rdata4.addPoint(t, micrasBody.getLeftMotor().getBodyLinearVelocity());
     rdata5.addPoint(t, micrasBody.getLinearAcceleration());
 
-    rdata7.addPoint(t, micrasBody.getWallSensors().get_sensors()[0].getReading());
-    rdata8.addPoint(t, micrasBody.getWallSensors().get_sensors()[1].getReading());
-    rdata9.addPoint(t, micrasBody.getWallSensors().get_sensors()[2].getReading());
-    rdata10.addPoint(t, micrasBody.getWallSensors().get_sensors()[3].getReading());
-    rdata11.addPoint(t, micrasBody.getLocomotion().right_motor->getAppliedForce());
-    rdata12.addPoint(t, micrasBody.getLocomotion().left_motor->getAppliedForce());
+    rdata7.addPoint(t, micrasBody.getDistanceSensor(0).getReading());
+    rdata8.addPoint(t, micrasBody.getDistanceSensor(1).getReading());
+    rdata9.addPoint(t, micrasBody.getDistanceSensor(2).getReading());
+    rdata10.addPoint(t, micrasBody.getDistanceSensor(3).getReading());
+    rdata11.addPoint(t, micrasBody.getRightMotor().getAppliedForce());
+    rdata12.addPoint(t, micrasBody.getLeftMotor().getAppliedForce());
 
     // Control for plot history
     static float history = 5.0f;

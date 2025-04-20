@@ -2,6 +2,14 @@
 #define RENDER_ENGINE_CPP
 
 #include "render/render_engine.hpp"
+#include "render/camera.hpp"
+#include "render/screen.hpp"
+#include "physics/box2d_distance_sensor.hpp"
+#include "physics/argb.hpp"
+
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <cmath>
 #include <iostream>
 #include <algorithm>
 
@@ -36,21 +44,33 @@ namespace micrasverse::render {
         );
         
         // Create ARGB scene objects
-        auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb();
-        for (auto& led : argb.argbs) {
+        auto& argb0 = this->simulationEngine->physicsEngine->getMicras().getArgb(0);
+        this->argbsSceneObjs.emplace_back(std::make_unique<ARGBRender>(
+            b2Vec2(argb0.getWorldPosition().x, argb0.getWorldPosition().y),
+            b2Vec2(argb0.getSize().x, argb0.getSize().y),
+            argb0.getLightColorArray(),
+            argb0.getBaseColorArray(),
+            argb0.isOn(),
+            screen->camera
+        ));
+        
+        try {
+            auto& argb1 = this->simulationEngine->physicsEngine->getMicras().getArgb(1);
             this->argbsSceneObjs.emplace_back(std::make_unique<ARGBRender>(
-                b2Vec2(led.getWorldPosition().x, led.getWorldPosition().y),
-                b2Vec2(led.getSize().x, led.getSize().y),
-                led.getLightColorArray(),
-                led.getBaseColorArray(),
-                led.isOn(),
+                b2Vec2(argb1.getWorldPosition().x, argb1.getWorldPosition().y),
+                b2Vec2(argb1.getSize().x, argb1.getSize().y),
+                argb1.getLightColorArray(),
+                argb1.getBaseColorArray(),
+                argb1.isOn(),
                 screen->camera
             ));
+        } catch (const std::exception& e) {
+            // If there's no second ARGB, just continue
         }
 
         // Create Lidar scene objects
-        auto& wallSensors = this->simulationEngine->physicsEngine->getMicras().getWallSensors();
-        for (auto& lidar : wallSensors.get_sensors()) {
+        for (size_t i = 0; i < 4; i++) {
+            auto& lidar = this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i);
             this->lidarsSceneObjs.emplace_back(std::make_unique<LidarRender>(
                 b2Vec2(lidar.getRayMidPoint().x, lidar.getRayMidPoint().y),
                 b2MakeRot(lidar.getAngle()),
@@ -83,25 +103,39 @@ namespace micrasverse::render {
         if (isFullscreen) {
             // Batch update ARGBs only if robot is in view
             if (isObjectInView(micrasRender->getBoundingBox())) {
-                auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb();
-                for (size_t i = 0; i < argb.argbs.size(); i++) {
-                    this->argbsSceneObjs[i]->update(
-                        b2Vec2(argb.argbs[i].getWorldPosition().x, argb.argbs[i].getWorldPosition().y),
+                auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb(0);
+                this->argbsSceneObjs[0]->update(
+                    b2Vec2(argb.getWorldPosition().x, argb.getWorldPosition().y),
+                    this->simulationEngine->physicsEngine->getMicras().getRotation(),
+                    argb.getLightColorArray(),
+                    argb.isOn()
+                );
+                if (this->argbsSceneObjs.size() > 1) {
+                    auto& argb1 = this->simulationEngine->physicsEngine->getMicras().getArgb(1);
+                    this->argbsSceneObjs[1]->update(
+                        b2Vec2(argb1.getWorldPosition().x, argb1.getWorldPosition().y),
                         this->simulationEngine->physicsEngine->getMicras().getRotation(),
-                        argb.argbs[i].getLightColorArray(),
-                        argb.argbs[i].isOn()
+                        argb1.getLightColorArray(),
+                        argb1.isOn()
                     );
                 }
             }
         } else {
             // Standard update in windowed mode
-            auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb();
-            for (size_t i = 0; i < argb.argbs.size(); i++) {
-                this->argbsSceneObjs[i]->update(
-                    b2Vec2(argb.argbs[i].getWorldPosition().x, argb.argbs[i].getWorldPosition().y),
+            auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb(0);
+            this->argbsSceneObjs[0]->update(
+                b2Vec2(argb.getWorldPosition().x, argb.getWorldPosition().y),
+                this->simulationEngine->physicsEngine->getMicras().getRotation(),
+                argb.getLightColorArray(),
+                argb.isOn()
+            );
+            if (this->argbsSceneObjs.size() > 1) {
+                auto& argb1 = this->simulationEngine->physicsEngine->getMicras().getArgb(1);
+                this->argbsSceneObjs[1]->update(
+                    b2Vec2(argb1.getWorldPosition().x, argb1.getWorldPosition().y),
                     this->simulationEngine->physicsEngine->getMicras().getRotation(),
-                    argb.argbs[i].getLightColorArray(),
-                    argb.argbs[i].isOn()
+                    argb1.getLightColorArray(),
+                    argb1.isOn()
                 );
             }
         }
@@ -110,40 +144,39 @@ namespace micrasverse::render {
         if (isFullscreen) {
             // Only update visible sensors
             int visibleCount = 0;
-            auto& wallSensors = this->simulationEngine->physicsEngine->getMicras().getWallSensors();
-            for (size_t i = 0; i < wallSensors.get_sensors().size(); i++) {
+            for (size_t i = 0; i < 4; i++) {
                 // Skip updating if too many visible sensors already (optimization)
                 if (visibleCount >= 4 && i > 0) continue;
                 
                 // Check reading to determine visibility
-                float reading = wallSensors.get_sensors()[i].getReadingVisual();
+                float reading = this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getReadingVisual();
                 if (reading > 0.005f) {
                     visibleCount++;
                     this->lidarsSceneObjs[i]->update(
-                        b2Vec2(wallSensors.get_sensors()[i].getRayMidPoint().x, wallSensors.get_sensors()[i].getRayMidPoint().y),
-                        b2MakeRot(std::atan2(wallSensors.get_sensors()[i].getRayDirection().y, 
-                                           wallSensors.get_sensors()[i].getRayDirection().x)),
+                        b2Vec2(this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayMidPoint().x, this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayMidPoint().y),
+                        b2MakeRot(std::atan2(this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayDirection().y, 
+                                           this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayDirection().x)),
                         reading
                     );
                 } else {
                     // Force invisible for better performance
                     this->lidarsSceneObjs[i]->update(
-                        b2Vec2(wallSensors.get_sensors()[i].getRayMidPoint().x, wallSensors.get_sensors()[i].getRayMidPoint().y),
-                        b2MakeRot(std::atan2(wallSensors.get_sensors()[i].getRayDirection().y,
-                                           wallSensors.get_sensors()[i].getRayDirection().x)),
+                        b2Vec2(this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayMidPoint().x, this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayMidPoint().y),
+                        b2MakeRot(std::atan2(this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayDirection().y,
+                                           this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayDirection().x)),
                         0.0f
                     );
                 }
             }
         } else {
             // Standard update in windowed mode
-            auto& wallSensors = this->simulationEngine->physicsEngine->getMicras().getWallSensors();
-            for (size_t i = 0; i < wallSensors.get_sensors().size(); i++) {
+            for (size_t i = 0; i < 4; i++) {
+                auto& lidar = this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i);
                 this->lidarsSceneObjs[i]->update(
-                    b2Vec2(wallSensors.get_sensors()[i].getRayMidPoint().x, wallSensors.get_sensors()[i].getRayMidPoint().y),
-                    b2MakeRot(std::atan2(wallSensors.get_sensors()[i].getRayDirection().y,
-                                       wallSensors.get_sensors()[i].getRayDirection().x)),
-                    wallSensors.get_sensors()[i].getReadingVisual()
+                    b2Vec2(lidar.getRayMidPoint().x, lidar.getRayMidPoint().y),
+                    b2MakeRot(std::atan2(lidar.getRayDirection().y,
+                                       lidar.getRayDirection().x)),
+                    lidar.getReadingVisual()
                 );
             }
         }
@@ -294,24 +327,31 @@ namespace micrasverse::render {
         this->mazeRender->reloadElements(this->simulationEngine->physicsEngine->getMaze().getElements());
         
         // Update ARGB render positions after reset
-        auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb();
-        for (size_t i = 0; i < argb.argbs.size(); i++) {
-            this->argbsSceneObjs[i]->update(
-                b2Vec2(argb.argbs[i].getWorldPosition().x, argb.argbs[i].getWorldPosition().y),
+        auto& argb = this->simulationEngine->physicsEngine->getMicras().getArgb(0);
+        this->argbsSceneObjs[0]->update(
+            b2Vec2(argb.getWorldPosition().x, argb.getWorldPosition().y),
+            this->simulationEngine->physicsEngine->getMicras().getRotation(),
+            argb.getLightColorArray(),
+            argb.isOn()
+        );
+        if (this->argbsSceneObjs.size() > 1) {
+            auto& argb1 = this->simulationEngine->physicsEngine->getMicras().getArgb(1);
+            this->argbsSceneObjs[1]->update(
+                b2Vec2(argb1.getWorldPosition().x, argb1.getWorldPosition().y),
                 this->simulationEngine->physicsEngine->getMicras().getRotation(),
-                argb.argbs[i].getLightColorArray(),
-                argb.argbs[i].isOn()
+                argb1.getLightColorArray(),
+                argb1.isOn()
             );
         }
         
         // Update Lidar render positions after reset
-        auto& wallSensors = this->simulationEngine->physicsEngine->getMicras().getWallSensors();
-        for (size_t i = 0; i < wallSensors.get_sensors().size(); i++) {
+        for (size_t i = 0; i < 4; i++) {
+            auto& lidar = this->simulationEngine->physicsEngine->getMicras().getDistanceSensor(i);
             this->lidarsSceneObjs[i]->update(
-                b2Vec2(wallSensors.get_sensors()[i].getRayMidPoint().x, wallSensors.get_sensors()[i].getRayMidPoint().y),
-                b2MakeRot(std::atan2(wallSensors.get_sensors()[i].getRayDirection().y,
-                                   wallSensors.get_sensors()[i].getRayDirection().x)),
-                wallSensors.get_sensors()[i].getReadingVisual()
+                b2Vec2(lidar.getRayMidPoint().x, lidar.getRayMidPoint().y),
+                b2MakeRot(std::atan2(lidar.getRayDirection().y,
+                                   lidar.getRayDirection().x)),
+                lidar.getReadingVisual()
             );
         }
         

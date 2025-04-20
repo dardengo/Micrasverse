@@ -18,12 +18,12 @@ public:
     void update(float step = micrasverse::STEP) override;
     void loadMaze(const std::string& mazePath) override;
     void resetMicrasPosition() override;
+    
     World& getWorld() { return *p_World; }
     Maze& getMaze() override { return *p_Maze; }
     Box2DMicrasBody& getMicras() override { return *p_Micras; }
 
 private:
-    void initializeComponents();
     std::unique_ptr<World> p_World;
     std::unique_ptr<Maze> p_Maze;
     std::unique_ptr<Box2DMicrasBody> p_Micras;

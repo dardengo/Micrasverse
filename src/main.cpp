@@ -5,23 +5,26 @@
 #include "micras/proxy/proxy_bridge.hpp"
 #include "target.hpp"
 #include "box2d/box2d.h"
-#include <iostream>
 
 int main() {
-    
+    // Create simulation engine
     auto simulationEngine = std::make_shared<micrasverse::simulation::SimulationEngine>();
-
-    b2BodyId bodyId = simulationEngine->physicsEngine->getMicras().getBodyId();
-
-    micras::initializeProxyConfigs(bodyId, b2Body_GetWorld(bodyId));
-
-    micras::Micras micrasController;
+    
+    // Get the Micras body from physics engine
     auto& micrasBody = simulationEngine->physicsEngine->getMicras();
+    
+    // Initialize proxy configurations
+    micras::initializeProxyConfigs(&micrasBody);
+
+    // Create Micras controller and proxy bridge
+    micras::Micras micrasController;
     auto proxyBridge = std::make_shared<micras::ProxyBridge>(micrasController, micrasBody);
 
+    // Initialize render engine
     micrasverse::render::RenderEngine renderEngine(simulationEngine);
     renderEngine.screen->getGUI().setProxyBridge(proxyBridge);
 
+    // Main loop
     while (not renderEngine.screen->shouldClose()) {
         micrasController.update();
         simulationEngine->updateSimulation();
@@ -30,5 +33,4 @@ int main() {
     }
 
     return 0;
-
-} //end of main
+}

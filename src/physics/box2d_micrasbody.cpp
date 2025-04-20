@@ -2,159 +2,144 @@
 #include "physics/box2d_dipswitch.hpp"
 #include "physics/box2d_distance_sensor.hpp"
 #include "physics/box2d_motor.hpp"
+#include "physics/box2d_button.hpp"
+#include "physics/box2d_led.hpp"
+#include "physics/argb.hpp"
 #include "physics/box2d_rectanglebody.hpp"
 #include "physics/box2d_physics_factory.hpp"
 #include "constants.hpp"
-#include "micras/proxy/wall_sensors.hpp"
-#include "micras/proxy/locomotion.hpp"
-#include "micras/proxy/argb.hpp"
-#include "micras/proxy/button.hpp"
-#include "micras/core/types.hpp"
+#include "micrasverse_core/types.hpp"
 #include "io/keyboard.hpp"
-#include "target.hpp"
+#include "physics/physics_types.hpp"
 
 #include <cstdint>
 #include <vector>
 #include <cmath>
 #include <iostream>
 
-namespace micrasverse::physics {
+// Helper struct for sensor configuration
+struct SensorConfig {
+    float angle;
+    b2Vec2 local_position;
+};
 
+namespace micrasverse::physics {
 // Constructor
 Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size, b2BodyType type, float density, float friction, float restitution) 
     : size(size)
     , rectBody(std::make_unique<RectangleBody>(worldId, position, size, type, density, friction, restitution))
 {
-    // Get the body ID from the rectangle body
-    b2BodyId bodyId = rectBody->getBodyId();
+    bodyId = rectBody->getBodyId();
     
-    // Validate the body ID is valid
-    if (!b2Body_IsValid(bodyId)) {
-        throw std::runtime_error("Invalid body ID in Box2DMicrasBody constructor");
-    }
+    // Initialize distance sensors
+    SensorConfig sensorConfigs[4] = {
+        {5.0f * B2_PI / 6.0f, {-0.009f, 0.049f}},
+        {B2_PI / 2.0f,        {-0.028f, 0.045f}},
+        {B2_PI / 2.0f,        { 0.028f, 0.045f}},
+        {B2_PI / 6.0f,        { 0.009f, 0.049f}}
+    };
     
-    // Initialize components with the body ID
-    try {
-        // Initialize button
-        auto buttonConfig = micras::button_config;
-        buttonConfig.bodyId = bodyId;
-        buttonConfig.worldId = worldId;
-        buttonConfig.pull_type = micras::proxy::Button::PullType::PULL_UP;  // Set default pull type
-        button = std::make_unique<micras::proxy::Button>(buttonConfig);
+    for (size_t i = 0; i < 4; i++) {
+        const auto& config = sensorConfigs[i];
+        b2Vec2 direction = {std::cos(config.angle), std::sin(config.angle)};
         
-        // Initialize wall sensors
-        auto wallSensorsConfig = micras::wall_sensors_config;
-        wallSensorsConfig.bodyId = bodyId;
-        wallSensors = std::make_unique<micras::proxy::TWallSensors<4>>(wallSensorsConfig);
+        // Convert b2Vec2 to types::Vec2 for the constructor
+        micrasverse::types::Vec2 localPos = {config.local_position.x, config.local_position.y};
+        micrasverse::types::Vec2 directionVec = {direction.x, direction.y};
         
-        // Initialize locomotion
-        auto locomotionConfig = micras::locomotion_config;
-        locomotionConfig.bodyId = bodyId;
-        
-        // Create motors first
-        auto leftMotor = std::make_shared<micrasverse::physics::Box2DMotor>(
+        distanceSensors.push_back(std::make_unique<Box2DDistanceSensor>(
+            worldId,
             bodyId,
-            micrasverse::types::Vec2{-micrasverse::MICRAS_HALFWIDTH, 0.0f},
-            true
-        );
-        
-        auto rightMotor = std::make_shared<micrasverse::physics::Box2DMotor>(
-            bodyId,
-            micrasverse::types::Vec2{micrasverse::MICRAS_HALFWIDTH, 0.0f},
-            false
-        );
-        
-        // Set motors in config
-        locomotionConfig.left_motor = leftMotor;
-        locomotionConfig.right_motor = rightMotor;
-        
-        locomotion = std::make_unique<micras::proxy::Locomotion>(locomotionConfig);
-        
-        // Initialize ARGB LEDs with proper error handling
-        try {
-            auto argbConfig = micras::argb_config;
-            argbConfig.bodyId = bodyId;
-            argb = std::make_unique<micras::proxy::TArgb<2>>(argbConfig);
-            
-            std::cout << "Initializing ARGB LEDs..." << std::endl;
-            
-            // Attach left LED
-            try {
-                argb->attachArgb(b2Vec2{-micrasverse::MICRAS_HALFWIDTH + 0.02f, 0.02f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::red);
-                std::cout << "Successfully attached left LED" << std::endl;
-            } catch (const std::exception& e) {
-                std::cerr << "Failed to attach left LED: " << e.what() << std::endl;
-                throw;
-            }
-            
-            // Attach right LED
-            try {
-                argb->attachArgb(b2Vec2{micrasverse::MICRAS_HALFWIDTH - 0.02f, 0.02f}, b2Vec2{0.01f, 0.01f}, micrasverse::types::Colors::green);
-                std::cout << "Successfully attached right LED" << std::endl;
-            } catch (const std::exception& e) {
-                std::cerr << "Failed to attach right LED: " << e.what() << std::endl;
-                throw;
-            }
-            
-            // Verify LEDs were created
-            if (argb->argbs.empty()) {
-                throw std::runtime_error("Failed to create any ARGB LEDs");
-            } else {
-                std::cout << "Successfully created " << argb->argbs.size() << " ARGB LEDs" << std::endl;
-            }
-            
-            // Initialize the LEDs with default colors
-            for (auto& led : argb->argbs) {
-                led.turnOn();
-            }
-            std::cout << "ARGB LEDs initialized and turned on" << std::endl;
-        } catch (const std::exception& e) {
-            std::cerr << "Error initializing ARGB LEDs: " << e.what() << std::endl;
-            // Re-throw the error since ARGB LEDs are a critical component
-            throw std::runtime_error("Failed to initialize ARGB LEDs: " + std::string(e.what()));
-        }
-        
-        // Initialize DIP switch
-        auto dipSwitchConfig = micras::dip_switch_config;
-        dipSwitchConfig.bodyId = bodyId;
-        dipSwitch = std::make_unique<micras::proxy::TDipSwitch<4>>(dipSwitchConfig);
+            localPos,
+            directionVec,
+            3.0f
+        ));
     }
-    catch (const std::exception& e) {
-        throw std::runtime_error("Error during component initialization: " + std::string(e.what()));
-    }
+
+    // Initialize motors
+    leftMotor = std::make_unique<Box2DMotor>(
+        bodyId,
+        micrasverse::types::Vec2{-MICRAS_HALFWIDTH, 0.0f},
+        true  // isLeftWheel
+    );
+    
+    rightMotor = std::make_unique<Box2DMotor>(
+        bodyId,
+        micrasverse::types::Vec2{MICRAS_HALFWIDTH, 0.0f},
+        false  // isLeftWheel
+    );
+
+    // Initialize button
+    button = std::make_unique<Box2DButton>(
+        bodyId,
+        micrasverse::types::Vec2{0.0f, MICRAS_HALFHEIGHT - 0.01f},  // position
+        0.01f  // radius
+    );
+
+    // Initialize DIP switches
+    dipSwitch = std::make_unique<Box2DDipSwitch>(4);
+
+    // Initialize LED
+    led = std::make_unique<Box2DLED>(
+        bodyId,
+        micrasverse::types::Vec2{0.0f, MICRAS_HALFHEIGHT - 0.01f},  // position
+        micrasverse::types::Vec2{0.01f, 0.01f},  // size
+        micrasverse::types::Color{255, 255, 255}  // color
+    );
+
+    // Initialize ARGB - fix constructor parameters
+    micrasverse::types::Color defaultColor = {255, 255, 255};
+    
+    argbs.push_back(std::make_unique<Argb>(
+        bodyId,
+        b2Vec2{-0.01f, MICRAS_HALFHEIGHT - 0.02f},  // position
+        b2Vec2{0.005f, 0.005f},  // size
+        defaultColor
+    ));
+    
+    argbs.push_back(std::make_unique<Argb>(
+        bodyId,
+        b2Vec2{0.01f, MICRAS_HALFHEIGHT - 0.02f},  // position
+        b2Vec2{0.005f, 0.005f},  // size
+        defaultColor
+    ));
 }
 
 b2BodyId Box2DMicrasBody::getBodyId() const {
-    if (!rectBody) {
-        throw std::runtime_error("Invalid RectangleBody in Box2DMicrasBody");
-    }
-    return rectBody->getBodyId();
+    return bodyId;
 }
 
 void Box2DMicrasBody::update(float deltaTime) {
     // Calculate acceleration as change in velocity over time
-    b2BodyId bodyId = getBodyId();
     b2Vec2 currentVelocity = b2Body_GetLinearVelocity(bodyId);
     this->acceleration = (currentVelocity - this->linearVelocity) * (1.0f/deltaTime);
     
     // Store current velocity for next calculation
     this->linearVelocity = currentVelocity;
 
+    // Update physical components
     updateFriction();
-    wallSensors->update();
-    locomotion->update(deltaTime, false);
-    argb->update();
-    button->is_pressed();
+    
+    // Update sensors
+    for (auto& sensor : distanceSensors) {
+        sensor->update();
+    }
+
+    // Update motors
+    leftMotor->update(deltaTime);
+    rightMotor->update(deltaTime);
+
+    // Update LEDs
+    led->update(deltaTime);
+
+    // Update ARGBs
+    for (auto& argb : argbs) {
+        argb->update();
+    }
 }
 
 void Box2DMicrasBody::processInput(float deltaTime) {
-    if (io::Keyboard::key(GLFW_KEY_SPACE)) {
-        locomotion->set_command(0.5f, 0.0f);
-        argb->set_color(micrasverse::types::Colors::red);
-    } else {
-        locomotion->set_command(0.0f, 0.0f);
-        argb->set_color(micrasverse::types::Colors::green);
-    }
+    // Process manual input
 }
 
 b2Vec2 Box2DMicrasBody::getPosition() const {
@@ -190,38 +175,17 @@ float Box2DMicrasBody::getLinearAcceleration() const {
     return this->linearAcceleration; 
 }
 
-void Box2DMicrasBody::attachDipSwitch(size_t numSwitches) {
-    // Cannot reset with different number of switches since it's template parameter
-    if (numSwitches != 4) {
-        std::cerr << "WARNING: Can't change DIP switch count from 4 to " << numSwitches 
-                  << " as it's a template parameter" << std::endl;
-    }
-    
-    // Reset with the same template parameter
-    auto dipSwitchConfig = micras::dip_switch_config;
-    dipSwitchConfig.bodyId = getBodyId();
-    dipSwitch = std::make_unique<micras::proxy::TDipSwitch<4>>(dipSwitchConfig);
-}
-
-// Getter implementation
-micras::proxy::TWallSensors<4>& Box2DMicrasBody::getWallSensors() {
-    return *wallSensors;
-}
-
-micras::proxy::Locomotion& Box2DMicrasBody::getLocomotion() {
-    return *locomotion;
-}
-
-micras::proxy::TArgb<2>& Box2DMicrasBody::getArgb() {
-    return *argb;
-}
-
-micras::proxy::TDipSwitch<4>& Box2DMicrasBody::getDipSwitch() {
-    return *dipSwitch;
-}
-
-micras::proxy::Button& Box2DMicrasBody::getButton() {
-    return *button;
+// Explicit destructor definition
+Box2DMicrasBody::~Box2DMicrasBody() {
+    // Explicitly destroy components in reverse order of creation
+    argbs.clear();
+    led.reset();
+    dipSwitch.reset();
+    button.reset();
+    rightMotor.reset();
+    leftMotor.reset();
+    distanceSensors.clear();
+    rectBody.reset();
 }
 
 } // namespace micrasverse::physics

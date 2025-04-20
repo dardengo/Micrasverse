@@ -1,14 +1,14 @@
 #include "micras/proxy/rotary_sensor.hpp"
 #include <random>
-#include "box2d/box2d.h"
 
 namespace micras::proxy {
 
 RotarySensor::RotarySensor(const Config& config) :
-    bodyId{config.bodyId},
+    micrasBody{config.micrasBody},
     resolution{config.resolution},
     noise{config.noise},
     stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{})} {
+    bodyId = micrasBody->getBodyId();
 }
 
 void RotarySensor::update() {

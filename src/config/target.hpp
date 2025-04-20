@@ -18,6 +18,7 @@
 #include "micras/proxy/motor.hpp"
 #include "box2d/box2d.h"
 #include <filesystem>
+#include "physics/box2d_micrasbody.hpp"
 
 namespace micras {
 
@@ -83,7 +84,7 @@ extern proxy::WallSensors::Config wall_sensors_config;
 extern proxy::Locomotion::Config locomotion_config;
 
 // Function to initialize all proxy configs with the correct bodyId
-void initializeProxyConfigs(b2BodyId bodyId, b2WorldId worldId);
+void initializeProxyConfigs(micrasverse::physics::Box2DMicrasBody* body);
 
 }  // namespace micras
 

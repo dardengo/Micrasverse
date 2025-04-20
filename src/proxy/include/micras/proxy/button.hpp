@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include "box2d/box2d.h"
+#include "physics/box2d_micrasbody.hpp"
 
 namespace micras::proxy {
 
@@ -21,8 +21,7 @@ public:
     };
 
     struct Config {
-        b2BodyId bodyId;
-        b2WorldId worldId;
+        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
         bool initial_state = false;
         PullType pull_type = PullType::PULL_UP;
     };
@@ -37,8 +36,7 @@ public:
     void set_pull_type(PullType pull_type);
 
 private:
-    b2BodyId bodyId;
-    b2WorldId worldId;
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
     bool current_state;
     bool previous_state;
     Status current_status;

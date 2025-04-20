@@ -2,14 +2,13 @@
 #define MICRAS_PROXY_TORQUE_SENSORS_CPP
 
 #include "micras/proxy/torque_sensors.hpp"
-#include "box2d/box2d.h"
 #include <algorithm>
 
 namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
 TTorqueSensors<num_of_sensors>::TTorqueSensors(const Config& config) :
-    bodyId{config.bodyId},
+    micrasBody{config.micrasBody},
     max_current{3.3f / config.shunt_resistor}, // Assuming 3.3V reference voltage
     max_torque{config.max_torque},
     noise{config.noise},

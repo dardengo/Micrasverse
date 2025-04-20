@@ -2,13 +2,12 @@
 #define MICRAS_PROXY_DIP_SWITCH_CPP
 
 #include "micras/proxy/dip_switch.hpp"
-#include "box2d/box2d.h"
 
 namespace micras::proxy {
 
 template <uint8_t num_of_switches>
 TDipSwitch<num_of_switches>::TDipSwitch(const Config& config) :
-    bodyId{config.bodyId},
+    micrasBody{config.micrasBody},
     switch_states{config.initial_states} { }
 
 template <uint8_t num_of_switches>

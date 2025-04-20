@@ -2,7 +2,6 @@
 #define MICRAS_PROXY_STORAGE_CPP
 
 #include "micras/proxy/storage.hpp"
-#include "box2d/box2d.h"
 #include <fstream>
 #include <filesystem>
 #include <cstring>
@@ -12,7 +11,7 @@
 namespace micras::proxy {
 
 Storage::Storage(const Config& config) :
-    bodyId{config.bodyId},
+    micrasBody{config.micrasBody},
     storage_path{config.storage_path} {
     // Create storage directory if it doesn't exist
     std::filesystem::create_directories(storage_path);

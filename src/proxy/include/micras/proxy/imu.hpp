@@ -3,15 +3,15 @@
 
 #include <array>
 #include <cstdint>
-#include <numbers>
 #include "box2d/box2d.h"
+#include "physics/box2d_micrasbody.hpp"
 
 namespace micras::proxy {
 
 class Imu {
 public:
     struct Config {
-        b2BodyId bodyId;
+        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
         float gyroscope_noise;
         float accelerometer_noise;
     };
@@ -35,6 +35,7 @@ public:
     void calibrate();
 
 private:
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
     b2BodyId bodyId;
     float gyroscope_noise;
     float accelerometer_noise;
@@ -43,7 +44,7 @@ private:
     std::array<float, 3> linear_acceleration{};
     bool calibrated{false};
 
-    static constexpr float radps_to_mdps{180000.0F / std::numbers::pi_v<float>};
+    static constexpr float radps_to_mdps{180000.0F / B2_PI};
     static constexpr float mps2_to_mg{1.0F / 0.00980665F};
 };
 

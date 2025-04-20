@@ -1,18 +1,14 @@
 #ifndef MICRAS_PROXY_LOCOMOTION_HPP
 #define MICRAS_PROXY_LOCOMOTION_HPP
 
-#include "physics/box2d_motor.hpp"
-#include "box2d/box2d.h"
-#include <memory>
+#include "physics/box2d_micrasbody.hpp"
 
 namespace micras::proxy {
 
 class Locomotion {
 public:
     struct Config {
-        b2BodyId bodyId;
-        std::shared_ptr<micrasverse::physics::Box2DMotor> left_motor;
-        std::shared_ptr<micrasverse::physics::Box2DMotor> right_motor;
+        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
     };
 
     explicit Locomotion(const Config& config);
@@ -29,11 +25,8 @@ public:
 
     void stop();
 
-    std::shared_ptr<micrasverse::physics::Box2DMotor> left_motor;
-    std::shared_ptr<micrasverse::physics::Box2DMotor> right_motor;
-
 private:
-    b2BodyId bodyId;
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
 };
 
 }  // namespace micras::proxy

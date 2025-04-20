@@ -1,47 +1,42 @@
-#ifndef MICRAS_PROXY_WALL_SENSORS_CPP
-#define MICRAS_PROXY_WALL_SENSORS_CPP
+#ifndef MICRAS_PROXY_WALL_SENSORS_TPP
+#define MICRAS_PROXY_WALL_SENSORS_TPP
 
-#include "micras/proxy/wall_sensors.hpp"
-#include "micras/core/types.hpp"
-#include "physics/i_distance_sensor.hpp"
-#include "physics/box2d_distance_sensor.hpp"
+// Note: We only need the adapter declaration, not its implementation
+#include "micras/proxy/box2d_sensor_adapter.hpp"
+// We don't need to include box2d_micrasbody.hpp here anymore
 
 namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
 TWallSensors<num_of_sensors>::TWallSensors(const Config& config) :
-    bodyId{config.bodyId},
     uncertainty{config.uncertainty},
     wall_threshold{config.wall_threshold},
     free_space_threshold{config.free_threshold} {
-
-    this->attach_sensor({ 0.028f, 0.045f},  B2_PI / 2.0f);
-    this->attach_sensor({-0.028f, 0.045f},  B2_PI / 2.0f);
-    this->attach_sensor({ 0.009f,  0.049f}, B2_PI / 6.0f);
-    this->attach_sensor({-0.009f,  0.049f}, 5.0f * B2_PI / 6.0f);
+    // Initialize the wall sensors with adapters
+    for (uint8_t i = 0; i < num_of_sensors; i++) {
+        sensors.push_back(std::make_unique<Box2DSensorAdapter>(config.micrasBody, i));
+    }
+    
+    // Initialize calibration arrays
+    wall_calibration_measure = {};
+    free_space_calibration_measure = {};
 }
 
 template <uint8_t num_of_sensors>
 TWallSensors<num_of_sensors>::~TWallSensors() {
-    
 }
-
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::turn_on() {
-    
 }
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::turn_off() {
-
 }
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::update() {
-    for (auto& sensor : this->sensors) {
-        sensor.update();
-    }
+    // The sensors are already updated in Box2DMicrasBody's update method
 }
 
 template <uint8_t num_of_sensors>
@@ -66,7 +61,8 @@ float TWallSensors<num_of_sensors>::get_reading(uint8_t sensor_index) const {
 
 template <uint8_t num_of_sensors>
 float TWallSensors<num_of_sensors>::get_adc_reading(uint8_t sensor_index) const {
-    return this->sensors.at(sensor_index).getReading();
+    // Use the sensor adapter interface to get the reading
+    return sensors.at(sensor_index)->getReading();
 }
 
 template <uint8_t num_of_sensors>
@@ -81,7 +77,7 @@ void TWallSensors<num_of_sensors>::calibrate_left_wall() {
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::calibrate_right_wall() {
-    this->wall_calibration_measure.at(4) = this->get_reading(4);
+    this->wall_calibration_measure.at(1) = this->get_reading(1);
 }
 
 template <uint8_t num_of_sensors>
@@ -96,7 +92,7 @@ void TWallSensors<num_of_sensors>::calibrate_left_free_space() {
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::calibrate_right_free_space() {
-    this->free_space_calibration_measure.at(4) = this->get_reading(4);
+    this->free_space_calibration_measure.at(1) = this->get_reading(1);
 }
 
 template <uint8_t num_of_sensors>
@@ -107,35 +103,6 @@ void TWallSensors<num_of_sensors>::update_thresholds() {
     }
 }
 
-template <uint8_t num_of_sensors>
-void TWallSensors<num_of_sensors>::attach_sensor(const b2Vec2 localPosition, const float angle) {
-    // Get the world ID from the body ID
-    b2WorldId worldId = b2Body_GetWorld(bodyId);
-    
-    // Convert angle to direction vector
-    micrasverse::types::Vec2 direction = {
-        std::cos(angle),
-        std::sin(angle)
-    };
-    
-    // Use a reasonable default max distance (1 meter)
-    const float maxDistance = 1.0f;
-    
-    // Create the sensor with the world ID, body ID, local position, direction, and max distance
-    this->sensors.push_back(micrasverse::physics::Box2DDistanceSensor(
-        worldId, 
-        bodyId, 
-        micrasverse::types::Vec2{localPosition.x, localPosition.y}, 
-        direction, 
-        maxDistance
-    ));
-}
-
-template <uint8_t num_of_sensors>
-std::vector<micrasverse::physics::Box2DDistanceSensor>& TWallSensors<num_of_sensors>::get_sensors() {
-    return this->sensors;
-}
-
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_WALL_SENSORS_CPP
+#endif  // MICRAS_PROXY_WALL_SENSORS_TPP 

@@ -1,71 +1,59 @@
 #include "micras/proxy/locomotion.hpp"
+#include "physics/box2d_motor.hpp"
 
 #include <cmath>
 
 namespace micras::proxy {
 
-Locomotion::Locomotion(const Config& config)
-    : bodyId{config.bodyId}
-    , left_motor{config.left_motor}
-    , right_motor{config.right_motor}
-{
+Locomotion::Locomotion(const Config& config) : micrasBody(config.micrasBody) {
     this->stop();
     this->disable();
 }
 
 void Locomotion::enable() {
     // Set both motors to active state
-    if (left_motor) {
-        left_motor->setCommand(0.0f);  // Initialize with zero command
-    }
-    if (right_motor) {
-        right_motor->setCommand(0.0f);  // Initialize with zero command
+    if (micrasBody) {
+        micrasBody->getLeftMotor().setCommand(0.0f);  // Initialize with zero command
+        micrasBody->getRightMotor().setCommand(0.0f);  // Initialize with zero command
     }
 }
 
 void Locomotion::disable() {
     // Stop and deactivate both motors
-    if (left_motor) {
-        left_motor->setCommand(0.0f);
-    }
-    if (right_motor) {
-        right_motor->setCommand(0.0f);
+    if (micrasBody) {
+        micrasBody->getLeftMotor().setCommand(0.0f);
+        micrasBody->getRightMotor().setCommand(0.0f);
     }
 }
 
 void Locomotion::update(float deltaTime, bool isFanOn) {
-    if (left_motor) {
-        left_motor->update(deltaTime, isFanOn);
-    }
-    if (right_motor) {
-        right_motor->update(deltaTime, isFanOn);
-    }
+    // No-op since micrasBody handles motor updates
 }
 
 void Locomotion::set_wheel_command(float left_command, float right_command) {
-    if (left_motor) {
-        left_motor->setCommand(left_command);
-    }
-    if (right_motor) {
-        right_motor->setCommand(right_command);
+    if (micrasBody) {
+        micrasBody->getLeftMotor().setCommand(left_command);
+        micrasBody->getRightMotor().setCommand(right_command);
     }
 }
 
 void Locomotion::set_command(float linear, float angular) {
-    float left_command = linear - angular;
-    float right_command = linear + angular;
+    if (micrasBody) {
+        float left_command = linear - angular;
+        float right_command = linear + angular;
 
-    if (std::abs(left_command) > 100.0F) {
-        left_command *= 100.0F / std::abs(left_command);
-        right_command *= 100.0F / std::abs(left_command);
+        if (std::abs(left_command) > 100.0F) {
+            left_command *= 100.0F / std::abs(left_command);
+            right_command *= 100.0F / std::abs(left_command);
+        }
+
+        if (std::abs(right_command) > 100.0F) {
+            left_command *= 100.0F / std::abs(right_command);
+            right_command *= 100.0F / std::abs(right_command);
+        }
+
+        this->set_wheel_command(left_command, right_command);
     }
-
-    if (std::abs(right_command) > 100.0F) {
-        left_command *= 100.0F / std::abs(right_command);
-        right_command *= 100.0F / std::abs(right_command);
-    }
-
-    this->set_wheel_command(left_command, right_command);
 }
 
 void Locomotion::stop() {

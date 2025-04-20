@@ -2,7 +2,7 @@
 #define MICRAS_PROXY_MOTOR_HPP
 
 #include "micras/proxy/stopwatch.hpp"
-#include "box2d/box2d.h"
+#include "physics/box2d_micrasbody.hpp"
 #include <memory>
 
 namespace micras::proxy {
@@ -10,8 +10,8 @@ namespace micras::proxy {
 class Motor {
 public:
     struct Config {
-        b2BodyId bodyId;
-        b2WorldId worldId;
+        micrasverse::physics::Box2DMicrasBody* micrasBody;
+        bool isLeftWheel;
         float max_speed;  // Maximum speed in RPM
         float max_torque;   // Maximum torque in Nm
         float gear_ratio;   // Gear ratio
@@ -26,8 +26,8 @@ public:
     void update();
 
 private:
-    b2BodyId bodyId;
-    b2WorldId worldId;
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
+    bool isLeftWheel;
     float max_speed;
     float max_torque;
     float gear_ratio;

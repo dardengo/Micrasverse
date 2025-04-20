@@ -2,7 +2,6 @@
 #define RECTANGLEBODY_HPP
 
 #include "box2d/box2d.h"
-#include "glm/glm.hpp"
 
 #include <vector>
 

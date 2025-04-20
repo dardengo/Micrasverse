@@ -2,14 +2,14 @@
 #define MICRAS_PROXY_BATTERY_HPP
 
 #include <cstdint>
-#include "box2d/box2d.h"
+#include "physics/box2d_micrasbody.hpp"
 
 namespace micras::proxy {
 
 class Battery {
 public:
     struct Config {
-        b2BodyId bodyId;
+        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
         float voltage;
         float voltage_divider;
         float filter_cutoff;
@@ -27,7 +27,7 @@ public:
     float get_adc_reading() const;
 
 private:
-    b2BodyId bodyId;
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
     float voltage;
     float voltage_divider;
     float noise;

@@ -1,12 +1,11 @@
 #include "micras/proxy/battery.hpp"
 #include <random>
 #include <algorithm>
-#include "box2d/box2d.h"
 
 namespace micras::proxy {
 
 Battery::Battery(const Config& config) :
-    bodyId{config.bodyId},
+    micrasBody{config.micrasBody},
     voltage{config.voltage},
     voltage_divider{config.voltage_divider},
     noise{config.noise},

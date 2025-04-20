@@ -1,12 +1,10 @@
 #include "micras/proxy/fan.hpp"
-#include "box2d/box2d.h"
 #include <algorithm>
 
 namespace micras::proxy {
 
 Fan::Fan(const Config& config) :
-    bodyId{config.bodyId},
-    worldId{config.worldId},
+    micrasBody{config.micrasBody},
     max_acceleration{config.max_acceleration},
     max_speed{config.max_speed},
     stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{})} {

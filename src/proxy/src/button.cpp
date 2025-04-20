@@ -3,8 +3,7 @@
 namespace micras::proxy {
 
 Button::Button(const Config& config) :
-    bodyId(config.bodyId),
-    worldId(config.worldId),
+    micrasBody(config.micrasBody),
     current_state(config.initial_state),
     previous_state(config.initial_state),
     current_status(Status::NO_PRESS),

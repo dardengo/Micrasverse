@@ -118,12 +118,6 @@ public:
     std::string get_objective_string() const;
     std::string get_action_type_string() const;
 
-    /**
-     * @brief Synchronize the controller and body proxies.
-     * This method should be called periodically to ensure both proxies stay in sync.
-     */
-    void sync();
-
 private:
     Micras& micras;
     micrasverse::physics::Box2DMicrasBody& micrasBody;

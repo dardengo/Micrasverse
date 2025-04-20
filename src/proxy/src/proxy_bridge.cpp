@@ -1,4 +1,5 @@
 #include "micras/proxy/proxy_bridge.hpp"
+#include "physics/argb.hpp"
 #include <iostream>
 #include <algorithm>
 
@@ -286,33 +287,6 @@ std::string ProxyBridge::get_action_type_string() const {
             return "ERROR";
         default:
             return "UNKNOWN";
-    }
-}
-
-// The sync method is no longer needed as each function now operates on both proxies
-// But we'll keep it for backward compatibility and as a safety net
-void ProxyBridge::sync() {
-    try {
-        // Sync locomotion - Get commands from simulation and apply to real robot
-        if (micrasBody.getLocomotion().left_motor && micrasBody.getLocomotion().right_motor) {
-            float left_cmd = micrasBody.getLocomotion().left_motor->getCommand();
-            float right_cmd = micrasBody.getLocomotion().right_motor->getCommand();
-            
-            // Apply commands to the real robot's locomotion
-            micras.locomotion.set_wheel_command(left_cmd, right_cmd);
-            
-            // If any motor is active (non-zero command), ensure motors are enabled
-            if (std::abs(left_cmd) > 0.1f || std::abs(right_cmd) > 0.1f) {
-                micras.locomotion.enable();
-            } else {
-                micras.locomotion.disable();
-            }
-        }
-
-        // Sync ARGB LEDs with proper checks and initialization
-        // ... existing code ...
-    } catch (const std::exception& e) {
-        std::cerr << "Sync operation failed: " << e.what() << std::endl;
     }
 }
 

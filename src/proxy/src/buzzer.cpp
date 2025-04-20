@@ -1,10 +1,9 @@
 #include "micras/proxy/buzzer.hpp"
-#include "box2d/box2d.h"
 
 namespace micras::proxy {
 
 Buzzer::Buzzer(const Config& config) : 
-    bodyId(config.bodyId), 
+    micrasBody(config.micrasBody), 
     volume(config.volume), 
     playing(false), 
     duration(0), 

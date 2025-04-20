@@ -1,15 +1,18 @@
 #ifndef MICRAS_PROXY_WALL_SENSORS_HPP
 #define MICRAS_PROXY_WALL_SENSORS_HPP
 
-#include "physics/box2d_distance_sensor.hpp"
-#include "micrasverse_core/types.hpp"
 #include "micras/core/types.hpp"
-
-#include "box2d/box2d.h"
+#include "micras/proxy/i_distance_sensor.hpp"
 
 #include <array>
 #include <cstdint>
 #include <vector>
+#include <memory>
+
+// Forward declaration
+namespace micrasverse::physics {
+class Box2DMicrasBody;
+}
 
 namespace micras::proxy {
 
@@ -17,7 +20,7 @@ template <uint8_t num_of_sensors>
 class TWallSensors {
 public:
     struct Config {
-        b2BodyId bodyId;
+        micrasverse::physics::Box2DMicrasBody* micrasBody;
         float uncertainty;
         std::array<float, num_of_sensors> wall_threshold;
         std::array<float, num_of_sensors> free_threshold;
@@ -53,28 +56,18 @@ public:
 
     void update_thresholds();
 
-    void attach_sensor(const b2Vec2 localPosition, const float angle);
-
-    std::vector<micrasverse::physics::Box2DDistanceSensor>& get_sensors();
-
 private:
-    std::vector<micrasverse::physics::Box2DDistanceSensor> sensors;
-    b2BodyId bodyId;
-    
+    std::vector<std::unique_ptr<IDistanceSensor>> sensors;
     float uncertainty;
-
-    std::array<float, num_of_sensors> wall_calibration_measure;
-
-    std::array<float, num_of_sensors> free_space_calibration_measure;
-
+    std::array<float, num_of_sensors> wall_calibration_measure{};
+    std::array<float, num_of_sensors> free_space_calibration_measure{};
     std::array<float, num_of_sensors> wall_threshold;
-
     std::array<float, num_of_sensors> free_space_threshold;
-
 };
 
 }  // namespace micras::proxy
 
-#include "../src/wall_sensors.cpp"
+// Include the template implementation
+#include "../src/wall_sensors.tpp"
 
 #endif  // MICRAS_PROXY_WALL_SENSORS_HPP

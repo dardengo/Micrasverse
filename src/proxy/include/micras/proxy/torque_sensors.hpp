@@ -4,7 +4,7 @@
 #include <array>
 #include <cstdint>
 #include <random>
-#include "box2d/box2d.h"
+#include "physics/box2d_micrasbody.hpp"
 
 namespace micras::proxy {
 
@@ -18,9 +18,10 @@ public:
      * @brief Configuration struct for torque sensors.
      */
     struct Config {
-        b2BodyId bodyId;
+        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
         float shunt_resistor;
         float max_torque;
+        float max_current;
         float filter_cutoff;
         float noise;
     };
@@ -91,9 +92,11 @@ public:
     void set_torque(uint8_t sensor_index, float torque);
 
 private:
-    b2BodyId bodyId;
-    float max_current;
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
+    float shunt_resistor;
     float max_torque;
+    float max_current;
+    float filter_cutoff;
     float noise;
     std::array<float, num_of_sensors> base_reading{};
     std::array<float, num_of_sensors> simulated_torque{};

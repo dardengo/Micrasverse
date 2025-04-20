@@ -3,6 +3,8 @@
 
 #include "micras/proxy/stopwatch.hpp"
 #include "box2d/box2d.h"
+#include "physics/box2d_micrasbody.hpp"
+
 #include <memory>
 
 namespace micras::proxy {
@@ -10,7 +12,7 @@ namespace micras::proxy {
 class RotarySensor {
 public:
     struct Config {
-        b2BodyId bodyId;
+        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
         float resolution;  // Resolution of the encoder in counts per revolution
         float noise;       // Noise level in counts
     };
@@ -26,6 +28,7 @@ public:
     void reset();
 
 private:
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
     b2BodyId bodyId;
     float resolution;
     float noise;

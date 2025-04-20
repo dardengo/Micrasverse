@@ -10,7 +10,6 @@
 namespace micrasverse::simulation {
 
 SimulationEngine::SimulationEngine() {
-    // Create a Box2DPhysicsEngine which now inherits from IPhysicsEngine
     this->setPhysicsEngine(std::make_shared<micrasverse::physics::Box2DPhysicsEngine>("external/mazefiles/classic/br2024-robochallenge-day3.txt"));
     this->updateMazePaths("external/mazefiles/classic");
     this->currentMazePath = "external/mazefiles/classic/br2024-robochallenge-day3.txt";
@@ -44,9 +43,6 @@ void SimulationEngine::loadMaze(const std::string& mazeFilePath){
 
 void SimulationEngine::togglePause(){
     this->isPaused = !isPaused;
-    
-    // If pausing, we don't need to stop the robot controller anymore
-    // as it's been removed from the physics engine
 }
 
 void SimulationEngine::updateSimulation(float step){

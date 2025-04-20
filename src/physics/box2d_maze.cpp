@@ -13,31 +13,8 @@
 namespace micrasverse::physics {
 
 // Constructor
-Maze::Maze(b2WorldId worldId, const std::string& filename) {
-    std::cout << "========== MAZE CREATION START ==========" << std::endl;
-    std::cout << "Maze constructor received world ID with index: " << worldId.index1 << std::endl;
-    
-    // Validate the world ID immediately
-    bool isValidWorld = b2World_IsValid(worldId);
-    std::cout << "World validity check in Maze constructor: " << (isValidWorld ? "VALID" : "INVALID") << std::endl;
-    
-    if (!isValidWorld) {
-        std::cerr << "ERROR: Invalid world ID in Maze constructor" << std::endl;
-        throw std::runtime_error("Invalid world ID in Maze constructor");
-    }
-    
-    // Store the world ID
-    this->worldId = worldId;
-    std::cout << "Stored world ID with index: " << this->worldId.index1 << std::endl;
-    
-    std::cout << "Loading maze from file: " << filename << std::endl;
+Maze::Maze(b2WorldId worldId, const std::string& filename) : worldId(worldId) {
     this->loadFromFile(filename);
-    
-    std::cout << "Creating Box2D objects for maze..." << std::endl;
-    this->createBox2dObjects();
-    
-    std::cout << "Maze created successfully" << std::endl;
-    std::cout << "========== MAZE CREATION END ==========" << std::endl;
 }
 
 // Parse maze from file
@@ -111,47 +88,25 @@ const std::vector<Maze::Element>& Maze::getElements() const {
 };
 
 // Create Box2D objects
-void Maze::createBox2dObjects() {
-    std::cout << "========== MAZE OBJECTS CREATION START ==========" << std::endl;
-    std::cout << "Using world ID with index: " << worldId.index1 << std::endl;
-    
-    bool isValidWorld = b2World_IsValid(worldId);
-    std::cout << "World validity check before creating maze objects: " << (isValidWorld ? "VALID" : "INVALID") << std::endl;
-    
-    if (!isValidWorld) {
-        std::cerr << "ERROR: Invalid world ID in createBox2dObjects" << std::endl;
-        throw std::runtime_error("Invalid world ID in createBox2dObjects");
-    }
-    
-    std::cout << "Creating " << this->elements.size() << " maze elements" << std::endl;
-    
+void Maze::createBox2dObjects() {  
     for (const auto& element : this->elements){
-        try {
-            std::cout << "Creating maze element at position (" << element.position.x << ", " << element.position.y 
-                      << ") of type '" << element.type << "' and size (" << element.size.x << ", " << element.size.y << ")" << std::endl;
-                      
-            auto rectangleBody = std::make_unique<RectangleBody>(
-                worldId,
-                element.position,
-                element.size,
-                b2_staticBody,
-                100.0f,
-                0.3f,
-                0.5f
-            );
-            
-            b2BodyId bodyId = rectangleBody->getBodyId();
-            std::cout << "Created maze body with ID index: " << bodyId.index1 << std::endl;
-            
-            this->mazeBodies.push_back(bodyId);
-            this->mazeBodiesObjects.push_back(std::move(rectangleBody));
-        } catch (const std::exception& e) {
-            std::cerr << "ERROR creating maze element: " << e.what() << std::endl;
-        }
+        auto rectangleBody = std::make_unique<RectangleBody>(
+            worldId,
+            element.position,
+            element.size,
+            b2_staticBody,
+            100.0f,
+            0.3f,
+            0.5f
+        );     
+        this->mazeBodies.push_back(rectangleBody->getBodyId());
+        this->mazeBodiesObjects.push_back(std::move(rectangleBody));
     }
-    
-    std::cout << "Created " << this->mazeBodies.size() << " maze bodies" << std::endl;
-    std::cout << "========== MAZE OBJECTS CREATION END ==========" << std::endl;
+}
+
+void Maze::reloadFromFile(const std::string& filename) {
+    this->destroy(); // Destroy existing Box2D objects
+    this->loadFromFile(filename); // Load the maze from the new file
 }
 
 // Destroy Box2D objects
@@ -164,10 +119,4 @@ void Maze::destroy() {
     mazeBodies.clear(); // Clear the list of maze bodies
     elements.clear();   // Clear the list of maze elements
 }
-
-void Maze::reloadFromFile(const std::string& filename) {
-    this->destroy(); // Destroy existing Box2D objects
-    this->loadFromFile(filename); // Load the maze from the new file
-}
-
 } // namespace micrasverse::physics

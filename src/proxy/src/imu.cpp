@@ -1,11 +1,10 @@
 #include "micras/proxy/imu.hpp"
 #include <random>
-#include "box2d/box2d.h"
 
 namespace micras::proxy {
 
 Imu::Imu(const Config& config) :
-    bodyId{config.bodyId},
+    micrasBody{config.micrasBody},
     gyroscope_noise{config.gyroscope_noise},
     accelerometer_noise{config.accelerometer_noise} {
 }
@@ -16,6 +15,23 @@ bool Imu::check_whoami() {
 }
 
 void Imu::update() {
+    // Get the body ID if it hasn't been set yet
+    if (micrasBody) {
+        bodyId = micrasBody->getBodyId();
+    }
+    
+    // Check if the body is valid before accessing it
+    if (!b2Body_IsValid(bodyId)) {
+        // Set default values if body is invalid
+        angular_velocity[0] = 0.0f;
+        angular_velocity[1] = 0.0f;
+        angular_velocity[2] = 0.0f;
+        linear_acceleration[0] = 0.0f;
+        linear_acceleration[1] = 0.0f;
+        linear_acceleration[2] = 9.81f; // gravity
+        return;
+    }
+
     // Get the body's angular velocity and linear velocity from Box2D
     float angularVelocity = b2Body_GetAngularVelocity(bodyId);
     b2Vec2 linearVelocity = b2Body_GetLinearVelocity(bodyId);

@@ -1,6 +1,8 @@
 #include "GUI/gui.hpp"
 #include "physics/box2d_micrasbody.hpp"
 #include "micras/proxy/proxy_bridge.hpp"
+#include "physics/box2d_dipswitch.hpp"
+#include "physics/box2d_motor.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -381,7 +383,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     
     ImGui::Text("Micras position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
     ImGui::Text("Micras linear velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
-    ImGui::Text("FAN is: %.2f", micrasBody.getDipSwitch().get_switch_state(0) ? 1.0f : 0.0f); ImGui::SameLine();
+    ImGui::Text("FAN is: %.2f", micrasBody.getDipSwitch().readSwitch(0) ? 1.0f : 0.0f); ImGui::SameLine();
     
     // Option to show style editor (defaults to off)
     ImGui::Checkbox("Show Style Editor", &showStyleEditor);

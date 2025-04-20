@@ -16,6 +16,11 @@ namespace micrasverse::physics {
         Rotation rotation;
     };
 
+    struct SensorConfig {
+        float angle;
+        Vec2 local_position;
+    };
+
 
 } // namespace micrasverse::physics
 
