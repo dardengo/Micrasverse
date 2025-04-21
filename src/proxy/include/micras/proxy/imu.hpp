@@ -39,6 +39,8 @@ private:
     b2BodyId bodyId;
     float gyroscope_noise;
     float accelerometer_noise;
+    b2Vec2 current_linear_velocity;
+    b2Vec2 previous_linear_velocity;
 
     std::array<float, 3> angular_velocity{};
     std::array<float, 3> linear_acceleration{};

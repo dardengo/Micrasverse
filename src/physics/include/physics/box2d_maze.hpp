@@ -27,10 +27,10 @@ public:
     std::vector<std::unique_ptr<RectangleBody>> mazeBodiesObjects; // List of maze bodies objects
     
     // Constructor
-    Maze(b2WorldId worldId, const std::string& filename);
+    Maze(b2WorldId worldId, const std::string_view filename);
 
     // Parse maze from file
-    void loadFromFile(const std::string& filename);
+    void loadFromFile(const std::string_view filename);
 
     const std::vector<Element>& getElements() const;
 
@@ -42,7 +42,7 @@ public:
     // Destroy Box2D objects
     void destroy();
 
-    void reloadFromFile(const std::string& filename);
+    void reloadFromFile(const std::string_view filename);
 
 };
 

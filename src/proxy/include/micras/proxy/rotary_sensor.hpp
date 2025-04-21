@@ -4,6 +4,7 @@
 #include "micras/proxy/stopwatch.hpp"
 #include "box2d/box2d.h"
 #include "physics/box2d_micrasbody.hpp"
+#include "micrasverse_core/types.hpp"
 
 #include <memory>
 
@@ -15,27 +16,25 @@ public:
         micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
         float resolution;  // Resolution of the encoder in counts per revolution
         float noise;       // Noise level in counts
+        bool isLeftWheel;
     };
 
     explicit RotarySensor(const Config& config);
 
-    void update();
+    float get_position();
 
-    float get_position() const;
-
-    float get_velocity() const;
-
-    void reset();
 
 private:
     micrasverse::physics::Box2DMicrasBody* micrasBody;
     b2BodyId bodyId;
     float resolution;
     float noise;
-    float position = 0.0f;
-    float velocity = 0.0f;
-    float last_position = 0.0f;
+    float position{0.0f};
+    float last_position{0.0f};
+    micrasverse::types::Vec2  global_position{0.0f, 0.0f};
+    micrasverse::types::Vec2 last_global_position{0.0f, 0.0f};
     std::unique_ptr<Stopwatch> stopwatch;
+    bool isLeftWheel;
 };
 
 }  // namespace micras::proxy

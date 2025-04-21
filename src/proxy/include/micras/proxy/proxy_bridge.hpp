@@ -14,6 +14,7 @@
 #include "micras/proxy/stopwatch.hpp"
 #include "micrasverse_core/types.hpp"
 #include "physics/box2d_micrasbody.hpp"
+#include "../../../external/MicrasFirmware/micras_nav/include/micras/nav/state.hpp"
 
 namespace micras {
 
@@ -65,8 +66,8 @@ public:
 
     // Rotary sensors access
     void update_rotary_sensors();
-    float get_left_rotary_sensor_velocity() const;
-    float get_right_rotary_sensor_velocity() const;
+    float get_left_rotary_sensor_position() const;
+    float get_right_rotary_sensor_position() const;
 
     // Wall sensors access
     void update_wall_sensors();
@@ -117,6 +118,10 @@ public:
     micras::nav::Mapping::Action get_current_action() const;
     std::string get_objective_string() const;
     std::string get_action_type_string() const;
+    
+    // Position and goal access
+    micras::nav::Point get_current_goal() const;
+    micras::nav::Pose get_current_pose() const;
 
 private:
     Micras& micras;

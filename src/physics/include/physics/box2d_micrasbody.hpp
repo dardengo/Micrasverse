@@ -3,13 +3,6 @@
 
 #include "box2d/box2d.h"
 #include "physics/box2d_rectanglebody.hpp"
-// Remove these includes that cause circular dependencies
-// #include "physics/box2d_distance_sensor.hpp"
-// #include "physics/box2d_motor.hpp"
-// #include "physics/box2d_dipswitch.hpp"
-// #include "physics/box2d_button.hpp"
-// #include "physics/box2d_led.hpp"
-// #include "physics/argb.hpp"
 
 #include <memory>
 #include <vector>
@@ -61,7 +54,7 @@ public:
     ~Box2DMicrasBody();
     
     // Get the body ID
-    b2BodyId getBodyId() const;
+    b2BodyId getBodyId() const { return bodyId; }
     
     // Update the body
     void update(float deltaTime);
@@ -82,7 +75,7 @@ public:
     b2Rot getRotation() const { return b2MakeRot(getAngle()); }
     
     // Get the body's acceleration
-    float getLinearAcceleration() const;
+    float getLinearAcceleration() const { return linearAcceleration; }
     
     // Get the body's linear velocity
     b2Vec2 getLinearVelocity() const { return linearVelocity; }

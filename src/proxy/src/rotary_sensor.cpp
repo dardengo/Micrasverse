@@ -1,4 +1,6 @@
 #include "micras/proxy/rotary_sensor.hpp"
+#include "constants.hpp"
+#include "physics/box2d_motor.hpp"
 #include <random>
 
 namespace micras::proxy {
@@ -7,43 +9,25 @@ RotarySensor::RotarySensor(const Config& config) :
     micrasBody{config.micrasBody},
     resolution{config.resolution},
     noise{config.noise},
-    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{})} {
+    stopwatch{std::make_unique<Stopwatch>(Stopwatch::Config{})},
+    isLeftWheel{config.isLeftWheel} {
     bodyId = micrasBody->getBodyId();
 }
 
-void RotarySensor::update() {
-    // Get the body's angular velocity from Box2D
-    float angular_velocity = b2Body_GetAngularVelocity(bodyId);
-    
-    // Add noise to simulate real encoder behavior
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::normal_distribution<float> noise_dist(0.0f, noise);
-    
-    // Calculate elapsed time in seconds
-    float elapsed_time = stopwatch->elapsed_time_ms() / 1000.0f;
-    stopwatch->reset_ms();
-    
-    // Update position based on angular velocity, resolution, and elapsed time
-    float delta_position = angular_velocity * resolution * elapsed_time;
-    position += delta_position + noise_dist(gen);
-    
-    // Update velocity
-    velocity = angular_velocity;
-}
+float RotarySensor::get_position() {
 
-float RotarySensor::get_position() const {
-    return position;
-}
+    if (isLeftWheel) {
+        this->global_position = micrasBody->getLeftMotor().getPosition();
+    } else {
+        this->global_position = micrasBody->getRightMotor().getPosition();
+    }
 
-float RotarySensor::get_velocity() const {
-    return velocity;
-}
+    micrasverse::types::Vec2 delta_position = this->global_position - this->last_global_position;
+    this->last_global_position = this->global_position;
+    float distance = delta_position.length();
+    this->position += distance / micrasverse::MICRAS_WHEEL_RADIUS;
 
-void RotarySensor::reset() {
-    position = 0.0f;
-    velocity = 0.0f;
-    last_position = 0.0f;
+    return this->position;
 }
 
 }  // namespace micras::proxy 

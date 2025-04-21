@@ -10,7 +10,6 @@ Box2DDistanceSensor::Box2DDistanceSensor(b2WorldId worldId, b2BodyId bodyId, con
       localDirection{direction.x, direction.y}, 
       maxDistance(maxDistance), reading(0.0f), angle(0.0f),
       rayMidPoint{0.0f, 0.0f}, rayDirection{0.0f, 0.0f} {
-    // Initialize the sensor
     update();
 }
 
@@ -52,15 +51,12 @@ float Box2DDistanceSensor::getAngle() const {
 
 void Box2DDistanceSensor::setAngle(float newAngle) {
     angle = newAngle;
-    // Update the direction based on the new angle
     localDirection.x = std::cos(angle);
     localDirection.y = std::sin(angle);
     update();
 }
 
-// ISensor interface implementation
 micrasverse::types::Vec2 Box2DDistanceSensor::getPosition() const {
-    // Get the world position of the sensor using Box2D's API
     b2Vec2 worldPos = b2Body_GetWorldPoint(bodyId, localPosition);
     return {worldPos.x, worldPos.y};
 }
@@ -68,7 +64,7 @@ micrasverse::types::Vec2 Box2DDistanceSensor::getPosition() const {
 void Box2DDistanceSensor::performRayCast() {
     const b2Vec2 origin = b2Body_GetWorldPoint(this->bodyId, this->localPosition);
     const b2Vec2 worldDirection = b2Body_GetWorldVector(this->bodyId, this->localDirection);
-    const b2Vec2 translation = MAZE_FLOOR_WIDTH * worldDirection;
+    const b2Vec2 translation = this->maxDistance * worldDirection;
     const b2QueryFilter filter = b2DefaultQueryFilter();
     const b2RayResult output = b2World_CastRayClosest(b2Body_GetWorld(this->bodyId), origin, translation, filter);
 

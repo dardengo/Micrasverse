@@ -101,17 +101,12 @@ void ProxyBridge::calibrate_imu() {
 }
 
 // Rotary sensors access
-void ProxyBridge::update_rotary_sensors() {
-    micras.rotary_sensor_left->update();
-    micras.rotary_sensor_right->update();
+float ProxyBridge::get_left_rotary_sensor_position() const {
+    return micras.rotary_sensor_left->get_position();
 }
 
-float ProxyBridge::get_left_rotary_sensor_velocity() const {
-    return micras.rotary_sensor_left->get_velocity();
-}
-
-float ProxyBridge::get_right_rotary_sensor_velocity() const {
-    return micras.rotary_sensor_right->get_velocity();
+float ProxyBridge::get_right_rotary_sensor_position() const {
+    return micras.rotary_sensor_right->get_position();
 }
 
 // Wall sensors access
@@ -253,11 +248,7 @@ micras::core::Objective ProxyBridge::get_objective() const {
 }
 
 micras::nav::Mapping::Action ProxyBridge::get_current_action() const {
-    // Return a default action if not available
-    micras::nav::Mapping::Action action;
-    action.type = micras::nav::Mapping::Action::Type::LOOK_AT;
-    action.direction = micras::nav::Direction::EAST;
-    return action;
+    return micras.current_action;
 }
 
 std::string ProxyBridge::get_objective_string() const {
@@ -288,6 +279,21 @@ std::string ProxyBridge::get_action_type_string() const {
         default:
             return "UNKNOWN";
     }
+}
+
+micras::nav::Point ProxyBridge::get_current_goal() const {
+    // Return the point from the current action instead of a placeholder
+    return micras.current_action.point;
+}
+
+micras::nav::Pose ProxyBridge::get_current_pose() const {
+    // Create a pose from the current Box2D body position and angle
+    micras::nav::Pose pose;
+    pose.position.x = micrasBody.getPosition().x;
+    pose.position.y = micrasBody.getPosition().y;
+    pose.orientation = micrasBody.getAngle();
+    
+    return pose;
 }
 
 } // namespace micras::proxy 

@@ -6,7 +6,7 @@ namespace micrasverse::physics {
 Box2DMotor::Box2DMotor(b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, 
                        float angle, float R, float ke, float kt, float maxVoltage)
     : resistance(R), ke(ke), kt(kt), maxVoltage(maxVoltage), inputCommand(0.0f),
-      current(0.0f), angularVelocity(0.0f), frictionCoefficient(0.3f),
+      current(0.0f), angularVelocity(0.0f), frictionCoefficient(MICRAS_FRICTION),
       appliedForce(0.0f), torque(0.0f), bodyLinearVelocity(0.0f), bodyAngularVelocity(0.0f),
       leftWheel(leftWheel), isFanOn(false), bodyId(bodyId),
       localPosition{localPosition.x, localPosition.y}, angle(angle) {
@@ -45,13 +45,6 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
         return;
     }
     
-    // If command is near zero, just return without applying force
-    if (std::abs(inputCommand) < 0.1f) {
-        appliedForce = 0.0f;
-        torque = 0.0f;
-        return;
-    }
-    
     // Get body transform to convert local to world coordinates
     b2Transform transform = b2Body_GetTransform(bodyId);
     
@@ -76,7 +69,7 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
     
     // Calculate angular velocity of the wheel based on body's linear velocity
     // This is a simplification; in reality you'd need to account for the wheel's radius
-    angularVelocity = bodyLinearVelocity / 0.01f; // assuming wheel radius 0.01
+    angularVelocity = bodyLinearVelocity / MICRAS_WHEEL_RADIUS; // Use the correct wheel radius constant
     
     // Motor modeling:
     // V = IR + Ke*ω
@@ -84,12 +77,7 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
     // T = Kt*I
     // F = T / radius
     
-    // Reduce angular velocity if fan is on (simulating power draw)
-    if (isFanOn) {
-        voltage *= 0.9f; // Reduce voltage by 10% when fan is on
-    }
-    
-    // Back EMF calculation
+    // Back EMF calculation - this reduces voltage based on body velocity
     float backEMF = ke * angularVelocity;
     
     // Motor current calculation
@@ -98,9 +86,25 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
     // Generate motor torque
     torque = kt * current;
     
-    // Convert torque to force (assuming wheel radius of 0.01)
-    // F = T / r
-    appliedForce = torque / 0.01f;
+    // Convert torque to force (F = T / r)
+    appliedForce = torque / MICRAS_WHEEL_RADIUS;
+    
+    // Calculate the maximum allowed force based on static friction
+    // Static friction increases when fan is on
+    float staticFrictionCoefficient = frictionCoefficient;
+    if (isFanOn) {
+        // Increase static friction coefficient when fan is on
+        staticFrictionCoefficient *= 2.0f; // Increase by 100%
+    }
+    
+    // Calculate maximum force that can be applied based on static friction
+    float normalForce = bodyMass * 9.81f; // Normal force = mass * gravity
+    float maxStaticForce = staticFrictionCoefficient * normalForce;
+    
+    // Limit the applied force by static friction
+    if (std::abs(appliedForce) > maxStaticForce) {
+        appliedForce = (appliedForce > 0) ? maxStaticForce : -maxStaticForce;
+    }
     
     // Apply the force to the body
     b2Body_ApplyForce(bodyId, b2MulSV(appliedForce, worldDirection), worldPosition, true);

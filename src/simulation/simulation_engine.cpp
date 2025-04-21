@@ -5,14 +5,13 @@
 #include "physics/box2d_physics_engine.hpp"
 #include "io/keyboard.hpp"
 #include <filesystem>
-#include <iostream>
 
 namespace micrasverse::simulation {
 
 SimulationEngine::SimulationEngine() {
-    this->setPhysicsEngine(std::make_shared<micrasverse::physics::Box2DPhysicsEngine>("external/mazefiles/classic/br2024-robochallenge-day3.txt"));
+    this->setPhysicsEngine(std::make_shared<micrasverse::physics::Box2DPhysicsEngine>(DEFAULT_MAZE_PATH));
     this->updateMazePaths("external/mazefiles/classic");
-    this->currentMazePath = "external/mazefiles/classic/br2024-robochallenge-day3.txt";
+    this->currentMazePath = DEFAULT_MAZE_PATH;
 }
 
 void SimulationEngine::updateMazePaths(const std::string& folderPath){

@@ -13,18 +13,20 @@
 namespace micrasverse::physics {
 
 // Constructor
-Maze::Maze(b2WorldId worldId, const std::string& filename) : worldId(worldId) {
+Maze::Maze(b2WorldId worldId, const std::string_view filename) : worldId(worldId) {
     this->loadFromFile(filename);
 }
 
 // Parse maze from file
-void Maze::loadFromFile(const std::string& filename) {
+void Maze::loadFromFile(const std::string_view filename) {
+
+    std::string filenameStr = std::string(filename);
     
-    if (!std::filesystem::exists(filename)) {
-        throw std::runtime_error("File does not exist: " + filename);
+    if (!std::filesystem::exists(filenameStr)) {
+        throw std::runtime_error("File does not exist: " + filenameStr);
     }
 
-    std::ifstream file(filename);
+    std::ifstream file(filenameStr);
     if (!file.is_open()) {
         throw std::runtime_error("Unable to open maze file");
     }
@@ -104,9 +106,10 @@ void Maze::createBox2dObjects() {
     }
 }
 
-void Maze::reloadFromFile(const std::string& filename) {
+void Maze::reloadFromFile(const std::string_view filename) {
+    std::string filenameStr = std::string(filename);
     this->destroy(); // Destroy existing Box2D objects
-    this->loadFromFile(filename); // Load the maze from the new file
+    this->loadFromFile(filenameStr); // Load the maze from the new file
 }
 
 // Destroy Box2D objects

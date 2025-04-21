@@ -7,16 +7,18 @@
 #include "physics/box2d_micrasbody.hpp"
 #include <memory>
 #include <string>
+#include <string_view>
+#include "constants.hpp"
 
 namespace micrasverse::physics {
 
 class Box2DPhysicsEngine : public IPhysicsEngine {
 public:
-    Box2DPhysicsEngine(const std::string& mazePath);
+    Box2DPhysicsEngine(const std::string_view mazePath = DEFAULT_MAZE_PATH);
     ~Box2DPhysicsEngine() override;
 
-    void update(float step = micrasverse::STEP) override;
-    void loadMaze(const std::string& mazePath) override;
+    void update(float step = STEP) override;
+    void loadMaze(const std::string_view mazePath) override;
     void resetMicrasPosition() override;
     
     World& getWorld() { return *p_World; }

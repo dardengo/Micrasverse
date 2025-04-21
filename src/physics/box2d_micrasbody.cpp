@@ -33,10 +33,10 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
     
     // Initialize distance sensors
     SensorConfig sensorConfigs[4] = {
-        {5.0f * B2_PI / 6.0f, {-0.009f, 0.049f}},
+        {5.0f * B2_PI / 6.0f, {-0.009f, 0.055f}},
         {B2_PI / 2.0f,        {-0.028f, 0.045f}},
         {B2_PI / 2.0f,        { 0.028f, 0.045f}},
-        {B2_PI / 6.0f,        { 0.009f, 0.049f}}
+        {B2_PI / 6.0f,        { 0.009f, 0.055f}}
     };
     
     for (size_t i = 0; i < 4; i++) {
@@ -52,11 +52,11 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
             bodyId,
             localPos,
             directionVec,
-            3.0f
+            MAZE_FLOOR_WIDTH // max distance
         ));
     }
 
-    // Initialize motors
+    // Initialize motors with proper wheel positions
     leftMotor = std::make_unique<Box2DMotor>(
         bodyId,
         micrasverse::types::Vec2{-MICRAS_HALFWIDTH, 0.0f},
@@ -92,21 +92,17 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
     
     argbs.push_back(std::make_unique<Argb>(
         bodyId,
-        b2Vec2{-0.01f, MICRAS_HALFHEIGHT - 0.02f},  // position
-        b2Vec2{0.005f, 0.005f},  // size
+        b2Vec2{-0.01f, MICRAS_HALFHEIGHT/2.0f},  // position
+        b2Vec2{0.0075f, 0.0075f},  // size
         defaultColor
     ));
     
     argbs.push_back(std::make_unique<Argb>(
         bodyId,
-        b2Vec2{0.01f, MICRAS_HALFHEIGHT - 0.02f},  // position
-        b2Vec2{0.005f, 0.005f},  // size
+        b2Vec2{0.01f, MICRAS_HALFHEIGHT/2.0f},  // position
+        b2Vec2{0.0075f, 0.0075f},  // size
         defaultColor
     ));
-}
-
-b2BodyId Box2DMicrasBody::getBodyId() const {
-    return bodyId;
 }
 
 void Box2DMicrasBody::update(float deltaTime) {
@@ -169,10 +165,6 @@ b2Vec2 Box2DMicrasBody::getLateralVelocity() const {
     b2Rot rotation = b2MakeRot(angle);
     b2Vec2 lateralNormal = b2RotateVector(rotation, b2Vec2{1.0f, 0.0f});
     return b2Dot(lateralNormal, linearVelocity) * lateralNormal;
-}
-
-float Box2DMicrasBody::getLinearAcceleration() const { 
-    return this->linearAcceleration; 
 }
 
 // Explicit destructor definition

@@ -3,6 +3,7 @@
 #include "micras/proxy/proxy_bridge.hpp"
 #include "physics/box2d_dipswitch.hpp"
 #include "physics/box2d_motor.hpp"
+#include "io/keyboard.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -152,6 +153,18 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
                 }
                 ImGui::Text("%s", directionText.c_str());
             }
+            
+            // Display current goal
+            ImGui::Separator();
+            ImGui::Text("Current Goal:");
+            auto goal = proxyBridge->get_current_goal();
+            ImGui::Text("x: %.2f, y: %.2f", goal.x, goal.y);
+            
+            // Display current pose
+            ImGui::Separator();
+            ImGui::Text("Current Pose:");
+            auto pose = proxyBridge->get_current_pose();
+            ImGui::Text("x: %.2f, y: %.2f, theta: %.2f", pose.position.x, pose.position.y, pose.orientation);
         }
     }
     
@@ -178,51 +191,80 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         ImGui::Separator();
         ImGui::Text("Current Movement:");
         
-        // Get keyboard state
-        bool wPressed = ImGui::IsKeyDown(ImGuiKey_W);
-        bool sPressed = ImGui::IsKeyDown(ImGuiKey_S);
-        bool aPressed = ImGui::IsKeyDown(ImGuiKey_A);
-        bool dPressed = ImGui::IsKeyDown(ImGuiKey_D);
-        bool spacePressed = ImGui::IsKeyDown(ImGuiKey_Space);
+        // Get keyboard state using micrasverse::io::Keyboard
+        bool wPressed = micrasverse::io::Keyboard::key(GLFW_KEY_W);
+        bool sPressed = micrasverse::io::Keyboard::key(GLFW_KEY_S);
+        bool aPressed = micrasverse::io::Keyboard::key(GLFW_KEY_A);
+        bool dPressed = micrasverse::io::Keyboard::key(GLFW_KEY_D);
+        bool spacePressed = micrasverse::io::Keyboard::key(GLFW_KEY_SPACE);
+        
+        // Check for key up events to set commands to zero
+        bool wReleased = micrasverse::io::Keyboard::keyWentUp(GLFW_KEY_W);
+        bool sReleased = micrasverse::io::Keyboard::keyWentUp(GLFW_KEY_S);
+        bool aReleased = micrasverse::io::Keyboard::keyWentUp(GLFW_KEY_A);
+        bool dReleased = micrasverse::io::Keyboard::keyWentUp(GLFW_KEY_D);
+        
+        // Track current command values
+        static float currentLinear = 0.0f;
+        static float currentAngular = 0.0f;
         
         // Apply movement based on key state
         if (spacePressed) {
             proxyBridge->stop_motors();
             proxyBridge->disable_motors();
+            currentLinear = 0.0f;
+            currentAngular = 0.0f;
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "STOPPED");
         } else {
-            // Enable motors if any movement key is pressed
+            // Clear previous commands and enable motors if any movement key is pressed
             if (wPressed || sPressed || aPressed || dPressed) {
                 proxyBridge->enable_motors();
-            }
-
-            // Forward/Backward
-            if (wPressed) {
-                proxyBridge->set_command(moveSpeed, 0.0f);
-                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "FORWARD");
-            } else if (sPressed) {
-                proxyBridge->set_command(-moveSpeed, 0.0f);
-                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "BACKWARD");
+                
+                // Forward/Backward movement
+                float linearSpeed = 0.0f;
+                if (wPressed) linearSpeed = moveSpeed;
+                if (sPressed) linearSpeed = -moveSpeed;
+                
+                // Left/Right turning
+                float angularSpeed = 0.0f;
+                if (aPressed) angularSpeed = moveSpeed;
+                if (dPressed) angularSpeed = -moveSpeed;
+                
+                // Update tracked values
+                currentLinear = linearSpeed;
+                currentAngular = angularSpeed;
+                
+                // Apply the combined command
+                proxyBridge->set_command(linearSpeed, angularSpeed);
+                
+                // Display movement status
+                if (linearSpeed > 0) {
+                    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "FORWARD");
+                } else if (linearSpeed < 0) {
+                    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "BACKWARD");
+                }
+                
+                if (angularSpeed > 0) {
+                    ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING LEFT");
+                } else if (angularSpeed < 0) {
+                    ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING RIGHT");
+                }
             } else {
-                // No forward/backward movement
-            }
-            
-            // Left/Right
-            if (aPressed) {
-                proxyBridge->set_command(0.0f, moveSpeed);
-                ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING LEFT");
-            } else if (dPressed) {
-                proxyBridge->set_command(0.0f, -moveSpeed);
-                ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING RIGHT");
-            } else {
-                // No turning
-            }
-            
-            // If no keys are pressed, stop and disable the motors
-            if (!wPressed && !sPressed && !aPressed && !dPressed) {
-                proxyBridge->stop_motors();
-                proxyBridge->disable_motors();
-                ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "IDLE");
+                // Handle key releases - set command to 0
+                if (wReleased || sReleased) {
+                    currentLinear = 0.0f;
+                    proxyBridge->set_command(0.0f, currentAngular);
+                }
+                
+                if (aReleased || dReleased) {
+                    currentAngular = 0.0f;
+                    proxyBridge->set_command(currentLinear, 0.0f);
+                }
+                
+                // No keys pressed
+                if (!wPressed && !sPressed && !aPressed && !dPressed) {
+                    ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "IDLE");
+                }
             }
         }
     }

@@ -73,14 +73,16 @@ proxy::Motor::Config motor_config = {
 // Rotary Sensor configuration
 proxy::RotarySensor::Config rotary_sensor_left_config = {
     .micrasBody = nullptr,
-    .resolution = 4000.0f,  // Resolution of the encoder in counts per revolution
-    .noise = 0.0f           // Noise level in counts
+    .resolution = 4096.0f,  // Resolution of the encoder in counts per revolution
+    .noise = 0.0f,           // Noise level in counts
+    .isLeftWheel = true
 };
 
 proxy::RotarySensor::Config rotary_sensor_right_config = {
     .micrasBody = nullptr,
-    .resolution = 4000.0f,  // Resolution of the encoder in counts per revolution
-    .noise = 0.0f           // Noise level in counts
+    .resolution = 4096.0f,  // Resolution of the encoder in counts per revolution
+    .noise = 0.0f,           // Noise level in counts
+    .isLeftWheel = false
 };
 
 // Stopwatch configuration

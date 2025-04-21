@@ -1,4 +1,5 @@
 #include "micras/proxy/imu.hpp"
+#include "constants.hpp"
 #include <random>
 
 namespace micras::proxy {
@@ -7,6 +8,7 @@ Imu::Imu(const Config& config) :
     micrasBody{config.micrasBody},
     gyroscope_noise{config.gyroscope_noise},
     accelerometer_noise{config.accelerometer_noise} {
+    bodyId = micrasBody->getBodyId();
 }
 
 bool Imu::check_whoami() {
@@ -15,26 +17,11 @@ bool Imu::check_whoami() {
 }
 
 void Imu::update() {
-    // Get the body ID if it hasn't been set yet
-    if (micrasBody) {
-        bodyId = micrasBody->getBodyId();
-    }
-    
-    // Check if the body is valid before accessing it
-    if (!b2Body_IsValid(bodyId)) {
-        // Set default values if body is invalid
-        angular_velocity[0] = 0.0f;
-        angular_velocity[1] = 0.0f;
-        angular_velocity[2] = 0.0f;
-        linear_acceleration[0] = 0.0f;
-        linear_acceleration[1] = 0.0f;
-        linear_acceleration[2] = 9.81f; // gravity
-        return;
-    }
-
     // Get the body's angular velocity and linear velocity from Box2D
     float angularVelocity = b2Body_GetAngularVelocity(bodyId);
-    b2Vec2 linearVelocity = b2Body_GetLinearVelocity(bodyId);
+    b2Vec2 current_linear_velocity = b2Body_GetLinearVelocity(bodyId);
+    b2Vec2 lin_acc = (current_linear_velocity - previous_linear_velocity) * ( 1 / (loop_time_us / 1000000.0f) ) ;
+    previous_linear_velocity = current_linear_velocity;
 
     // Add noise to simulate real IMU behavior
     static std::random_device rd;
@@ -50,8 +37,8 @@ void Imu::update() {
 
     // For acceleration, we'll use velocity changes over time
     // This is a simplified model - in a real IMU, you'd want to track velocity changes
-    linear_acceleration[0] = linearVelocity.x + accel_noise(gen);
-    linear_acceleration[1] = linearVelocity.y + accel_noise(gen);
+    linear_acceleration[0] = lin_acc.x + accel_noise(gen);
+    linear_acceleration[1] = lin_acc.y + accel_noise(gen);
     linear_acceleration[2] = 9.81f + accel_noise(gen); // Gravity in Z direction
 }
 

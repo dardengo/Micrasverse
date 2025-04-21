@@ -19,7 +19,7 @@
 
 namespace micrasverse::physics {
 
-    Box2DPhysicsEngine::Box2DPhysicsEngine(const std::string& mazePath) {
+    Box2DPhysicsEngine::Box2DPhysicsEngine(const std::string_view mazePath) {
         p_World = std::make_unique<World>();
         b2WorldId worldId = p_World->getWorldId();        
         p_Maze = std::make_unique<Maze>(worldId, mazePath); 
@@ -41,7 +41,7 @@ namespace micrasverse::physics {
         }
     }
 
-    void Box2DPhysicsEngine::loadMaze(const std::string& mazePath) {      
+    void Box2DPhysicsEngine::loadMaze(const std::string_view mazePath) {      
         p_Maze->reloadFromFile(mazePath);
         for (size_t i = 0; i < 4; i++) {
             p_Micras->getDistanceSensor(i).update();
@@ -56,7 +56,6 @@ namespace micrasverse::physics {
             b2Body_SetAngularVelocity(bodyId, 0.0f);
         }
         for (size_t i = 0; i < 2; i++) { // Assuming we have 2 argbs
-            p_Micras->getArgb(i).setColor(micrasverse::types::Colors::red);
             p_Micras->getArgb(i).update();
         }
         for (size_t i = 0; i < 4; i++) {
