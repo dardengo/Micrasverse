@@ -33,10 +33,10 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
     
     // Initialize distance sensors
     SensorConfig sensorConfigs[4] = {
-        {5.0f * B2_PI / 6.0f, {-0.009f, 0.055f}},
-        {B2_PI / 2.0f,        {-0.028f, 0.045f}},
-        {B2_PI / 2.0f,        { 0.028f, 0.045f}},
-        {B2_PI / 6.0f,        { 0.009f, 0.055f}}
+        {B2_PI / 2.0f,        {-0.028f, 0.045f + MICRAS_CENTER_OF_MASS_OFFSET}},
+        {5.0f * B2_PI / 6.0f, {-0.009f, 0.055f + MICRAS_CENTER_OF_MASS_OFFSET}},
+        {B2_PI / 6.0f,        { 0.009f, 0.055f + MICRAS_CENTER_OF_MASS_OFFSET}},
+        {B2_PI / 2.0f,        { 0.028f, 0.045f + MICRAS_CENTER_OF_MASS_OFFSET}}
     };
     
     for (size_t i = 0; i < 4; i++) {
@@ -59,13 +59,13 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
     // Initialize motors with proper wheel positions
     leftMotor = std::make_unique<Box2DMotor>(
         bodyId,
-        micrasverse::types::Vec2{-MICRAS_HALFWIDTH, 0.0f},
+        micrasverse::types::Vec2{-MICRAS_HALFWIDTH, 0.0f + MICRAS_CENTER_OF_MASS_OFFSET},
         true  // isLeftWheel
     );
     
     rightMotor = std::make_unique<Box2DMotor>(
         bodyId,
-        micrasverse::types::Vec2{MICRAS_HALFWIDTH, 0.0f},
+        micrasverse::types::Vec2{MICRAS_HALFWIDTH, 0.0f + MICRAS_CENTER_OF_MASS_OFFSET},
         false  // isLeftWheel
     );
 
@@ -145,7 +145,9 @@ b2Vec2 Box2DMicrasBody::getPosition() const {
 
 float Box2DMicrasBody::getAngle() const {
     b2Transform transform = b2Body_GetTransform(getBodyId());
-    return b2Rot_GetAngle(transform.q);
+    float rotation = b2Rot_GetAngle(transform.q) ;
+    
+    return rotation;
 }
 
 void Box2DMicrasBody::updateFriction() {

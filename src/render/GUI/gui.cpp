@@ -74,15 +74,33 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // Main control panel
     ImGui::Begin("Micrasverse Control Panel");
     
-    // Display FPS
-    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+    /// Toggle simulation running
+        if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {
+            simulationEngine->togglePause();
+        }
+    
+        ImGui::SameLine();
+    
+        // Step one frame
+        if (ImGui::Button("Step")) {
+            simulationEngine->stepThroughSimulation();
+        }
+
+        ImGui::SameLine();
+    
+        ImGui::Text("Simulation is %s", simulationEngine->isPaused ? "Paused" : "Running");
     
     // Robot Status Section
     if (ImGui::CollapsingHeader("Robot Status", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::Text("Position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
-        ImGui::Text("Rotation: %.2f", micrasBody.getAngle());
-        ImGui::Text("Linear Velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
-        
+        ImGui::Text("Micras Body Pose: (%.2f, %.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y, micrasBody.getAngle() + B2_PI/2.0f);
+        auto pose = proxyBridge->get_current_pose();
+        ImGui::Text("Micras Controller Pose: (%.2f, %.2f, %.2f)", pose.position.x, pose.position.y, pose.orientation);
+        ImGui::Separator();
+        auto goal = proxyBridge->get_current_goal();
+        ImGui::Text("Micras Controller Goal: (%.2f, %.2f)", goal.x, goal.y);
+        ImGui::Separator();
+        ImGui::Text("Micras Body Linear Velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
+
         // Add MicrasController objective and current_action
         if (proxyBridge) {
             ImGui::Separator();
@@ -154,17 +172,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
                 ImGui::Text("%s", directionText.c_str());
             }
             
-            // Display current goal
-            ImGui::Separator();
-            ImGui::Text("Current Goal:");
-            auto goal = proxyBridge->get_current_goal();
-            ImGui::Text("x: %.2f, y: %.2f", goal.x, goal.y);
             
-            // Display current pose
-            ImGui::Separator();
-            ImGui::Text("Current Pose:");
-            auto pose = proxyBridge->get_current_pose();
-            ImGui::Text("x: %.2f, y: %.2f, theta: %.2f", pose.position.x, pose.position.y, pose.orientation);
         }
     }
     
@@ -364,7 +372,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         for (size_t i = 0; i < 4; ++i) {
             ImGui::Text("Sensor %zu:", i);
             ImGui::NextColumn();
-            ImGui::Text("%.2f", proxyBridge->get_wall_sensor_reading(i));
+            ImGui::Text("%.4f", proxyBridge->get_wall_sensor_reading(i));
             ImGui::NextColumn();
         }
         ImGui::Columns(1);
@@ -372,7 +380,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
 
     // Simulation controls
     if (this->simulationEngine) {
-        ImGui::SeparatorText("Simulation Controls");
+        ImGui::SeparatorText("Maze Controls");
     
         const auto& mazePaths = simulationEngine->getMazePaths();
         static int selectedMazeIdx = 0;
@@ -408,24 +416,8 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             ImGui::TextColored(ImVec4(1,0.5f,0.5f,1), "No maze files found!");
         }
     
-        // Toggle simulation running
-        if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {
-            simulationEngine->togglePause();
-        }
-    
-        ImGui::SameLine();
-    
-        // Step one frame
-        if (ImGui::Button("Step")) {
-            simulationEngine->stepThroughSimulation();
-        }
-    
-        ImGui::Text("Simulation is %s", simulationEngine->isPaused ? "Paused" : "Running");
+        
     }
-    
-    ImGui::Text("Micras position: (%.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y);
-    ImGui::Text("Micras linear velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
-    ImGui::Text("FAN is: %.2f", micrasBody.getDipSwitch().readSwitch(0) ? 1.0f : 0.0f); ImGui::SameLine();
     
     // Option to show style editor (defaults to off)
     ImGui::Checkbox("Show Style Editor", &showStyleEditor);

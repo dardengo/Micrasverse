@@ -66,8 +66,8 @@ proxy::Motor::Config motor_config = {
     .micrasBody = nullptr,
     .isLeftWheel = true,  // Will be set per motor
     .max_speed = 100.0f,  // Maximum speed in RPM
-    .max_torque = 1.0f,   // Maximum torque in Nm
-    .gear_ratio = 1.0f    // Gear ratio
+    .max_torque = 0.0008f,   // Maximum torque in Nm
+    .gear_ratio = 2.5f    // Gear ratio
 };
 
 // Rotary Sensor configuration
@@ -108,8 +108,8 @@ proxy::TorqueSensors::Config torque_sensors_config = {
 proxy::WallSensors::Config wall_sensors_config = {
     .micrasBody = nullptr,
     .uncertainty = 0.0f,
-    .wall_threshold = {3.0f, 3.0f, 3.0f, 3.0f},
-    .free_threshold = {5.0f, 5.0f, 5.0f, 5.0f}
+    .wall_threshold = {0.1f, 0.1f, 0.1f, 0.1f},
+    .free_threshold = {0.1f, 0.1f, 0.1f, 0.1f}
 };
 
 // Locomotion configuration

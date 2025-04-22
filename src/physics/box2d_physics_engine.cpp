@@ -25,7 +25,7 @@ namespace micrasverse::physics {
         p_Maze = std::make_unique<Maze>(worldId, mazePath); 
         p_Micras = std::make_unique<Box2DMicrasBody>(
             worldId,
-            b2Vec2((CELL_SIZE+WALL_THICKNESS)/2.0f, (CELL_SIZE+WALL_THICKNESS)/2.0f),
+            b2Vec2((CELL_SIZE+WALL_THICKNESS)/2.0f, MICRAS_HALFHEIGHT+WALL_THICKNESS/2.0f),
             b2Vec2(MICRAS_WIDTH, MICRAS_HEIGHT),
             b2_dynamicBody,
             MICRAS_MASS,
@@ -51,7 +51,7 @@ namespace micrasverse::physics {
     void Box2DPhysicsEngine::resetMicrasPosition() {
         b2BodyId bodyId = p_Micras->getBodyId();
         if (b2Body_IsValid(bodyId)) {
-            b2Body_SetTransform(bodyId, (b2Vec2){(CELL_SIZE+WALL_THICKNESS)/2.0f, (CELL_SIZE+WALL_THICKNESS)/2.0f}, (b2Rot){1.0f, 0.0f});
+            b2Body_SetTransform(bodyId, (b2Vec2){(CELL_SIZE+WALL_THICKNESS)/2.0f, MICRAS_HALFHEIGHT}, (b2Rot){1.0f, 0.0f});
             b2Body_SetLinearVelocity(bodyId, (b2Vec2){0.0f, 0.0f});
             b2Body_SetAngularVelocity(bodyId, 0.0f);
         }

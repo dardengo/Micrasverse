@@ -68,8 +68,7 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
     bodyLinearVelocity = b2Dot(pointVelocity, worldDirection);
     
     // Calculate angular velocity of the wheel based on body's linear velocity
-    // This is a simplification; in reality you'd need to account for the wheel's radius
-    angularVelocity = bodyLinearVelocity / MICRAS_WHEEL_RADIUS; // Use the correct wheel radius constant
+    angularVelocity = MICRAS_GEAR_RATIO * bodyLinearVelocity / MICRAS_WHEEL_RADIUS;
     
     // Motor modeling:
     // V = IR + Ke*ω

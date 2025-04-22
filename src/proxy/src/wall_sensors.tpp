@@ -43,11 +43,11 @@ template <uint8_t num_of_sensors>
 micras::core::Observation TWallSensors<num_of_sensors>::get_observation(uint8_t sensor_index) const {
     const float reading = this->get_reading(sensor_index);
 
-    if (reading > this->wall_threshold.at(sensor_index)) {
+    if (reading < this->wall_threshold.at(sensor_index)) {
         return micras::core::Observation::WALL;
     }
 
-    if (reading < this->free_space_threshold.at(sensor_index)) {
+    if (reading > this->free_space_threshold.at(sensor_index)) {
         return micras::core::Observation::FREE_SPACE;
     }
 
@@ -56,7 +56,7 @@ micras::core::Observation TWallSensors<num_of_sensors>::get_observation(uint8_t 
 
 template <uint8_t num_of_sensors>
 float TWallSensors<num_of_sensors>::get_reading(uint8_t sensor_index) const {
-    return get_adc_reading(sensor_index);
+    return sensors.at(sensor_index)->getReading();
 }
 
 template <uint8_t num_of_sensors>

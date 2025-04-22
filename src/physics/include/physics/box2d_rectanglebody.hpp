@@ -14,7 +14,7 @@ protected:
 
 public:
     // Constructor
-    RectangleBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution, const float friction);
+    RectangleBody(const b2WorldId worldId, const b2Vec2 position, const b2Vec2 size, const b2BodyType type, const float mass, const float restitution = 0.0f, const float friction = 0.0f);
 
     // Destructor
     virtual ~RectangleBody();

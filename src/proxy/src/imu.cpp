@@ -36,7 +36,6 @@ void Imu::update() {
     angular_velocity[2] = angularVelocity + gyro_noise(gen); // Z rotation (yaw)
 
     // For acceleration, we'll use velocity changes over time
-    // This is a simplified model - in a real IMU, you'd want to track velocity changes
     linear_acceleration[0] = lin_acc.x + accel_noise(gen);
     linear_acceleration[1] = lin_acc.y + accel_noise(gen);
     linear_acceleration[2] = 9.81f + accel_noise(gen); // Gravity in Z direction

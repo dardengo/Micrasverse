@@ -98,7 +98,7 @@ void Maze::createBox2dObjects() {
             element.size,
             b2_staticBody,
             100.0f,
-            0.3f,
+            0.0f,
             0.5f
         );     
         this->mazeBodies.push_back(rectangleBody->getBodyId());

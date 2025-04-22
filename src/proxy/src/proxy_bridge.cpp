@@ -287,13 +287,9 @@ micras::nav::Point ProxyBridge::get_current_goal() const {
 }
 
 micras::nav::Pose ProxyBridge::get_current_pose() const {
-    // Create a pose from the current Box2D body position and angle
-    micras::nav::Pose pose;
-    pose.position.x = micrasBody.getPosition().x;
-    pose.position.y = micrasBody.getPosition().y;
-    pose.orientation = micrasBody.getAngle();
-    
-    return pose;
+    micras::nav::State state = micras.odometry.get_state();
+
+    return state.pose;
 }
 
 } // namespace micras::proxy 
