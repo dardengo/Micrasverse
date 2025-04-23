@@ -24,6 +24,9 @@ public:
         float uncertainty;
         std::array<float, num_of_sensors> wall_threshold;
         std::array<float, num_of_sensors> free_threshold;
+        float K;
+        float max_adc_reading;
+        float max_distance;
     };
 
     explicit TWallSensors(const Config& config);
@@ -63,6 +66,9 @@ private:
     std::array<float, num_of_sensors> free_space_calibration_measure{};
     std::array<float, num_of_sensors> wall_threshold;
     std::array<float, num_of_sensors> free_space_threshold;
+    float K;
+    float max_adc_reading;
+    float max_distance;
 };
 
 }  // namespace micras::proxy

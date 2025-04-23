@@ -93,7 +93,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     
     // Robot Status Section
     if (ImGui::CollapsingHeader("Robot Status", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::Text("Micras Body Pose: (%.2f, %.2f, %.2f)", micrasBody.getPosition().x, micrasBody.getPosition().y, micrasBody.getAngle() + B2_PI/2.0f);
+        ImGui::Text("Micras Body Pose: (%.2f, %.2f, %.2f)", micrasBody.getPosition().x-WALL_THICKNESS, micrasBody.getPosition().y-WALL_THICKNESS, micrasBody.getAngle() + B2_PI/2.0f);
         auto pose = proxyBridge->get_current_pose();
         ImGui::Text("Micras Controller Pose: (%.2f, %.2f, %.2f)", pose.position.x, pose.position.y, pose.orientation);
         ImGui::Separator();
@@ -173,6 +173,38 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
                 ImGui::Text("%s", directionText.c_str());
             }
             
+            // Display follow wall type
+            if (proxyBridge->get_current_action().type == micras::nav::Mapping::Action::Type::GO_TO) {
+                std::string followWallTypeText = "Follow Wall Type: " + proxyBridge->get_follow_wall_type_string();
+                ImVec4 followWallColor;
+                
+                // Set color based on follow wall type
+                switch (proxyBridge->get_follow_wall_type()) {
+                    case micras::core::FollowWallType::NONE:
+                        followWallColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Gray
+                        break;
+                    case micras::core::FollowWallType::FRONT:
+                        followWallColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // White
+                        break;
+                    case micras::core::FollowWallType::LEFT:
+                        followWallColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
+                        break;
+                    case micras::core::FollowWallType::RIGHT:
+                        followWallColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Red
+                        break;
+                    case micras::core::FollowWallType::PARALLEL:
+                        followWallColor = ImVec4(1.0f, 1.0f, 0.0f, 1.0f); // Yellow
+                        break;
+                    case micras::core::FollowWallType::BACK:
+                        followWallColor = ImVec4(0.0f, 1.0f, 1.0f, 1.0f); // Cyan
+                        break;
+                    default:
+                        followWallColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Gray
+                        break;
+                }
+                
+                ImGui::TextColored(followWallColor, "%s", followWallTypeText.c_str());
+            }
             
         }
     }
@@ -281,6 +313,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // DIP Switch Controls Section
     if (ImGui::CollapsingHeader("DIP Switches", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Columns(4, "dipswitches", false);
+        
         for (size_t i = 0; i < 4; ++i) {
             bool switchState = proxyBridge->get_dip_switch_state(i);
             if (ImGui::Checkbox(("Switch " + std::to_string(i)).c_str(), &switchState)) {

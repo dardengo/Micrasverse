@@ -108,8 +108,11 @@ proxy::TorqueSensors::Config torque_sensors_config = {
 proxy::WallSensors::Config wall_sensors_config = {
     .micrasBody = nullptr,
     .uncertainty = 0.0f,
-    .wall_threshold = {0.1f, 0.1f, 0.1f, 0.1f},
-    .free_threshold = {0.1f, 0.1f, 0.1f, 0.1f}
+    .wall_threshold = {995.0f, 985.0f, 985.0f, 995.0f},
+    .free_threshold = {995.0f, 985.0f, 985.0f, 995.0f},
+    .K = 1023.0f,
+    .max_adc_reading = 1023.0f,
+    .max_distance = 3.0f
 };
 
 // Locomotion configuration

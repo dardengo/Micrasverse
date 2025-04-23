@@ -100,7 +100,7 @@ const nav::LookAtPoint::Config look_at_point_config{
             .ki = 0.0F,
             .kd = 1.0F,
             .setpoint = 0.0F,
-            .saturation = 15.0F,
+            .saturation = 10.0F,
             .max_integral = 15.0F,
         },
     .distance_tolerance = 0.01F,
@@ -137,15 +137,15 @@ const nav::GoToPoint::Config go_to_point_config{
 const nav::FollowWall::Config follow_wall_config = {
     .pid =
         {
-            .kp = 10.0F,
-            .ki = 0.0F,
+            .kp = 1.0F,
+            .ki = 0.050F,
             .kd = 0.0F,
             .setpoint = 0.0F,
-            .saturation = 200.0F,
+            .saturation = 5.0F,
             .max_integral = -1.0F,
         },
-    .base_left_reading = 0.0866F,
-    .base_right_reading = 0.0866F,
+    .base_left_reading = 993.0F,
+    .base_right_reading = 993.0F,
 };
 
 const nav::Mapping::Config mapping_config{
@@ -158,16 +158,16 @@ const nav::Mapping::Config mapping_config{
     .front_orientation_alignment_tolerance = 0.01F,
     .side_orientation_alignment_tolerance = 0.01F,
     .front_distance_reading = {{
-        0.049F,
-        0.049F,
+        1006.0F,
+        1006.0F,
     }},
     .front_orientation_reading = {{
-        0.078F,
-        0.078F,
+        996.0F,
+        996.0F,
     }},
     .side_distance_reading = {{
-        0.0866F,
-        0.0866F,
+        993.0F,
+        993.0F,
     }},
     .start = {{0, 0}, nav::Side::UP},
 };

@@ -292,4 +292,31 @@ micras::nav::Pose ProxyBridge::get_current_pose() const {
     return state.pose;
 }
 
+micras::core::FollowWallType ProxyBridge::get_follow_wall_type() const {
+    // Get the current pose
+    micras::nav::Pose pose = get_current_pose();
+    
+    // Use the mapping to get the follow wall type
+    return micras.mapping.get_follow_wall_type(pose);
+}
+
+std::string ProxyBridge::get_follow_wall_type_string() const {
+    switch (get_follow_wall_type()) {
+        case micras::core::FollowWallType::NONE:
+            return "NONE";
+        case micras::core::FollowWallType::FRONT:
+            return "FRONT";
+        case micras::core::FollowWallType::LEFT:
+            return "LEFT";
+        case micras::core::FollowWallType::RIGHT:
+            return "RIGHT";
+        case micras::core::FollowWallType::PARALLEL:
+            return "PARALLEL";
+        case micras::core::FollowWallType::BACK:
+            return "BACK";
+        default:
+            return "UNKNOWN";
+    }
+}
+
 } // namespace micras::proxy 

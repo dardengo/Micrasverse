@@ -11,7 +11,10 @@ template <uint8_t num_of_sensors>
 TWallSensors<num_of_sensors>::TWallSensors(const Config& config) :
     uncertainty{config.uncertainty},
     wall_threshold{config.wall_threshold},
-    free_space_threshold{config.free_threshold} {
+    free_space_threshold{config.free_threshold},
+    K{config.K},
+    max_adc_reading{config.max_adc_reading},
+    max_distance{config.max_distance} {
     // Initialize the wall sensors with adapters
     for (uint8_t i = 0; i < num_of_sensors; i++) {
         sensors.push_back(std::make_unique<Box2DSensorAdapter>(config.micrasBody, i));
@@ -43,11 +46,11 @@ template <uint8_t num_of_sensors>
 micras::core::Observation TWallSensors<num_of_sensors>::get_observation(uint8_t sensor_index) const {
     const float reading = this->get_reading(sensor_index);
 
-    if (reading < this->wall_threshold.at(sensor_index)) {
+    if (reading > this->wall_threshold.at(sensor_index)) {
         return micras::core::Observation::WALL;
     }
 
-    if (reading > this->free_space_threshold.at(sensor_index)) {
+    if (reading < this->free_space_threshold.at(sensor_index)) {
         return micras::core::Observation::FREE_SPACE;
     }
 
@@ -56,13 +59,18 @@ micras::core::Observation TWallSensors<num_of_sensors>::get_observation(uint8_t 
 
 template <uint8_t num_of_sensors>
 float TWallSensors<num_of_sensors>::get_reading(uint8_t sensor_index) const {
-    return sensors.at(sensor_index)->getReading();
+    return get_adc_reading(sensor_index);
 }
 
 template <uint8_t num_of_sensors>
 float TWallSensors<num_of_sensors>::get_adc_reading(uint8_t sensor_index) const {
     // Use the sensor adapter interface to get the reading
-    return sensors.at(sensor_index)->getReading();
+    float distance = sensors.at(sensor_index)->getReading();
+    if (distance >= max_distance) {
+        return 0;
+    }
+    
+    return static_cast<int>(K * (1.0f - (distance / max_distance)));
 }
 
 template <uint8_t num_of_sensors>

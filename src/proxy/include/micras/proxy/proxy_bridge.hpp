@@ -118,6 +118,8 @@ public:
     micras::nav::Mapping::Action get_current_action() const;
     std::string get_objective_string() const;
     std::string get_action_type_string() const;
+    micras::core::FollowWallType get_follow_wall_type() const;
+    std::string get_follow_wall_type_string() const;
     
     // Position and goal access
     micras::nav::Point get_current_goal() const;
