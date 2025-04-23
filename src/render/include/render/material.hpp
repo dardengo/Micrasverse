@@ -35,6 +35,7 @@ struct Material {
     static Material black_plastic;
     static Material cyan_plastic;
     static Material green_plastic;
+    static Material green_pcb;
     static Material red_plastic;
     static Material white_plastic;
     static Material yellow_plastic;

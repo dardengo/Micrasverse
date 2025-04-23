@@ -9,7 +9,7 @@ MicrasRender::MicrasRender(const b2Vec2 position, const b2Vec2 size)
     this->shader.generate("src/render/assets/vertex-core.glsl", "src/render/assets/fragment-core.glsl");
     
     this->renderModel = Rectangle(
-        Material::green_plastic,
+        Material::green_pcb,
         glm::vec3(position.x , position.y, 0.02f),  // Position of the center
         glm::vec3(size.x, size.y, 0.01f)           // Size
     );

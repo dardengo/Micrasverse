@@ -88,6 +88,7 @@ public:
     Box2DDipSwitch& getDipSwitch() { return *dipSwitch; }
     Box2DLED& getLed() { return *led; }
     Argb& getArgb(size_t index) { return *argbs[index]; }
+    std::vector<std::unique_ptr<Argb>>& getArgbs() { return argbs; }
 };
 
 } // namespace micrasverse::physics

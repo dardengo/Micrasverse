@@ -110,7 +110,7 @@ public:
 
     // Get the number of ARGB LEDs available
     size_t get_argb_count() const {
-        return micras.argb.argbs.size();
+        return micras.argb.argbRefs.size();
     }
 
     // MicrasController access

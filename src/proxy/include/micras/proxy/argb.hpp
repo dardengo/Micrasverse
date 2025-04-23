@@ -9,13 +9,16 @@
 #include <vector>
 #include <array>
 #include <cstdint>
+#include <memory>
+#include <functional>
 
 namespace micras::proxy {
 
 template <uint8_t num_of_leds>
 class TArgb {
 public:
-    std::vector<micrasverse::physics::Argb> argbs;
+    // Changed from direct objects to references to the physical ARGBs
+    std::vector<std::reference_wrapper<micrasverse::physics::Argb>> argbRefs;
 
     struct Config {
         micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;    

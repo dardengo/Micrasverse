@@ -13,6 +13,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <chrono>
 
 namespace micrasverse::render {
 
@@ -37,6 +38,11 @@ private:
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
     std::shared_ptr<micras::ProxyBridge> proxyBridge;
     Plot plot;
+    
+    // Button timing variables
+    bool buttonTimerActive = false;
+    std::chrono::steady_clock::time_point buttonActivationTime;
+    float buttonDurations[3] = {0.5f, 1.5f, 3.0f}; // Duration in seconds for SHORT, LONG, EXTRA_LONG
 };
 
 } // namespace micrasverse::render

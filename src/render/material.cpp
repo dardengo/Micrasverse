@@ -23,6 +23,7 @@ Material Material::silver = { glm::vec3(0.19225, 0.19225, 0.19225), glm::vec3(0.
 Material Material::black_plastic = { glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.01, 0.01, 0.01), glm::vec3(0.50, 0.50, 0.50), .25 };
 Material Material::cyan_plastic = { glm::vec3(0.0, 0.1, 0.06), glm::vec3(0.0, 0.50980392, 0.50980392), glm::vec3(0.50196078, 0.50196078, 0.50196078), .25 };
 Material Material::green_plastic = { glm::vec3(15.0, 125.0, 15.0) / 255.0f, glm::vec3(0.1, 0.35, 0.1), glm::vec3(0.45, 0.55, 0.45), .25 };
+Material Material::green_pcb = { glm::vec3(9.0, 73.0, 50.0) / 255.0f, glm::vec3(0.1, 0.35, 0.1), glm::vec3(0.45, 0.55, 0.45), .25 };
 Material Material::red_plastic = { glm::vec3(125.0, 15.0, 15.0) / 255.0f, glm::vec3(0.5, 0.0, 0.0), glm::vec3(0.7, 0.6, 0.6), .25 };
 Material Material::white_plastic = { glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.55, 0.55, 0.55), glm::vec3(0.70, 0.70, 0.70), .25 };
 Material Material::yellow_plastic = { glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.5, 0.5, 0.0), glm::vec3(0.60, 0.60, 0.50), .25 };

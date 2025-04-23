@@ -96,11 +96,11 @@ const nav::LookAtPoint::Config look_at_point_config{
         },
     .angular_pid =
         {
-            .kp = 3.0F,
+            .kp = 3.1F,
             .ki = 0.0F,
-            .kd = 0.2F,
+            .kd = 1.0F,
             .setpoint = 0.0F,
-            .saturation = 8.0F,
+            .saturation = 15.0F,
             .max_integral = 15.0F,
         },
     .distance_tolerance = 0.01F,

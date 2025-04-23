@@ -11,6 +11,7 @@
 
 #include <filesystem>
 #include <thread>
+#include <chrono>
 
 namespace micrasverse::render {
 
@@ -298,6 +299,35 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         std::string statusText;
         ImVec4 statusColor;
         
+        // Check if a button timer is active and handle timeout
+        if (buttonTimerActive) {
+            auto currentTime = std::chrono::steady_clock::now();
+            float elapsedTime = std::chrono::duration<float>(currentTime - buttonActivationTime).count();
+            
+            int durationIndex = 0;
+            switch (status) {
+                case micras::proxy::Button::Status::SHORT_PRESS:
+                    durationIndex = 0;
+                    break;
+                case micras::proxy::Button::Status::LONG_PRESS:
+                    durationIndex = 1;
+                    break;
+                case micras::proxy::Button::Status::EXTRA_LONG_PRESS:
+                    durationIndex = 2;
+                    break;
+                default:
+                    buttonTimerActive = false;
+                    break;
+            }
+            
+            // Reset the button status after the configured duration
+            if (status != micras::proxy::Button::Status::NO_PRESS && 
+                elapsedTime >= buttonDurations[durationIndex]) {
+                proxyBridge->set_button_status(micras::proxy::Button::Status::NO_PRESS);
+                buttonTimerActive = false;
+            }
+        }
+        
         switch (status) {
             case micras::proxy::Button::Status::NO_PRESS:
                 statusText = "No button pressed";
@@ -333,7 +363,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         ImGui::PopStyleColor(3);
         ImGui::PopStyleVar();
 
-        // Add interactive buttons for each status
+        // Add interactive buttons for each status with duration
         ImGui::Separator();
         ImGui::Text("Set Button Status:");
         
@@ -344,26 +374,49 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         // First row
         if (ImGui::Button("Short Press", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->set_button_status(micras::proxy::Button::Status::SHORT_PRESS);
+            buttonActivationTime = std::chrono::steady_clock::now();
+            buttonTimerActive = true;
         }
         ImGui::SameLine();
         if (ImGui::Button("Long Press", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->set_button_status(micras::proxy::Button::Status::LONG_PRESS);
+            buttonActivationTime = std::chrono::steady_clock::now();
+            buttonTimerActive = true;
         }
         
         // Second row
         if (ImGui::Button("Extra Long Press", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->set_button_status(micras::proxy::Button::Status::EXTRA_LONG_PRESS);
+            buttonActivationTime = std::chrono::steady_clock::now();
+            buttonTimerActive = true;
         }
-        ImGui::SameLine();
-        if (ImGui::Button("No Press", ImVec2(buttonWidth, buttonHeight))) {
-            proxyBridge->set_button_status(micras::proxy::Button::Status::NO_PRESS);
+              
+        // Time remaining if a button is active
+        if (buttonTimerActive && status != micras::proxy::Button::Status::NO_PRESS) {
+            ImGui::Separator();
+            auto currentTime = std::chrono::steady_clock::now();
+            float elapsedTime = std::chrono::duration<float>(currentTime - buttonActivationTime).count();
+            
+            int durationIndex = 0;
+            switch (status) {
+                case micras::proxy::Button::Status::SHORT_PRESS: durationIndex = 0; break;
+                case micras::proxy::Button::Status::LONG_PRESS: durationIndex = 1; break;
+                case micras::proxy::Button::Status::EXTRA_LONG_PRESS: durationIndex = 2; break;
+                default: break;
+            }
+            
+            float remainingTime = buttonDurations[durationIndex] - elapsedTime;
+            if (remainingTime < 0) remainingTime = 0;
+            
+            ImGui::Text("Time remaining: %.1f seconds", remainingTime);
+            
+            // Progress bar
+            float progress = 1.0f - (remainingTime / buttonDurations[durationIndex]);
+            ImGui::ProgressBar(progress, ImVec2(-1, 0), "");
         }
         
         // Debug information
         ImGui::Separator();
-        ImGui::Text("Debug Information:");
-        ImGui::Text("Current Status: %s", statusText.c_str());
-        ImGui::Text("Button Pressed: %s", proxyBridge->is_button_pressed() ? "Yes" : "No");
     }
     
     // Wall Sensors Section
