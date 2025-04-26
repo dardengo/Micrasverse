@@ -5,6 +5,7 @@
 #include "micras/proxy/proxy_bridge.hpp"
 #include "target.hpp"
 #include "box2d/box2d.h"
+#include "io/keyboard.hpp"
 
 int main() {
     // Create simulation engine
@@ -21,15 +22,24 @@ int main() {
     auto proxyBridge = std::make_shared<micras::ProxyBridge>(micrasController, micrasBody);
 
     // Initialize render engine
-    micrasverse::render::RenderEngine renderEngine(simulationEngine);
-    renderEngine.screen->getGUI().setProxyBridge(proxyBridge);
+    auto renderEngine = std::make_shared<micrasverse::render::RenderEngine>(simulationEngine);
+    renderEngine->setProxyBridge(proxyBridge);
+    renderEngine->screen->setProxyBridge(proxyBridge);
+    renderEngine->screen->setRenderEngine(renderEngine.get());
 
     // Main loop
-    while (not renderEngine.screen->shouldClose()) {
-        micrasController.update();
-        simulationEngine->updateSimulation();
-        renderEngine.update();
-        renderEngine.renderFrame();
+    while (not renderEngine->screen->shouldClose()) {
+        
+        if (micrasverse::io::Keyboard::keyWentDown(GLFW_KEY_R)) {
+            simulationEngine->togglePause();
+        }
+
+        if (!simulationEngine->isPaused) {
+            micrasController.update();
+            simulationEngine->updateSimulation();
+        }
+        renderEngine->update();
+        renderEngine->renderFrame();
     }
 
     return 0;

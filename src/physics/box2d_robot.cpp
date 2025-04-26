@@ -129,8 +129,8 @@ void Box2DRobot::createBody(b2WorldId worldId, const types::Vec2& position) {
     // Set the body position and type
     bodyDef.position = {position.x, position.y};
     bodyDef.type = b2_dynamicBody;
-    bodyDef.linearDamping = 0.5f;
-    bodyDef.angularDamping = 0.5f;
+    bodyDef.linearDamping = 0.75f;
+    bodyDef.angularDamping = 0.75f;
     
     // Create the body
     bodyId = b2CreateBody(worldId, &bodyDef);
@@ -140,9 +140,6 @@ void Box2DRobot::createBody(b2WorldId worldId, const types::Vec2& position) {
     
     // Create shape definition
     b2ShapeDef shapeDef = b2DefaultShapeDef();
-    shapeDef.density = 1.0f;
-    shapeDef.friction = 0.3f;
-    shapeDef.restitution = 0.1f;
     
     // Create shape and attach to body
     b2CreatePolygonShape(bodyId, &shapeDef, &boxShape);

@@ -91,7 +91,6 @@ proxy::Stopwatch::Config stopwatch_config = {
 
 // Storage configuration
 proxy::Storage::Config maze_storage_config{
-    .micrasBody = nullptr,
     .storage_path = std::filesystem::path{"storage/maze"}
 };
 
@@ -107,12 +106,11 @@ proxy::TorqueSensors::Config torque_sensors_config = {
 // Wall Sensors configuration
 proxy::WallSensors::Config wall_sensors_config = {
     .micrasBody = nullptr,
-    .uncertainty = 0.0f,
-    .wall_threshold = {995.0f, 985.0f, 985.0f, 995.0f},
-    .free_threshold = {995.0f, 985.0f, 985.0f, 995.0f},
-    .K = 1023.0f,
-    .max_adc_reading = 1023.0f,
-    .max_distance = 3.0f
+    .uncertainty = 0.6f,
+    .base_readings = {0.5861f, 0.7594f, 0.7594f, 0.5861f},
+    .K = 1.0f,
+    .max_adc_reading = 1.0f,
+    .max_distance = 0.18f*2.0f
 };
 
 // Locomotion configuration
@@ -132,7 +130,6 @@ void initializeProxyConfigs(micrasverse::physics::Box2DMicrasBody* body) {
     motor_config.micrasBody = body;
     rotary_sensor_left_config.micrasBody = body;
     rotary_sensor_right_config.micrasBody = body;
-    maze_storage_config.micrasBody = body;
     torque_sensors_config.micrasBody = body;
     wall_sensors_config.micrasBody = body;
     locomotion_config.micrasBody = body;

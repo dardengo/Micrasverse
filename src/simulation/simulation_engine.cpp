@@ -45,13 +45,7 @@ void SimulationEngine::togglePause(){
 }
 
 void SimulationEngine::updateSimulation(float step){
-    if (micrasverse::io::Keyboard::keyWentDown(GLFW_KEY_R)) {
-        this->togglePause();
-    }
-
-    if (!this->isPaused) {
-        this->physicsEngine->update(step);
-    }
+    this->physicsEngine->update(step);
 }
 
 void SimulationEngine::stepThroughSimulation(float step){

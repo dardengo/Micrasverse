@@ -12,9 +12,11 @@
 #include "micras/proxy/argb.hpp"
 #include "micras/proxy/dip_switch.hpp"
 #include "micras/proxy/stopwatch.hpp"
+#include "micras/core/types.hpp"
 #include "micrasverse_core/types.hpp"
 #include "physics/box2d_micrasbody.hpp"
 #include "../../../external/MicrasFirmware/micras_nav/include/micras/nav/state.hpp"
+#include "../../../external/MicrasFirmware/micras_nav/include/micras/nav/actions/base.hpp"
 
 namespace micras {
 
@@ -75,12 +77,10 @@ public:
     bool is_wall_detected(uint8_t index) const;
     float get_wall_sensor_reading(uint8_t sensor_index) const;
     float get_wall_sensor_adc_reading(uint8_t sensor_index) const;
+    float get_wall_sensor_error(uint8_t sensor_index) const;
     void calibrate_front_wall();
     void calibrate_left_wall();
     void calibrate_right_wall();
-    void calibrate_front_free_space();
-    void calibrate_left_free_space();
-    void calibrate_right_free_space();
     void turn_on_wall_sensors();
     void turn_off_wall_sensors();
 
@@ -115,19 +115,59 @@ public:
 
     // MicrasController access
     micras::core::Objective get_objective() const;
-    micras::nav::Mapping::Action get_current_action() const;
+    std::shared_ptr<micras::nav::Action> get_current_action() const;
     std::string get_objective_string() const;
     std::string get_action_type_string() const;
-    micras::core::FollowWallType get_follow_wall_type() const;
+    
+
+    // Speed controller access
+    micras::nav::SpeedController& get_speed_controller() const;
+    
+    float get_linear_pid_setpoint() const {
+        return micras.speed_controller.linear_pid.setpoint;
+    }
+    float get_angular_pid_setpoint() const {
+        return micras.speed_controller.angular_pid.setpoint;
+    }
+    
+    micras::core::PidController& get_linear_pid() const {
+        return micras.speed_controller.linear_pid;
+    }
+    micras::core::PidController& get_angular_pid() const {
+        return micras.speed_controller.angular_pid;
+    }
+
+    float get_linear_pid_last_response() const {
+        return micras.speed_controller.linear_pid.last_response;
+    }
+    float get_angular_pid_last_response() const {
+        return micras.speed_controller.angular_pid.last_response;
+    }  
+
+    float get_left_feed_forward_response() const {
+        return micras.speed_controller.left_feed_forward_response;
+    }
+    float get_right_feed_forward_response() const {
+        return micras.speed_controller.right_feed_forward_response;
+    }
+
+    // Additional methods for wall following
     std::string get_follow_wall_type_string() const;
     
     // Position and goal access
     micras::nav::Point get_current_goal() const;
     micras::nav::Pose get_current_pose() const;
 
+    // Maze access
+    bool has_wall(const micras::nav::GridPose& pose) const {
+        return micras.maze.has_wall(pose);
+    }
+
 private:
     Micras& micras;
     micrasverse::physics::Box2DMicrasBody& micrasBody;
+    
+    // Default to NONE when no actual follow wall type is available
 };
 
 } // namespace micras::proxy

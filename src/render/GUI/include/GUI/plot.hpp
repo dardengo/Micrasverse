@@ -2,6 +2,7 @@
 #define PLOT_HPP
 
 #include "physics/box2d_micrasbody.hpp"
+#include "micras/proxy/proxy_bridge.hpp"
 
 #include "imgui.h"
 
@@ -33,7 +34,7 @@ public:
 
     void init();
 
-    void draw(micrasverse::physics::Box2DMicrasBody& micrasBody);
+    void draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::ProxyBridge& proxyBridge, bool simulationIsPaused = false);
 
     void destroy();
     

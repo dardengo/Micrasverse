@@ -10,7 +10,7 @@ ProxyBridge::ProxyBridge(Micras& micras, micrasverse::physics::Box2DMicrasBody& 
 
 // Button access
 proxy::Button::Status ProxyBridge::get_button_status() const {
-    return micras.button_status;
+    return micras.button.get_status();
 }
 
 bool ProxyBridge::is_button_pressed() const {
@@ -19,6 +19,14 @@ bool ProxyBridge::is_button_pressed() const {
 
 void ProxyBridge::set_button_status(proxy::Button::Status status) {
     micras.button.set_status(status);
+}
+
+void ProxyBridge::set_button_pull_type(proxy::Button::PullType pull_type) {
+    micras.button.set_pull_type(pull_type);
+}
+
+proxy::Button::PullType ProxyBridge::get_button_pull_type() const {
+    return micras.button.get_pull_type();
 }
 
 // Buzzer access
@@ -101,6 +109,11 @@ void ProxyBridge::calibrate_imu() {
 }
 
 // Rotary sensors access
+void ProxyBridge::update_rotary_sensors() {
+    // In the simulation, rotary sensors are updated automatically
+    // No update method to call in RotarySensor class
+}
+
 float ProxyBridge::get_left_rotary_sensor_position() const {
     return micras.rotary_sensor_left->get_position();
 }
@@ -119,7 +132,7 @@ float ProxyBridge::get_wall_sensor_distance(uint8_t index) const {
 }
 
 bool ProxyBridge::is_wall_detected(uint8_t index) const {
-    return micras.wall_sensors->get_observation(index) == micras::core::Observation::WALL;
+    return micras.wall_sensors->get_wall(index);
 }
 
 float ProxyBridge::get_wall_sensor_reading(uint8_t sensor_index) const {
@@ -128,6 +141,10 @@ float ProxyBridge::get_wall_sensor_reading(uint8_t sensor_index) const {
 
 float ProxyBridge::get_wall_sensor_adc_reading(uint8_t sensor_index) const {
     return micras.wall_sensors->get_adc_reading(sensor_index);
+}
+
+float ProxyBridge::get_wall_sensor_error(uint8_t sensor_index) const {
+    return micras.wall_sensors->get_sensor_error(sensor_index);
 }
 
 void ProxyBridge::calibrate_front_wall() {
@@ -140,18 +157,6 @@ void ProxyBridge::calibrate_left_wall() {
 
 void ProxyBridge::calibrate_right_wall() {
     micras.wall_sensors->calibrate_right_wall();
-}
-
-void ProxyBridge::calibrate_front_free_space() {
-    micras.wall_sensors->calibrate_front_free_space();
-}
-
-void ProxyBridge::calibrate_left_free_space() {
-    micras.wall_sensors->calibrate_left_free_space();
-}
-
-void ProxyBridge::calibrate_right_free_space() {
-    micras.wall_sensors->calibrate_right_free_space();
 }
 
 void ProxyBridge::turn_on_wall_sensors() {
@@ -247,7 +252,7 @@ micras::core::Objective ProxyBridge::get_objective() const {
     return micras::core::Objective::EXPLORE;
 }
 
-micras::nav::Mapping::Action ProxyBridge::get_current_action() const {
+std::shared_ptr<micras::nav::Action> ProxyBridge::get_current_action() const {
     return micras.current_action;
 }
 
@@ -265,58 +270,38 @@ std::string ProxyBridge::get_objective_string() const {
 }
 
 std::string ProxyBridge::get_action_type_string() const {
-    switch (get_current_action().type) {
-        case micras::nav::Mapping::Action::Type::LOOK_AT:
-            return "LOOK_AT";
-        case micras::nav::Mapping::Action::Type::GO_TO:
-            return "GO_TO";
-        case micras::nav::Mapping::Action::Type::ALIGN_BACK:
-            return "ALIGN_BACK";
-        case micras::nav::Mapping::Action::Type::FINISHED:
-            return "FINISHED";
-        case micras::nav::Mapping::Action::Type::ERROR:
-            return "ERROR";
-        default:
-            return "UNKNOWN";
+    auto action = get_current_action();
+    if (!action) {
+        return "NONE";
+    }
+    
+    // We need to use RTTI to check what kind of action it is
+    // This is a simplified version - you might need to add more cases
+    // based on the actual action classes in MicrasFirmware
+    const auto& typeName = typeid(*action).name();
+    if (std::string(typeName).find("MoveAction") != std::string::npos) {
+        return "MOVE";
+    } else if (std::string(typeName).find("TurnAction") != std::string::npos) {
+        return "TURN";
+    } else {
+        return "UNKNOWN";
     }
 }
 
 micras::nav::Point ProxyBridge::get_current_goal() const {
-    // Return the point from the current action instead of a placeholder
-    return micras.current_action.point;
+    // Since we don't have access to the Action's internal point anymore,
+    // return the current position or zero as a fallback
+    auto pose = get_current_pose();
+    return {pose.position.x, pose.position.y};
 }
 
 micras::nav::Pose ProxyBridge::get_current_pose() const {
     micras::nav::State state = micras.odometry.get_state();
-
     return state.pose;
 }
 
-micras::core::FollowWallType ProxyBridge::get_follow_wall_type() const {
-    // Get the current pose
-    micras::nav::Pose pose = get_current_pose();
-    
-    // Use the mapping to get the follow wall type
-    return micras.mapping.get_follow_wall_type(pose);
-}
-
-std::string ProxyBridge::get_follow_wall_type_string() const {
-    switch (get_follow_wall_type()) {
-        case micras::core::FollowWallType::NONE:
-            return "NONE";
-        case micras::core::FollowWallType::FRONT:
-            return "FRONT";
-        case micras::core::FollowWallType::LEFT:
-            return "LEFT";
-        case micras::core::FollowWallType::RIGHT:
-            return "RIGHT";
-        case micras::core::FollowWallType::PARALLEL:
-            return "PARALLEL";
-        case micras::core::FollowWallType::BACK:
-            return "BACK";
-        default:
-            return "UNKNOWN";
-    }
+micras::nav::SpeedController& ProxyBridge::get_speed_controller() const {
+    return micras.speed_controller;
 }
 
 } // namespace micras::proxy 

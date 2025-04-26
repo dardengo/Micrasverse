@@ -3,15 +3,16 @@
 
 // Note: We only need the adapter declaration, not its implementation
 #include "micras/proxy/box2d_sensor_adapter.hpp"
-// We don't need to include box2d_micrasbody.hpp here anymore
+#include "micras/proxy/wall_sensors.hpp"
+// The path is relative to the include directories in CMakeLists.txt
+#include "micras/core/types.hpp"
 
 namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
-TWallSensors<num_of_sensors>::TWallSensors(const Config& config) :
+TWallSensors<num_of_sensors>::TWallSensors(const typename TWallSensors<num_of_sensors>::Config& config) :
     uncertainty{config.uncertainty},
-    wall_threshold{config.wall_threshold},
-    free_space_threshold{config.free_threshold},
+    base_readings{config.base_readings},
     K{config.K},
     max_adc_reading{config.max_adc_reading},
     max_distance{config.max_distance} {
@@ -19,22 +20,21 @@ TWallSensors<num_of_sensors>::TWallSensors(const Config& config) :
     for (uint8_t i = 0; i < num_of_sensors; i++) {
         sensors.push_back(std::make_unique<Box2DSensorAdapter>(config.micrasBody, i));
     }
-    
-    // Initialize calibration arrays
-    wall_calibration_measure = {};
-    free_space_calibration_measure = {};
 }
 
 template <uint8_t num_of_sensors>
 TWallSensors<num_of_sensors>::~TWallSensors() {
+    // No resources to clean up since we're using unique_ptr
 }
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::turn_on() {
+    // No physical hardware to turn on in the simulation
 }
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::turn_off() {
+    // No physical hardware to turn off in the simulation
 }
 
 template <uint8_t num_of_sensors>
@@ -43,18 +43,17 @@ void TWallSensors<num_of_sensors>::update() {
 }
 
 template <uint8_t num_of_sensors>
-micras::core::Observation TWallSensors<num_of_sensors>::get_observation(uint8_t sensor_index) const {
-    const float reading = this->get_reading(sensor_index);
+bool TWallSensors<num_of_sensors>::get_wall(uint8_t sensor_index, bool disturbed) const {   
+    return this->get_reading(sensor_index) > this->base_readings.at(sensor_index)*uncertainty;
+}
 
-    if (reading > this->wall_threshold.at(sensor_index)) {
-        return micras::core::Observation::WALL;
+template <uint8_t num_of_sensors>
+micras::core::Observation TWallSensors<num_of_sensors>::get_observation() const {
+    if (this->get_wall(0) && this->get_wall(3)) {
+        return {this->get_wall(1, true), true, this->get_wall(2, true)};
     }
 
-    if (reading < this->free_space_threshold.at(sensor_index)) {
-        return micras::core::Observation::FREE_SPACE;
-    }
-
-    return micras::core::Observation::UNKNOWN;
+    return {this->get_wall(1), false, this->get_wall(2)};
 }
 
 template <uint8_t num_of_sensors>
@@ -70,45 +69,28 @@ float TWallSensors<num_of_sensors>::get_adc_reading(uint8_t sensor_index) const 
         return 0;
     }
     
-    return static_cast<int>(K * (1.0f - (distance / max_distance)));
+    return (K * (1.0f - (distance / max_distance)));
+}
+
+template <uint8_t num_of_sensors>
+float TWallSensors<num_of_sensors>::get_sensor_error(uint8_t sensor_index) const {
+    // In MicrasFirmware, this returns the difference between current reading and base (calibrated) reading
+    return this->get_reading(sensor_index) - base_readings.at(sensor_index);
 }
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::calibrate_front_wall() {
-    this->wall_calibration_measure.at(2) = this->get_reading(2);
+    this->base_readings.at(2) = this->get_reading(2);
 }
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::calibrate_left_wall() {
-    this->wall_calibration_measure.at(0) = this->get_reading(0);
+    this->base_readings.at(0) = this->get_reading(0);
 }
 
 template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::calibrate_right_wall() {
-    this->wall_calibration_measure.at(1) = this->get_reading(1);
-}
-
-template <uint8_t num_of_sensors>
-void TWallSensors<num_of_sensors>::calibrate_front_free_space() {
-    this->free_space_calibration_measure.at(2) = this->get_reading(2);
-}
-
-template <uint8_t num_of_sensors>
-void TWallSensors<num_of_sensors>::calibrate_left_free_space() {
-    this->free_space_calibration_measure.at(0) = this->get_reading(0);
-}
-
-template <uint8_t num_of_sensors>
-void TWallSensors<num_of_sensors>::calibrate_right_free_space() {
-    this->free_space_calibration_measure.at(1) = this->get_reading(1);
-}
-
-template <uint8_t num_of_sensors>
-void TWallSensors<num_of_sensors>::update_thresholds() {
-    for (uint8_t i = 0; i < num_of_sensors; i++) {
-        this->wall_threshold.at(i) = this->wall_calibration_measure.at(i) * (1.0F - this->uncertainty);
-        this->free_space_threshold.at(i) = this->free_space_calibration_measure.at(i) * (1.0F + this->uncertainty);
-    }
+    this->base_readings.at(1) = this->get_reading(1);
 }
 
 }  // namespace micras::proxy

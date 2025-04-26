@@ -15,6 +15,9 @@ bool Button::is_pressed() const {
     return get_logical_state();
 }
 
+void Button::update() {
+}
+
 Button::Status Button::get_status() const {
     return current_status;
 }

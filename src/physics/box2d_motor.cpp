@@ -86,7 +86,7 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
     torque = kt * current;
     
     // Convert torque to force (F = T / r)
-    appliedForce = torque / MICRAS_WHEEL_RADIUS;
+    appliedForce = MICRAS_GEAR_RATIO * torque / MICRAS_WHEEL_RADIUS;
     
     // Calculate the maximum allowed force based on static friction
     // Static friction increases when fan is on

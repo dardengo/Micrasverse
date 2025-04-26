@@ -31,8 +31,6 @@ RectangleBody::RectangleBody(const b2WorldId worldId, const b2Vec2 position, con
     
     // Set density, friction and restitution
     shapeDef.density = (type == b2_staticBody) ? 0.0f : (mass / (size.x * size.y));
-    shapeDef.friction = friction;
-    shapeDef.restitution = restitution;
     
     // Create polygon shape to the body
     this->shapeId = b2CreatePolygonShape(bodyId, &shapeDef, &boxShape);

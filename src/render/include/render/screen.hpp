@@ -4,7 +4,6 @@
 #include "simulation/simulation_engine.hpp"
 
 #include "render/camera.hpp"
-#include "GUI/gui.hpp"
 #include "physics/box2d_rectanglebody.hpp"
 
 #define GLFW_INCLUDE_NONE   // GLFW include guard
@@ -13,6 +12,13 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+#include <memory>
+
+namespace micrasverse::render {
+    class GUI;  // Forward declaration
+    class RenderEngine;
+}
+
 namespace micrasverse::render {
 
 class Screen {
@@ -20,7 +26,7 @@ private:
     GLFWwindow* window;
     GLFWmonitor* monitor;
     const GLFWvidmode* mode;
-    GUI gui;
+    std::unique_ptr<GUI> gui;
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
     
     // FPS counting
@@ -48,6 +54,9 @@ public:
     Screen(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine);
     
     ~Screen();
+
+    void setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge);
+    void setRenderEngine(RenderEngine* renderEngine);
     
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
     
@@ -73,7 +82,7 @@ public:
 
     GLFWwindow* getWindow();
 
-    GUI& getGUI() { return gui; }
+    std::unique_ptr<GUI>& getGUI() { return gui; }
 
 };
 

@@ -34,6 +34,8 @@ public:
 
     void calibrate();
 
+    bool was_initialized() const;
+
 private:
     micrasverse::physics::Box2DMicrasBody* micrasBody;
     b2BodyId bodyId;
@@ -45,7 +47,7 @@ private:
     std::array<float, 3> angular_velocity{};
     std::array<float, 3> linear_acceleration{};
     bool calibrated{false};
-
+    bool initialized{true};
     static constexpr float radps_to_mdps{180000.0F / B2_PI};
     static constexpr float mps2_to_mg{1.0F / 0.00980665F};
 };

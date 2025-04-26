@@ -11,16 +11,20 @@
 #include "models/led.hpp"
 #include "render/shader.hpp"
 #include "render/boundingbox.hpp"
+#include "micras/proxy/proxy_bridge.hpp"
 
 #include <vector>
 #include <memory>
 #include <array>
+
 
 namespace micrasverse::render {
 
 class RenderEngine {
     public:
     RenderEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine);
+
+    void setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge);
 
     void update();
 
@@ -31,6 +35,8 @@ class RenderEngine {
     std::unique_ptr<Screen> screen;
     
     private:
+    std::shared_ptr<micras::ProxyBridge> proxyBridge;
+
     // Frustum culling check for optimization
     bool isObjectInView(const BoundingBox& bbox);
     
@@ -44,6 +50,8 @@ class RenderEngine {
     std::vector<std::unique_ptr<ARGBRender>> argbsSceneObjs;
     std::vector<std::unique_ptr<LidarRender>> lidarsSceneObjs;
     std::unique_ptr<Shader> lightShader;
+
+    friend class GUI;
 };
 
 } // namespace micrasverse::render

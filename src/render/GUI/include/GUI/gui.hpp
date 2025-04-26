@@ -5,7 +5,7 @@
 #include "GUI/plot.hpp"
 #include "physics/box2d_micrasbody.hpp"
 #include "micras/proxy/proxy_bridge.hpp"
-
+#include "render/render_engine.hpp"
 #define GLFW_INCLUDE_NONE   // GLFW include guard
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -23,6 +23,7 @@ public:
     ~GUI() = default;
 
     void setSimulationEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine);
+    void setRenderEngine(RenderEngine* renderEngine);
     void setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge);
     void init(GLFWwindow* window);
     void update();
@@ -36,6 +37,7 @@ private:
     bool showStyleEditor;
     GLFWwindow* currentWindow;
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
+    RenderEngine* renderEngine;
     std::shared_ptr<micras::ProxyBridge> proxyBridge;
     Plot plot;
     

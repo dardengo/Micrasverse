@@ -21,6 +21,10 @@ void GUI::setSimulationEngine(const std::shared_ptr<micrasverse::simulation::Sim
     this->simulationEngine = simulationEngine;
 }
 
+void GUI::setRenderEngine(RenderEngine* renderEngine) {
+    this->renderEngine = renderEngine;
+}
+
 void GUI::setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge) {
     this->proxyBridge = proxyBridge;
 }
@@ -132,79 +136,12 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             
             // Display current action with color coding
             std::string actionText = "Current Action: " + proxyBridge->get_action_type_string();
-            ImVec4 actionColor;
+            ImVec4 actionColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Default gray
             
-            switch (proxyBridge->get_current_action().type) {
-                case micras::nav::Mapping::Action::Type::LOOK_AT:
-                    actionColor = ImVec4(0.0f, 1.0f, 1.0f, 1.0f); // Cyan
-                    break;
-                case micras::nav::Mapping::Action::Type::GO_TO:
-                    actionColor = ImVec4(1.0f, 0.0f, 1.0f, 1.0f); // Magenta
-                    break;
-                case micras::nav::Mapping::Action::Type::ALIGN_BACK:
-                    actionColor = ImVec4(1.0f, 1.0f, 0.0f, 1.0f); // Yellow
-                    break;
-                case micras::nav::Mapping::Action::Type::FINISHED:
-                    actionColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
-                    break;
-                case micras::nav::Mapping::Action::Type::ERROR:
-                    actionColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Red
-                    break;
-                default:
-                    actionColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Gray
-                    break;
-            }
-            
+            // Use simpler approach since we don't have direct access to the Action type
             ImGui::PushStyleColor(ImGuiCol_Text, actionColor);
             ImGui::Text("%s", actionText.c_str());
             ImGui::PopStyleColor();
-            
-            // Display action direction if available
-            if (proxyBridge->get_current_action().type == micras::nav::Mapping::Action::Type::LOOK_AT || 
-                proxyBridge->get_current_action().type == micras::nav::Mapping::Action::Type::GO_TO) {
-                std::string directionText = "Direction: ";
-                switch (proxyBridge->get_current_action().direction) {
-                    case 0: directionText += "EAST"; break;
-                    case 1: directionText += "SOUTH"; break;
-                    case 2: directionText += "WEST"; break;
-                    case 3: directionText += "NORTH"; break;
-                    default: directionText += "UNKNOWN"; break;
-                }
-                ImGui::Text("%s", directionText.c_str());
-            }
-            
-            // Display follow wall type
-            if (proxyBridge->get_current_action().type == micras::nav::Mapping::Action::Type::GO_TO) {
-                std::string followWallTypeText = "Follow Wall Type: " + proxyBridge->get_follow_wall_type_string();
-                ImVec4 followWallColor;
-                
-                // Set color based on follow wall type
-                switch (proxyBridge->get_follow_wall_type()) {
-                    case micras::core::FollowWallType::NONE:
-                        followWallColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Gray
-                        break;
-                    case micras::core::FollowWallType::FRONT:
-                        followWallColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); // White
-                        break;
-                    case micras::core::FollowWallType::LEFT:
-                        followWallColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
-                        break;
-                    case micras::core::FollowWallType::RIGHT:
-                        followWallColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f); // Red
-                        break;
-                    case micras::core::FollowWallType::PARALLEL:
-                        followWallColor = ImVec4(1.0f, 1.0f, 0.0f, 1.0f); // Yellow
-                        break;
-                    case micras::core::FollowWallType::BACK:
-                        followWallColor = ImVec4(0.0f, 1.0f, 1.0f, 1.0f); // Cyan
-                        break;
-                    default:
-                        followWallColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Gray
-                        break;
-                }
-                
-                ImGui::TextColored(followWallColor, "%s", followWallTypeText.c_str());
-            }
             
         }
     }
@@ -360,48 +297,13 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
                 buttonTimerActive = false;
             }
         }
-        
-        switch (status) {
-            case micras::proxy::Button::Status::NO_PRESS:
-                statusText = "No button pressed";
-                statusColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
-                break;
-            case micras::proxy::Button::Status::SHORT_PRESS:
-                statusText = "SHORT PRESS";
-                statusColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
-                break;
-            case micras::proxy::Button::Status::LONG_PRESS:
-                statusText = "LONG PRESS";
-                statusColor = ImVec4(0.0f, 0.0f, 1.0f, 1.0f);
-                break;
-            case micras::proxy::Button::Status::EXTRA_LONG_PRESS:
-                statusText = "EXTRA LONG PRESS";
-                statusColor = ImVec4(1.0f, 0.0f, 0.0f, 1.0f);
-                break;
-            default:
-                statusText = "Unknown";
-                statusColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
-                break;
-        }
-        
-        // Display button status with a more prominent style
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
-        ImGui::PushStyleColor(ImGuiCol_Button, statusColor);
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(statusColor.x * 1.2f, statusColor.y * 1.2f, statusColor.z * 1.2f, statusColor.w));
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(statusColor.x * 0.8f, statusColor.y * 0.8f, statusColor.z * 0.8f, statusColor.w));
-        
-        // Create a button that shows the status (non-interactive)
-        ImGui::Button(statusText.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 40));
-        
-        ImGui::PopStyleColor(3);
-        ImGui::PopStyleVar();
 
         // Add interactive buttons for each status with duration
         ImGui::Separator();
         ImGui::Text("Set Button Status:");
         
         // Create a grid of buttons
-        float buttonWidth = (ImGui::GetContentRegionAvail().x - 20) / 2; // 2 buttons per row with spacing
+        float buttonWidth = (ImGui::GetContentRegionAvail().x - 20) / 3; // 3 buttons per row with spacing
         float buttonHeight = 30;
         
         // First row
@@ -416,8 +318,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             buttonActivationTime = std::chrono::steady_clock::now();
             buttonTimerActive = true;
         }
-        
-        // Second row
+        ImGui::SameLine();
         if (ImGui::Button("Extra Long Press", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->set_button_status(micras::proxy::Button::Status::EXTRA_LONG_PRESS);
             buttonActivationTime = std::chrono::steady_clock::now();
@@ -467,6 +368,10 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // Simulation controls
     if (this->simulationEngine) {
         ImGui::SeparatorText("Maze Controls");
+
+        if (this->renderEngine && this->renderEngine->mazeRender) {
+            ImGui::Checkbox("Show Firmware Maze", &this->renderEngine->mazeRender->showFirmwareWalls);
+        }
     
         const auto& mazePaths = simulationEngine->getMazePaths();
         static int selectedMazeIdx = 0;
@@ -507,16 +412,16 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     
     // Option to show style editor (defaults to off)
     ImGui::Checkbox("Show Style Editor", &showStyleEditor);
+    ImGui::Checkbox("Show Performance Plots", &this->plot.showPlots);
+
+    ImGui::End();
 
     // Only draw plots if not in fullscreen mode or if user explicitly enabled them
-    if (!isLargeScreen || (isLargeScreen && this->plot.showPlots)) {
-        this->plot.draw(micrasBody);
-    } else {
-        // Just show checkbox to enable plots when in fullscreen
-        ImGui::Checkbox("Show Performance Plots", &this->plot.showPlots);
+    if (this->plot.showPlots) {
+        ImGui::Begin("Performance Plots");
+        this->plot.draw(micrasBody, *proxyBridge, this->simulationEngine->isPaused);
+        ImGui::End();
     }
-    
-    ImGui::End();
 }
 
 void GUI::render() {

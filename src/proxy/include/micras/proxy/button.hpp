@@ -27,6 +27,8 @@ public:
     };
 
     explicit Button(const Config& config);
+    
+    void update();
 
     bool is_pressed() const;
     Status get_status() const;

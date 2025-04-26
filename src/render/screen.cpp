@@ -1,6 +1,7 @@
 #include "render/screen.hpp"
 #include "io/mouse.hpp"
 #include "io/keyboard.hpp"
+#include "GUI/gui.hpp"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -17,10 +18,20 @@ unsigned int Screen::SCR_HEIGHT = 768;
 
 Screen::Screen(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine) 
     : window(nullptr), camera(), simulationEngine(simulationEngine), 
-      lastFrameTime(0.0f), frameCount(0), isFullscreen(false), lastWidth(SCR_WIDTH), lastHeight(SCR_HEIGHT) {}
+      lastFrameTime(0.0f), frameCount(0), isFullscreen(false), lastWidth(SCR_WIDTH), lastHeight(SCR_HEIGHT) {
+    this->gui = std::make_unique<GUI>();
+}
 
 Screen::~Screen() {
     this->destroy();
+}
+
+void Screen::setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge) {
+    gui->setProxyBridge(proxyBridge);
+}
+
+void Screen::setRenderEngine(RenderEngine* renderEngine) {
+    gui->setRenderEngine(renderEngine);
 }
 
 void Screen::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -91,8 +102,8 @@ void Screen::setParameters() {
     glfwSetScrollCallback(window, io::Mouse::scroll_callback);
 
     // Create and initialize GUI after user callbacks are set so to not overwrite ImGui's callbacks 
-    this->gui.setSimulationEngine(this->simulationEngine);
-    this->gui.init(this->window);
+    this->gui->setSimulationEngine(this->simulationEngine);
+    this->gui->init(this->window);
 }
 
 void Screen::processInput() {
@@ -209,7 +220,7 @@ void Screen::update(const micrasverse::physics::Box2DMicrasBody& micrasBody) {
     }
 
     // Update GUI
-    this->gui.update();
+    this->gui->update();
 
     // Update camera
     this->camera.update(micrasBody);
@@ -229,8 +240,8 @@ void Screen::update(const micrasverse::physics::Box2DMicrasBody& micrasBody) {
 
 void Screen::renderGUI(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // Now render GUI
-    this->gui.draw(micrasBody);
-    this->gui.render();
+    this->gui->draw(micrasBody);
+    this->gui->render();
 }
 
 void Screen::newFrame() {
@@ -251,7 +262,7 @@ GLFWwindow* Screen::getWindow() {
 }
 
 void Screen::destroy() {
-    this->gui.destroy();
+    this->gui->destroy();
     glfwTerminate();
 }
 

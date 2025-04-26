@@ -181,6 +181,11 @@ namespace micrasverse::render {
             }
         }
 
+        // Update firmware walls if proxy bridge exists
+        if (proxyBridge) {
+            mazeRender->updateFirmwareWalls(proxyBridge);
+        }
+
         // Reload maze if needed
         if(this->simulationEngine->wasReset) {
             this->reloadMaze(this->simulationEngine->getCurrentMazePath());
@@ -193,6 +198,15 @@ namespace micrasverse::render {
                     0.0f     // Zero reading ensures they're invisible
                 );
             }
+        }
+    }
+
+    void RenderEngine::setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge) {
+    this->proxyBridge = proxyBridge;
+    
+    // Initial update of firmware walls
+    if (mazeRender) {
+            mazeRender->updateFirmwareWalls(proxyBridge);
         }
     }
     

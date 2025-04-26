@@ -22,8 +22,7 @@ public:
     struct Config {
         micrasverse::physics::Box2DMicrasBody* micrasBody;
         float uncertainty;
-        std::array<float, num_of_sensors> wall_threshold;
-        std::array<float, num_of_sensors> free_threshold;
+        std::array<float, num_of_sensors> base_readings;
         float K;
         float max_adc_reading;
         float max_distance;
@@ -39,18 +38,24 @@ public:
 
     void update();
 
-    micras::core::Observation get_observation(uint8_t sensor_index) const;
-
+    // Methods matching MicrasFirmware interface
+    bool get_wall(uint8_t sensor_index, bool disturbed = false) const;
+    
+    micras::core::Observation get_observation() const;
+    
     float get_reading(uint8_t sensor_index) const;
-
+    
     float get_adc_reading(uint8_t sensor_index) const;
-
+    
+    float get_sensor_error(uint8_t sensor_index) const;
+    
     void calibrate_front_wall();
-
+    
     void calibrate_left_wall();
-
+    
     void calibrate_right_wall();
 
+    // Additional methods for Micrasverse (for backward compatibility)
     void calibrate_front_free_space();
 
     void calibrate_left_free_space();
@@ -62,10 +67,7 @@ public:
 private:
     std::vector<std::unique_ptr<IDistanceSensor>> sensors;
     float uncertainty;
-    std::array<float, num_of_sensors> wall_calibration_measure{};
-    std::array<float, num_of_sensors> free_space_calibration_measure{};
-    std::array<float, num_of_sensors> wall_threshold;
-    std::array<float, num_of_sensors> free_space_threshold;
+    std::array<float, num_of_sensors> base_readings{};
     float K;
     float max_adc_reading;
     float max_distance;
