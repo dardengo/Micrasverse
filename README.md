@@ -10,7 +10,7 @@ A micromouse simulator built for [Micras](https://github.com/Team-Micras/), the 
 
 </div align="center">
 
-![Animated example of simulation with Micras going forward, then back, and then turning around its center. The GIF shows charts plotting motors' electrical current, motor's angular velocity, Micras' angular velocity, Micras' linear velocity, Micras' angular position, and distance sensors' readings](./docs/assets/Micrasverse%202025-01-14%2023-17-55.gif)
+![Animated example of simulation with Micras going forward, then back, and then turning around its center. The GIF shows charts plotting motors' electrical current, motor's angular velocity, Micras' angular velocity, Micras' linear velocity, Micras' angular position, and distance sensors' readings](./docs/assets/Micrasverse%202025-04-27.gif)
 
 
 ## ✨ Features

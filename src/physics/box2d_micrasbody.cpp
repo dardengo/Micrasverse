@@ -59,13 +59,13 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
     // Initialize motors with proper wheel positions
     leftMotor = std::make_unique<Box2DMotor>(
         bodyId,
-        micrasverse::types::Vec2{-MICRAS_HALFWIDTH, 0.0f + MICRAS_CENTER_OF_MASS_OFFSET},
+        micrasverse::types::Vec2{-MICRAS_HALFWIDTH, 0.0f},
         true  // isLeftWheel
     );
     
     rightMotor = std::make_unique<Box2DMotor>(
         bodyId,
-        micrasverse::types::Vec2{MICRAS_HALFWIDTH, 0.0f + MICRAS_CENTER_OF_MASS_OFFSET},
+        micrasverse::types::Vec2{MICRAS_HALFWIDTH, 0.0f},
         false  // isLeftWheel
     );
 

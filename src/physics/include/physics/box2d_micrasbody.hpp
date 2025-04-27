@@ -36,7 +36,6 @@ private:
     std::vector<std::unique_ptr<Argb>> argbs;
 
     // Acceleration and velocity tracking
-    b2Vec2 linearVelocity = {0.0f, 0.0f};
     float linearSpeed = 0.0f;
     b2Vec2 acceleration = {0.0f, 0.0f};
     float linearAcceleration = 0.0f;
@@ -48,6 +47,7 @@ private:
     b2Vec2 getLateralVelocity() const;
 
 public:
+    b2Vec2 linearVelocity = {0.0f, 0.0f};
     float getLinearSpeed() const { return linearSpeed; }
 
     // Constructor

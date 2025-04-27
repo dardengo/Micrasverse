@@ -230,7 +230,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
     if (!sdata1.data.empty() && ImPlot::BeginPlot("Linear PID setpoint", ImVec2(-1,150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1,-1,1);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,-0.25,0.25);
         ImPlot::PlotLine("Linear PID setpoint", &rdata13.data[0].x, &rdata13.data[0].y, rdata13.data.size(), 0, rdata13.offset, 2*sizeof(float));
         ImPlot::PlotLine("Linear speed", &rdata6.data[0].x, &rdata6.data[0].y, rdata6.data.size(), 0, rdata6.offset, 2*sizeof(float));
         ImPlot::PlotLine("Body linear speed", &rdata20.data[0].x, &rdata20.data[0].y, rdata20.data.size(), 0, rdata20.offset, 2*sizeof(float));
@@ -240,7 +240,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
     if (!sdata1.data.empty() && ImPlot::BeginPlot("Angular PID setpoint", ImVec2(-1,150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1,-10,10);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,-5,5);
         ImPlot::PlotLine("Angular PID setpoint", &rdata14.data[0].x, &rdata14.data[0].y, rdata14.data.size(), 0, rdata14.offset, 2*sizeof(float));
         ImPlot::PlotLine("Angular speed", &rdata19.data[0].x, &rdata19.data[0].y, rdata19.data.size(), 0, rdata19.offset, 2*sizeof(float));
         ImPlot::EndPlot();
@@ -249,7 +249,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
     if (!sdata1.data.empty() && ImPlot::BeginPlot("Linear PID response", ImVec2(-1,150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1,-50,50);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,-1.5,1.5);
         ImPlot::PlotLine("Linear PID response", &rdata15.data[0].x, &rdata15.data[0].y, rdata15.data.size(), 0, rdata15.offset, 2*sizeof(float));
         ImPlot::PlotLine("Linear integrative response", &rdata21.data[0].x, &rdata21.data[0].y, rdata21.data.size(), 0, rdata21.offset, 2*sizeof(float));
         ImPlot::EndPlot();
@@ -258,16 +258,16 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
     if (!sdata1.data.empty() && ImPlot::BeginPlot("Angular PID response", ImVec2(-1,150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1,-20,20);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,-5,5);
         ImPlot::PlotLine("Angular PID response", &rdata16.data[0].x, &rdata16.data[0].y, rdata16.data.size(), 0, rdata16.offset, 2*sizeof(float));
-        ImPlot::PlotLine("Angular integrative response", &rdata21.data[0].x, &rdata21.data[0].y, rdata21.data.size(), 0, rdata21.offset, 2*sizeof(float));
+        ImPlot::PlotLine("Angular integrative response", &rdata22.data[0].x, &rdata22.data[0].y, rdata22.data.size(), 0, rdata22.offset, 2*sizeof(float));
         ImPlot::EndPlot();
     }
 
     if (!sdata1.data.empty() && ImPlot::BeginPlot("Feed forward response", ImVec2(-1,150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1,-50,50);
+        ImPlot::SetupAxisLimits(ImAxis_Y1,-20,20);
         ImPlot::PlotLine("Left feed forward response", &rdata17.data[0].x, &rdata17.data[0].y, rdata17.data.size(), 0, rdata17.offset, 2*sizeof(float));
         ImPlot::PlotLine("Right feed forward response", &rdata18.data[0].x, &rdata18.data[0].y, rdata18.data.size(), 0, rdata18.offset, 2*sizeof(float));
         ImPlot::EndPlot();

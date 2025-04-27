@@ -70,7 +70,7 @@ constexpr float    cell_size{0.18};
 constexpr uint32_t loop_time_us{1042};
 constexpr float    wall_thickness{0.0126F};
 constexpr float    start_offset{0.04F + wall_thickness / 2.0F};
-constexpr float    exploration_speed{0.2F};
+constexpr float    exploration_speed{0.25F};
 constexpr float    max_linear_acceleration{1.0F};
 constexpr float    max_angular_acceleration{200.0F};
 
@@ -112,14 +112,17 @@ const nav::ActionQueuer::Config action_queuer_config{
 const nav::FollowWall::Config follow_wall_config{
     .pid =
         {
-            .kp = 0.5F,
+            .kp = 40.0F,
             .ki = 0.0F,
             .kd = 0.0F,
             .setpoint = 0.0F,
-            .saturation = 1.0F,
+            .saturation = 20.0F,
             .max_integral = -1.0F,
         },
-    .max_linear_speed = 0.1F,
+    .max_linear_speed = 0.5F,
+    .post_threshold = -16.5F,
+    .cell_size = cell_size,
+    .post_margin = 0.2F * cell_size,
 };
 
 const nav::Maze::Config maze_config{
@@ -133,7 +136,7 @@ const nav::Maze::Config maze_config{
 };
 
 const nav::Odometry::Config odometry_config{
-    .linear_cutoff_frequency = 25.0F,
+    .linear_cutoff_frequency = 27.0F,
     .wheel_radius = 0.0112F,
     .initial_pose = {{0.0F, 0.0F}, 0.0F},
 };
@@ -143,7 +146,7 @@ const nav::SpeedController::Config speed_controller_config{
     .max_angular_acceleration = max_angular_acceleration,
     .linear_pid =
         {
-            .kp = 12.0F,
+            .kp = 8.0F,
             .ki = 4.0F,
             .kd = 0.0F,
             .setpoint = 0.0F,
@@ -152,7 +155,7 @@ const nav::SpeedController::Config speed_controller_config{
         },
     .angular_pid =
         {
-            .kp = 2.0F,
+            .kp = 1.0F,
             .ki = 6.0F,
             .kd = 0.0F,
             .setpoint = 0.0F,
@@ -161,17 +164,17 @@ const nav::SpeedController::Config speed_controller_config{
         },
     .left_feed_forward =
         {
-            .linear_speed = 14.0F,
-            .linear_acceleration = 2.878F,  // 2.796F,
-            .angular_speed = -1.1F,
-            .angular_acceleration = -0.0258F,  //-0.0258F,
+            .linear_speed = 16.0F,
+            .linear_acceleration = 4.0F,  // 2.796F,
+            .angular_speed = -0.45F,
+            .angular_acceleration = -0.15F,  //-0.0258F,
         },
     .right_feed_forward =
         {
-            .linear_speed = 14.0F,
-            .linear_acceleration = 2.878F,  // 2.796F,
-            .angular_speed = +1.1F,
-            .angular_acceleration = +0.0258F,  //-0.0258F,
+            .linear_speed = 16.0F,
+            .linear_acceleration = 4.0F,  // 2.796F,
+            .angular_speed = +0.45F,
+            .angular_acceleration = +0.15F,  //-0.0258F,
             
             // .linear_speed = 13.319F,
             // .linear_acceleration = 0.0F,  // 2.878F,
