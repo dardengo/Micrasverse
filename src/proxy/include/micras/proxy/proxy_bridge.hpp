@@ -151,6 +151,49 @@ public:
         return micras.speed_controller.right_feed_forward_response;
     }
 
+    float get_linear_speed() const {
+        return micras.odometry.get_state().velocity.linear;
+    }
+    float get_angular_speed() const {
+        return micras.odometry.get_state().velocity.angular;
+    }
+
+    float get_linear_pid_error_acc() const {
+        return micras.speed_controller.linear_pid.error_acc;
+    }
+    float get_angular_pid_error_acc() const {
+        return micras.speed_controller.angular_pid.error_acc;
+    }
+
+    float get_linear_pid_kp() const {
+        return micras.speed_controller.linear_pid.kp;
+    }
+    float get_angular_pid_kp() const {
+        return micras.speed_controller.angular_pid.kp;
+    }
+    float get_linear_pid_ki() const {
+        return micras.speed_controller.linear_pid.ki;
+    }
+    float get_angular_pid_ki() const {
+        return micras.speed_controller.angular_pid.ki;
+    }
+    float get_linear_pid_kd() const {
+        return micras.speed_controller.linear_pid.kd;
+    }
+    float get_angular_pid_kd() const {
+        return micras.speed_controller.angular_pid.kd;
+    }
+
+    float get_linear_integrative_response() const {
+        return get_linear_pid_error_acc() * get_linear_pid_ki() * get_linear_pid_kp();
+    }
+    float get_angular_integrative_response() const {
+        return get_angular_pid_error_acc() * get_angular_pid_ki() * get_angular_pid_kp();
+    }
+    
+    
+    
+
     // Additional methods for wall following
     std::string get_follow_wall_type_string() const;
     

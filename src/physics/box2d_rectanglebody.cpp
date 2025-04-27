@@ -15,6 +15,8 @@ RectangleBody::RectangleBody(const b2WorldId worldId, const b2Vec2 position, con
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.position = position;
     bodyDef.type = type;
+    bodyDef.linearDamping = 0.0f;
+    bodyDef.angularDamping = 0.0f;
     
     // Create the body
     this->bodyId = b2CreateBody(worldId, &bodyDef);

@@ -37,6 +37,7 @@ private:
 
     // Acceleration and velocity tracking
     b2Vec2 linearVelocity = {0.0f, 0.0f};
+    float linearSpeed = 0.0f;
     b2Vec2 acceleration = {0.0f, 0.0f};
     float linearAcceleration = 0.0f;
     
@@ -47,6 +48,8 @@ private:
     b2Vec2 getLateralVelocity() const;
 
 public:
+    float getLinearSpeed() const { return linearSpeed; }
+
     // Constructor
     Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size, b2BodyType type, float density, float friction, float restitution);
     

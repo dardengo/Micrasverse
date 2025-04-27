@@ -113,6 +113,8 @@ void Box2DMicrasBody::update(float deltaTime) {
     // Store current velocity for next calculation
     this->linearVelocity = currentVelocity;
 
+    this->linearSpeed = b2Length(currentVelocity);
+
     // Update physical components
     updateFriction();
     

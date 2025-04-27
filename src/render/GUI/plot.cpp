@@ -58,7 +58,9 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
     }
     
     static ScrollingBuffer sdata1, sdata2, sdata3, sdata4, sdata5, sdata6, sdata7, sdata8, sdata9, sdata10;
-    static ScrollingBuffer rdata1, rdata2, rdata3, rdata4, rdata5, rdata6, rdata7, rdata8, rdata9, rdata10, rdata11, rdata12, rdata13, rdata14, rdata15, rdata16, rdata17, rdata18, rdata19, rdata20;
+    static ScrollingBuffer rdata1, rdata2, rdata3, rdata4, rdata5, rdata6, rdata7, rdata8, rdata9, rdata10,
+                           rdata11, rdata12, rdata13, rdata14, rdata15, rdata16, rdata17, rdata18, rdata19,
+                           rdata20, rdata21, rdata22, rdata23, rdata24, rdata25, rdata26, rdata27, rdata28, rdata29, rdata30;
     
     // Ensure buffers are not empty at first launch
     static bool initialized = false;
@@ -82,6 +84,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
             rdata3.addPoint(t, 0.0f);
             rdata4.addPoint(t, 0.0f);
             rdata5.addPoint(t, 0.0f);
+            rdata6.addPoint(t, 0.0f);
             rdata7.addPoint(t, 0.0f);
             rdata8.addPoint(t, 0.0f);
             rdata9.addPoint(t, 0.0f);
@@ -96,6 +99,13 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
             rdata18.addPoint(t, 0.0f);
             rdata19.addPoint(t, 0.0f);
             rdata20.addPoint(t, 0.0f);
+            rdata21.addPoint(t, 0.0f);
+            rdata22.addPoint(t, 0.0f);
+            rdata23.addPoint(t, 0.0f);
+            rdata24.addPoint(t, 0.0f);
+            rdata25.addPoint(t, 0.0f);
+            rdata26.addPoint(t, 0.0f);
+            rdata27.addPoint(t, 0.0f);
         }
         initialized = true;
     }
@@ -116,6 +126,9 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         rdata3.addPoint(t, micrasBody.getRightMotor().getBodyAngularVelocity());
         rdata4.addPoint(t, micrasBody.getLeftMotor().getBodyLinearVelocity());
         rdata5.addPoint(t, micrasBody.getLinearAcceleration());
+        rdata6.addPoint(t, proxyBridge.get_linear_speed());
+        rdata19.addPoint(t, proxyBridge.get_angular_speed());
+        rdata20.addPoint(t, micrasBody.getLinearSpeed());
 
         rdata7.addPoint(t, proxyBridge.get_wall_sensor_reading(0));
         rdata8.addPoint(t, proxyBridge.get_wall_sensor_reading(1));
@@ -138,6 +151,9 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
 
         rdata17.addPoint(t, proxyBridge.get_left_feed_forward_response());
         rdata18.addPoint(t, proxyBridge.get_right_feed_forward_response());
+
+        rdata21.addPoint(t, proxyBridge.get_linear_integrative_response());
+        rdata22.addPoint(t, proxyBridge.get_angular_integrative_response());
     }
 
     // Control for plot history
@@ -216,6 +232,8 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1,-1,1);
         ImPlot::PlotLine("Linear PID setpoint", &rdata13.data[0].x, &rdata13.data[0].y, rdata13.data.size(), 0, rdata13.offset, 2*sizeof(float));
+        ImPlot::PlotLine("Linear speed", &rdata6.data[0].x, &rdata6.data[0].y, rdata6.data.size(), 0, rdata6.offset, 2*sizeof(float));
+        ImPlot::PlotLine("Body linear speed", &rdata20.data[0].x, &rdata20.data[0].y, rdata20.data.size(), 0, rdata20.offset, 2*sizeof(float));
         ImPlot::EndPlot();
     }
 
@@ -224,6 +242,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1,-10,10);
         ImPlot::PlotLine("Angular PID setpoint", &rdata14.data[0].x, &rdata14.data[0].y, rdata14.data.size(), 0, rdata14.offset, 2*sizeof(float));
+        ImPlot::PlotLine("Angular speed", &rdata19.data[0].x, &rdata19.data[0].y, rdata19.data.size(), 0, rdata19.offset, 2*sizeof(float));
         ImPlot::EndPlot();
     }
 
@@ -232,6 +251,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1,-50,50);
         ImPlot::PlotLine("Linear PID response", &rdata15.data[0].x, &rdata15.data[0].y, rdata15.data.size(), 0, rdata15.offset, 2*sizeof(float));
+        ImPlot::PlotLine("Linear integrative response", &rdata21.data[0].x, &rdata21.data[0].y, rdata21.data.size(), 0, rdata21.offset, 2*sizeof(float));
         ImPlot::EndPlot();
     }
 
@@ -240,6 +260,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         ImPlot::SetupAxisLimits(ImAxis_X1,t - history, t, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1,-20,20);
         ImPlot::PlotLine("Angular PID response", &rdata16.data[0].x, &rdata16.data[0].y, rdata16.data.size(), 0, rdata16.offset, 2*sizeof(float));
+        ImPlot::PlotLine("Angular integrative response", &rdata21.data[0].x, &rdata21.data[0].y, rdata21.data.size(), 0, rdata21.offset, 2*sizeof(float));
         ImPlot::EndPlot();
     }
 

@@ -30,83 +30,48 @@ void Box2DMotor::setCommand(float command) {
 }
 
 void Box2DMotor::update(float deltaTime, bool fanState) {
-    // Update fan state
-    isFanOn = fanState;
+    // Calculate input voltage based on the command
+    float inputVoltage = this->maxVoltage * (this->inputCommand / 100.0f);
+
+    // Compute back EMF
+    float angularVelocitySign = (this->leftWheel ? -1.0f : +1.0f);
+    float linearVelocityDirection = b2Dot(b2Body_GetLinearVelocity(this->bodyId), b2Body_GetWorldVector(this->bodyId, this->localDirection));
+
+    this->bodyLinearVelocity = std::copysignf(b2Length(b2Body_GetLinearVelocity(this->bodyId)), linearVelocityDirection);
+
+    this->bodyAngularVelocity = b2Body_GetAngularVelocity(this->bodyId);
+
+    float wheelAngularVelocity = (bodyLinearVelocity+angularVelocitySign*MICRAS_TRACK_WIDTH/2.0f*b2Body_GetAngularVelocity(this->bodyId))/(MICRAS_WHEEL_RADIUS);
     
-    // Check if body is valid before proceeding
-    if (!b2Body_IsValid(bodyId)) {
-        // Reset values if body is invalid
-        current = 0.0f;
-        angularVelocity = 0.0f;
-        appliedForce = 0.0f;
-        torque = 0.0f;
-        bodyLinearVelocity = 0.0f;
-        bodyAngularVelocity = 0.0f;
-        return;
-    }
+    this->angularVelocity = wheelAngularVelocity * MICRAS_GEAR_RATIO;
+
+    float backEMF = this->ke * this->angularVelocity;
+
+    // Compute current through the motor
+    this->current = (inputVoltage - std::copysignf(backEMF, angularVelocity)) / this->resistance;
+
+    // Compute torque
+    this->torque = this->kt * this->current;
+
+    // Compute force applied at each wheel
+    float force = (this->torque * MICRAS_GEAR_RATIO) / (MICRAS_WHEEL_RADIUS);
+
+    float fanEffect = isFanOn ? 4.0f : 1.0f;
+
+    // Compute maximum frictional force
+    float maxFrictionForce = fanEffect * MICRAS_FRICTION * MICRAS_MASS * 9.81f;
+
+    // Apply the smaller of motor force and friction force
+    float appliedForce = ((std::abs(force) < maxFrictionForce) ? force : std::copysign(maxFrictionForce, force));
+
+    this->appliedForce = appliedForce;
+
+    // Apply force at the position of the motor in the direction of angle
+    const b2Vec2 worldDirection = b2Body_GetWorldVector(this->bodyId, this->localDirection);
+
+    b2Vec2 forceVector = appliedForce * worldDirection;
     
-    // Get body transform to convert local to world coordinates
-    b2Transform transform = b2Body_GetTransform(bodyId);
-    
-    // Calculate voltage based on command (-100 to +100 mapped to -maxVoltage to +maxVoltage)
-    float voltage = (inputCommand / 100.0f) * maxVoltage;
-    
-    // Get current body velocity
-    b2Vec2 linearVelocity = b2Body_GetLinearVelocity(bodyId);
-    bodyAngularVelocity = b2Body_GetAngularVelocity(bodyId);
-    
-    // Calculate world direction of motor
-    b2Vec2 worldDirection = b2RotateVector(transform.q, localDirection);
-    
-    // Calculate the linear velocity at the wheel contact point
-    b2Vec2 worldPosition = b2TransformPoint(transform, localPosition);
-    b2Vec2 r = b2Sub(worldPosition, b2Body_GetWorldCenterOfMass(bodyId));
-    b2Vec2 tangentialVel = b2CrossSV(bodyAngularVelocity, r);
-    b2Vec2 pointVelocity = b2Add(linearVelocity, tangentialVel);
-    
-    // Project the velocity onto the wheel direction
-    bodyLinearVelocity = b2Dot(pointVelocity, worldDirection);
-    
-    // Calculate angular velocity of the wheel based on body's linear velocity
-    angularVelocity = MICRAS_GEAR_RATIO * bodyLinearVelocity / MICRAS_WHEEL_RADIUS;
-    
-    // Motor modeling:
-    // V = IR + Ke*ω
-    // I = (V - Ke*ω) / R
-    // T = Kt*I
-    // F = T / radius
-    
-    // Back EMF calculation - this reduces voltage based on body velocity
-    float backEMF = ke * angularVelocity;
-    
-    // Motor current calculation
-    current = (voltage - backEMF) / resistance;
-    
-    // Generate motor torque
-    torque = kt * current;
-    
-    // Convert torque to force (F = T / r)
-    appliedForce = MICRAS_GEAR_RATIO * torque / MICRAS_WHEEL_RADIUS;
-    
-    // Calculate the maximum allowed force based on static friction
-    // Static friction increases when fan is on
-    float staticFrictionCoefficient = frictionCoefficient;
-    if (isFanOn) {
-        // Increase static friction coefficient when fan is on
-        staticFrictionCoefficient *= 2.0f; // Increase by 100%
-    }
-    
-    // Calculate maximum force that can be applied based on static friction
-    float normalForce = bodyMass * 9.81f; // Normal force = mass * gravity
-    float maxStaticForce = staticFrictionCoefficient * normalForce;
-    
-    // Limit the applied force by static friction
-    if (std::abs(appliedForce) > maxStaticForce) {
-        appliedForce = (appliedForce > 0) ? maxStaticForce : -maxStaticForce;
-    }
-    
-    // Apply the force to the body
-    b2Body_ApplyForce(bodyId, b2MulSV(appliedForce, worldDirection), worldPosition, true);
+    b2Body_ApplyForce(this->bodyId, forceVector, b2Body_GetWorldPoint(this->bodyId, this->localPosition), true);
 }
 
 } // namespace micrasverse::physics 

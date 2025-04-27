@@ -70,7 +70,7 @@ constexpr float    cell_size{0.18};
 constexpr uint32_t loop_time_us{1042};
 constexpr float    wall_thickness{0.0126F};
 constexpr float    start_offset{0.04F + wall_thickness / 2.0F};
-constexpr float    exploration_speed{0.5F};
+constexpr float    exploration_speed{0.2F};
 constexpr float    max_linear_acceleration{1.0F};
 constexpr float    max_angular_acceleration{200.0F};
 
@@ -95,7 +95,7 @@ const nav::ActionQueuer::Config action_queuer_config{
             .max_linear_acceleration = max_linear_acceleration,
             .max_linear_deceleration = max_linear_acceleration,
             .curve_radius = cell_size / 2.0F,
-            .max_centrifugal_acceleration = 2.78F,
+            .max_centrifugal_acceleration = 0.4444F,
             .max_angular_acceleration = max_angular_acceleration,
         },
     .solving =
@@ -133,7 +133,7 @@ const nav::Maze::Config maze_config{
 };
 
 const nav::Odometry::Config odometry_config{
-    .linear_cutoff_frequency = 5.0F,
+    .linear_cutoff_frequency = 25.0F,
     .wheel_radius = 0.0112F,
     .initial_pose = {{0.0F, 0.0F}, 0.0F},
 };
@@ -143,8 +143,8 @@ const nav::SpeedController::Config speed_controller_config{
     .max_angular_acceleration = max_angular_acceleration,
     .linear_pid =
         {
-            .kp = 10.0F,
-            .ki = 1.0F,
+            .kp = 12.0F,
+            .ki = 4.0F,
             .kd = 0.0F,
             .setpoint = 0.0F,
             .saturation = 20.0F,
@@ -153,7 +153,7 @@ const nav::SpeedController::Config speed_controller_config{
     .angular_pid =
         {
             .kp = 2.0F,
-            .ki = 1.0F,
+            .ki = 6.0F,
             .kd = 0.0F,
             .setpoint = 0.0F,
             .saturation = 20.0F,
@@ -161,17 +161,17 @@ const nav::SpeedController::Config speed_controller_config{
         },
     .left_feed_forward =
         {
-            .linear_speed = 12.706F,
-            .linear_acceleration = 0.0F,  // 2.796F,
-            .angular_speed = -0.971F,
-            .angular_acceleration = 0.0F,  //-0.0258F,
+            .linear_speed = 14.0F,
+            .linear_acceleration = 2.878F,  // 2.796F,
+            .angular_speed = -1.1F,
+            .angular_acceleration = -0.0258F,  //-0.0258F,
         },
     .right_feed_forward =
         {
-            .linear_speed = 12.706F,
-            .linear_acceleration = 0.0F,  // 2.796F,
-            .angular_speed = +0.971F,
-            .angular_acceleration = 0.0F,  //-0.0258F,
+            .linear_speed = 14.0F,
+            .linear_acceleration = 2.878F,  // 2.796F,
+            .angular_speed = +1.1F,
+            .angular_acceleration = +0.0258F,  //-0.0258F,
             
             // .linear_speed = 13.319F,
             // .linear_acceleration = 0.0F,  // 2.878F,

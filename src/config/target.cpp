@@ -106,7 +106,7 @@ proxy::TorqueSensors::Config torque_sensors_config = {
 // Wall Sensors configuration
 proxy::WallSensors::Config wall_sensors_config = {
     .micrasBody = nullptr,
-    .uncertainty = 0.6f,
+    .uncertainty = 0.8f,
     .base_readings = {0.5861f, 0.7594f, 0.7594f, 0.5861f},
     .K = 1.0f,
     .max_adc_reading = 1.0f,
