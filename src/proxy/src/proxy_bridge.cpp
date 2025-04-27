@@ -248,8 +248,7 @@ uint32_t ProxyBridge::get_elapsed_time_us() const {
 
 // MicrasController access
 micras::core::Objective ProxyBridge::get_objective() const {
-    // Return a default objective if not available
-    return micras::core::Objective::EXPLORE;
+    return micras.objective;
 }
 
 std::shared_ptr<micras::nav::Action> ProxyBridge::get_current_action() const {
@@ -279,6 +278,7 @@ std::string ProxyBridge::get_action_type_string() const {
     // This is a simplified version - you might need to add more cases
     // based on the actual action classes in MicrasFirmware
     const auto& typeName = typeid(*action).name();
+    
     if (std::string(typeName).find("MoveAction") != std::string::npos) {
         return "MOVE";
     } else if (std::string(typeName).find("TurnAction") != std::string::npos) {

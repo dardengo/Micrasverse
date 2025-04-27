@@ -8,6 +8,7 @@
 #include "io/keyboard.hpp"
 
 int main() {
+
     // Create simulation engine
     auto simulationEngine = std::make_shared<micrasverse::simulation::SimulationEngine>();
     
@@ -27,6 +28,14 @@ int main() {
     renderEngine->screen->setProxyBridge(proxyBridge);
     renderEngine->screen->setRenderEngine(renderEngine.get());
 
+    // Simple counter for controlling render frequency
+    const int physicsStepsPerFrame = 20;
+    int stepCounter = 0;
+    
+    // Initial render
+    renderEngine->update();
+    renderEngine->renderFrame();
+
     // Main loop
     while (not renderEngine->screen->shouldClose()) {
         
@@ -37,9 +46,17 @@ int main() {
         if (!simulationEngine->isPaused) {
             micrasController.update();
             simulationEngine->updateSimulation();
+            stepCounter++;
+            
+            if (stepCounter >= physicsStepsPerFrame) {
+                renderEngine->update();
+                renderEngine->renderFrame();
+                stepCounter = 0;
+            }
+        } else {
+            renderEngine->update();
+            renderEngine->renderFrame();
         }
-        renderEngine->update();
-        renderEngine->renderFrame();
     }
 
     return 0;

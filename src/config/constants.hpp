@@ -44,8 +44,8 @@ namespace micrasverse {
     constexpr float MOTOR_KT = MOTOR_STALL_TORQUE / MOTOR_STALL_CURRENT;                    // newton-meters/ampere
 
     // Simulation parameters
-    constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/br2024-robochallenge-day3.txt";
-    constexpr float STEP = 1.0f / 60.0f;                                                    // seconds — simulation step time
+    constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/training/minimaze.txt";
+    constexpr float STEP = 1.0f / 1000.0f;                                                    // seconds — simulation step time
     constexpr b2Vec2 GRAVITY = {0.0f, 0.0f};                                               // m/s² — set to {0.0f} for top-down view
 
 }  // namespace micrasverse
@@ -127,12 +127,7 @@ const nav::FollowWall::Config follow_wall_config{
 
 const nav::Maze::Config maze_config{
     .start = {{0, 0}, nav::Side::UP},
-    .goal = {{
-        {maze_width / 2, maze_height / 2},
-        {(maze_width - 1) / 2, maze_height / 2},
-        {maze_width / 2, (maze_height - 1) / 2},
-        {(maze_width - 1) / 2, (maze_height - 1) / 2},
-    }},
+    .goal = {{{4, 4}}},
 };
 
 const nav::Odometry::Config odometry_config{
