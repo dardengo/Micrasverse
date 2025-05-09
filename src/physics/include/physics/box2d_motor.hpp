@@ -29,7 +29,7 @@ public:
     
     // IMotor interface implementation
     float getCurrent() const override { return current; }
-    float getAngularVelocity() const override { return angularVelocity; }
+    float getAngularVelocity() const override { return rotorAngularVelocity; }
     float getAppliedForce() const override { return appliedForce; }
     float getTorque() const override { return torque; }
     float getBodyLinearVelocity() const override { return bodyLinearVelocity; }
@@ -44,7 +44,7 @@ private:
     float maxVoltage;           // Maximum input voltage
     float inputCommand;         // Motor command (-100 to +100)
     float current;              // Current through the motor
-    float angularVelocity;      // Angular velocity of the rotor
+    float rotorAngularVelocity;      // Angular velocity of the rotor
     float frictionCoefficient;  // Coefficient of friction (mu)
     float bodyMass;             // Mass of the body
     float appliedForce;         // Force applied by the motor

@@ -17,9 +17,9 @@ public:
     };
 
     enum Axis : uint8_t {
-        X,
-        Y,
-        Z
+        X = 0,
+        Y = 1,
+        Z = 2
     };
 
     explicit Imu(const Config& config);

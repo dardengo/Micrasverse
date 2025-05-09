@@ -44,16 +44,10 @@ void TWallSensors<num_of_sensors>::update() {
 
 template <uint8_t num_of_sensors>
 bool TWallSensors<num_of_sensors>::get_wall(uint8_t sensor_index, bool disturbed) const {   
-    return this->get_reading(sensor_index) > this->base_readings.at(sensor_index)*uncertainty;
-}
-
-template <uint8_t num_of_sensors>
-micras::core::Observation TWallSensors<num_of_sensors>::get_observation() const {
-    if (this->get_wall(0) && this->get_wall(3)) {
-        return {this->get_wall(1, true), true, this->get_wall(2, true)};
-    }
-
-    return {this->get_wall(1), false, this->get_wall(2)};
+    float reading = this->get_reading(sensor_index);
+    float threshold = this->base_readings.at(sensor_index)*uncertainty;
+    
+    return reading > threshold;
 }
 
 template <uint8_t num_of_sensors>
@@ -68,8 +62,10 @@ float TWallSensors<num_of_sensors>::get_adc_reading(uint8_t sensor_index) const 
     if (distance >= max_distance) {
         return 0;
     }
-    
-    return (K * (1.0f - (distance / max_distance)));
+
+    float reading = (K * (1.0f - (distance / max_distance)));
+        
+    return reading;
 }
 
 template <uint8_t num_of_sensors>
@@ -92,6 +88,12 @@ template <uint8_t num_of_sensors>
 void TWallSensors<num_of_sensors>::calibrate_right_wall() {
     this->base_readings.at(1) = this->get_reading(1);
 }
+
+template <uint8_t num_of_sensors>
+void TWallSensors<num_of_sensors>::calibrate_sensor(uint8_t sensor_index) {
+    this->base_readings.at(sensor_index) = this->get_reading(sensor_index);
+}
+
 
 }  // namespace micras::proxy
 

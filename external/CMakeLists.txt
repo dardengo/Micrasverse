@@ -48,6 +48,23 @@ if(NOT TARGET implot)
   target_link_libraries(implot PUBLIC imgui)
 endif() 
 
+# ImPlot3D
+if(NOT TARGET implot3d)
+  set(IMPLOT3D_DIR ${CMAKE_CURRENT_SOURCE_DIR}/implot3d)
+  set(IMPLOT3D_SOURCES
+    ${IMPLOT3D_DIR}/implot3d.cpp
+    ${IMPLOT3D_DIR}/implot3d_items.cpp
+  )
+  set(IMPLOT3D_HEADERS
+    ${IMPLOT3D_DIR}/implot3d.h
+    ${IMPLOT3D_DIR}/implot3d_internal.h
+  )
+  
+  add_library(implot3d STATIC ${IMPLOT3D_SOURCES} ${IMPLOT3D_HEADERS})
+  target_include_directories(implot3d PUBLIC ${IMPLOT3D_DIR})
+  target_link_libraries(implot3d PUBLIC imgui implot)
+endif()
+
 # MicrasFirmware - only include necessary components
 if(NOT TARGET micras_nav)
   add_subdirectory(MicrasFirmware/micras_core)
@@ -56,6 +73,7 @@ if(NOT TARGET micras_nav)
   # Create an interface target for MicrasFirmware that excludes config directory
   add_library(micras STATIC
     ${CMAKE_CURRENT_SOURCE_DIR}/MicrasFirmware/src/micras.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/MicrasFirmware/src/interface.cpp
   )
   target_link_libraries(micras PUBLIC micras::core micras::nav)
   target_include_directories(micras PUBLIC 

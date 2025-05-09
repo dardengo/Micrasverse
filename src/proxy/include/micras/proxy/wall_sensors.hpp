@@ -41,7 +41,6 @@ public:
     // Methods matching MicrasFirmware interface
     bool get_wall(uint8_t sensor_index, bool disturbed = false) const;
     
-    micras::core::Observation get_observation() const;
     
     float get_reading(uint8_t sensor_index) const;
     
@@ -63,6 +62,11 @@ public:
     void calibrate_right_free_space();
 
     void update_thresholds();
+
+    /**
+     * @brief Calibrate a wall sensor base reading.
+     */
+    void calibrate_sensor(uint8_t sensor_index);
 
 private:
     std::vector<std::unique_ptr<IDistanceSensor>> sensors;

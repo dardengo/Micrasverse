@@ -17,3 +17,6 @@
 	path = external/MicrasFirmware
 	url = https://github.com/Team-Micras/MicrasFirmware.git
 	branch = feature/new-architecture
+[submodule "external/implot3d"]
+	path = external/implot3d
+	url = https://github.com/brenocq/implot3d.git

@@ -44,8 +44,9 @@ namespace micrasverse {
     constexpr float MOTOR_KT = MOTOR_STALL_TORQUE / MOTOR_STALL_CURRENT;                    // newton-meters/ampere
 
     // Simulation parameters
-    constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/training/minimaze.txt";
-    constexpr float STEP = 1.0f / 1000.0f;                                                    // seconds — simulation step time
+    //constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/training/minimaze.txt";
+    constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/alljapan-015-1994-frsh.txt";
+    constexpr float STEP = 1.0f / 60.0f;                                                    // seconds — simulation step time
     constexpr b2Vec2 GRAVITY = {0.0f, 0.0f};                                               // m/s² — set to {0.0f} for top-down view
 
 }  // namespace micrasverse
@@ -73,6 +74,14 @@ constexpr float    start_offset{0.04F + wall_thickness / 2.0F};
 constexpr float    exploration_speed{0.25F};
 constexpr float    max_linear_acceleration{1.0F};
 constexpr float    max_angular_acceleration{200.0F};
+constexpr float    crash_acceleration{1000000.0F};
+
+constexpr core::WallSensorsIndex wall_sensors_index{
+    .left_front = 0,
+    .left = 1,
+    .right = 2,
+    .right_front = 3,
+};
 
 /*****************************************
  * Template Instantiations
@@ -95,14 +104,14 @@ const nav::ActionQueuer::Config action_queuer_config{
             .max_linear_acceleration = max_linear_acceleration,
             .max_linear_deceleration = max_linear_acceleration,
             .curve_radius = cell_size / 2.0F,
-            .max_centrifugal_acceleration = 0.4444F,
+            .max_centrifugal_acceleration = 2.78F,
             .max_angular_acceleration = max_angular_acceleration,
         },
     .solving =
         {
             .max_linear_speed = exploration_speed,
             .max_linear_acceleration = max_linear_acceleration,
-            .max_linear_deceleration = 1.0F,
+            .max_linear_deceleration = max_linear_acceleration,
             .curve_radius = cell_size / 2.0F,
             .max_centrifugal_acceleration = 1.0F,
             .max_angular_acceleration = max_angular_acceleration,
@@ -119,15 +128,21 @@ const nav::FollowWall::Config follow_wall_config{
             .saturation = 20.0F,
             .max_integral = -1.0F,
         },
+    .wall_sensor_index = wall_sensors_index,
     .max_linear_speed = 0.5F,
-    .post_threshold = -16.5F,
+    .post_threshold = 16.5F,
     .cell_size = cell_size,
-    .post_margin = 0.2F * cell_size,
+    .post_clearance = 0.2F * cell_size,
 };
 
 const nav::Maze::Config maze_config{
     .start = {{0, 0}, nav::Side::UP},
-    .goal = {{{4, 4}}},
+    .goal = {{
+        {maze_width / 2, maze_height / 2},
+        {(maze_width - 1) / 2, maze_height / 2},
+        {maze_width / 2, (maze_height - 1) / 2},
+        {(maze_width - 1) / 2, (maze_height - 1) / 2},
+    }}
 };
 
 const nav::Odometry::Config odometry_config{
@@ -135,6 +150,44 @@ const nav::Odometry::Config odometry_config{
     .wheel_radius = 0.0112F,
     .initial_pose = {{0.0F, 0.0F}, 0.0F},
 };
+
+// const nav::SpeedController::Config speed_controller_config{
+//     .max_linear_acceleration = max_linear_acceleration,
+//     .max_angular_acceleration = max_angular_acceleration,
+//     .linear_pid =
+//         {
+//             .kp = 8.0F,
+//             .ki = 4.0F,
+//             .kd = 0.0F,
+//             .setpoint = 0.0F,
+//             .saturation = 20.0F,
+//             .max_integral = -1.0F,
+//         },
+//     .angular_pid =
+//         {
+//             .kp = 1.0F,
+//             .ki = 6.0F,
+//             .kd = 0.0F,
+//             .setpoint = 0.0F,
+//             .saturation = 20.0F,
+//             .max_integral = -1.0F,
+//         },
+//     .left_feed_forward =
+//         {
+//             .linear_speed = 16.0F,
+//             .linear_acceleration = 4.0F,  // 2.796F,
+//             .angular_speed = -0.45F,
+//             .angular_acceleration = -0.15F,  //-0.0258F,
+//         },
+//     .right_feed_forward =
+//         {
+//             .linear_speed = 16.0F,
+//             .linear_acceleration = 4.0F,  // 2.796F,
+//             .angular_speed = +0.45F,
+//             .angular_acceleration = +0.15F,  //-0.0258F,
+//         },
+// };
+
 
 const nav::SpeedController::Config speed_controller_config{
     .max_linear_acceleration = max_linear_acceleration,
@@ -162,14 +215,14 @@ const nav::SpeedController::Config speed_controller_config{
             .linear_speed = 16.0F,
             .linear_acceleration = 4.0F,  // 2.796F,
             .angular_speed = -0.45F,
-            .angular_acceleration = -0.15F,  //-0.0258F,
+            .angular_acceleration = -0.10F,  //-0.0258F,
         },
     .right_feed_forward =
         {
             .linear_speed = 16.0F,
             .linear_acceleration = 4.0F,  // 2.796F,
             .angular_speed = +0.45F,
-            .angular_acceleration = +0.15F,  //-0.0258F,
+            .angular_acceleration = +0.10F,  //-0.0258F,
             
             // .linear_speed = 13.319F,
             // .linear_acceleration = 0.0F,  // 2.878F,

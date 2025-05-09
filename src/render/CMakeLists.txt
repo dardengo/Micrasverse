@@ -23,6 +23,12 @@ target_include_directories(render_engine PUBLIC
     ${CMAKE_SOURCE_DIR}/src/core/include
     ${CMAKE_SOURCE_DIR}/src/render/include
     ${CMAKE_SOURCE_DIR}/external/box2d/include
+    ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/micras_nav/include
+    ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/micras_core/include
+    ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/include
+    ${CMAKE_SOURCE_DIR}/external/MicrasFirmware
+    ${CMAKE_SOURCE_DIR}/external
+    ${CMAKE_SOURCE_DIR}/external/MicrasFirmware/src
 )
 
 # Find required packages
@@ -32,6 +38,7 @@ target_link_libraries(render_engine PUBLIC
     glad
     imgui
     implot
+    implot3d
     glfw
     OpenGL::GL
     io_module

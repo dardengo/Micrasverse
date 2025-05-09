@@ -11,8 +11,8 @@ namespace micras::proxy {
 class Fan {
 public:
     enum RotationDirection : uint8_t {
-        FORWARD,
-        BACKWARDS
+        FORWARD = 0,
+        BACKWARDS = 1
     };
 
     struct Config {

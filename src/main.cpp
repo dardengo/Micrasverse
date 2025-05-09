@@ -29,7 +29,7 @@ int main() {
     renderEngine->screen->setRenderEngine(renderEngine.get());
 
     // Simple counter for controlling render frequency
-    const int physicsStepsPerFrame = 20;
+    const int physicsStepsPerFrame = 0;
     int stepCounter = 0;
     
     // Initial render

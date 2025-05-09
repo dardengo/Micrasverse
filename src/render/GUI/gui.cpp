@@ -143,11 +143,30 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             ImGui::Text("%s", actionText.c_str());
             ImGui::PopStyleColor();
             
+            // Set Objective buttons using Interface events
+            ImGui::Separator();
+            ImGui::Text("Set Objective via Interface Events:");
+            
+            if (ImGui::Button("Set EXPLORE")) {
+                proxyBridge->send_event(micras::Interface::Event::EXPLORE);
+            }
+            
+            ImGui::SameLine();
+            
+            if (ImGui::Button("Set SOLVE")) {
+                proxyBridge->send_event(micras::Interface::Event::SOLVE);
+            }
+            
+            ImGui::SameLine();
+            
+            if (ImGui::Button("CALIBRATE")) {
+                proxyBridge->send_event(micras::Interface::Event::CALIBRATE);
+            }
         }
     }
     
     // Movement Controls Section
-    if (ImGui::CollapsingHeader("Movement Controls", ImGuiTreeNodeFlags_DefaultOpen)) {
+    if (ImGui::CollapsingHeader("Movement Controls")) {
         static float moveSpeed = 5.0f;
         ImGui::SliderFloat("Movement Speed", &moveSpeed, 0.1f, 10.0f);
         
@@ -248,7 +267,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     }
     
     // DIP Switch Controls Section
-    if (ImGui::CollapsingHeader("DIP Switches", ImGuiTreeNodeFlags_DefaultOpen)) {
+    if (ImGui::CollapsingHeader("DIP Switches")) {
         ImGui::Columns(4, "dipswitches", false);
         
         for (size_t i = 0; i < 4; ++i) {
@@ -262,8 +281,64 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         ImGui::Columns(1);
     }
     
+    // Add LED/ARGB Control Section
+    if (ImGui::CollapsingHeader("LED Control")) {
+        ImGui::Text("Set LED Colors by Events:");
+        
+        // Create grid of buttons for different events and colors
+        float buttonWidth = (ImGui::GetContentRegionAvail().x - 20) / 2;
+        float buttonHeight = 30;
+        
+        // ARGB Control for events
+        if (ImGui::Button("Set EXPLORE Color (Green)", ImVec2(buttonWidth, buttonHeight))) {
+            micrasverse::types::Color color{0, 255, 0}; // Green
+            proxyBridge->set_argb_color(color);
+            proxyBridge->send_event(micras::Interface::Event::EXPLORE);
+        }
+        
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Set SOLVE Color (Blue)", ImVec2(buttonWidth, buttonHeight))) {
+            micrasverse::types::Color color{0, 0, 255}; // Blue
+            proxyBridge->set_argb_color(color);
+            proxyBridge->send_event(micras::Interface::Event::SOLVE);
+        }
+        
+        if (ImGui::Button("Set CALIBRATE Color (Yellow)", ImVec2(buttonWidth, buttonHeight))) {
+            micrasverse::types::Color color{255, 255, 0}; // Yellow
+            proxyBridge->set_argb_color(color);
+            proxyBridge->send_event(micras::Interface::Event::CALIBRATE);
+        }
+        
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Set ERROR Color (Red)", ImVec2(buttonWidth, buttonHeight))) {
+            micrasverse::types::Color color{255, 0, 0}; // Red
+            proxyBridge->set_argb_color(color);
+            proxyBridge->send_event(micras::Interface::Event::ERROR);
+        }
+        
+        if (ImGui::Button("Turn Off LEDs", ImVec2(buttonWidth, buttonHeight))) {
+            proxyBridge->turn_off_argb();
+        }
+        
+        // Manual control of individual LEDs
+        ImGui::Separator();
+        ImGui::Text("Manual Control:");
+        
+        static int led_index = 0;
+        static float color[3] = {255.0f, 255.0f, 255.0f}; // RGB
+        
+        ImGui::SliderInt("LED Index", &led_index, 0, 1);
+        ImGui::ColorEdit3("LED Color", color);
+        
+        if (ImGui::Button("Set Individual LED")) {
+            proxyBridge->set_led_color(led_index, color[0], color[1], color[2]);
+        }
+    }
+    
     // Button Controls Section
-    if (ImGui::CollapsingHeader("Button Controls", ImGuiTreeNodeFlags_DefaultOpen)) {
+    if (ImGui::CollapsingHeader("Button Controls")) {
         // Get the current button status
         auto status = proxyBridge->get_button_status();
         std::string statusText;
@@ -306,20 +381,20 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         float buttonWidth = (ImGui::GetContentRegionAvail().x - 20) / 3; // 3 buttons per row with spacing
         float buttonHeight = 30;
         
-        // First row
-        if (ImGui::Button("Short Press", ImVec2(buttonWidth, buttonHeight))) {
+        // Use Interface events instead of direct button status setting
+        if (ImGui::Button("Short Press (EXPLORE)", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->set_button_status(micras::proxy::Button::Status::SHORT_PRESS);
             buttonActivationTime = std::chrono::steady_clock::now();
             buttonTimerActive = true;
         }
         ImGui::SameLine();
-        if (ImGui::Button("Long Press", ImVec2(buttonWidth, buttonHeight))) {
+        if (ImGui::Button("Long Press (SOLVE)", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->set_button_status(micras::proxy::Button::Status::LONG_PRESS);
             buttonActivationTime = std::chrono::steady_clock::now();
             buttonTimerActive = true;
         }
         ImGui::SameLine();
-        if (ImGui::Button("Extra Long Press", ImVec2(buttonWidth, buttonHeight))) {
+        if (ImGui::Button("Extra Long Press (CALIBRATE)", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->set_button_status(micras::proxy::Button::Status::EXTRA_LONG_PRESS);
             buttonActivationTime = std::chrono::steady_clock::now();
             buttonTimerActive = true;
@@ -349,8 +424,71 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             ImGui::ProgressBar(progress, ImVec2(-1, 0), "");
         }
         
-        // Debug information
+        // Show Interface events status
         ImGui::Separator();
+        ImGui::Text("Interface Events:");
+        
+        bool exploreEvent = proxyBridge->peek_event(micras::Interface::Event::EXPLORE);
+        bool solveEvent = proxyBridge->peek_event(micras::Interface::Event::SOLVE);
+        bool calibrateEvent = proxyBridge->peek_event(micras::Interface::Event::CALIBRATE);
+        bool errorEvent = proxyBridge->peek_event(micras::Interface::Event::ERROR);
+        
+        ImGui::Text("EXPLORE: %s", exploreEvent ? "Active" : "Inactive");
+        ImGui::Text("SOLVE: %s", solveEvent ? "Active" : "Inactive");
+        ImGui::Text("CALIBRATE: %s", calibrateEvent ? "Active" : "Inactive");
+        ImGui::Text("ERROR: %s", errorEvent ? "Active" : "Inactive");
+        
+        // Allow acknowledging events
+        if (ImGui::Button("Acknowledge All Events")) {
+            proxyBridge->acknowledge_event(micras::Interface::Event::EXPLORE);
+            proxyBridge->acknowledge_event(micras::Interface::Event::SOLVE);
+            proxyBridge->acknowledge_event(micras::Interface::Event::CALIBRATE);
+            proxyBridge->acknowledge_event(micras::Interface::Event::ERROR);
+        }
+    }
+    
+    // Add Buzzer Control Section
+    if (ImGui::CollapsingHeader("Buzzer Control")) {
+        static float frequency = 440.0f; // Default to 440 Hz (A4 note)
+        static int duration = 500; // Default to 500 ms
+        
+        ImGui::SliderFloat("Frequency (Hz)", &frequency, 20.0f, 20000.0f, "%.1f", ImGuiSliderFlags_Logarithmic);
+        ImGui::SliderInt("Duration (ms)", &duration, 100, 5000);
+        
+        if (ImGui::Button("Play Sound")) {
+            proxyBridge->set_buzzer_frequency(frequency);
+            proxyBridge->set_buzzer_duration(duration);
+        }
+        
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Stop Sound")) {
+            proxyBridge->stop_buzzer();
+        }
+        
+        // Display current buzzer status
+        bool isPlaying = proxyBridge->is_buzzer_playing();
+        ImGui::Text("Buzzer is %s", isPlaying ? "playing" : "stopped");
+        
+        // Predefined tones/patterns
+        ImGui::Separator();
+        ImGui::Text("Predefined Patterns:");
+        
+        if (ImGui::Button("Error Tone")) {
+            // Play error tone and trigger error event
+            proxyBridge->set_buzzer_frequency(880.0f);  // Higher frequency for error
+            proxyBridge->set_buzzer_duration(300);
+            proxyBridge->send_event(micras::Interface::Event::ERROR);
+        }
+        
+        ImGui::SameLine();
+        
+        if (ImGui::Button("Success Tone")) {
+            // Play success tone and trigger explore event
+            proxyBridge->set_buzzer_frequency(1760.0f);
+            proxyBridge->set_buzzer_duration(200);
+            proxyBridge->send_event(micras::Interface::Event::EXPLORE);
+        }
     }
     
     // Wall Sensors Section
@@ -401,6 +539,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             if (ImGui::Button("Reset Simulation"))
             {
                 simulationEngine->resetSimulation();
+                proxyBridge->reset_micras();
             }
             
         } else {

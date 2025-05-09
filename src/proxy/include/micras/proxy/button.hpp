@@ -8,16 +8,16 @@ namespace micras::proxy {
 class Button {
 public:
     enum class Status {
-        NO_PRESS,
-        SHORT_PRESS,
-        LONG_PRESS,
-        EXTRA_LONG_PRESS
+        NO_PRESS = 0,
+        SHORT_PRESS = 1,
+        LONG_PRESS = 2,
+        EXTRA_LONG_PRESS = 3
     };
 
     enum class PullType {
-        PULL_UP,
-        PULL_DOWN,
-        NO_PULL
+        PULL_UP = 0,
+        PULL_DOWN = 1,
+        NO_PULL = 2
     };
 
     struct Config {

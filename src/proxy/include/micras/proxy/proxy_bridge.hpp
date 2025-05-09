@@ -1,7 +1,8 @@
 #ifndef MICRAS_PROXY_BRIDGE_HPP
 #define MICRAS_PROXY_BRIDGE_HPP
 
-#include "../../../external/MicrasFirmware/include/micras/micras.hpp"
+#include "micras/micras.hpp"
+#include "micras/interface.hpp"
 #include "micras/proxy/button.hpp"
 #include "micras/proxy/buzzer.hpp"
 #include "micras/proxy/fan.hpp"
@@ -15,8 +16,10 @@
 #include "micras/core/types.hpp"
 #include "micrasverse_core/types.hpp"
 #include "physics/box2d_micrasbody.hpp"
-#include "../../../external/MicrasFirmware/micras_nav/include/micras/nav/state.hpp"
-#include "../../../external/MicrasFirmware/micras_nav/include/micras/nav/actions/base.hpp"
+#include "micras/nav/state.hpp"
+#include "micras/nav/actions/base.hpp"
+#include <limits>
+#include <algorithm>
 
 namespace micras {
 
@@ -110,7 +113,7 @@ public:
 
     // Get the number of ARGB LEDs available
     size_t get_argb_count() const {
-        return micras.argb.argbRefs.size();
+        return micras.argb ? 2 : 0; // TArgb<2> has 2 LEDs
     }
 
     // MicrasController access
@@ -191,20 +194,52 @@ public:
         return get_angular_pid_error_acc() * get_angular_pid_ki() * get_angular_pid_kp();
     }
     
-    
-    
+    void reset_micras() {
+        micras.reset();
+    }
 
     // Additional methods for wall following
     std::string get_follow_wall_type_string() const;
     
     // Position and goal access
-    micras::nav::Point get_current_goal() const;
+    micras::core::Vector get_current_goal() const;
     micras::nav::Pose get_current_pose() const;
 
     // Maze access
     bool has_wall(const micras::nav::GridPose& pose) const {
         return micras.maze.has_wall(pose);
     }
+
+    // Maze cost access for 3D plotting
+    int get_maze_width() const {
+        return 16; // Default maze width (usually 16x16 for classic mazes)
+    }
+    
+    int get_maze_height() const {
+        return 16; // Default maze height (usually 16x16 for classic mazes)
+    }
+    
+    std::vector<int16_t> get_maze_cell_costs() const {
+        const int width = get_maze_width();
+        const int height = get_maze_height();
+        std::vector<int16_t> costs(width * height);
+        
+        // Fill with costs from the maze
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Access the cost from the maze data structure
+                const int16_t rawCost = micras.maze.cells[y][x].cost;
+                costs[y * width + x] = rawCost;
+            }
+        }
+        
+        return costs;
+    }
+
+    // Interface event access
+    void send_event(Interface::Event event);
+    bool acknowledge_event(Interface::Event event);
+    bool peek_event(Interface::Event event) const;
 
 private:
     Micras& micras;

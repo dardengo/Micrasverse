@@ -10,40 +10,40 @@ ProxyBridge::ProxyBridge(Micras& micras, micrasverse::physics::Box2DMicrasBody& 
 
 // Button access
 proxy::Button::Status ProxyBridge::get_button_status() const {
-    return micras.button.get_status();
+    return micras.button->get_status();
 }
 
 bool ProxyBridge::is_button_pressed() const {
-    return micras.button.is_pressed();
+    return micras.button->is_pressed();
 }
 
 void ProxyBridge::set_button_status(proxy::Button::Status status) {
-    micras.button.set_status(status);
+    micras.button->set_status(status);
 }
 
 void ProxyBridge::set_button_pull_type(proxy::Button::PullType pull_type) {
-    micras.button.set_pull_type(pull_type);
+    micras.button->set_pull_type(pull_type);
 }
 
 proxy::Button::PullType ProxyBridge::get_button_pull_type() const {
-    return micras.button.get_pull_type();
+    return micras.button->get_pull_type();
 }
 
 // Buzzer access
 void ProxyBridge::set_buzzer_frequency(float frequency) {
-    micras.buzzer.set_frequency(frequency);
+    micras.buzzer->set_frequency(frequency);
 }
 
 void ProxyBridge::set_buzzer_duration(uint32_t duration) {
-    micras.buzzer.set_duration(duration);
+    micras.buzzer->set_duration(duration);
 }
 
 void ProxyBridge::stop_buzzer() {
-    micras.buzzer.stop();
+    micras.buzzer->stop();
 }
 
 bool ProxyBridge::is_buzzer_playing() const {
-    return micras.buzzer.is_playing();
+    return micras.buzzer->is_playing();
 }
 
 // Fan access
@@ -191,46 +191,46 @@ void ProxyBridge::disable_motors() {
 // ARGB access
 void ProxyBridge::set_led_color(uint8_t index, uint8_t red, uint8_t green, uint8_t blue) {
     micrasverse::types::Color color{red, green, blue};
-    micras.argb.set_color(color, index);
+    micras.argb->set_color(color, index);
 }
 
 void ProxyBridge::set_led_brightness(uint8_t index, uint8_t brightness) {
     // The Micrasverse implementation doesn't have a direct set_brightness method
     // For now, we'll just use the set_color method with the current color
     // This is a workaround until a proper set_brightness method is implemented
-    micrasverse::types::Color currentColor = micras.argb.argbRefs[index].get().getColor();
+    micrasverse::types::Color currentColor = micras.argb->argbRefs[index].get().getColor();
     float brightnessFactor = brightness / 255.0f;
     micrasverse::types::Color newColor{
         static_cast<uint8_t>(currentColor.r * brightnessFactor),
         static_cast<uint8_t>(currentColor.g * brightnessFactor),
         static_cast<uint8_t>(currentColor.b * brightnessFactor)
     };
-    micras.argb.set_color(newColor, index);
+    micras.argb->set_color(newColor, index);
 }
 
 void ProxyBridge::set_argb_color(const micrasverse::types::Color& color, uint8_t index) {
-    micras.argb.set_color({color.r, color.g, color.b}, index);
+    micras.argb->set_color({color.r, color.g, color.b}, index);
 }
 
 void ProxyBridge::set_argb_color(const micrasverse::types::Color& color) {
-    micras.argb.set_color({color.r, color.g, color.b});
+    micras.argb->set_color({color.r, color.g, color.b});
 }
 
 void ProxyBridge::turn_off_argb(uint8_t index) {
-    micras.argb.turn_off();
+    micras.argb->turn_off();
 }
 
 void ProxyBridge::turn_off_argb() {
-    micras.argb.turn_off();
+    micras.argb->turn_off();
 }
 
 // Dip switch access
 uint8_t ProxyBridge::get_dip_switch_value() const {
-    return micras.dip_switch.get_switches_value();
+    return micras.dip_switch->get_switches_value();
 }
 
 bool ProxyBridge::get_dip_switch_state(uint8_t index) const {
-    return micras.dip_switch.get_switch_state(index);
+    return micras.dip_switch->get_switch_state(index);
 }
 
 // Stopwatch access
@@ -288,7 +288,7 @@ std::string ProxyBridge::get_action_type_string() const {
     }
 }
 
-micras::nav::Point ProxyBridge::get_current_goal() const {
+micras::core::Vector ProxyBridge::get_current_goal() const {
     // Since we don't have access to the Action's internal point anymore,
     // return the current position or zero as a fallback
     auto pose = get_current_pose();
@@ -302,6 +302,19 @@ micras::nav::Pose ProxyBridge::get_current_pose() const {
 
 micras::nav::SpeedController& ProxyBridge::get_speed_controller() const {
     return micras.speed_controller;
+}
+
+// Interface event access
+void ProxyBridge::send_event(Interface::Event event) {
+    micras.send_event(event);
+}
+
+bool ProxyBridge::acknowledge_event(Interface::Event event) {
+    return micras.acknowledge_event(event);
+}
+
+bool ProxyBridge::peek_event(Interface::Event event) const {
+    return micras.peek_event(event);
 }
 
 } // namespace micras::proxy 
