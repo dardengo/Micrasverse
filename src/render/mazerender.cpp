@@ -1,6 +1,8 @@
 #include "render/mazerender.hpp"
 #include "constants.hpp"
 #include "render/material.hpp"
+#define GLFW_INCLUDE_NONE   // GLFW include guard
+#include "glad/glad.h"      // Use glad instead of GLEW
 
 namespace micrasverse::render {
 
@@ -22,9 +24,12 @@ void MazeRender::init() {
     }
     this->mazeWalls.clear();
     
-    // Initialize shader
+    // Initialize standard shader
     this->shader = Shader();
     this->shader.generate("src/render/assets/vertex-core.glsl", "src/render/assets/fragment-core.glsl");
+    // Enable blending for transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     // Create floor - the black ground
     this->renderModel = Rectangle(
@@ -121,20 +126,20 @@ void MazeRender::updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>&
                     Material material;
                     switch (wallState) {
                         case micras::nav::Costmap<16, 16, 2>::WallState::WALL:
-                            material = Material::cyan_plastic;  // Red for physical walls
+                            material = Material::cyan_plastic;  // Solid walls
                             break;
                         case micras::nav::Costmap<16, 16, 2>::WallState::VIRTUAL:
-                            material = Material::yellow_plastic;  // Blue for virtual walls
+                            material = Material::yellow_plastic;  // Transparent walls
                             break;
                         case micras::nav::Costmap<16, 16, 2>::WallState::UNKNOWN:
-                            material = Material::white_plastic;  // Yellow for unknown walls
+                            material = Material::white_plastic;  // Dotted walls for unknown
                             break;
                         case micras::nav::Costmap<16, 16, 2>::WallState::NO_WALL:
-                            material = Material::black_rubber;  // Green for no walls
+                            material = Material::black_rubber;  // Invisible/black for no walls
                             break;
                     }
                     
-                    // Create wall rectangle with blue color (to distinguish from physical walls)
+                    // Create wall rectangle with the appropriate material
                     Rectangle wall(
                         material,
                         glm::vec3(posX, posY, 0.035f),                      // Position slightly above physical walls
@@ -156,21 +161,20 @@ void MazeRender::render(const glm::mat4 view, const glm::mat4 projection, glm::v
     // Activate shader with updated view and projection
     this->shader.activate(view, projection);
 
-    // Set lighting parameters
+    // Set lighting parameters for standard shader
     shader.set3Float("lightPosition", position);
     shader.set3Float("viewPosition", cameraPosition);
     shader.set3Float("light.ambient", ambient);
     shader.set3Float("light.diffuse", diffuse);
     shader.set3Float("light.specular", specular);
     
-    // First render the floor (explicitly controlling depth)
     this->renderModel.render(shader, true);
     
     // Then render all walls
     for (auto& wall : this->mazeWalls) {
-        wall.render(shader, true);
+                wall.render(shader, true);
     }
-
+    
     if (showFirmwareWalls) {
         for (auto& wall : this->firmwareWalls) {
             wall.render(shader, true);

@@ -15,6 +15,7 @@ struct Material {
     glm::vec3 diffuse;
     glm::vec3 specular;
     float shininess;
+    float alpha = 1.0f;  // Alpha channel for transparency (default: fully opaque)
 
     /*
         static instances of common materials

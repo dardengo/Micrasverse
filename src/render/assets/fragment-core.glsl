@@ -5,6 +5,7 @@ struct Material {
     vec3 diffuse;
     vec3 specular;
     float shininess;
+    float alpha;  // Add alpha for transparency
 };
 
 struct Light {
@@ -44,5 +45,6 @@ void main () {
     float specularCte = pow(max(dot(viewDirection, reflectDirection), 0.0), material.shininess * 128);
     vec3 specular = light.specular * (specularCte * material.specular);
 
-    FragColor = vec4(vec3(ambient + diffuse + specular), 1.0);
+    // Use the material's alpha value for transparency
+    FragColor = vec4(vec3(ambient + diffuse + specular), material.alpha);
 }

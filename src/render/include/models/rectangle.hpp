@@ -73,6 +73,7 @@ public:
         shader.set3Float("material.diffuse", this->material.diffuse);
         shader.set3Float("material.specular", this->material.specular);
         shader.setFloat("material.shininess", this->material.shininess);
+        shader.setFloat("material.alpha", this->material.alpha);
 
         // Render the meshes
         for (Mesh& mesh : meshes) {

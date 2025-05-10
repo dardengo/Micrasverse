@@ -13,7 +13,7 @@ class MazeRender: public SceneObj {
 
 public:
     std::vector<render::Rectangle> mazeWalls; // List of maze walls
-    std::vector<render::Rectangle> firmwareWalls; // List of firmware detected walls
+    std::vector<render::Rectangle> firmwareWalls; // List of firmware detected walls/ Shader for dotted walls
 
     MazeRender(const std::vector<physics::Maze::Element>& elements);
 
