@@ -143,7 +143,8 @@ const nav::Maze::Config maze_config{
         {(maze_width - 1) / 2, maze_height / 2},
         {maze_width / 2, (maze_height - 1) / 2},
         {(maze_width - 1) / 2, (maze_height - 1) / 2},
-    }}
+    }},
+    .cost_margin = 1.2f
 };
 
 const nav::Odometry::Config odometry_config{

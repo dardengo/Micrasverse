@@ -210,13 +210,13 @@ public:
         return micras.maze.costmap.has_wall(pose, consider_virtual);
     }
 
-    micras::nav::Costmap<16, 16, 3>::WallState get_wall_state(const micras::nav::GridPose& pose) const {
+    micras::nav::Costmap<16, 16, 2>::WallState get_wall_state(const micras::nav::GridPose& pose) const {
         return micras.maze.costmap.get_cell(pose.position).walls.at(pose.orientation);
 
 
     }
 
-    micras::nav::Costmap<16, 16, 3>::Cell get_cell(const micras::nav::GridPoint& point) const {
+    micras::nav::Costmap<16, 16, 2>::Cell get_cell(const micras::nav::GridPoint& point) const {
         return micras.maze.costmap.get_cell(point);
     }
 
@@ -233,25 +233,20 @@ public:
         const int width = get_maze_width();
         const int height = get_maze_height();
         std::vector<int16_t> costs(width * height);
-        
-        if(micras.objective == micras::core::Objective::EXPLORE) {
 
         // Fill with costs from the maze
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                    costs[y * width + x] = micras.maze.costmap.get_cost(micras::nav::GridPoint(x, y), micras::nav::Maze::Layer::EXPLORE);
+                    int16_t cost = micras.maze.costmap.get_cost(micras::nav::GridPoint(x, y), micras::nav::Maze::Layer::EXPLORE) + micras.maze.costmap.get_cost(micras::nav::GridPoint(x, y), micras::nav::Maze::Layer::RETURN);
+                    costs[y * width + x] = cost > 125 ? 125 : cost;
                 }
             }
-        }
 
-        if(micras.objective == micras::core::Objective::RETURN) {            
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    costs[y * width + x] = micras.maze.costmap.get_cost(micras::nav::GridPoint(x, y), micras::nav::Maze::Layer::RETURN);
-                }
-            }
-        }
         return costs;
+    }
+
+    uint8_t get_min_maze_cost() const {
+        return micras.maze.minimum_cost;
     }
 
     // Interface event access

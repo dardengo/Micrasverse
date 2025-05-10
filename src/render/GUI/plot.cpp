@@ -541,6 +541,7 @@ void Plot::drawMazeCostHeatmap(micras::ProxyBridge& proxyBridge) {
     
     // Display data range information
     ImGui::Text("Data range: [%d, %d]", dataMin, dataMax);
+    ImGui::Text("Minimum cost: %d", proxyBridge.get_min_maze_cost());
     
     if (ImPlot::BeginPlot("##MazeHeatmap", ImVec2(-1, 400), ImPlotFlags_NoFrame | ImPlotFlags_NoLegend | ImPlotFlags_NoMouseText)) {
         ImPlot::SetupAxes("X", "Y", 0, ImPlotAxisFlags_Invert | ImPlotAxisFlags_NoTickLabels | ImPlotAxisFlags_NoLabel);

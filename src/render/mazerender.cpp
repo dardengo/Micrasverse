@@ -45,8 +45,8 @@ void MazeRender::init() {
     for (const auto& element : this->elements) {
         Rectangle wall(
             Material::red_plastic,                                     // Material (red walls)
-            glm::vec3(element.position.x, element.position.y, 0.03f),  // Position with slight z-offset
-            glm::vec3(element.size.x, element.size.y, 0.01f)           // Size
+            glm::vec3(element.position.x, element.position.y, 0.0001f),  // Position with slight z-offset
+            glm::vec3(element.size.x, element.size.y, 0.0001f)           // Size
         );
         
         // Initialize this wall before adding to vector
@@ -83,9 +83,9 @@ void MazeRender::updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>&
             // Check walls in all four directions
             for (uint8_t dir = 0; dir < 4; dir++) {
                 micras::nav::GridPose pose{point, static_cast<micras::nav::Side>(dir)};
-                bool hasWall = proxyBridge->has_wall(pose, true);
+                micras::nav::Costmap<16, 16, 2>::WallState wallState = proxyBridge->get_wall_state(pose);
                 
-                if (hasWall) {
+                if (wallState != micras::nav::Costmap<16, 16, 2>::WallState::NO_WALL) {
                     // Calculate wall position based on cell position and direction
                     float posX = 0.0f, posY = 0.0f;
                     float sizeX = 0.0f, sizeY = 0.0f;
@@ -134,16 +134,13 @@ void MazeRender::updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>&
                         case micras::nav::Costmap<16, 16, 2>::WallState::UNKNOWN:
                             material = Material::white_plastic;  // Dotted walls for unknown
                             break;
-                        case micras::nav::Costmap<16, 16, 2>::WallState::NO_WALL:
-                            material = Material::black_rubber;  // Invisible/black for no walls
-                            break;
                     }
                     
                     // Create wall rectangle with the appropriate material
                     Rectangle wall(
                         material,
-                        glm::vec3(posX, posY, 0.035f),                      // Position slightly above physical walls
-                        glm::vec3(sizeX, sizeY, 0.015f)                     // Size (thinner than physical walls)
+                        glm::vec3(posX, posY, 0.0002f),                      // Position slightly above physical walls
+                        glm::vec3(sizeX, sizeY, 0.0002f)                     // Size (thinner than physical walls)
                     );
                     
                     // Initialize wall
@@ -168,18 +165,37 @@ void MazeRender::render(const glm::mat4 view, const glm::mat4 projection, glm::v
     shader.set3Float("light.diffuse", diffuse);
     shader.set3Float("light.specular", specular);
     
+    // 1. Render opaque floor first without blending
+    glDisable(GL_BLEND);
     this->renderModel.render(shader, true);
     
-    // Then render all walls
+    // 2. Render opaque maze walls (alpha = 1.0)
     for (auto& wall : this->mazeWalls) {
-                wall.render(shader, true);
+        if (wall.material.alpha >= 0.99f) {
+            wall.render(shader, true);
+        }
     }
     
+    // 3. Now enable blending for transparent objects
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    // 4. Render semi-transparent maze walls after opaque ones
+    for (auto& wall : this->mazeWalls) {
+        if (wall.material.alpha < 0.99f) {
+            wall.render(shader, true);
+        }
+    }
+    
+    // 5. Render firmware walls last if needed (they are usually transparent)
     if (showFirmwareWalls) {
         for (auto& wall : this->firmwareWalls) {
             wall.render(shader, true);
         }
     }
+    
+    // Disable blending when done to avoid affecting other rendering
+    glDisable(GL_BLEND);
 }
 
 } // namespace micrasverse::render

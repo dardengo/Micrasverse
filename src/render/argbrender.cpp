@@ -17,8 +17,8 @@ ARGBRender::ARGBRender(const b2Vec2 position, const b2Vec2 size, const glm::vec3
         glm::vec3(1.0f),
         glm::vec3(1.0f),
         glm::vec3(1.0f),
-        glm::vec3(position.x, position.y, 0.021f),
-        glm::vec3(size.x, size.y, 0.01f)
+        glm::vec3(position.x, position.y, 0.0004f),
+        glm::vec3(size.x, size.y, 0.0004f)
     );
 
     this->renderModel.init();
@@ -39,8 +39,8 @@ ARGBRender::ARGBRender(const b2Vec2 position, const b2Vec2 size, const std::arra
         glm::vec3(1.0f),
         glm::vec3(1.0f),
         glm::vec3(1.0f),
-        glm::vec3(position.x, position.y, 0.02f),
-        glm::vec3(size.x, size.y, 0.01f)
+        glm::vec3(position.x, position.y, 0.0004f),
+        glm::vec3(size.x, size.y, 0.0004f)
     );
 
     this->renderModel.init();
@@ -49,13 +49,13 @@ ARGBRender::ARGBRender(const b2Vec2 position, const b2Vec2 size, const std::arra
 void ARGBRender::update(b2Vec2 position, b2Rot rotation, const glm::vec3 color, const bool isOn) {
     this->lightColor = color;
     this->renderModel.setColor(isOn ? this->lightColor : this->baseColor);
-    this->renderModel.setPose(glm::vec3(position.x, position.y, 0.02f), rotation);
+    this->renderModel.setPose(glm::vec3(position.x, position.y, 0.0004f), rotation);
 }
 
 void ARGBRender::update(b2Vec2 position, b2Rot rotation, const std::array<float, 3>& color, const bool isOn) {
     this->lightColor = {color[0], color[1], color[2]};
     this->renderModel.setColor(isOn ? this->lightColor : this->baseColor);
-    this->renderModel.setPose(glm::vec3(position.x, position.y, 0.02f), rotation);
+    this->renderModel.setPose(glm::vec3(position.x, position.y, 0.0004f), rotation);
 }
 
 glm::vec3 ARGBRender::colorToVec3(const types::Color& color) {
