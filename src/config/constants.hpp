@@ -45,7 +45,8 @@ namespace micrasverse {
 
     // Simulation parameters
     //constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/training/minimaze.txt";
-    constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/alljapan-015-1994-frsh.txt";
+    //constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/alljapan-015-1994-frsh.txt";
+    constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/br2024-robochallenge-day3.txt";
     constexpr float STEP = 1.0f / 60.0f;                                                    // seconds — simulation step time
     constexpr b2Vec2 GRAVITY = {0.0f, 0.0f};                                               // m/s² — set to {0.0f} for top-down view
 

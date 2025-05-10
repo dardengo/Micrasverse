@@ -78,7 +78,7 @@ void MazeRender::updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>&
             // Check walls in all four directions
             for (uint8_t dir = 0; dir < 4; dir++) {
                 micras::nav::GridPose pose{point, static_cast<micras::nav::Side>(dir)};
-                bool hasWall = proxyBridge->has_wall(pose);
+                bool hasWall = proxyBridge->has_wall(pose, true);
                 
                 if (hasWall) {
                     // Calculate wall position based on cell position and direction
@@ -115,10 +115,28 @@ void MazeRender::updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>&
                             sizeY = WALL_THICKNESS;
                             break;
                     }
+
+                    auto wallState = proxyBridge->get_cell(point).walls[dir];
+
+                    Material material;
+                    switch (wallState) {
+                        case micras::nav::Costmap<16, 16, 2>::WallState::WALL:
+                            material = Material::cyan_plastic;  // Red for physical walls
+                            break;
+                        case micras::nav::Costmap<16, 16, 2>::WallState::VIRTUAL:
+                            material = Material::yellow_plastic;  // Blue for virtual walls
+                            break;
+                        case micras::nav::Costmap<16, 16, 2>::WallState::UNKNOWN:
+                            material = Material::white_plastic;  // Yellow for unknown walls
+                            break;
+                        case micras::nav::Costmap<16, 16, 2>::WallState::NO_WALL:
+                            material = Material::black_rubber;  // Green for no walls
+                            break;
+                    }
                     
                     // Create wall rectangle with blue color (to distinguish from physical walls)
                     Rectangle wall(
-                        Material::cyan_plastic,                             // Blue material for firmware walls
+                        material,
                         glm::vec3(posX, posY, 0.035f),                      // Position slightly above physical walls
                         glm::vec3(sizeX, sizeY, 0.015f)                     // Size (thinner than physical walls)
                     );

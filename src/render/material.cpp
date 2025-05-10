@@ -25,14 +25,15 @@ Material Material::cyan_plastic = { glm::vec3(0.0, 255.0, 255.0) / 255.0f, glm::
 Material Material::green_plastic = { glm::vec3(15.0, 125.0, 15.0) / 255.0f, glm::vec3(0.1, 0.35, 0.1), glm::vec3(0.45, 0.55, 0.45), .25 };
 Material Material::green_pcb = { glm::vec3(9.0, 73.0, 50.0) / 255.0f, glm::vec3(0.1, 0.35, 0.1), glm::vec3(0.45, 0.55, 0.45), .25 };
 Material Material::red_plastic = { glm::vec3(125.0, 15.0, 15.0) / 255.0f, glm::vec3(0.5, 0.0, 0.0), glm::vec3(0.7, 0.6, 0.6), .25 };
-Material Material::white_plastic = { glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.55, 0.55, 0.55), glm::vec3(0.70, 0.70, 0.70), .25 };
-Material Material::yellow_plastic = { glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.5, 0.5, 0.0), glm::vec3(0.60, 0.60, 0.50), .25 };
+Material Material::white_plastic = { glm::vec3(125.0, 125.0, 125.0) / 255.0f, glm::vec3(0.55, 0.55, 0.55), glm::vec3(0.70, 0.70, 0.70), .25 };
+Material Material::yellow_plastic = { glm::vec3(255.0, 255.0, 0.0) / 255.0f, glm::vec3(0.5, 0.5, 0.0), glm::vec3(0.60, 0.60, 0.50), .25 };
 Material Material::black_rubber = { glm::vec3(0.02, 0.02, 0.02), glm::vec3(0.01, 0.01, 0.01), glm::vec3(0.4, 0.4, 0.4), .078125 };
 Material Material::cyan_rubber = { glm::vec3(0.0, 0.05, 0.05), glm::vec3(0.4, 0.5, 0.5), glm::vec3(0.04, 0.7, 0.7), .078125 };
 Material Material::green_rubber = { glm::vec3(0.0, 0.05, 0.0), glm::vec3(0.4, 0.5, 0.4), glm::vec3(0.04, 0.7, 0.04), .078125 };
 Material Material::red_rubber = { glm::vec3(0.05, 0.0, 0.0), glm::vec3(0.5, 0.4, 0.4), glm::vec3(0.7, 0.04, 0.04), .078125 };
 Material Material::white_rubber = { glm::vec3(0.05, 0.05, 0.05), glm::vec3(0.5, 0.5, 0.5), glm::vec3(0.7, 0.7, 0.7), .078125 };
 Material Material::yellow_rubber = { glm::vec3(0.05, 0.05, 0.0), glm::vec3(0.5, 0.5, 0.4), glm::vec3(0.7, 0.7, 0.04), .078125 };
+Material Material::blue_rubber = { glm::vec3(0.0, 0.0, 0.125) / 255.0f, glm::vec3(0.4, 0.4, 0.5), glm::vec3(0.04, 0.04, 0.7), .078125 };
 
 // function to mix two materials with a proportion
 Material Material::mix(Material m1, Material m2, float mix) {

@@ -45,6 +45,7 @@ struct Material {
     static Material red_rubber;
     static Material white_rubber;
     static Material yellow_rubber;
+    static Material blue_rubber;
 
     // function to mix two materials with a proportion
     static Material mix(Material m1, Material m2, float mix = 0.5f);

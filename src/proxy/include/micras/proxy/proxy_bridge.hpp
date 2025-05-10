@@ -206,8 +206,18 @@ public:
     micras::nav::Pose get_current_pose() const;
 
     // Maze access
-    bool has_wall(const micras::nav::GridPose& pose) const {
-        return micras.maze.has_wall(pose);
+    bool has_wall(const micras::nav::GridPose& pose, bool consider_virtual = false) const {
+        return micras.maze.costmap.has_wall(pose, consider_virtual);
+    }
+
+    micras::nav::Costmap<16, 16, 3>::WallState get_wall_state(const micras::nav::GridPose& pose) const {
+        return micras.maze.costmap.get_cell(pose.position).walls.at(pose.orientation);
+
+
+    }
+
+    micras::nav::Costmap<16, 16, 3>::Cell get_cell(const micras::nav::GridPoint& point) const {
+        return micras.maze.costmap.get_cell(point);
     }
 
     // Maze cost access for 3D plotting
@@ -224,15 +234,23 @@ public:
         const int height = get_maze_height();
         std::vector<int16_t> costs(width * height);
         
+        if(micras.objective == micras::core::Objective::EXPLORE) {
+
         // Fill with costs from the maze
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                // Access the cost from the maze data structure
-                const int16_t rawCost = micras.maze.cells[y][x].cost;
-                costs[y * width + x] = rawCost;
+                    costs[y * width + x] = micras.maze.costmap.get_cost(micras::nav::GridPoint(x, y), micras::nav::Maze::Layer::EXPLORE);
+                }
             }
         }
-        
+
+        if(micras.objective == micras::core::Objective::RETURN) {            
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    costs[y * width + x] = micras.maze.costmap.get_cost(micras::nav::GridPoint(x, y), micras::nav::Maze::Layer::RETURN);
+                }
+            }
+        }
         return costs;
     }
 
