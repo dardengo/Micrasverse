@@ -249,6 +249,11 @@ public:
         return micras.maze.minimum_cost;
     }
 
+    // Access the best route from the maze
+    const std::list<micras::nav::GridPose>& get_best_route() const {
+        return micras.maze.get_best_route();
+    }
+
     // Interface event access
     void send_event(Interface::Event event);
     bool acknowledge_event(Interface::Event event);

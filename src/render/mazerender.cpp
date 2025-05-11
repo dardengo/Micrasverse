@@ -15,6 +15,9 @@ MazeRender::~MazeRender() {
     for (auto& wall : this->firmwareWalls) {
         wall.cleanUp();
     }
+    for (auto& marker : this->routeMarkers) {
+        marker.cleanUp();
+    }
 }
 
 void MazeRender::init() {
@@ -154,6 +157,66 @@ void MazeRender::updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>&
     }
 }
 
+void MazeRender::updateRouteMarkers(const std::shared_ptr<micras::ProxyBridge>& proxyBridge) {
+    // Clean up existing route markers
+    for (auto& marker : this->routeMarkers) {
+        marker.cleanUp();
+    }
+    this->routeMarkers.clear();
+    
+    if (!proxyBridge) return;
+    
+    // Get the best route from the maze
+    const auto& best_route = proxyBridge->get_best_route();
+    
+    // Create a triangle in the center of each cell in the best route
+    for (const auto& grid_pose : best_route) {
+        // Calculate the center of the cell
+        float posX = grid_pose.position.x * CELL_SIZE + (CELL_SIZE / 2.0f);
+        float posY = grid_pose.position.y * CELL_SIZE + (CELL_SIZE / 2.0f);
+        
+        // Triangle size (about 1/3 of the cell size)
+        float triangleSize = CELL_SIZE * 0.15f;
+        
+        // Create a triangle shape
+        Rectangle triangle(
+            Material::green_plastic,  // Use emerald material for visibility
+            glm::vec3(posX, posY, 0.0005f),  // Position slightly above the floor
+            glm::vec3(triangleSize, triangleSize, 0.0003f)  // Size
+        );
+        
+        // Set flag to create triangle before initialization
+        triangle.isTriangle = true;
+        
+        // Initialize the triangle
+        triangle.init();
+        
+        // Set rotation based on orientation
+        // Side enum: RIGHT(0), UP(1), LEFT(2), DOWN(3)
+        float rotationAngle = 0.0f;
+        switch (grid_pose.orientation) {
+            case micras::nav::Side::RIGHT: // East (0)
+                rotationAngle = 270.0f;  // Point right
+                break;
+            case micras::nav::Side::UP: // North (1)
+                rotationAngle = 0.0f; // Point up
+                break;
+            case micras::nav::Side::LEFT: // West (2)
+                rotationAngle = 90.0f; // Point left
+                break;
+            case micras::nav::Side::DOWN: // South (3)
+                rotationAngle = 180.0f; // Point down
+                break;
+        }
+        
+        // Convert to radians and set rotation
+        triangle.rotation = rotationAngle * (M_PI / 180.0f);
+        
+        // Add to collection
+        this->routeMarkers.push_back(triangle);
+    }
+}
+
 void MazeRender::render(const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) {
     // Activate shader with updated view and projection
     this->shader.activate(view, projection);
@@ -176,18 +239,25 @@ void MazeRender::render(const glm::mat4 view, const glm::mat4 projection, glm::v
         }
     }
     
-    // 3. Now enable blending for transparent objects
+    // 3. Render best route markers (before transparent objects)
+    if (showRouteMarkers) {
+        for (auto& marker : this->routeMarkers) {
+            marker.render(shader, true);
+        }
+    }
+    
+    // 4. Now enable blending for transparent objects
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    // 4. Render semi-transparent maze walls after opaque ones
+    // 5. Render semi-transparent maze walls after opaque ones
     for (auto& wall : this->mazeWalls) {
         if (wall.material.alpha < 0.99f) {
             wall.render(shader, true);
         }
     }
     
-    // 5. Render firmware walls last if needed (they are usually transparent)
+    // 6. Render firmware walls last if needed (they are usually transparent)
     if (showFirmwareWalls) {
         for (auto& wall : this->firmwareWalls) {
             wall.render(shader, true);

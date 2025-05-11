@@ -184,6 +184,15 @@ namespace micrasverse::render {
         // Update firmware walls if proxy bridge exists
         if (proxyBridge) {
             mazeRender->updateFirmwareWalls(proxyBridge);
+            
+            // Update route markers when the best route changes
+            static int lastBestRouteSize = 0;
+            int currentBestRouteSize = proxyBridge->get_best_route().size();
+            
+            if (currentBestRouteSize != lastBestRouteSize) {
+                mazeRender->updateRouteMarkers(proxyBridge);
+                lastBestRouteSize = currentBestRouteSize;
+            }
         }
 
         // Reload maze if needed
@@ -207,6 +216,7 @@ namespace micrasverse::render {
     // Initial update of firmware walls
     if (mazeRender) {
             mazeRender->updateFirmwareWalls(proxyBridge);
+            mazeRender->updateRouteMarkers(proxyBridge);
         }
     }
     
@@ -367,6 +377,12 @@ namespace micrasverse::render {
                                    lidar.getRayDirection().x)),
                 lidar.getReadingVisual()
             );
+        }
+        
+        // Update firmware walls and route markers after reset
+        if (this->proxyBridge) {
+            this->mazeRender->updateFirmwareWalls(this->proxyBridge);
+            this->mazeRender->updateRouteMarkers(this->proxyBridge);
         }
         
         this->simulationEngine->wasReset = false;
