@@ -50,6 +50,11 @@ namespace micrasverse {
     constexpr float STEP = 1.0f / 60.0f;                                                    // seconds — simulation step time
     constexpr b2Vec2 GRAVITY = {0.0f, 0.0f};                                               // m/s² — set to {0.0f} for top-down view
 
+    // Rendering parameters
+    constexpr int WINDOW_WIDTH = 1280;                                                     // pixels
+    constexpr int WINDOW_HEIGHT = 720;                                                    // pixels
+    constexpr uint32_t MAX_FRAMES_IN_FLIGHT = 2;                                                  // number of frames in flight
+
 }  // namespace micrasverse
 
 #include <cstdint>
