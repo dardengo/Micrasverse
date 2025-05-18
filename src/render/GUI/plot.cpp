@@ -351,6 +351,13 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         drawMazeCost3DSurface(proxyBridge);
 
         ImGui::Columns(1);
+
+        std::vector<Node> nodes = {{1, 1.f, 1.f, micras::nav::RIGHT}, {2, 1.f, 2.f, micras::nav::UP}, {3, 2.f, 2.f, micras::nav::LEFT}};
+
+        std::vector<Edge> edges = {{1, 2}, {2, 3}, {3, 1}};
+
+        drawGraph(nodes, edges);
+
         ImGui::EndChild();
         return;
     }
@@ -508,6 +515,125 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         ImPlot::PlotLine(
             "Right feed forward response", &rdata18.data[0].x, &rdata18.data[0].y, rdata18.data.size(), 0, rdata18.offset, 2 * sizeof(float)
         );
+        ImPlot::EndPlot();
+    }
+}
+
+void Plot::drawGraph(const std::vector<Node>& nodes, const std::vector<Edge>& edges) {
+    if (ImPlot::BeginPlot("Maze Graph", ImVec2(-1, 800), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
+        ImPlot::SetupAxes("X", "Y", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_NoTickLabels);
+        ImPlot::SetupAxisLimits(ImAxis_X1, 0.0, 16.0, ImPlotCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 16.0, ImPlotCond_Always);
+
+        // Create a map for quick node lookup
+        std::unordered_map<int, const Node*> nodeMap;
+        for (const auto& node : nodes) {
+            nodeMap[node.id] = &node;
+        }
+
+        // Draw edges with arrows
+        for (const auto& edge : edges) {
+            auto from_it = nodeMap.find(edge.from_node_id);
+            auto to_it = nodeMap.find(edge.to_node_id);
+
+            if (from_it != nodeMap.end() && to_it != nodeMap.end()) {
+                const Node* from_node = from_it->second;
+                const Node* to_node = to_it->second;
+
+                // Draw main edge line
+                float x_coords[2] = {from_node->x, to_node->x};
+                float y_coords[2] = {from_node->y, to_node->y};
+                ImPlot::PlotLine("Edges", x_coords, y_coords, 2);
+
+                // Calculate direction vector
+                float dx = to_node->x - from_node->x;
+                float dy = to_node->y - from_node->y;
+
+                // Normalize direction vector
+                float length = std::sqrt(dx * dx + dy * dy);
+                if (length > 0) {
+                    dx /= length;
+                    dy /= length;
+
+                    // Arrow size (adjust as needed)
+                    float arrow_size = 0.025f;
+
+                    // Position arrow slightly before the end (80% along the edge)
+                    float arrow_x = from_node->x + dx * length * 0.8f;
+                    float arrow_y = from_node->y + dy * length * 0.8f;
+
+                    // Create arrowhead (perpendicular to direction)
+                    float arrow_dx = -dy;  // Perpendicular to direction
+                    float arrow_dy = dx;   // Perpendicular to direction
+
+                    // Draw the arrowhead as two lines
+                    float arrow_x1[2] = {arrow_x, arrow_x - dx * arrow_size + arrow_dx * arrow_size};
+                    float arrow_y1[2] = {arrow_y, arrow_y - dy * arrow_size + arrow_dy * arrow_size};
+                    float arrow_x2[2] = {arrow_x, arrow_x - dx * arrow_size - arrow_dx * arrow_size};
+                    float arrow_y2[2] = {arrow_y, arrow_y - dy * arrow_size - arrow_dy * arrow_size};
+
+                    // Draw arrow lines
+                    ImPlot::PlotLine("Edges", arrow_x1, arrow_y1, 2);
+                    ImPlot::PlotLine("Edges", arrow_x2, arrow_y2, 2);
+                }
+            }
+        }
+
+        // Draw nodes as circles with orientation arrows
+        for (const auto& node : nodes) {
+            // Draw the node as a scatter point (circle)
+            ImPlot::PushStyleVar(ImPlotStyleVar_MarkerSize, 8);  // Larger circle
+            ImPlot::PlotScatter("Nodes", &node.x, &node.y, 1);
+            ImPlot::PopStyleVar();
+
+            // Draw orientation arrow inside the circle
+            // Calculate arrow direction based on the node's orientation
+            float dx = 0, dy = 0;
+            float arrow_length = 0.04f;  // REDUCED Length of orientation arrow
+
+            switch (node.orientation) {
+                case micras::nav::RIGHT:
+                    dx = 1.0f;
+                    dy = 0.0f;
+                    break;
+                case micras::nav::UP:
+                    dx = 0.0f;
+                    dy = -1.0f;  // Y is inverted in most plotting systems
+                    break;
+                case micras::nav::LEFT:
+                    dx = -1.0f;
+                    dy = 0.0f;
+                    break;
+                case micras::nav::DOWN:
+                    dx = 0.0f;
+                    dy = 1.0f;  // Y is inverted in most plotting systems
+                    break;
+            }
+
+            // Draw the orientation arrow
+            float arrow_x[2] = {node.x, node.x + dx * arrow_length};
+            float arrow_y[2] = {node.y, node.y + dy * arrow_length};
+
+            // Use a different color for orientation arrows
+            ImPlot::PushStyleColor(ImPlotCol_Line, ImVec4(0.8f, 0.0f, 0.0f, 1.0f));
+            ImPlot::PlotLine("Orientation", arrow_x, arrow_y, 2);
+
+            // Add a smaller arrowhead to the orientation arrow
+            float ah_size = 0.01f;  // REDUCED arrowhead size
+            float arrow_dx = -dy;   // Perpendicular to direction
+            float arrow_dy = dx;    // Perpendicular to direction
+
+            float ah_x1[2] = {arrow_x[1], arrow_x[1] - dx * ah_size + arrow_dx * ah_size};
+            float ah_y1[2] = {arrow_y[1], arrow_y[1] - dy * ah_size + arrow_dy * ah_size};
+            float ah_x2[2] = {arrow_x[1], arrow_x[1] - dx * ah_size - arrow_dx * ah_size};
+            float ah_y2[2] = {arrow_y[1], arrow_y[1] - dy * ah_size - arrow_dy * ah_size};
+
+            ImPlot::PlotLine("Orientation", ah_x1, ah_y1, 2);
+            ImPlot::PlotLine("Orientation", ah_x2, ah_y2, 2);
+
+            ImPlot::PopStyleColor();
+        }
+
         ImPlot::EndPlot();
     }
 }

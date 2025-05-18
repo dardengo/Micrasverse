@@ -3,6 +3,7 @@
 
 #include "physics/box2d_micrasbody.hpp"
 #include "micras/proxy/proxy_bridge.hpp"
+#include "micras/nav/grid_pose.hpp"
 
 #include "imgui.h"
 #include "implot.h"
@@ -12,6 +13,30 @@ namespace micrasverse::render {
 
 class Plot {
 public:
+    struct Node {
+        int               id;
+        float             x, y;
+        micras::nav::Side orientation;
+
+        // Constructor from GridPose and cell size
+        Node(int id, const micras::nav::GridPose& pose, float cell_size) : id(id), orientation(pose.orientation) {
+            // Convert GridPoint to world coordinates
+            auto vec = pose.position.to_vector(cell_size);
+            x = vec.x;
+            y = vec.y;
+        }
+
+        // Default constructor
+        Node(int id, float x, float y, micras::nav::Side orientation) : id(id), x(x), y(y), orientation(orientation) { }
+    };
+
+    struct Edge {
+        int from_node_id;
+        int to_node_id;
+    };
+
+    void drawGraph(const std::vector<Node>& nodes, const std::vector<Edge>& edges);
+
     struct ScrollingBuffer {
         int              maxSize;
         int              offset;
