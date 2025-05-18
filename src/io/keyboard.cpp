@@ -10,11 +10,10 @@ void Keyboard::key_callback(GLFWwindow* window, int key, int scancode, int actio
         if (!keys[key]) {
             keys[key] = true;
         }
-    } 
-    else {
+    } else {
         keys[key] = false;
     }
-    keysChanged[key] = action != GLFW_REPEAT; 
+    keysChanged[key] = action != GLFW_REPEAT;
 }
 
 bool Keyboard::key(int key) {
@@ -35,4 +34,4 @@ bool Keyboard::keyWentDown(int key) {
     return keys[key] && keyChanged(key);
 }
 
-} // micrasverse::io
+}  // namespace micrasverse::io

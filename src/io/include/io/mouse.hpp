@@ -1,10 +1,9 @@
 #ifndef MOUSE_HPP
 #define MOUSE_HPP
 
-#define GLFW_INCLUDE_NONE   // GLFW include guard
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-#include "glm/glm.hpp"
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 
 namespace micrasverse::io {
 
@@ -29,7 +28,6 @@ public:
     static bool buttonWentDown(int button);
 
 private:
-
     static double x;
     static double y;
 
@@ -48,6 +46,6 @@ private:
     static bool buttonsChanged[];
 };
 
-} // micrasverse::io
+}  // namespace micrasverse::io
 
-#endif // MOUSE_HPP
+#endif  // MOUSE_HPP

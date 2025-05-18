@@ -71,7 +71,8 @@
         "regex": "cpp",
         "list": "cpp",
         "codecvt": "cpp",
-        "*.tpp": "cpp"
+        "*.tpp": "cpp",
+        "cassert": "cpp"
     },
-    "cmake.sourceDirectory": "C:/Area de trabalho/CPP/Micrasverse/external/box2d"
+    "cmake.sourceDirectory": "/home/darde/repos/Micrasverse"
 }

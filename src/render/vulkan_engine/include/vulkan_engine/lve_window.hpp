@@ -1,38 +1,42 @@
-#ifndef LVE_WINDOW_HPP
-#define LVE_WINDOW_HPP
+#pragma once
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#include <vulkan/vulkan.h>
 
 #include <string>
+
 namespace lve {
 
 class LveWindow {
- public:
-  LveWindow(int w, int h, std::string name);
-  ~LveWindow();
+public:
+    LveWindow(int w, int h, std::string name);
+    ~LveWindow();
 
-  LveWindow(const LveWindow &) = delete;
-  LveWindow &operator=(const LveWindow &) = delete;
+    LveWindow(const LveWindow&) = delete;
+    LveWindow& operator=(const LveWindow&) = delete;
 
-  bool shouldClose() { return glfwWindowShouldClose(window); }
-  VkExtent2D getExtent() { return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)}; }
-  bool wasWindowResized() { return framebufferResized; }
-  void resetWindowResizedFlag() { framebufferResized = false; }
+    bool shouldClose() { return glfwWindowShouldClose(window); }
 
-  void createWindowSurface(VkInstance instance, VkSurfaceKHR *surface);
+    VkExtent2D getExtent() { return {static_cast<uint32_t>(width), static_cast<uint32_t>(height)}; }
 
- //private:
-  static void framebufferResizeCallback(GLFWwindow *window, int width, int height);
-  void initWindow();
+    bool wasWindowResized() { return framebufferResized; }
 
-  int width;
-  int height;
-  bool framebufferResized = false;
+    void resetWindowResizedFlag() { framebufferResized = false; }
 
-  std::string windowName;
-  GLFWwindow *window;
+    GLFWwindow* getGLFWwindow() const { return window; }
+
+    void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
+
+    // private:
+    static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
+    void        initWindow();
+
+    int  width;
+    int  height;
+    bool framebufferResized = false;
+
+    std::string windowName;
+    GLFWwindow* window;
 };
 }  // namespace lve
-
-#endif  // LVE_WINDOW_HPP

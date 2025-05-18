@@ -8,7 +8,7 @@
 #include <vector>
 
 namespace micrasverse::simulation {
-    
+
 class SimulationEngine {
 public:
     SimulationEngine();
@@ -33,15 +33,15 @@ public:
 
     void setPhysicsEngine(std::shared_ptr<physics::IPhysicsEngine> engine);
 
-    bool isPaused{true};
-    bool wasReset{false};
+    bool                                     isPaused{true};
+    bool                                     wasReset{false};
     std::shared_ptr<physics::IPhysicsEngine> physicsEngine;
+
 private:
     std::vector<std::string> mazePaths{};
-    std::string currentMazePath;
+    std::string              currentMazePath;
 };
 
-} // namespace micrasverse::simulation
+}  // namespace micrasverse::simulation
 
-
-#endif // SIMULATION_ENGINE_HPP
+#endif  // SIMULATION_ENGINE_HPP

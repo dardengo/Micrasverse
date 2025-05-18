@@ -1,10 +1,3 @@
-# Include GLAD
-add_library(glad STATIC glad.c)
-target_include_directories(glad PUBLIC 
-    ${CMAKE_SOURCE_DIR}/external/box2d/build/_deps/glfw-src/deps
-    ${CMAKE_SOURCE_DIR}/include
-)
-
 # Add subdirectories for all modules
 add_subdirectory(config)
 add_subdirectory(core)
@@ -43,5 +36,6 @@ target_include_directories(micrasverse PRIVATE
     ${CMAKE_SOURCE_DIR}/src/physics/include
     ${CMAKE_SOURCE_DIR}/src/proxy/include
     ${CMAKE_SOURCE_DIR}/src/render/include
+#    ${CMAKE_SOURCE_DIR}/src/render/GUI/include
     ${CMAKE_SOURCE_DIR}/src/simulation/include
 ) 

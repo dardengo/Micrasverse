@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
-#include <cstring> // For memcpy
+#include <cstring>  // For memcpy
 
 namespace micrasverse::physics {
 
@@ -26,7 +26,7 @@ World::World() {
 
 World::~World() {
     b2DestroyWorld(this->worldId);
-    worldExists = false; // Reset the flag so a new world can be created if needed
+    worldExists = false;  // Reset the flag so a new world can be created if needed
 }
 
 b2WorldId World::getWorldId() const {
@@ -41,4 +41,4 @@ void World::runStep(const float timeStep, const int subStepCount) {
     }
 }
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics

@@ -19,6 +19,6 @@ public:
     virtual void toggleSwitch(size_t switchIndex) = 0;
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // MICRASVERSE_PHYSICS_I_DIPSWITCH_HPP 
+#endif  // MICRASVERSE_PHYSICS_I_DIPSWITCH_HPP

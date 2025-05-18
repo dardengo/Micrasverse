@@ -2,13 +2,16 @@
 
 namespace micrasverse::render {
 
-SceneObj::SceneObj() {}
+SceneObj::SceneObj() { }
 
 SceneObj::~SceneObj() {
     this->renderModel.cleanUp();
 }
 
-void SceneObj::render(const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) {
+void SceneObj::render(
+    const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse,
+    glm::vec3 specular
+) {
     this->shader.activate(view, projection);
 
     shader.set3Float("lightPosition", position);
@@ -20,5 +23,4 @@ void SceneObj::render(const glm::mat4 view, const glm::mat4 projection, glm::vec
     this->renderModel.render(this->shader, false);
 }
 
-
-} // namespace micrasverse::render
+}  // namespace micrasverse::render

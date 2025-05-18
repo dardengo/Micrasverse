@@ -15,16 +15,16 @@ enum class ActuatorType {
 class IActuator {
 public:
     virtual ~IActuator() = default;
-    
+
     // Actuator basics
     virtual ActuatorType getType() const = 0;
-    virtual types::Vec2 getPosition() const = 0;
-    
+    virtual types::Vec2  getPosition() const = 0;
+
     // Command interface
-    virtual void setCommand(float command) = 0;
+    virtual void  setCommand(float command) = 0;
     virtual float getCommand() const = 0;
-    virtual bool isActive() const = 0;
-    
+    virtual bool  isActive() const = 0;
+
     // Update method
     virtual void update(float deltaTime) = 0;
 };
@@ -33,6 +33,6 @@ public:
 class IMotor;
 class ILED;
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // MICRASVERSE_PHYSICS_I_ACTUATOR_HPP 
+#endif  // MICRASVERSE_PHYSICS_I_ACTUATOR_HPP

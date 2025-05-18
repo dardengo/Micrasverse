@@ -158,4 +158,4 @@ private:
 };
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_STORAGE_HPP 
+#endif  // MICRAS_PROXY_STORAGE_HPP

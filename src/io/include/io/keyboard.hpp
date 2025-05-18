@@ -1,9 +1,8 @@
 #ifndef KEYBOARD_HPP
 #define KEYBOARD_HPP
 
-#define GLFW_INCLUDE_NONE   // GLFW include guard
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 namespace micrasverse::io {
 
@@ -21,6 +20,6 @@ private:
     static bool keysChanged[];
 };
 
-}// micrasverse::io
+}  // namespace micrasverse::io
 
-#endif // KEYBOARD_HPP
+#endif  // KEYBOARD_HPP

@@ -9,8 +9,10 @@ namespace micrasverse::physics {
 
 class Box2DDistanceSensor : public IDistanceSensor {
 public:
-
-    Box2DDistanceSensor(b2WorldId worldId, b2BodyId bodyId, const micrasverse::types::Vec2& localPosition, const micrasverse::types::Vec2& direction, float maxDistance);
+    Box2DDistanceSensor(
+        b2WorldId worldId, b2BodyId bodyId, const micrasverse::types::Vec2& localPosition, const micrasverse::types::Vec2& direction,
+        float maxDistance
+    );
 
     micrasverse::types::Vec2 getLocalPosition() const override;
 
@@ -33,24 +35,27 @@ public:
     void setAngle(float angle) override;
 
     SensorType getType() const override { return SensorType::DISTANCE; }
+
     micrasverse::types::Vec2 getPosition() const override;
+
     float getReadingVisual() const override { return reading; }
 
-private:
+    // private:
     void performRayCast();
 
     b2WorldId worldId;
-    b2BodyId bodyId;
-    b2Vec2 localPosition;
-    b2Vec2 localDirection;
-    float maxDistance;
-    float reading;
-    float angle;
-    b2Vec2 rayMidPoint;
-    b2Vec2 rayDirection;
-    b2Vec2 intersectionPoint;
+    b2BodyId  bodyId;
+    b2Vec2    localPosition;
+    b2Vec2    localDirection;
+    b2Vec2    worldDirection;
+    float     maxDistance;
+    float     reading;
+    float     angle;
+    b2Vec2    rayMidPoint;
+    b2Vec2    rayDirection;
+    b2Vec2    intersectionPoint;
 };
 
 }  // namespace micrasverse::physics
 
-#endif  // MICRASVERSE_PHYSICS_BOX2D_DISTANCE_SENSOR_HPP 
+#endif  // MICRASVERSE_PHYSICS_BOX2D_DISTANCE_SENSOR_HPP

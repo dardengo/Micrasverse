@@ -19,11 +19,11 @@ public:
      */
     struct Config {
         micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
-        float shunt_resistor;
-        float max_torque;
-        float max_current;
-        float filter_cutoff;
-        float noise;
+        float                                  shunt_resistor;
+        float                                  max_torque;
+        float                                  max_current;
+        float                                  filter_cutoff;
+        float                                  noise;
     };
 
     /**
@@ -93,21 +93,21 @@ public:
 
 private:
     micrasverse::physics::Box2DMicrasBody* micrasBody;
-    float shunt_resistor;
-    float max_torque;
-    float max_current;
-    float filter_cutoff;
-    float noise;
-    std::array<float, num_of_sensors> base_reading{};
-    std::array<float, num_of_sensors> simulated_torque{};
-    std::array<float, num_of_sensors> filtered_readings{};
-    std::random_device rd;
-    std::mt19937 gen;
-    std::normal_distribution<float> noise_dist;
+    float                                  shunt_resistor;
+    float                                  max_torque;
+    float                                  max_current;
+    float                                  filter_cutoff;
+    float                                  noise;
+    std::array<float, num_of_sensors>      base_reading{};
+    std::array<float, num_of_sensors>      simulated_torque{};
+    std::array<float, num_of_sensors>      filtered_readings{};
+    std::random_device                     rd;
+    std::mt19937                           gen;
+    std::normal_distribution<float>        noise_dist;
 };
 
 }  // namespace micras::proxy
 
 #include "../src/torque_sensors.cpp"  // NOLINT(bugprone-suspicious-include, misc-header-include-cycle)
 
-#endif  // MICRAS_PROXY_TORQUE_SENSORS_HPP 
+#endif  // MICRAS_PROXY_TORQUE_SENSORS_HPP

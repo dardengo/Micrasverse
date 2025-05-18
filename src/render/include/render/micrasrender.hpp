@@ -8,21 +8,20 @@
 
 namespace micrasverse::render {
 
-class MicrasRender: public SceneObj {
+class MicrasRender : public SceneObj {
 public:
     MicrasRender(const b2Vec2 position, const b2Vec2 size);
 
     void update(const b2Vec2 position, const b2Rot rotation);
-    
+
     // Get AABB for frustum culling
     BoundingBox getBoundingBox() const;
-    
+
 private:
     b2Vec2 position;
     b2Vec2 size;
 };
 
+}  // namespace micrasverse::render
 
-} // namespace micrasverse::render
-
-#endif // MICRAS_RENDER_HPP
+#endif  // MICRAS_RENDER_HPP

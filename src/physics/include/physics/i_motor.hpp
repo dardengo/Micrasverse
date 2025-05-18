@@ -23,14 +23,15 @@ public:
     virtual float getTorque() const = 0;
     virtual float getBodyLinearVelocity() const = 0;
     virtual float getBodyAngularVelocity() const = 0;
-    virtual bool isLeftWheel() const = 0;
-    virtual bool getFanState() const = 0;
+    virtual bool  isLeftWheel() const = 0;
+    virtual bool  getFanState() const = 0;
 
     virtual float getCommand() const = 0;
-    virtual bool isActive() const = 0;
+    virtual bool  isActive() const = 0;
+
     virtual ActuatorType getType() const override { return ActuatorType::MOTOR; }
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // MICRASVERSE_PHYSICS_I_MOTOR_HPP 
+#endif  // MICRASVERSE_PHYSICS_I_MOTOR_HPP

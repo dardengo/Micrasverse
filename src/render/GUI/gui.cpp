@@ -7,7 +7,7 @@
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "imgui_impl_vulkan.h"
 
 #include <filesystem>
 #include <thread>
@@ -15,7 +15,8 @@
 
 namespace micrasverse::render {
 
-GUI::GUI() : showStyleEditor(false), currentWindow(nullptr), proxyBridge(nullptr) {}
+GUI::GUI(std::shared_ptr<lve::FirstApp> vulkanEngine, lve::SimpleRenderSystem& simpleRenderSystem) :
+    showStyleEditor(false), currentWindow(nullptr), proxyBridge(nullptr), vulkanEngine(vulkanEngine), simpleRenderSystem(simpleRenderSystem) { }
 
 void GUI::setSimulationEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine) {
     this->simulationEngine = simulationEngine;
@@ -32,33 +33,36 @@ void GUI::setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge
 void GUI::init(GLFWwindow* window) {
     // Store the window for later use
     this->currentWindow = window;
-    
+
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    
+
     // Configure ImGui for better performance (using available flags)
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    
+
     // Set smaller font size for better performance
     ImFontConfig fontConfig;
     fontConfig.SizePixels = 13.0f;
     fontConfig.OversampleH = 1;
     fontConfig.OversampleV = 1;
     fontConfig.PixelSnapH = true;
-    
+
     // Memory optimization
-    io.ConfigMemoryCompactTimer = 60.0f; // Compact memory less frequently
-    
+    io.ConfigMemoryCompactTimer = 60.0f;  // Compact memory less frequently
+
     this->plot.init();
     ImGui::StyleColorsDark();
-    
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
+
+    ImGui_ImplGlfw_InitForVulkan(window, true);
+
+    ImGui_ImplVulkan_InitInfo init_info = getVulkanInitInfo(*vulkanEngine);
+
+    ImGui_ImplVulkan_Init(&init_info);
 }
 
 void GUI::update() {
-    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplVulkan_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
@@ -75,29 +79,32 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     int width, height;
     glfwGetFramebufferSize(currentWindow, &width, &height);
     bool isLargeScreen = (width > 1919 || height > 1079);
-    
+
     // Main control panel
     ImGui::Begin("Micrasverse Control Panel");
-    
-    /// Toggle simulation running
-        if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {
-            simulationEngine->togglePause();
-        }
-    
-        ImGui::SameLine();
-    
-        // Step one frame
-        if (ImGui::Button("Step")) {
-            simulationEngine->stepThroughSimulation();
-        }
 
-        ImGui::SameLine();
-    
-        ImGui::Text("Simulation is %s", simulationEngine->isPaused ? "Paused" : "Running");
-    
+    /// Toggle simulation running
+    if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {
+        simulationEngine->togglePause();
+    }
+
+    ImGui::SameLine();
+
+    // Step one frame
+    if (ImGui::Button("Step")) {
+        simulationEngine->stepThroughSimulation();
+    }
+
+    ImGui::SameLine();
+
+    ImGui::Text("Simulation is %s", simulationEngine->isPaused ? "Paused" : "Running");
+
     // Robot Status Section
     if (ImGui::CollapsingHeader("Robot Status", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::Text("Micras Body Pose: (%.2f, %.2f, %.2f)", micrasBody.getPosition().x-WALL_THICKNESS, micrasBody.getPosition().y-WALL_THICKNESS, micrasBody.getAngle() + B2_PI/2.0f);
+        ImGui::Text(
+            "Micras Body Pose: (%.2f, %.2f, %.2f)", micrasBody.getPosition().x - WALL_THICKNESS, micrasBody.getPosition().y - WALL_THICKNESS,
+            micrasBody.getAngle() + B2_PI / 2.0f
+        );
         auto pose = proxyBridge->get_current_pose();
         ImGui::Text("Micras Controller Pose: (%.2f, %.2f, %.2f)", pose.position.x, pose.position.y, pose.orientation);
         ImGui::Separator();
@@ -110,66 +117,66 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         if (proxyBridge) {
             ImGui::Separator();
             ImGui::Text("MicrasController Status:");
-            
+
             // Display objective with color coding
             std::string objectiveText = "Objective: " + proxyBridge->get_objective_string();
-            ImVec4 objectiveColor;
-            
+            ImVec4      objectiveColor;
+
             switch (proxyBridge->get_objective()) {
                 case micras::core::Objective::EXPLORE:
-                    objectiveColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green
+                    objectiveColor = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);  // Green
                     break;
                 case micras::core::Objective::RETURN:
-                    objectiveColor = ImVec4(0.0f, 0.0f, 1.0f, 1.0f); // Blue
+                    objectiveColor = ImVec4(0.0f, 0.0f, 1.0f, 1.0f);  // Blue
                     break;
                 case micras::core::Objective::SOLVE:
-                    objectiveColor = ImVec4(1.0f, 0.5f, 0.0f, 1.0f); // Orange
+                    objectiveColor = ImVec4(1.0f, 0.5f, 0.0f, 1.0f);  // Orange
                     break;
                 default:
-                    objectiveColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Gray
+                    objectiveColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);  // Gray
                     break;
             }
-            
+
             ImGui::PushStyleColor(ImGuiCol_Text, objectiveColor);
             ImGui::Text("%s", objectiveText.c_str());
             ImGui::PopStyleColor();
-            
+
             // Display current action with color coding
             std::string actionText = "Current Action: " + proxyBridge->get_action_type_string();
-            ImVec4 actionColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); // Default gray
-            
+            ImVec4      actionColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);  // Default gray
+
             // Use simpler approach since we don't have direct access to the Action type
             ImGui::PushStyleColor(ImGuiCol_Text, actionColor);
             ImGui::Text("%s", actionText.c_str());
             ImGui::PopStyleColor();
-            
+
             // Set Objective buttons using Interface events
             ImGui::Separator();
             ImGui::Text("Set Objective via Interface Events:");
-            
+
             if (ImGui::Button("Set EXPLORE")) {
                 proxyBridge->send_event(micras::Interface::Event::EXPLORE);
             }
-            
+
             ImGui::SameLine();
-            
+
             if (ImGui::Button("Set SOLVE")) {
                 proxyBridge->send_event(micras::Interface::Event::SOLVE);
             }
-            
+
             ImGui::SameLine();
-            
+
             if (ImGui::Button("CALIBRATE")) {
                 proxyBridge->send_event(micras::Interface::Event::CALIBRATE);
             }
         }
     }
-    
+
     // Movement Controls Section
     if (ImGui::CollapsingHeader("Movement Controls")) {
         static float moveSpeed = 5.0f;
         ImGui::SliderFloat("Movement Speed", &moveSpeed, 0.1f, 10.0f);
-        
+
         // Display WASD controls in a more compact way
         ImGui::Text("WASD Controls:");
         ImGui::Columns(2, "controls", false);
@@ -183,28 +190,28 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         ImGui::NextColumn();
         ImGui::Text("Space - Stop");
         ImGui::Columns(1);
-        
+
         // Display current movement state
         ImGui::Separator();
         ImGui::Text("Current Movement:");
-        
+
         // Get keyboard state using micrasverse::io::Keyboard
         bool wPressed = micrasverse::io::Keyboard::key(GLFW_KEY_W);
         bool sPressed = micrasverse::io::Keyboard::key(GLFW_KEY_S);
         bool aPressed = micrasverse::io::Keyboard::key(GLFW_KEY_A);
         bool dPressed = micrasverse::io::Keyboard::key(GLFW_KEY_D);
         bool spacePressed = micrasverse::io::Keyboard::key(GLFW_KEY_SPACE);
-        
+
         // Check for key up events to set commands to zero
         bool wReleased = micrasverse::io::Keyboard::keyWentUp(GLFW_KEY_W);
         bool sReleased = micrasverse::io::Keyboard::keyWentUp(GLFW_KEY_S);
         bool aReleased = micrasverse::io::Keyboard::keyWentUp(GLFW_KEY_A);
         bool dReleased = micrasverse::io::Keyboard::keyWentUp(GLFW_KEY_D);
-        
+
         // Track current command values
         static float currentLinear = 0.0f;
         static float currentAngular = 0.0f;
-        
+
         // Apply movement based on key state
         if (spacePressed) {
             proxyBridge->stop_motors();
@@ -216,31 +223,35 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             // Clear previous commands and enable motors if any movement key is pressed
             if (wPressed || sPressed || aPressed || dPressed) {
                 proxyBridge->enable_motors();
-                
+
                 // Forward/Backward movement
                 float linearSpeed = 0.0f;
-                if (wPressed) linearSpeed = moveSpeed;
-                if (sPressed) linearSpeed = -moveSpeed;
-                
+                if (wPressed)
+                    linearSpeed = moveSpeed;
+                if (sPressed)
+                    linearSpeed = -moveSpeed;
+
                 // Left/Right turning
                 float angularSpeed = 0.0f;
-                if (aPressed) angularSpeed = moveSpeed;
-                if (dPressed) angularSpeed = -moveSpeed;
-                
+                if (aPressed)
+                    angularSpeed = moveSpeed;
+                if (dPressed)
+                    angularSpeed = -moveSpeed;
+
                 // Update tracked values
                 currentLinear = linearSpeed;
                 currentAngular = angularSpeed;
-                
+
                 // Apply the combined command
                 proxyBridge->set_command(linearSpeed, angularSpeed);
-                
+
                 // Display movement status
                 if (linearSpeed > 0) {
                     ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "FORWARD");
                 } else if (linearSpeed < 0) {
                     ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "BACKWARD");
                 }
-                
+
                 if (angularSpeed > 0) {
                     ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "TURNING LEFT");
                 } else if (angularSpeed < 0) {
@@ -252,12 +263,12 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
                     currentLinear = 0.0f;
                     proxyBridge->set_command(0.0f, currentAngular);
                 }
-                
+
                 if (aReleased || dReleased) {
                     currentAngular = 0.0f;
                     proxyBridge->set_command(currentLinear, 0.0f);
                 }
-                
+
                 // No keys pressed
                 if (!wPressed && !sPressed && !aPressed && !dPressed) {
                     ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "IDLE");
@@ -265,11 +276,11 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             }
         }
     }
-    
+
     // DIP Switch Controls Section
     if (ImGui::CollapsingHeader("DIP Switches")) {
         ImGui::Columns(4, "dipswitches", false);
-        
+
         for (size_t i = 0; i < 4; ++i) {
             bool switchState = proxyBridge->get_dip_switch_state(i);
             if (ImGui::Checkbox(("Switch " + std::to_string(i)).c_str(), &switchState)) {
@@ -280,75 +291,75 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         }
         ImGui::Columns(1);
     }
-    
+
     // Add LED/ARGB Control Section
     if (ImGui::CollapsingHeader("LED Control")) {
         ImGui::Text("Set LED Colors by Events:");
-        
+
         // Create grid of buttons for different events and colors
         float buttonWidth = (ImGui::GetContentRegionAvail().x - 20) / 2;
         float buttonHeight = 30;
-        
+
         // ARGB Control for events
         if (ImGui::Button("Set EXPLORE Color (Green)", ImVec2(buttonWidth, buttonHeight))) {
-            micrasverse::types::Color color{0, 255, 0}; // Green
+            micrasverse::types::Color color{0, 255, 0};  // Green
             proxyBridge->set_argb_color(color);
             proxyBridge->send_event(micras::Interface::Event::EXPLORE);
         }
-        
+
         ImGui::SameLine();
-        
+
         if (ImGui::Button("Set SOLVE Color (Blue)", ImVec2(buttonWidth, buttonHeight))) {
-            micrasverse::types::Color color{0, 0, 255}; // Blue
+            micrasverse::types::Color color{0, 0, 255};  // Blue
             proxyBridge->set_argb_color(color);
             proxyBridge->send_event(micras::Interface::Event::SOLVE);
         }
-        
+
         if (ImGui::Button("Set CALIBRATE Color (Yellow)", ImVec2(buttonWidth, buttonHeight))) {
-            micrasverse::types::Color color{255, 255, 0}; // Yellow
+            micrasverse::types::Color color{255, 255, 0};  // Yellow
             proxyBridge->set_argb_color(color);
             proxyBridge->send_event(micras::Interface::Event::CALIBRATE);
         }
-        
+
         ImGui::SameLine();
-        
+
         if (ImGui::Button("Set ERROR Color (Red)", ImVec2(buttonWidth, buttonHeight))) {
-            micrasverse::types::Color color{255, 0, 0}; // Red
+            micrasverse::types::Color color{255, 0, 0};  // Red
             proxyBridge->set_argb_color(color);
             proxyBridge->send_event(micras::Interface::Event::ERROR);
         }
-        
+
         if (ImGui::Button("Turn Off LEDs", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->turn_off_argb();
         }
-        
+
         // Manual control of individual LEDs
         ImGui::Separator();
         ImGui::Text("Manual Control:");
-        
-        static int led_index = 0;
-        static float color[3] = {255.0f, 255.0f, 255.0f}; // RGB
-        
+
+        static int   led_index = 0;
+        static float color[3] = {255.0f, 255.0f, 255.0f};  // RGB
+
         ImGui::SliderInt("LED Index", &led_index, 0, 1);
         ImGui::ColorEdit3("LED Color", color);
-        
+
         if (ImGui::Button("Set Individual LED")) {
             proxyBridge->set_led_color(led_index, color[0], color[1], color[2]);
         }
     }
-    
+
     // Button Controls Section
     if (ImGui::CollapsingHeader("Button Controls")) {
         // Get the current button status
-        auto status = proxyBridge->get_button_status();
+        auto        status = proxyBridge->get_button_status();
         std::string statusText;
-        ImVec4 statusColor;
-        
+        ImVec4      statusColor;
+
         // Check if a button timer is active and handle timeout
         if (buttonTimerActive) {
-            auto currentTime = std::chrono::steady_clock::now();
+            auto  currentTime = std::chrono::steady_clock::now();
             float elapsedTime = std::chrono::duration<float>(currentTime - buttonActivationTime).count();
-            
+
             int durationIndex = 0;
             switch (status) {
                 case micras::proxy::Button::Status::SHORT_PRESS:
@@ -364,10 +375,9 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
                     buttonTimerActive = false;
                     break;
             }
-            
+
             // Reset the button status after the configured duration
-            if (status != micras::proxy::Button::Status::NO_PRESS && 
-                elapsedTime >= buttonDurations[durationIndex]) {
+            if (status != micras::proxy::Button::Status::NO_PRESS && elapsedTime >= buttonDurations[durationIndex]) {
                 proxyBridge->set_button_status(micras::proxy::Button::Status::NO_PRESS);
                 buttonTimerActive = false;
             }
@@ -376,11 +386,11 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         // Add interactive buttons for each status with duration
         ImGui::Separator();
         ImGui::Text("Set Button Status:");
-        
+
         // Create a grid of buttons
-        float buttonWidth = (ImGui::GetContentRegionAvail().x - 20) / 3; // 3 buttons per row with spacing
+        float buttonWidth = (ImGui::GetContentRegionAvail().x - 20) / 3;  // 3 buttons per row with spacing
         float buttonHeight = 30;
-        
+
         // Use Interface events instead of direct button status setting
         if (ImGui::Button("Short Press (EXPLORE)", ImVec2(buttonWidth, buttonHeight))) {
             proxyBridge->set_button_status(micras::proxy::Button::Status::SHORT_PRESS);
@@ -399,45 +409,53 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             buttonActivationTime = std::chrono::steady_clock::now();
             buttonTimerActive = true;
         }
-              
+
         // Time remaining if a button is active
         if (buttonTimerActive && status != micras::proxy::Button::Status::NO_PRESS) {
             ImGui::Separator();
-            auto currentTime = std::chrono::steady_clock::now();
+            auto  currentTime = std::chrono::steady_clock::now();
             float elapsedTime = std::chrono::duration<float>(currentTime - buttonActivationTime).count();
-            
+
             int durationIndex = 0;
             switch (status) {
-                case micras::proxy::Button::Status::SHORT_PRESS: durationIndex = 0; break;
-                case micras::proxy::Button::Status::LONG_PRESS: durationIndex = 1; break;
-                case micras::proxy::Button::Status::EXTRA_LONG_PRESS: durationIndex = 2; break;
-                default: break;
+                case micras::proxy::Button::Status::SHORT_PRESS:
+                    durationIndex = 0;
+                    break;
+                case micras::proxy::Button::Status::LONG_PRESS:
+                    durationIndex = 1;
+                    break;
+                case micras::proxy::Button::Status::EXTRA_LONG_PRESS:
+                    durationIndex = 2;
+                    break;
+                default:
+                    break;
             }
-            
+
             float remainingTime = buttonDurations[durationIndex] - elapsedTime;
-            if (remainingTime < 0) remainingTime = 0;
-            
+            if (remainingTime < 0)
+                remainingTime = 0;
+
             ImGui::Text("Time remaining: %.1f seconds", remainingTime);
-            
+
             // Progress bar
             float progress = 1.0f - (remainingTime / buttonDurations[durationIndex]);
             ImGui::ProgressBar(progress, ImVec2(-1, 0), "");
         }
-        
+
         // Show Interface events status
         ImGui::Separator();
         ImGui::Text("Interface Events:");
-        
+
         bool exploreEvent = proxyBridge->peek_event(micras::Interface::Event::EXPLORE);
         bool solveEvent = proxyBridge->peek_event(micras::Interface::Event::SOLVE);
         bool calibrateEvent = proxyBridge->peek_event(micras::Interface::Event::CALIBRATE);
         bool errorEvent = proxyBridge->peek_event(micras::Interface::Event::ERROR);
-        
+
         ImGui::Text("EXPLORE: %s", exploreEvent ? "Active" : "Inactive");
         ImGui::Text("SOLVE: %s", solveEvent ? "Active" : "Inactive");
         ImGui::Text("CALIBRATE: %s", calibrateEvent ? "Active" : "Inactive");
         ImGui::Text("ERROR: %s", errorEvent ? "Active" : "Inactive");
-        
+
         // Allow acknowledging events
         if (ImGui::Button("Acknowledge All Events")) {
             proxyBridge->acknowledge_event(micras::Interface::Event::EXPLORE);
@@ -446,43 +464,43 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             proxyBridge->acknowledge_event(micras::Interface::Event::ERROR);
         }
     }
-    
+
     // Add Buzzer Control Section
     if (ImGui::CollapsingHeader("Buzzer Control")) {
-        static float frequency = 440.0f; // Default to 440 Hz (A4 note)
-        static int duration = 500; // Default to 500 ms
-        
+        static float frequency = 440.0f;  // Default to 440 Hz (A4 note)
+        static int   duration = 500;      // Default to 500 ms
+
         ImGui::SliderFloat("Frequency (Hz)", &frequency, 20.0f, 20000.0f, "%.1f", ImGuiSliderFlags_Logarithmic);
         ImGui::SliderInt("Duration (ms)", &duration, 100, 5000);
-        
+
         if (ImGui::Button("Play Sound")) {
             proxyBridge->set_buzzer_frequency(frequency);
             proxyBridge->set_buzzer_duration(duration);
         }
-        
+
         ImGui::SameLine();
-        
+
         if (ImGui::Button("Stop Sound")) {
             proxyBridge->stop_buzzer();
         }
-        
+
         // Display current buzzer status
         bool isPlaying = proxyBridge->is_buzzer_playing();
         ImGui::Text("Buzzer is %s", isPlaying ? "playing" : "stopped");
-        
+
         // Predefined tones/patterns
         ImGui::Separator();
         ImGui::Text("Predefined Patterns:");
-        
+
         if (ImGui::Button("Error Tone")) {
             // Play error tone and trigger error event
             proxyBridge->set_buzzer_frequency(880.0f);  // Higher frequency for error
             proxyBridge->set_buzzer_duration(300);
             proxyBridge->send_event(micras::Interface::Event::ERROR);
         }
-        
+
         ImGui::SameLine();
-        
+
         if (ImGui::Button("Success Tone")) {
             // Play success tone and trigger explore event
             proxyBridge->set_buzzer_frequency(1760.0f);
@@ -490,7 +508,7 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
             proxyBridge->send_event(micras::Interface::Event::EXPLORE);
         }
     }
-    
+
     // Wall Sensors Section
     if (this->simulationEngine && ImGui::CollapsingHeader("Wall Sensors", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Columns(2, "wallsensors", false);
@@ -510,45 +528,43 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         if (this->renderEngine && this->renderEngine->mazeRender) {
             ImGui::Checkbox("Show Firmware Maze", &this->renderEngine->mazeRender->showFirmwareWalls);
         }
-    
+
         const auto& mazePaths = simulationEngine->getMazePaths();
-        static int selectedMazeIdx = 0;
-    
+        static int  selectedMazeIdx = 0;
+
         if (!mazePaths.empty()) {
             // Only use filenames for the dropdown
             std::string currentMazeFile = std::filesystem::path(mazePaths[selectedMazeIdx]).filename().string();
-        
+
             if (ImGui::BeginCombo("Maze", currentMazeFile.c_str())) {
                 for (int i = 0; i < mazePaths.size(); ++i) {
                     std::string label = std::filesystem::path(mazePaths[i]).filename().string();
-                    bool selected = (selectedMazeIdx == i);
+                    bool        selected = (selectedMazeIdx == i);
                     if (ImGui::Selectable(label.c_str(), selected)) {
                         selectedMazeIdx = i;
                     }
-                    if (selected) ImGui::SetItemDefaultFocus();
+                    if (selected)
+                        ImGui::SetItemDefaultFocus();
                 }
                 ImGui::EndCombo();
             }
-        
+
             // Restart simulation with selected maze
-            
+
             if (ImGui::Button("Load Maze")) {
                 simulationEngine->resetSimulation(mazePaths[selectedMazeIdx]);
             }
 
-            if (ImGui::Button("Reset Simulation"))
-            {
+            if (ImGui::Button("Reset Simulation")) {
                 simulationEngine->resetSimulation();
                 proxyBridge->reset_micras();
             }
-            
+
         } else {
-            ImGui::TextColored(ImVec4(1,0.5f,0.5f,1), "No maze files found!");
+            ImGui::TextColored(ImVec4(1, 0.5f, 0.5f, 1), "No maze files found!");
         }
-    
-        
     }
-    
+
     // Option to show style editor (defaults to off)
     ImGui::Checkbox("Show Style Editor", &showStyleEditor);
     ImGui::Checkbox("Show Performance Plots", &this->plot.showPlots);
@@ -565,15 +581,34 @@ void GUI::draw(micrasverse::physics::Box2DMicrasBody& micrasBody) {
 
 void GUI::render() {
     ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplVulkan_RenderDrawData(
+        ImGui::GetDrawData(), this->vulkanEngine->lveRenderer.commandBuffers[this->vulkanEngine->lveRenderer.getFrameIndex()],
+        this->simpleRenderSystem.lvePipeline->graphicsPipeline
+    );
 }
 
 void GUI::destroy() {
-    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplVulkan_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     this->plot.destroy();
     ImGui::DestroyContext();
     this->currentWindow = nullptr;
 }
 
-} // namespace micrasverse::render
+ImGui_ImplVulkan_InitInfo GUI::getVulkanInitInfo(lve::FirstApp& app) const {
+    ImGui_ImplVulkan_InitInfo info{};
+    info.ApiVersion = 450;  // Fill with API version of Instance, e.g. VK_API_VERSION_1_3 or your value of VkApplicationInfo::apiVersion. May be lower
+                            // than header version (VK_HEADER_VERSION_COMPLETE)
+    info.Instance = app.lveDevice.instance;
+    info.PhysicalDevice = app.lveDevice.physicalDevice;
+    info.Device = app.lveDevice.device_;
+    info.QueueFamily = app.lveDevice.findQueueFamilies(app.lveDevice.physicalDevice).graphicsFamily;
+    info.Queue = app.lveDevice.graphicsQueue_;
+    info.DescriptorPool = app.globalPool->descriptorPool;
+    info.RenderPass = app.lveRenderer.getSwapChainRenderPass();
+    info.MinImageCount = 2;
+    info.ImageCount = app.lveRenderer.lveSwapChain->imageCount();
+    return info;
+}
+
+}  // namespace micrasverse::render

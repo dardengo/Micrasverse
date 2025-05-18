@@ -12,8 +12,8 @@ class Imu {
 public:
     struct Config {
         micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
-        float gyroscope_noise;
-        float accelerometer_noise;
+        float                                  gyroscope_noise;
+        float                                  accelerometer_noise;
     };
 
     enum Axis : uint8_t {
@@ -38,20 +38,20 @@ public:
 
 private:
     micrasverse::physics::Box2DMicrasBody* micrasBody;
-    b2BodyId bodyId;
-    float gyroscope_noise;
-    float accelerometer_noise;
-    b2Vec2 current_linear_velocity;
-    b2Vec2 previous_linear_velocity;
+    b2BodyId                               bodyId;
+    float                                  gyroscope_noise;
+    float                                  accelerometer_noise;
+    b2Vec2                                 current_linear_velocity;
+    b2Vec2                                 previous_linear_velocity;
 
-    std::array<float, 3> angular_velocity{};
-    std::array<float, 3> linear_acceleration{};
-    bool calibrated{false};
-    bool initialized{true};
+    std::array<float, 3>   angular_velocity{};
+    std::array<float, 3>   linear_acceleration{};
+    bool                   calibrated{false};
+    bool                   initialized{true};
     static constexpr float radps_to_mdps{180000.0F / B2_PI};
     static constexpr float mps2_to_mg{1.0F / 0.00980665F};
 };
 
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_IMU_HPP 
+#endif  // MICRAS_PROXY_IMU_HPP

@@ -10,10 +10,10 @@ class Battery {
 public:
     struct Config {
         micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
-        float voltage;
-        float voltage_divider;
-        float filter_cutoff;
-        float noise;
+        float                                  voltage;
+        float                                  voltage_divider;
+        float                                  filter_cutoff;
+        float                                  noise;
     };
 
     explicit Battery(const Config& config);
@@ -28,14 +28,14 @@ public:
 
 private:
     micrasverse::physics::Box2DMicrasBody* micrasBody;
-    float voltage;
-    float voltage_divider;
-    float noise;
-    float raw_reading{0.0f};
-    float filtered_reading{0.0f};
-    float max_voltage;
+    float                                  voltage;
+    float                                  voltage_divider;
+    float                                  noise;
+    float                                  raw_reading{0.0f};
+    float                                  filtered_reading{0.0f};
+    float                                  max_voltage;
 };
 
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_BATTERY_HPP 
+#endif  // MICRAS_PROXY_BATTERY_HPP

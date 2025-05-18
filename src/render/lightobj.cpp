@@ -2,7 +2,7 @@
 
 namespace micrasverse::render {
 
-LightObj::LightObj() {}
+LightObj::LightObj() { }
 
 LightObj::~LightObj() {
     this->renderModel.cleanUp();
@@ -13,5 +13,4 @@ void LightObj::render(const glm::mat4 view, const glm::mat4 projection) {
     this->renderModel.render(this->shader, false);
 }
 
-
-} // namespace micrasverse::render
+}  // namespace micrasverse::render

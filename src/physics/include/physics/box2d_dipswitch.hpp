@@ -20,6 +20,6 @@ private:
     std::vector<bool> switchStates;
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // BOX2D_DIPSWITCH_HPP 
+#endif  // BOX2D_DIPSWITCH_HPP

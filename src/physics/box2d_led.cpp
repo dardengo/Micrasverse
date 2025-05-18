@@ -2,17 +2,16 @@
 
 namespace micrasverse::physics {
 
-Box2DLED::Box2DLED(b2BodyId bodyId, const types::Vec2& localPosition, const types::Vec2& size, const types::Color& lightColor)
-    : bodyId(bodyId), 
-      localPosition{localPosition.x, localPosition.y}, 
-      size{size.x, size.y},
-      isLedOn(false),
-      baseColor(types::Color(176.0f, 198.0f, 214.0f)), // Light gray base color
-      lightColor(lightColor) {
-    
+Box2DLED::Box2DLED(b2BodyId bodyId, const types::Vec2& localPosition, const types::Vec2& size, const types::Color& lightColor) :
+    bodyId(bodyId),
+    localPosition{localPosition.x, localPosition.y},
+    size{size.x, size.y},
+    isLedOn(false),
+    baseColor(types::Color(176.0f, 198.0f, 214.0f)),  // Light gray base color
+    lightColor(lightColor) {
     // Initialize world position
     worldPosition = b2Body_GetWorldPoint(bodyId, this->localPosition);
-    
+
     // Set up color arrays for rendering
     baseColorArray = baseColor.toArray();
     lightColorArray = lightColor.toArray();
@@ -87,4 +86,4 @@ const std::array<float, 3>& Box2DLED::getLightColorArray() const {
     return lightColorArray;
 }
 
-} // namespace micrasverse::physics 
+}  // namespace micrasverse::physics

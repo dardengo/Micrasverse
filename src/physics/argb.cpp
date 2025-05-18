@@ -2,14 +2,14 @@
 
 namespace micrasverse::physics {
 
-Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, const types::Color& lightColor)
-    : bodyId(bodyId)
-    , localPosition(localPosition)
-    , size(size)
-    , lightColor(lightColor)
-    , baseColor(176.0f, 198.0f, 214.0f)
-    , isLedOn(false)
-    , command(0.0f) {
+Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, const types::Color& lightColor) :
+    bodyId(bodyId),
+    localPosition(localPosition),
+    size(size),
+    lightColor(lightColor),
+    baseColor(176.0f, 198.0f, 214.0f),
+    isLedOn(false),
+    command(0.0f) {
     if (!b2Body_IsValid(bodyId)) {
         throw std::runtime_error("Invalid body ID in Argb constructor");
     }
@@ -18,7 +18,7 @@ Argb::Argb(b2BodyId bodyId, b2Vec2 localPosition, b2Vec2 size, const types::Colo
     this->baseColorArray = this->baseColor.toArray();
 }
 
-void Argb::setColor(const types::Color& color){
+void Argb::setColor(const types::Color& color) {
     this->lightColor = color;
     this->lightColorArray = color.toArray();
 }
@@ -27,25 +27,25 @@ types::Color Argb::getColor() const {
     return this->lightColor;
 }
 
-void Argb::update(){
+void Argb::update() {
     this->worldPosition = b2Body_GetWorldPoint(this->bodyId, this->localPosition);
 }
 
-void Argb::turnOn(){
+void Argb::turnOn() {
     this->isLedOn = true;
 }
 
-void Argb::turnOn(const types::Color& color){
+void Argb::turnOn(const types::Color& color) {
     this->lightColor = color;
     this->lightColorArray = color.toArray();
     this->isLedOn = true;
 }
 
-void Argb::turnOff(){
+void Argb::turnOff() {
     this->isLedOn = false;
 }
 
-void Argb::toggle(){
+void Argb::toggle() {
     this->isLedOn = !this->isLedOn;
 }
 
@@ -117,4 +117,4 @@ void Argb::encode_color(const types::Color& color, uint8_t index) {
     this->lightColorArray = color.toArray();
 }
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics

@@ -20,7 +20,7 @@ enum class SensorType {
 class ISensor {
 public:
     virtual ~ISensor() = default;
-    
+
     // Sensor basics
     virtual SensorType getType() const = 0;
 
@@ -37,11 +37,11 @@ public:
      * @return The direction of the sensor.
      */
     virtual micrasverse::types::Vec2 getDirection() const = 0;
-    
+
     // Reading
     virtual float getReading() const = 0;
-    virtual void update() = 0;
-    
+    virtual void  update() = 0;
+
     // For visualization
     /**
      * @brief Get the midpoint of the ray.
@@ -56,9 +56,9 @@ public:
      * @return The direction of the ray.
      */
     virtual micrasverse::types::Vec2 getRayDirection() const = 0;
-    virtual float getReadingVisual() const = 0; // The value for display purposes
+    virtual float                    getReadingVisual() const = 0;  // The value for display purposes
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // MICRASVERSE_PHYSICS_I_SENSOR_HPP 
+#endif  // MICRASVERSE_PHYSICS_I_SENSOR_HPP

@@ -19,8 +19,7 @@ bool Mouse::firstMouse = true;
 bool Mouse::buttons[GLFW_MOUSE_BUTTON_LAST] = {false};
 bool Mouse::buttonsChanged[GLFW_MOUSE_BUTTON_LAST] = {false};
 
-void Mouse::cursor_position_callback(GLFWwindow* window, double xPos, double yPos){
-
+void Mouse::cursor_position_callback(GLFWwindow* window, double xPos, double yPos) {
     if (firstMouse) {
         lastX = xPos;
         lastY = yPos;
@@ -29,7 +28,7 @@ void Mouse::cursor_position_callback(GLFWwindow* window, double xPos, double yPo
 
     x = xPos;
     y = yPos;
-    
+
     dx = xPos - lastX;
     dy = lastY - yPos;
 
@@ -37,7 +36,7 @@ void Mouse::cursor_position_callback(GLFWwindow* window, double xPos, double yPo
     lastY = yPos;
 }
 
-void Mouse::mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
+void Mouse::mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (action != GLFW_RELEASE) {
         if (!buttons[button]) {
             buttons[button] = true;
@@ -49,61 +48,59 @@ void Mouse::mouse_button_callback(GLFWwindow* window, int button, int action, in
     buttonsChanged[button] = action != GLFW_REPEAT;
 }
 
-void Mouse::scroll_callback(GLFWwindow* window, double xOffset, double yOffset){
+void Mouse::scroll_callback(GLFWwindow* window, double xOffset, double yOffset) {
     scrollDx = xOffset;
     scrollDy = yOffset;
 }
 
-double Mouse::getMouseX(){
+double Mouse::getMouseX() {
     return x;
 }
 
-double Mouse::getMouseY(){
+double Mouse::getMouseY() {
     return y;
 }
 
-double Mouse::getDX(){
+double Mouse::getDX() {
     double _dx = dx;
     dx = 0;
     return _dx;
 }
 
-double Mouse::getDY(){
+double Mouse::getDY() {
     double _dy = dy;
     dy = 0;
     return _dy;
 }
 
-double Mouse::getScrollDx(){
+double Mouse::getScrollDx() {
     double _scrollDx = scrollDx;
     scrollDx = 0;
     return _scrollDx;
 }
 
-double Mouse::getScrollDy(){
+double Mouse::getScrollDy() {
     double _scrollDy = scrollDy;
     scrollDy = 0;
     return _scrollDy;
 }
 
-bool Mouse::button(int button){
+bool Mouse::button(int button) {
     return buttons[button];
 }
 
-bool Mouse::buttonChanged(int button){
+bool Mouse::buttonChanged(int button) {
     bool ret = buttonsChanged[button];
     buttonsChanged[button] = false;
     return ret;
 }
 
-bool Mouse::buttonWentUp(int button){
+bool Mouse::buttonWentUp(int button) {
     return !buttons[button] && buttonChanged(button);
 }
 
-bool Mouse::buttonWentDown(int button){
+bool Mouse::buttonWentDown(int button) {
     return buttons[button] && buttonChanged(button);
 }
 
-
-
-} // micrasverse::io
+}  // namespace micrasverse::io

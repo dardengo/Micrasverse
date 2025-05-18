@@ -11,15 +11,14 @@ namespace micrasverse::render {
 class LightObj {
 public:
     Shader shader;
-    Led renderModel;
-    
+    Led    renderModel;
+
     LightObj();
     virtual ~LightObj();
 
     virtual void render(const glm::mat4 view, const glm::mat4 projection);
-    
 };
 
-} // namespace micrasverse::render
+}  // namespace micrasverse::render
 
-#endif // LIGHT_OBJ_HPP
+#endif  // LIGHT_OBJ_HPP

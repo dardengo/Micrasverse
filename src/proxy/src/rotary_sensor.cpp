@@ -15,25 +15,26 @@ RotarySensor::RotarySensor(const Config& config) :
     bodyId = micrasBody->getBodyId();
 }
 
-float RotarySensor::get_position() {
+float RotarySensor::get_position() const {
+    auto modifiable = const_cast<RotarySensor*>(this);
+
     float angular_velocity = 0.0f;
     if (isLeftWheel) {
-        this->global_position = micrasBody->getLeftMotor().getPosition();
+        modifiable->global_position = micrasBody->getLeftMotor().getPosition();
     } else {
-        this->global_position = micrasBody->getRightMotor().getPosition();
+        modifiable->global_position = micrasBody->getRightMotor().getPosition();
     }
-    
-    micrasverse::types::Vec2 delta_position = this->global_position - this->last_global_position;
-    this->last_global_position = this->global_position;
-    
+
+    micrasverse::types::Vec2 delta_position = modifiable->global_position - modifiable->last_global_position;
+    modifiable->last_global_position = modifiable->global_position;
+
     float distance_sign = b2Dot((b2Vec2){delta_position.x, delta_position.y}, micrasBody->linearVelocity);
 
     float distance = std::copysignf(delta_position.length(), distance_sign);
-    
-    
-    this->position += distance / micrasverse::MICRAS_WHEEL_RADIUS;
 
-    return this->position;
+    modifiable->position += distance / micrasverse::MICRAS_WHEEL_RADIUS;
+
+    return modifiable->position;
 }
 
-}  // namespace micras::proxy 
+}  // namespace micras::proxy

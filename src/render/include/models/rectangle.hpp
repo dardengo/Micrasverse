@@ -10,60 +10,60 @@ namespace micrasverse::render {
 
 class Rectangle : public Model {
 public:
-    bool isTriangle = false; // Flag to render as a triangle instead of a rectangle
+    bool isTriangle = false;  // Flag to render as a triangle instead of a rectangle
 
-    Rectangle(Material material = Material::black_plastic, glm::vec3 position = glm::vec3(0.0f), glm::vec3 size = glm::vec3(1.0f))
-        : Model(material, position, size) {}
+    Rectangle(Material material = Material::black_plastic, glm::vec3 position = glm::vec3(0.0f), glm::vec3 size = glm::vec3(1.0f)) :
+        Model(material, position, size) { }
 
     void init() {
         // Clear any previous meshes
         meshes.clear();
-        
+
         if (isTriangle) {
             // Create triangle vertices/indices
             float vertices[] = {
-            // Positions        // Normals         
-            0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Top
-           -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Bottom left
-            0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // Bottom right
+                // Positions        // Normals
+                0.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f,  // Top
+                -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,  // Bottom left
+                0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f   // Bottom right
             };
 
             unsigned int indices[] = {
                 0, 1, 2  // Triangle
             };
-            
+
             int noVertices = 3;
             int noIndices = 3;
-            
+
             // Create vertices and indices lists from the arrays
-            std::vector<Vertex> vertexList = Vertex::genList(vertices, noVertices);
+            std::vector<Vertex>       vertexList = Vertex::genList(vertices, noVertices);
             std::vector<unsigned int> indexList(indices, indices + noIndices);
-            
+
             // Add the mesh to the model
             meshes.push_back(Mesh(vertexList, indexList));
         } else {
             // Regular rectangle
             // Simplify the calculation for vertices/indices
             float vertices[] = {
-            // Positions        // Normals         
-           -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Bottom left
-            0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Bottom right
-           -0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  // Top left
-            0.5f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // Top right
+                // Positions        // Normals
+                -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,  // Bottom left
+                0.5f,  -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,  // Bottom right
+                -0.5f, 0.5f,  0.0f, 0.0f, 0.0f, 1.0f,  // Top left
+                0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f   // Top right
             };
 
             unsigned int indices[] = {
                 0, 1, 2,  // First triangle
                 1, 3, 2   // Second triangle
             };
-            
+
             int noVertices = 4;
             int noIndices = 6;
-            
+
             // Create vertices and indices lists from the arrays
-            std::vector<Vertex> vertexList = Vertex::genList(vertices, noVertices);
+            std::vector<Vertex>       vertexList = Vertex::genList(vertices, noVertices);
             std::vector<unsigned int> indexList(indices, indices + noIndices);
-            
+
             // Add the mesh to the model
             meshes.push_back(Mesh(vertexList, indexList));
         }
@@ -74,20 +74,16 @@ public:
         this->rotation = b2Rot_GetAngle(rotation);
     }
 
-    void setMaterial(const Material material) {
-        this->material = material;
-    }
+    void setMaterial(const Material material) { this->material = material; }
 
-    void setSize(const glm::vec3 size) {
-        this->size = size;
-    }
-    
+    void setSize(const glm::vec3 size) { this->size = size; }
+
     void render(Shader shader, const bool setModel = false) {
         // Ensure shaders are properly set up before rendering
         if (meshes.empty()) {
-            return; // Skip rendering if not initialized
+            return;  // Skip rendering if not initialized
         }
-        
+
         // Set up the model matrix
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, position);
@@ -109,6 +105,6 @@ public:
     }
 };
 
-} // micrasverse::render
+}  // namespace micrasverse::render
 
-#endif // RECTANGLE_HPP
+#endif  // RECTANGLE_HPP

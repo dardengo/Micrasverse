@@ -30,12 +30,12 @@ float Fan::update() {
         return 0.0f;
     }
 
-    float elapsed_time = stopwatch->elapsed_time_ms() / 1000.0f; // Convert to seconds
+    float elapsed_time = stopwatch->elapsed_time_ms() / 1000.0f;  // Convert to seconds
     stopwatch->reset_ms();
 
     // Calculate acceleration based on elapsed time
     float acceleration = this->max_acceleration * elapsed_time;
-    
+
     // Move current speed towards target speed
     if (this->current_speed < this->target_speed) {
         this->current_speed = std::min(this->current_speed + acceleration, this->target_speed);
@@ -66,4 +66,4 @@ void Fan::set_direction(RotationDirection direction) {
     this->current_direction = direction;
 }
 
-}  // namespace micras::proxy 
+}  // namespace micras::proxy

@@ -20,10 +20,12 @@ if(NOT TARGET imgui)
   list(APPEND IMGUI_SOURCES
     ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_vulkan.cpp
   )
   list(APPEND IMGUI_HEADERS
     ${IMGUI_DIR}/backends/imgui_impl_glfw.h
     ${IMGUI_DIR}/backends/imgui_impl_opengl3.h
+    ${IMGUI_DIR}/backends/imgui_impl_vulkan.h
   )
   
   add_library(imgui STATIC ${IMGUI_SOURCES} ${IMGUI_HEADERS})

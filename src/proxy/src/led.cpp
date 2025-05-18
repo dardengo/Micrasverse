@@ -7,11 +7,7 @@
 namespace micras::proxy {
 
 Led::Led(const Config& config) :
-    micrasBody{config.micrasBody},
-    state{config.initial_state},
-    red{config.red},
-    green{config.green},
-    blue{config.blue} { }
+    micrasBody{config.micrasBody}, state{config.initial_state}, red{config.red}, green{config.green}, blue{config.blue} { }
 
 void Led::turn_on() {
     this->state = true;
@@ -54,14 +50,12 @@ void Led::setState(bool state) {
 
 void Led::updateColor() {
     if (this->state) {
-        micrasBody->getLed().setColor(micrasverse::types::Color{
-            static_cast<float>(red) / 255.0f,
-            static_cast<float>(green) / 255.0f,
-            static_cast<float>(blue) / 255.0f
-        });
+        micrasBody->getLed().setColor(
+            micrasverse::types::Color{static_cast<float>(red) / 255.0f, static_cast<float>(green) / 255.0f, static_cast<float>(blue) / 255.0f}
+        );
     } else {
         micrasBody->getLed().setColor(micrasverse::types::Color{0.0f, 0.0f, 0.0f});
     }
 }
 
-}  // namespace micras::proxy 
+}  // namespace micras::proxy

@@ -1,7 +1,7 @@
 #ifndef SHADER_HPP
 #define SHADER_HPP
 
-#define GLFW_INCLUDE_NONE   // GLFW include guard
+#define GLFW_INCLUDE_NONE  // GLFW include guard
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -10,7 +10,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
 
 namespace micrasverse::render {
 
@@ -24,14 +23,14 @@ public:
 
     // Activate the shader
     void use();
-    
+
     // Activate with view and projection matrices
     void activate(const glm::mat4 view, const glm::mat4 projection);
 
     // Utility functions
     std::string loadShaderSrc(const char* filepath);
-    GLuint compileShader(const char* filepath, GLenum type);
-    
+    GLuint      compileShader(const char* filepath, GLenum type);
+
     // Set uniforms
     void setMat4(const std::string& name, const glm::mat4 value);
     void setFloat(const std::string& name, const float value);
@@ -39,6 +38,6 @@ public:
     void set3Float(const std::string& name, const float x, const float y, const float z);
 };
 
-} // micrasverse::renderer
+}  // namespace micrasverse::render
 
-#endif // SHADER_HPP
+#endif  // SHADER_HPP

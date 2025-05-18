@@ -9,12 +9,11 @@
 
 namespace micrasverse::render {
 
-class MazeRender: public SceneObj {
-
+class MazeRender : public SceneObj {
 public:
-    std::vector<render::Rectangle> mazeWalls; // List of maze walls
-    std::vector<render::Rectangle> firmwareWalls; // List of firmware detected walls/ Shader for dotted walls
-    std::vector<render::Rectangle> routeMarkers; // List of triangles for best route visualization
+    std::vector<render::Rectangle> mazeWalls;      // List of maze walls
+    std::vector<render::Rectangle> firmwareWalls;  // List of firmware detected walls/ Shader for dotted walls
+    std::vector<render::Rectangle> routeMarkers;   // List of triangles for best route visualization
 
     MazeRender(const std::vector<physics::Maze::Element>& elements);
 
@@ -25,20 +24,21 @@ public:
     void reloadElements(const std::vector<physics::Maze::Element>& elements);
 
     void updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>& proxyBridge);
-    
+
     void updateRouteMarkers(const std::shared_ptr<micras::ProxyBridge>& proxyBridge);
 
-    void render(const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) override;
+    void render(
+        const glm::mat4 view, const glm::mat4 projection, glm::vec3 position, glm::vec3 cameraPosition, glm::vec3 ambient, glm::vec3 diffuse,
+        glm::vec3 specular
+    ) override;
 
     bool showFirmwareWalls = true;
     bool showRouteMarkers = true;
 
 private:
     std::vector<physics::Maze::Element> elements;
-
 };
 
-} // namespace micrasverse::render
+}  // namespace micrasverse::render
 
-
-#endif // MAZE_RENDER_HPP
+#endif  // MAZE_RENDER_HPP

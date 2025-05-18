@@ -11,10 +11,10 @@ class Motor {
 public:
     struct Config {
         micrasverse::physics::Box2DMicrasBody* micrasBody;
-        bool isLeftWheel;
-        float max_speed;  // Maximum speed in RPM
-        float max_torque;   // Maximum torque in Nm
-        float gear_ratio;   // Gear ratio
+        bool                                   isLeftWheel;
+        float                                  max_speed;   // Maximum speed in RPM
+        float                                  max_torque;  // Maximum torque in Nm
+        float                                  gear_ratio;  // Gear ratio
     };
 
     explicit Motor(const Config& config);
@@ -27,14 +27,14 @@ public:
 
 private:
     micrasverse::physics::Box2DMicrasBody* micrasBody;
-    bool isLeftWheel;
-    float max_speed;
-    float max_torque;
-    float gear_ratio;
-    float current_speed = 0.0f;
-    std::unique_ptr<Stopwatch> stopwatch;
+    bool                                   isLeftWheel;
+    float                                  max_speed;
+    float                                  max_torque;
+    float                                  gear_ratio;
+    float                                  current_speed = 0.0f;
+    std::unique_ptr<Stopwatch>             stopwatch;
 };
 
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_MOTOR_HPP 
+#endif  // MICRAS_PROXY_MOTOR_HPP

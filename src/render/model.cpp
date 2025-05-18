@@ -2,10 +2,9 @@
 
 namespace micrasverse::render {
 
-Model::Model(Material material, glm::vec3 position, glm::vec3 size)
-    : position(position), size(size), material(material) {}
+Model::Model(Material material, glm::vec3 position, glm::vec3 size) : position(position), size(size), material(material) { }
 
-void Model::init() {}
+void Model::init() { }
 
 void Model::render(Shader shader, const bool setModel) {
     if (setModel) {
@@ -27,4 +26,4 @@ void Model::cleanUp() {
     }
 }
 
-} // micrasverse::render
+}  // namespace micrasverse::render

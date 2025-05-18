@@ -11,8 +11,8 @@ namespace micrasverse::physics {
 class World {
 private:
     b2WorldId worldId;
-    b2Vec2 gravity;
-    
+    b2Vec2    gravity;
+
     // Flag to ensure only one world exists at a time
     static std::atomic<bool> worldExists;
 
@@ -21,12 +21,12 @@ public:
     ~World();
 
     b2WorldId getWorldId() const;
-    void runStep(const float timeStep, const int subStepCount);
-    
+    void      runStep(const float timeStep, const int subStepCount);
+
     // Check if a world already exists
     static bool hasExistingWorld() { return worldExists; }
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // WORLD_HPP
+#endif  // WORLD_HPP

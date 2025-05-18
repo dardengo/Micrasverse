@@ -9,11 +9,10 @@ namespace micrasverse::render {
 struct BoundingBox {
     glm::vec3 min;
     glm::vec3 max;
-    
-    BoundingBox(glm::vec3 min = glm::vec3(-1.0f), glm::vec3 max = glm::vec3(1.0f))
-        : min(min), max(max) {}
+
+    BoundingBox(glm::vec3 min = glm::vec3(-1.0f), glm::vec3 max = glm::vec3(1.0f)) : min(min), max(max) { }
 };
 
-} // namespace micrasverse::render
+}  // namespace micrasverse::render
 
-#endif // BOUNDINGBOX_HPP 
+#endif  // BOUNDINGBOX_HPP

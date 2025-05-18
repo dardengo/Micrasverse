@@ -3,21 +3,20 @@
 
 namespace micras::proxy {
 
-GuiController::GuiController(const Config& config, std::shared_ptr<ProxyBridge> proxy_bridge)
-    : config(config), proxy_bridge(proxy_bridge) {}
+GuiController::GuiController(const Config& config, std::shared_ptr<ProxyBridge> proxy_bridge) : config(config), proxy_bridge(proxy_bridge) { }
 
 void GuiController::update() {
     // Update GUI element states from proxy bridge
     button_pressed = proxy_bridge->is_button_pressed();
     dip_switch_state = proxy_bridge->get_dip_switch_value();
-    
+
     // Only try to set LED colors if they exist
     if (proxy_bridge && proxy_bridge->get_argb_count() > 0) {
         micrasverse::types::Color color = {0, 0, 0};
         proxy_bridge->set_argb_color(color, 0);
-        led_state = false; // If any LED was on, it's now off
+        led_state = false;  // If any LED was on, it's now off
     }
-    
+
     fan_speed = proxy_bridge->get_fan_speed();
     buzzer_playing = proxy_bridge->is_buzzer_playing();
 }
@@ -34,12 +33,12 @@ void GuiController::render() {
 
     // Button section with enhanced status visualization
     ImGui::BeginChild("Button Section", ImVec2(0, 80), true);
-    
+
     // Get current button status
-    auto status = proxy_bridge->get_button_status();
+    auto        status = proxy_bridge->get_button_status();
     std::string statusText;
-    ImVec4 statusColor;
-    
+    ImVec4      statusColor;
+
     switch (status) {
         case micras::proxy::Button::Status::NO_PRESS:
             statusText = "RELEASED";
@@ -62,23 +61,23 @@ void GuiController::render() {
             statusColor = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
             break;
     }
-    
+
     // Display button status with enhanced styling
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
     ImGui::PushStyleColor(ImGuiCol_Button, statusColor);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(statusColor.x * 1.2f, statusColor.y * 1.2f, statusColor.z * 1.2f, statusColor.w));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(statusColor.x * 0.8f, statusColor.y * 0.8f, statusColor.z * 0.8f, statusColor.w));
-    
+
     // Create a button that shows the status (non-interactive)
     ImGui::Button(statusText.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 40));
-    
+
     ImGui::PopStyleColor(3);
     ImGui::PopStyleVar();
-    
+
     // Add debug information
     ImGui::Text("Raw State: %s", button_pressed ? "PRESSED" : "RELEASED");
     ImGui::Text("Pull Type: %s", proxy_bridge->get_button_pull_type() == micras::proxy::Button::PullType::PULL_UP ? "PULL UP" : "PULL DOWN");
-    
+
     ImGui::EndChild();
 
     ImGui::Spacing();
@@ -198,7 +197,7 @@ void GuiController::update_button_state(float x, float y) {
 void GuiController::update_dip_switch_state(float x, float y) {
     if (is_point_in_rect(x, y, config.dip_switch.x, config.dip_switch.y, config.dip_switch.width, config.dip_switch.height)) {
         // Toggle dip switch state
-        uint8_t new_state = (dip_switch_state + 1) % 16; // 4-bit dip switch
+        uint8_t new_state = (dip_switch_state + 1) % 16;  // 4-bit dip switch
         // Since we can't directly set dip switch state, we'll just update our local state
         dip_switch_state = new_state;
     }
@@ -209,9 +208,9 @@ void GuiController::update_led_state(float x, float y) {
         // Toggle LED state using ARGB
         if (proxy_bridge && proxy_bridge->get_argb_count() > 0) {
             if (!led_state) {
-                proxy_bridge->set_led_color(0, 255, 255, 255); // White when on
+                proxy_bridge->set_led_color(0, 255, 255, 255);  // White when on
             } else {
-                proxy_bridge->set_led_color(0, 0, 0, 0); // Off
+                proxy_bridge->set_led_color(0, 0, 0, 0);  // Off
             }
         }
     }
@@ -220,7 +219,7 @@ void GuiController::update_led_state(float x, float y) {
 void GuiController::update_fan_speed(float x, float y) {
     if (is_point_in_rect(x, y, config.fan.x, config.fan.y, config.fan.width, config.fan.height)) {
         float normalized_x = (x - config.fan.x) / config.fan.width;
-        float new_speed = normalized_x * 100.0f; // Scale to 0-100%
+        float new_speed = normalized_x * 100.0f;  // Scale to 0-100%
         proxy_bridge->set_fan_speed(new_speed);
     }
 }
@@ -228,12 +227,12 @@ void GuiController::update_fan_speed(float x, float y) {
 void GuiController::update_buzzer_state(float x, float y) {
     if (is_point_in_rect(x, y, config.buzzer.x, config.buzzer.y, config.buzzer.width, config.buzzer.height)) {
         if (!buzzer_playing) {
-            proxy_bridge->set_buzzer_frequency(1000); // Default frequency
-            proxy_bridge->set_buzzer_duration(100);   // Default duration (ms)
+            proxy_bridge->set_buzzer_frequency(1000);  // Default frequency
+            proxy_bridge->set_buzzer_duration(100);    // Default duration (ms)
         } else {
             proxy_bridge->stop_buzzer();
         }
     }
 }
 
-} // namespace micras::proxy 
+}  // namespace micras::proxy

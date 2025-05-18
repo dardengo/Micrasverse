@@ -4,15 +4,15 @@
 #include "constants.hpp"
 #include "physics/box2d_micrasbody.hpp"
 
-#define GLFW_INCLUDE_NONE   // GLFW include guard
+#define GLFW_INCLUDE_NONE  // GLFW include guard
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
-namespace micrasverse::render{
+namespace micrasverse::render {
 
-//Enum to represent directions for movement
+// Enum to represent directions for movement
 
 enum class CameraDirection {
     NONE = 0,
@@ -39,8 +39,8 @@ public:
     glm::vec3 worldUp;
 
     // Rotational values
-    float yaw; // x-axis
-    float pitch; // y-axis
+    float yaw;    // x-axis
+    float pitch;  // y-axis
 
     // Movement values
     float speed;
@@ -48,8 +48,8 @@ public:
     float zoom;
 
     // Camera behavior
-    bool followMicras {false};
-    bool centerMaze {true};
+    bool followMicras{false};
+    bool centerMaze{true};
 
     // Default and initialize with position
     Camera(const glm::vec3 position = glm::vec3(-0.3f, micrasverse::MAZE_FLOOR_HALFHEIGHT, 4.75f));
@@ -85,6 +85,6 @@ private:
     void updateCameraVectors();
 };
 
-} // namespace micrasverse::render
+}  // namespace micrasverse::render
 
-#endif // CAMERA_HPP
+#endif  // CAMERA_HPP

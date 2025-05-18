@@ -12,10 +12,9 @@ namespace micras::proxy {
 template <uint8_t num_of_switches>
 class TDipSwitch {
 public:
-
     struct Config {
         micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
-        std::array<bool, num_of_switches> initial_states;
+        std::array<bool, num_of_switches>      initial_states;
     };
 
     explicit TDipSwitch(const Config& config);
@@ -30,11 +29,11 @@ public:
 
 private:
     micrasverse::physics::Box2DMicrasBody* micrasBody;
-    std::array<bool, num_of_switches> switch_states;
+    std::array<bool, num_of_switches>      switch_states;
 };
 
 }  // namespace micras::proxy
 
 #include "../src/dip_switch.cpp"  // NOLINT(bugprone-suspicious-include, misc-header-include-cycle)
 
-#endif  // MICRAS_PROXY_DIP_SWITCH_HPP 
+#endif  // MICRAS_PROXY_DIP_SWITCH_HPP

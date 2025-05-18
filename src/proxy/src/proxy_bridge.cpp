@@ -5,8 +5,7 @@
 
 namespace micras {
 
-ProxyBridge::ProxyBridge(Micras& micras, micrasverse::physics::Box2DMicrasBody& micrasBody) 
-    : micras(micras), micrasBody(micrasBody) {}
+ProxyBridge::ProxyBridge(Micras& micras, micrasverse::physics::Box2DMicrasBody& micrasBody) : micras(micras), micrasBody(micrasBody) { }
 
 // Button access
 proxy::Button::Status ProxyBridge::get_button_status() const {
@@ -199,10 +198,9 @@ void ProxyBridge::set_led_brightness(uint8_t index, uint8_t brightness) {
     // For now, we'll just use the set_color method with the current color
     // This is a workaround until a proper set_brightness method is implemented
     micrasverse::types::Color currentColor = micras.argb->argbRefs[index].get().getColor();
-    float brightnessFactor = brightness / 255.0f;
+    float                     brightnessFactor = brightness / 255.0f;
     micrasverse::types::Color newColor{
-        static_cast<uint8_t>(currentColor.r * brightnessFactor),
-        static_cast<uint8_t>(currentColor.g * brightnessFactor),
+        static_cast<uint8_t>(currentColor.r * brightnessFactor), static_cast<uint8_t>(currentColor.g * brightnessFactor),
         static_cast<uint8_t>(currentColor.b * brightnessFactor)
     };
     micras.argb->set_color(newColor, index);
@@ -273,12 +271,12 @@ std::string ProxyBridge::get_action_type_string() const {
     if (!action) {
         return "NONE";
     }
-    
+
     // We need to use RTTI to check what kind of action it is
     // This is a simplified version - you might need to add more cases
     // based on the actual action classes in MicrasFirmware
     const auto& typeName = typeid(*action).name();
-    
+
     if (std::string(typeName).find("MoveAction") != std::string::npos) {
         return "MOVE";
     } else if (std::string(typeName).find("TurnAction") != std::string::npos) {
@@ -317,4 +315,4 @@ bool ProxyBridge::peek_event(Interface::Event event) const {
     return micras.peek_event(event);
 }
 
-} // namespace micras::proxy 
+}  // namespace micras

@@ -29,4 +29,4 @@ void Box2DDipSwitch::toggleSwitch(size_t switchIndex) {
     switchStates[switchIndex] = !switchStates[switchIndex];
 }
 
-} // namespace micrasverse::physics 
+}  // namespace micrasverse::physics

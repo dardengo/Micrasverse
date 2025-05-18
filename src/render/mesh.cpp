@@ -4,18 +4,12 @@ namespace micrasverse::render {
 
 std::vector<Vertex> Vertex::genList(float* vertices, int noVertices) {
     std::vector<Vertex> vertexList(noVertices);
-    
-    int stride = 6; // 3 position + 3 normal coordinates
+
+    int stride = 6;  // 3 position + 3 normal coordinates
 
     for (int i = 0; i < noVertices; i++) {
-        vertexList[i].position = glm::vec3(vertices[i * stride + 0],
-                                           vertices[i * stride + 1],
-                                           vertices[i * stride + 2]
-        );
-        vertexList[i].normal = glm::vec3(vertices[i * stride + 3],
-                                         vertices[i * stride + 4],
-                                         vertices[i * stride + 5]
-        );
+        vertexList[i].position = glm::vec3(vertices[i * stride + 0], vertices[i * stride + 1], vertices[i * stride + 2]);
+        vertexList[i].normal = glm::vec3(vertices[i * stride + 3], vertices[i * stride + 4], vertices[i * stride + 5]);
         /*vertexList[i].color = glm::vec3(vertices[i * stride + 6],
                                         vertices[i * stride + 7],
                                         vertices[i * stride + 8]
@@ -25,7 +19,7 @@ std::vector<Vertex> Vertex::genList(float* vertices, int noVertices) {
     return vertexList;
 }
 
-Mesh::Mesh() {}
+Mesh::Mesh() { }
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) : vertices(vertices), indices(indices) {
     setup();
@@ -79,4 +73,4 @@ void Mesh::setup() {
     glBindVertexArray(0);
 }
 
-} // micrasverse::render
+}  // namespace micrasverse::render

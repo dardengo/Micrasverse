@@ -6,9 +6,7 @@
 namespace micras::proxy {
 
 template <uint8_t num_of_switches>
-TDipSwitch<num_of_switches>::TDipSwitch(const Config& config) :
-    micrasBody{config.micrasBody},
-    switch_states{config.initial_states} { }
+TDipSwitch<num_of_switches>::TDipSwitch(const Config& config) : micrasBody{config.micrasBody}, switch_states{config.initial_states} { }
 
 template <uint8_t num_of_switches>
 bool TDipSwitch<num_of_switches>::get_switch_state(uint8_t switch_index) const {
@@ -42,4 +40,4 @@ void TDipSwitch<num_of_switches>::setState(uint8_t value) {
 
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_DIP_SWITCH_CPP 
+#endif  // MICRAS_PROXY_DIP_SWITCH_CPP

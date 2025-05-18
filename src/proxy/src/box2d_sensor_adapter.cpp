@@ -4,12 +4,10 @@
 
 namespace micras::proxy {
 
-Box2DSensorAdapter::Box2DSensorAdapter(micrasverse::physics::Box2DMicrasBody* body, uint8_t sensorIndex)
-    : body(body), sensorIndex(sensorIndex) {
-}
+Box2DSensorAdapter::Box2DSensorAdapter(micrasverse::physics::Box2DMicrasBody* body, uint8_t sensorIndex) : body(body), sensorIndex(sensorIndex) { }
 
 float Box2DSensorAdapter::getReading() const {
     return body->getDistanceSensor(sensorIndex).getReading();
 }
 
-}  // namespace micras::proxy 
+}  // namespace micras::proxy

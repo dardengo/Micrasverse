@@ -82,6 +82,6 @@ public:
     virtual void setAngle(float angle) = 0;
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // MICRASVERSE_PHYSICS_I_DISTANCE_SENSOR_HPP 
+#endif  // MICRASVERSE_PHYSICS_I_DISTANCE_SENSOR_HPP

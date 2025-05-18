@@ -2,16 +2,15 @@
 
 namespace micrasverse::render {
 
-Camera::Camera(const glm::vec3 position)
-    : position(position),
-    yaw(-90.0f),    // -90.0f to face x-y plane
+Camera::Camera(const glm::vec3 position) :
+    position(position),
+    yaw(-90.0f),  // -90.0f to face x-y plane
     pitch(0.0f),
     speed(1.0f),
     sensitivity(1.0f),
     zoom(45.0f),
     cameraFront(glm::vec3(0.0f, 0.0f, -1.0f)),  // -z direction
-    worldUp(glm::vec3(0.0f, 1.0f, 0.0f))
-{
+    worldUp(glm::vec3(0.0f, 1.0f, 0.0f)) {
     updateCameraVectors();
 }
 
@@ -34,37 +33,36 @@ void Camera::updateCameraPos(const CameraDirection direction, const double dt) {
     const float velocity = (float)dt * speed;
 
     switch (direction) {
-    case CameraDirection::FORWARD:
-        position += cameraFront * velocity;
-        break;
-    case CameraDirection::BACKWARD:
-        position -= cameraFront * velocity;
-        break;
-    case CameraDirection::RIGHT:
-        position += cameraRight * velocity;
-        break;
-    case CameraDirection::LEFT:
-        position -= cameraRight * velocity;
-        break;
-    case CameraDirection::UP:
-        position += cameraUp * velocity;
-        break;
-    case CameraDirection::DOWN:
-        position -= cameraUp * velocity;
-        break;
-    case CameraDirection::NONE:
-        break;
+        case CameraDirection::FORWARD:
+            position += cameraFront * velocity;
+            break;
+        case CameraDirection::BACKWARD:
+            position -= cameraFront * velocity;
+            break;
+        case CameraDirection::RIGHT:
+            position += cameraRight * velocity;
+            break;
+        case CameraDirection::LEFT:
+            position -= cameraRight * velocity;
+            break;
+        case CameraDirection::UP:
+            position += cameraUp * velocity;
+            break;
+        case CameraDirection::DOWN:
+            position -= cameraUp * velocity;
+            break;
+        case CameraDirection::NONE:
+            break;
     }
 }
 
 void Camera::updateCameraZoom(const double dy) {
-    zoom -= 5 * dy; // Multiply by 5 to make zooming faster
-    
+    zoom -= 5 * dy;  // Multiply by 5 to make zooming faster
+
     // Constrain zoom value
     if (zoom < 1.0f) {
         zoom = 1.0f;
-    }
-    else if (zoom > 100.0f) {
+    } else if (zoom > 100.0f) {
         zoom = 100.0f;
     }
 }
@@ -99,4 +97,4 @@ void Camera::update(const micrasverse::physics::Box2DMicrasBody& micrasBody) {
     }
 }
 
-} // namespace micrasverse::render
+}  // namespace micrasverse::render

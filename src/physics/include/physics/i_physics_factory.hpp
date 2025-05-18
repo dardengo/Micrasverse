@@ -18,27 +18,16 @@ public:
     virtual ~IPhysicsFactory() = default;
 
     // Create components
-    virtual std::unique_ptr<IArgb> createARGB(
-        const types::Vec2& localPosition, 
-        const types::Vec2& size, 
-        const types::Color& color) = 0;
+    virtual std::unique_ptr<IArgb> createARGB(const types::Vec2& localPosition, const types::Vec2& size, const types::Color& color) = 0;
 
     virtual std::unique_ptr<IDipSwitch> createDipSwitch(size_t numSwitches) = 0;
 
-    virtual std::unique_ptr<IDistanceSensor> createDistanceSensor(
-        const types::Vec2& localPosition, 
-        float angle) = 0;
+    virtual std::unique_ptr<IDistanceSensor> createDistanceSensor(const types::Vec2& localPosition, float angle) = 0;
 
-    virtual std::unique_ptr<IMotor> createMotor(
-        const types::Vec2& localPosition, 
-        bool leftWheel, 
-        float angle,
-        float resistance, 
-        float ke, 
-        float kt, 
-        float maxVoltage) = 0;
+    virtual std::unique_ptr<IMotor>
+        createMotor(const types::Vec2& localPosition, bool leftWheel, float angle, float resistance, float ke, float kt, float maxVoltage) = 0;
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // MICRASVERSE_PHYSICS_I_PHYSICS_FACTORY_HPP 
+#endif  // MICRASVERSE_PHYSICS_I_PHYSICS_FACTORY_HPP

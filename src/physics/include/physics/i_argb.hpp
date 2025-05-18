@@ -106,11 +106,11 @@ public:
      * @param index The index of the LED.
      */
     virtual void encode_color(const micrasverse::types::Color& color, uint8_t index) = 0;
-    
+
     // Override the getType method from IActuator
     virtual ActuatorType getType() const override { return ActuatorType::LED; }
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // MICRASVERSE_PHYSICS_I_ARGB_HPP 
+#endif  // MICRASVERSE_PHYSICS_I_ARGB_HPP

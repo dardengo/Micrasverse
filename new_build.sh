@@ -73,10 +73,10 @@ echo "Build successful!"
 
 # Check if executable exists
 if [ -f "bin/micrasverse" ]; then
-  echo "Run with: ./bin/micrasverse"
+  echo "Run with: ./build./bin/micrasverse"
 elif [ -f "bin/$BUILD_TYPE/micrasverse" ]; then
   echo "Run with: ./build/bin/$BUILD_TYPE/micrasverse"
 else
   echo "Executable not found. Check the build output for errors."
-  echo "Expected locations: ./bin/micrasverse or ./bin/$BUILD_TYPE/micrasverse"
+  echo "Expected locations: ./build./bin/micrasverse or ./build./bin/$BUILD_TYPE/micrasverse"
 fi

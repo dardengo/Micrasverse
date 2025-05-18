@@ -12,34 +12,41 @@ namespace micrasverse::physics {
 class Box2DButton : public ISensor {
 public:
     Box2DButton(b2BodyId bodyId, const micrasverse::types::Vec2& localPosition, float radius);
-    
+
     // ISensor interface implementation
     SensorType getType() const override { return SensorType::TOUCH; }
+
     micrasverse::types::Vec2 getPosition() const override;
-    micrasverse::types::Vec2 getDirection() const override { return {0.0f, 1.0f}; } // Button points up
+
+    micrasverse::types::Vec2 getDirection() const override { return {0.0f, 1.0f}; }  // Button points up
+
     float getReading() const override { return isPressed() ? 1.0f : 0.0f; }
+
     void update() override;
+
     micrasverse::types::Vec2 getRayMidPoint() const override { return getPosition(); }
+
     micrasverse::types::Vec2 getRayDirection() const override { return getDirection(); }
+
     float getReadingVisual() const override { return getReading(); }
-    
+
     // Box2DButton specific methods
-    bool isPressed() const;
+    bool                          isPressed() const;
     micras::proxy::Button::Status getStatus() const;
 
 private:
-    b2BodyId bodyId;
-    b2Vec2 localPosition;
-    float radius;
-    bool pressed;
-    bool previousPressed;
-    micras::proxy::Button::Status currentStatus;
+    b2BodyId                              bodyId;
+    b2Vec2                                localPosition;
+    float                                 radius;
+    bool                                  pressed;
+    bool                                  previousPressed;
+    micras::proxy::Button::Status         currentStatus;
     std::chrono::steady_clock::time_point pressStartTime;
-    
+
     static constexpr int SHORT_PRESS_DURATION_MS = 500;
     static constexpr int LONG_PRESS_DURATION_MS = 2000;
 };
 
 }  // namespace micrasverse::physics
 
-#endif  // BOX2D_BUTTON_HPP 
+#endif  // BOX2D_BUTTON_HPP

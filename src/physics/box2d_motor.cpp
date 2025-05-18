@@ -3,18 +3,30 @@
 
 namespace micrasverse::physics {
 
-Box2DMotor::Box2DMotor(b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, 
-                       float angle, float R, float ke, float kt, float maxVoltage)
-    : resistance(R), ke(ke), kt(kt), maxVoltage(maxVoltage), inputCommand(0.0f),
-      current(0.0f), rotorAngularVelocity(0.0f), frictionCoefficient(MICRAS_FRICTION),
-      appliedForce(0.0f), torque(0.0f), bodyLinearVelocity(0.0f), bodyAngularVelocity(0.0f),
-      leftWheel(leftWheel), isFanOn(false), bodyId(bodyId),
-      localPosition{localPosition.x, localPosition.y}, angle(angle) {
-    
+Box2DMotor::Box2DMotor(
+    b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, float angle, float R, float ke, float kt, float maxVoltage
+) :
+    resistance(R),
+    ke(ke),
+    kt(kt),
+    maxVoltage(maxVoltage),
+    inputCommand(0.0f),
+    current(0.0f),
+    rotorAngularVelocity(0.0f),
+    frictionCoefficient(MICRAS_FRICTION),
+    appliedForce(0.0f),
+    torque(0.0f),
+    bodyLinearVelocity(0.0f),
+    bodyAngularVelocity(0.0f),
+    leftWheel(leftWheel),
+    isFanOn(false),
+    bodyId(bodyId),
+    localPosition{localPosition.x, localPosition.y},
+    angle(angle) {
     // Calculate local direction based on angle
     localDirection.x = std::cos(angle);
     localDirection.y = std::sin(angle);
-    
+
     // Calculate body mass (used for force calculations)
     bodyMass = b2Body_GetMass(bodyId);
 }
@@ -41,8 +53,9 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
 
     this->bodyAngularVelocity = b2Body_GetAngularVelocity(this->bodyId);
 
-    float wheelAngularVelocity = (bodyLinearVelocity+angularVelocitySign*MICRAS_TRACK_WIDTH/2.0f*b2Body_GetAngularVelocity(this->bodyId))/(MICRAS_WHEEL_RADIUS);
-    
+    float wheelAngularVelocity =
+        (bodyLinearVelocity + angularVelocitySign * MICRAS_TRACK_WIDTH / 2.0f * b2Body_GetAngularVelocity(this->bodyId)) / (MICRAS_WHEEL_RADIUS);
+
     this->rotorAngularVelocity = wheelAngularVelocity * MICRAS_GEAR_RATIO;
 
     float backEMF = this->ke * this->rotorAngularVelocity;
@@ -70,8 +83,8 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
     const b2Vec2 worldDirection = b2Body_GetWorldVector(this->bodyId, this->localDirection);
 
     b2Vec2 forceVector = appliedForce * worldDirection;
-    
+
     b2Body_ApplyForce(this->bodyId, forceVector, b2Body_GetWorldPoint(this->bodyId, this->localPosition), true);
 }
 
-} // namespace micrasverse::physics 
+}  // namespace micrasverse::physics

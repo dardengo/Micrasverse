@@ -2,12 +2,7 @@
 
 namespace micras::proxy {
 
-Buzzer::Buzzer(const Config& config) : 
-    micrasBody(config.micrasBody), 
-    volume(config.volume), 
-    playing(false), 
-    duration(0), 
-    current_frequency(0) {
+Buzzer::Buzzer(const Config& config) : micrasBody(config.micrasBody), volume(config.volume), playing(false), duration(0), current_frequency(0) {
     tone_timer = std::make_unique<Stopwatch>(Stopwatch::Config{});
     wait_timer = std::make_unique<Stopwatch>(Stopwatch::Config{});
 }
@@ -59,5 +54,4 @@ bool Buzzer::is_playing() const {
     return playing;
 }
 
-}  // namespace micras::proxy 
-
+}  // namespace micras::proxy

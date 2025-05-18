@@ -15,10 +15,15 @@ namespace micrasverse::render {
 unsigned int Screen::SCR_WIDTH = 1366;
 unsigned int Screen::SCR_HEIGHT = 768;
 
-
-Screen::Screen(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine) 
-    : window(nullptr), camera(), simulationEngine(simulationEngine), 
-      lastFrameTime(0.0f), frameCount(0), isFullscreen(false), lastWidth(SCR_WIDTH), lastHeight(SCR_HEIGHT) {
+Screen::Screen(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine) :
+    window(nullptr),
+    camera(),
+    simulationEngine(simulationEngine),
+    lastFrameTime(0.0f),
+    frameCount(0),
+    isFullscreen(false),
+    lastWidth(SCR_WIDTH),
+    lastHeight(SCR_HEIGHT) {
     this->gui = std::make_unique<GUI>();
 }
 
@@ -46,7 +51,7 @@ bool Screen::init() {
         return false;
     }
 
-    //Set OpenGL version to 3.3 (fail if user doesn't have)
+    // Set OpenGL version to 3.3 (fail if user doesn't have)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
@@ -54,8 +59,8 @@ bool Screen::init() {
     // Use dynamic multisampling based on screen size
     int samples = 4;
     glfwWindowHint(GLFW_SAMPLES, samples);
-    
-    //Set OpenGL profile to core (not backwards compatible)
+
+    // Set OpenGL profile to core (not backwards compatible)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     this->window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Micrasverse", NULL, NULL);
@@ -66,13 +71,13 @@ bool Screen::init() {
         return false;
     }
 
-    //Make the window the current context
+    // Make the window the current context
     glfwMakeContextCurrent(this->window);
 
     // Enable V-Sync
     glfwSwapInterval(1);
 
-    //Load GLAD and openGL function pointers
+    // Load GLAD and openGL function pointers
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cerr << "Failed to initialize GLAD and openGl function pointers" << '\n';
         return false;
@@ -81,7 +86,7 @@ bool Screen::init() {
     // Enable depth testing for proper 3D rendering
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-    
+
     // Enable multisampling for smoother edges
     glEnable(GL_MULTISAMPLE);
 
@@ -93,7 +98,7 @@ bool Screen::init() {
 };
 
 void Screen::setParameters() {
-    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT); //for windowed
+    glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);  // for windowed
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     glfwSetKeyCallback(window, io::Keyboard::key_callback);
@@ -101,7 +106,7 @@ void Screen::setParameters() {
     glfwSetMouseButtonCallback(window, io::Mouse::mouse_button_callback);
     glfwSetScrollCallback(window, io::Mouse::scroll_callback);
 
-    // Create and initialize GUI after user callbacks are set so to not overwrite ImGui's callbacks 
+    // Create and initialize GUI after user callbacks are set so to not overwrite ImGui's callbacks
     this->gui->setSimulationEngine(this->simulationEngine);
     this->gui->init(this->window);
 }
@@ -115,7 +120,7 @@ void Screen::processInput() {
     if (io::Keyboard::keyWentDown(GLFW_KEY_ESCAPE)) {
         this->setShouldClose(true);
     }
-    
+
     if (io::Keyboard::keyWentDown(GLFW_KEY_F)) {
         this->camera.followMicras = !this->camera.followMicras;
     }
@@ -125,7 +130,7 @@ void Screen::processInput() {
         this->camera.followMicras = false;
         this->camera.position = glm::vec3(-0.3f, micrasverse::MAZE_FLOOR_HALFHEIGHT, 4.75f);
     }
-    
+
     // Toggle fullscreen when F11 is pressed
     if (io::Keyboard::keyWentDown(GLFW_KEY_F11)) {
         toggleFullscreen();
@@ -158,28 +163,28 @@ void Screen::processInput() {
 
 void Screen::toggleFullscreen() {
     isFullscreen = !isFullscreen;
-    
+
     if (isFullscreen) {
         // Store current window dimensions
         glfwGetWindowSize(window, &lastWidth, &lastHeight);
-        
+
         // Get primary monitor
-        GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+        GLFWmonitor*       primaryMonitor = glfwGetPrimaryMonitor();
         const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
-        
+
         // Make window fullscreen
         glfwSetWindowMonitor(window, primaryMonitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-        
+
         // Adjust multisampling and rendering optimizations for fullscreen
         glDisable(GL_MULTISAMPLE);
     } else {
         // Restore windowed mode
         glfwSetWindowMonitor(window, nullptr, 100, 100, lastWidth, lastHeight, GLFW_DONT_CARE);
-        
+
         // Restore higher quality rendering for windowed mode
         glEnable(GL_MULTISAMPLE);
     }
-    
+
     // Update viewport
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
@@ -190,13 +195,13 @@ void Screen::updateAndDisplayFPS() {
     // Update FPS counter
     float currentTime = glfwGetTime();
     frameCount++;
-    
+
     // Update FPS every second
     if (currentTime - lastFrameTime >= 1.0f) {
         fps = static_cast<float>(frameCount) / (currentTime - lastFrameTime);
         frameCount = 0;
         lastFrameTime = currentTime;
-        
+
         // Display FPS in window title
         char title[256];
         snprintf(title, sizeof(title), "Micrasverse | FPS: %.1f", fps);
@@ -227,13 +232,10 @@ void Screen::update(const micrasverse::physics::Box2DMicrasBody& micrasBody) {
 
     // Update view matrix
     this->view = this->camera.getViewMatrix();
-    
+
     // Update projection matrix
-    this->projection = glm::perspective(glm::radians(this->camera.getZoom()),
-                                        (float)SCR_WIDTH / (float)SCR_HEIGHT,
-                                        0.1f,
-                                        100.0f);
-    
+    this->projection = glm::perspective(glm::radians(this->camera.getZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
     // Update FPS counter
     updateAndDisplayFPS();
 }
@@ -266,4 +268,4 @@ void Screen::destroy() {
     glfwTerminate();
 }
 
-} // micrasverse::render
+}  // namespace micrasverse::render

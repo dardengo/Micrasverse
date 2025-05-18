@@ -8,9 +8,7 @@ namespace micras::proxy {
 
 class Stopwatch {
 public:
-    struct Config {
-        
-    };
+    struct Config { };
 
     Stopwatch();
 
@@ -34,4 +32,4 @@ private:
 
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_STOPWATCH_HPP 
+#endif  // MICRAS_PROXY_STOPWATCH_HPP

@@ -27,14 +27,6 @@ foreach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/lib)
 endforeach()
 
-# Find required packages
-find_package(OpenGL REQUIRED)
-if(NOT TARGET OpenGL::GL)
-    add_library(OpenGL::GL INTERFACE IMPORTED)
-    target_link_libraries(OpenGL::GL INTERFACE ${OPENGL_LIBRARIES})
-    target_include_directories(OpenGL::GL INTERFACE ${OPENGL_INCLUDE_DIR})
-endif()
-
 # Platform-specific settings
 if(UNIX AND NOT APPLE)
   # Linux-specific settings

@@ -7,11 +7,11 @@ namespace micras::proxy {
 class IDistanceSensor {
 public:
     virtual ~IDistanceSensor() = default;
-    
+
     // Get raw sensor reading
     virtual float getReading() const = 0;
 };
 
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_I_DISTANCE_SENSOR_HPP 
+#endif  // MICRAS_PROXY_I_DISTANCE_SENSOR_HPP

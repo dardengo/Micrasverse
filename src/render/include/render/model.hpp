@@ -4,7 +4,7 @@
 #include "render/mesh.hpp"
 #include "render/material.hpp"
 
-#define GLFW_INCLUDE_NONE   // GLFW include guard
+#define GLFW_INCLUDE_NONE  // GLFW include guard
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
@@ -18,8 +18,8 @@ class Model {
 public:
     glm::vec3 position;
     glm::vec3 size;
-    float rotation{0.0f};
-    Material material;
+    float     rotation{0.0f};
+    Material  material;
 
     Model(Material material = Material::black_plastic, glm::vec3 position = glm::vec3(0.0f), glm::vec3 size = glm::vec3(1.0f));
 
@@ -33,6 +33,6 @@ protected:
     std::vector<Mesh> meshes;
 };
 
-} // micrasverse::render
+}  // namespace micrasverse::render
 
-#endif // MODEL_HPP
+#endif  // MODEL_HPP

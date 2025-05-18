@@ -3,10 +3,9 @@
 namespace micrasverse::render {
 
 // Constructor
-Shader::Shader() {}
+Shader::Shader() { }
 
 void Shader::generate(const char* vertexShaderPath, const char* fragmentShaderPath) {
-    
     // Compile vertex shader
     GLuint vertexShader = compileShader(vertexShaderPath, GL_VERTEX_SHADER);
     // Compile fragment shader
@@ -19,7 +18,7 @@ void Shader::generate(const char* vertexShaderPath, const char* fragmentShaderPa
     glLinkProgram(id);
 
     // Check if the shader program linked successfully
-    int success;
+    int  success;
     char infoLog[512];
     glGetProgramiv(id, GL_LINK_STATUS, &success);
     if (!success) {
@@ -43,9 +42,9 @@ void Shader::activate(const glm::mat4 view, const glm::mat4 projection) {
 }
 
 // Load shader source
-std::string Shader::loadShaderSrc(const char* filepath){
-    std::ifstream file {};
-    std::stringstream buffer {};
+std::string Shader::loadShaderSrc(const char* filepath) {
+    std::ifstream     file{};
+    std::stringstream buffer{};
 
     std::string shaderSource = "";
 
@@ -57,7 +56,7 @@ std::string Shader::loadShaderSrc(const char* filepath){
     } else {
         std::cerr << "Failed to open file: " << filepath << std::endl;
     }
-    
+
     file.close();
     return shaderSource;
 }
@@ -68,13 +67,13 @@ GLuint Shader::compileShader(const char* filepath, GLenum type) {
     GLuint shader = glCreateShader(type);
 
     // Load shader source
-    std::string shaderSrc = loadShaderSrc(filepath);
+    std::string   shaderSrc = loadShaderSrc(filepath);
     const GLchar* shaderSource = shaderSrc.c_str();
     glShaderSource(shader, 1, &shaderSource, NULL);
     glCompileShader(shader);
 
     // Check if the shader compiled successfully
-    int success {};
+    int  success{};
     char infoLog[512];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
@@ -102,4 +101,4 @@ void Shader::set3Float(const std::string& name, const float x, const float y, co
     glUniform3f(glGetUniformLocation(id, name.c_str()), x, y, z);
 }
 
-} // namespace micrasverse::renderer
+}  // namespace micrasverse::render

@@ -6,54 +6,53 @@
 
 namespace micrasverse {
 
-    
-    // Maze dimensions (1 unit = 1 meter)
-    constexpr int MAZE_CELLS_HEIGHT = 16;                                                   // number of cells
-    constexpr int MAZE_CELLS_WIDTH = 16;                                                    // number of cells
-    
-    constexpr float CELL_SIZE = 0.18f;                                                      // meters
-    constexpr float WALL_THICKNESS = 0.012f;                                                // meters
-    constexpr float WALL_SIZE = CELL_SIZE - WALL_THICKNESS;                                 // meters
-    
-    constexpr float MAZE_FLOOR_WIDTH = CELL_SIZE * MAZE_CELLS_WIDTH + WALL_THICKNESS;       // meters
-    constexpr float MAZE_FLOOR_HALFWIDTH = MAZE_FLOOR_WIDTH / 2.0f;                         // meters
-    constexpr float MAZE_FLOOR_HEIGHT = CELL_SIZE * MAZE_CELLS_HEIGHT + WALL_THICKNESS;     // meters
-    constexpr float MAZE_FLOOR_HALFHEIGHT = MAZE_FLOOR_HEIGHT / 2.0f;                       // meters
+// Maze dimensions (1 unit = 1 meter)
+constexpr int MAZE_CELLS_HEIGHT = 16;  // number of cells
+constexpr int MAZE_CELLS_WIDTH = 16;   // number of cells
 
-    // Micras robot physical dimensions and properties
-    constexpr float MICRAS_WIDTH = 0.067f;                                                  // meters
-    constexpr float MICRAS_HALFWIDTH = MICRAS_WIDTH / 2.0f;                                 // meters
-    constexpr float MICRAS_HEIGHT = 0.1f;                                                  // meters
-    constexpr float MICRAS_HALFHEIGHT = MICRAS_HEIGHT / 2.0f;                               // meters
-    constexpr float MICRAS_MASS = 0.110f;                                                   // kilograms
-    constexpr float MICRAS_RESTITUTION = 0.0f;                                              // bounciness (0-1)
-    constexpr float MICRAS_FRICTION = 0.95f;                                                // friction coefficient
-    constexpr float MICRAS_WHEEL_RADIUS = 0.0112f;                                          // meters
-    constexpr float MICRAS_GEAR_RATIO = 2.5f;                                               // reduction ratio
-    constexpr float MICRAS_TRACK_WIDTH = 0.067f;                                            // meters (distance between wheels)
-    constexpr float MICRAS_CENTER_OF_MASS_OFFSET = 0.04f - MICRAS_HALFHEIGHT;                                    // meters (offset from center of body)
+constexpr float CELL_SIZE = 0.18f;                       // meters
+constexpr float WALL_THICKNESS = 0.012f;                 // meters
+constexpr float WALL_SIZE = CELL_SIZE - WALL_THICKNESS;  // meters
 
-    // Motor characteristics 
-    constexpr float MOTOR_MAX_VOLTAGE = 12.0f;                                              // volts
-    constexpr float MOTOR_STALL_TORQUE = 0.00063f * 9.81f;                                   // newton-meters
-    constexpr float MOTOR_STALL_CURRENT = 2.0f;                                             // amperes
-    constexpr float MOTOR_MAX_RPM = 13000.0f;                                               // revolutions per minute
-    constexpr float MOTOR_MAX_ANGULAR_VELOCITY = MOTOR_MAX_RPM * 2.0f * B2_PI / 60.0f;      // radians/second
-    constexpr float MOTOR_RESISTANCE = MOTOR_MAX_VOLTAGE/MOTOR_STALL_CURRENT;                                                // ohms
-    constexpr float MOTOR_KE = MOTOR_MAX_VOLTAGE / MOTOR_MAX_ANGULAR_VELOCITY;              // volts/(radians/second)
-    constexpr float MOTOR_KT = MOTOR_STALL_TORQUE / MOTOR_STALL_CURRENT;                    // newton-meters/ampere
+constexpr float MAZE_FLOOR_WIDTH = CELL_SIZE * MAZE_CELLS_WIDTH + WALL_THICKNESS;    // meters
+constexpr float MAZE_FLOOR_HALFWIDTH = MAZE_FLOOR_WIDTH / 2.0f;                      // meters
+constexpr float MAZE_FLOOR_HEIGHT = CELL_SIZE * MAZE_CELLS_HEIGHT + WALL_THICKNESS;  // meters
+constexpr float MAZE_FLOOR_HALFHEIGHT = MAZE_FLOOR_HEIGHT / 2.0f;                    // meters
 
-    // Simulation parameters
-    //constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/training/minimaze.txt";
-    //constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/alljapan-015-1994-frsh.txt";
-    constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/br2024-robochallenge-day3.txt";
-    constexpr float STEP = 1.0f / 60.0f;                                                    // seconds — simulation step time
-    constexpr b2Vec2 GRAVITY = {0.0f, 0.0f};                                               // m/s² — set to {0.0f} for top-down view
+// Micras robot physical dimensions and properties
+constexpr float MICRAS_WIDTH = 0.067f;                                     // meters
+constexpr float MICRAS_HALFWIDTH = MICRAS_WIDTH / 2.0f;                    // meters
+constexpr float MICRAS_HEIGHT = 0.1f;                                      // meters
+constexpr float MICRAS_HALFHEIGHT = MICRAS_HEIGHT / 2.0f;                  // meters
+constexpr float MICRAS_MASS = 0.110f;                                      // kilograms
+constexpr float MICRAS_RESTITUTION = 0.0f;                                 // bounciness (0-1)
+constexpr float MICRAS_FRICTION = 0.95f;                                   // friction coefficient
+constexpr float MICRAS_WHEEL_RADIUS = 0.0112f;                             // meters
+constexpr float MICRAS_GEAR_RATIO = 2.5f;                                  // reduction ratio
+constexpr float MICRAS_TRACK_WIDTH = 0.067f;                               // meters (distance between wheels)
+constexpr float MICRAS_CENTER_OF_MASS_OFFSET = 0.04f - MICRAS_HALFHEIGHT;  // meters (offset from center of body)
 
-    // Rendering parameters
-    constexpr int WINDOW_WIDTH = 1280;                                                     // pixels
-    constexpr int WINDOW_HEIGHT = 720;                                                    // pixels
-    constexpr uint32_t MAX_FRAMES_IN_FLIGHT = 2;                                                  // number of frames in flight
+// Motor characteristics
+constexpr float MOTOR_MAX_VOLTAGE = 12.0f;                                          // volts
+constexpr float MOTOR_STALL_TORQUE = 0.00063f * 9.81f;                              // newton-meters
+constexpr float MOTOR_STALL_CURRENT = 2.0f;                                         // amperes
+constexpr float MOTOR_MAX_RPM = 13000.0f;                                           // revolutions per minute
+constexpr float MOTOR_MAX_ANGULAR_VELOCITY = MOTOR_MAX_RPM * 2.0f * B2_PI / 60.0f;  // radians/second
+constexpr float MOTOR_RESISTANCE = MOTOR_MAX_VOLTAGE / MOTOR_STALL_CURRENT;         // ohms
+constexpr float MOTOR_KE = MOTOR_MAX_VOLTAGE / MOTOR_MAX_ANGULAR_VELOCITY;          // volts/(radians/second)
+constexpr float MOTOR_KT = MOTOR_STALL_TORQUE / MOTOR_STALL_CURRENT;                // newton-meters/ampere
+
+// Simulation parameters
+// constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/training/minimaze.txt";
+// constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/alljapan-015-1994-frsh.txt";
+constexpr std::string_view DEFAULT_MAZE_PATH = "external/mazefiles/classic/br2024-robochallenge-day3.txt";
+constexpr float            STEP = 1.0f / 1000.0f;   // seconds — simulation step time
+constexpr b2Vec2           GRAVITY = {0.0f, 0.0f};  // m/s² — set to {0.0f} for top-down view
+
+// Rendering parameters
+constexpr int      WINDOW_WIDTH = 1280;       // pixels
+constexpr int      WINDOW_HEIGHT = 720;       // pixels
+constexpr uint32_t MAX_FRAMES_IN_FLIGHT = 2;  // number of frames in flight
 
 }  // namespace micrasverse
 
@@ -195,7 +194,6 @@ const nav::Odometry::Config odometry_config{
 //         },
 // };
 
-
 const nav::SpeedController::Config speed_controller_config{
     .max_linear_acceleration = max_linear_acceleration,
     .max_angular_acceleration = max_angular_acceleration,
@@ -230,7 +228,7 @@ const nav::SpeedController::Config speed_controller_config{
             .linear_acceleration = 4.0F,  // 2.796F,
             .angular_speed = +0.45F,
             .angular_acceleration = +0.10F,  //-0.0258F,
-            
+
             // .linear_speed = 13.319F,
             // .linear_acceleration = 0.0F,  // 2.878F,
             // .angular_speed = 0.901F,

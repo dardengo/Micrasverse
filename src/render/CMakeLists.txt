@@ -3,8 +3,8 @@
 file(GLOB_RECURSE RENDER_HEADERS "include/*.hpp")
 
 # Get GUI sources separately
-#file(GLOB_RECURSE GUI_SOURCES "GUI/*.cpp")
-#file(GLOB_RECURSE GUI_HEADERS "GUI/include/*.hpp")
+file(GLOB_RECURSE GUI_SOURCES "GUI/plot.cpp")
+file(GLOB_RECURSE GUI_HEADERS "GUI/include/plot.hpp")
 
 file(GLOB_RECURSE LVE_SOURCES "vulkan_engine/*.cpp")
 file(GLOB_RECURSE LVE_HEADERS "vulkan_engine/include/*.hpp")
@@ -15,8 +15,8 @@ find_package(Vulkan REQUIRED)
 add_library(render_engine STATIC 
     ${RENDER_SOURCES} 
     ${RENDER_HEADERS}
-#    ${GUI_SOURCES}
-#    ${GUI_HEADERS}
+    ${GUI_SOURCES}
+    ${GUI_HEADERS}
     ${LVE_SOURCES}
     ${LVE_HEADERS}
 )

@@ -9,7 +9,7 @@ namespace micras::proxy {
 template <uint8_t num_of_sensors>
 TTorqueSensors<num_of_sensors>::TTorqueSensors(const Config& config) :
     micrasBody{config.micrasBody},
-    max_current{3.3f / config.shunt_resistor}, // Assuming 3.3V reference voltage
+    max_current{3.3f / config.shunt_resistor},  // Assuming 3.3V reference voltage
     max_torque{config.max_torque},
     noise{config.noise},
     gen(rd()),
@@ -31,9 +31,9 @@ void TTorqueSensors<num_of_sensors>::update() {
     for (uint8_t i = 0; i < num_of_sensors; i++) {
         // Add noise to the simulated torque
         float noisy_torque = this->simulated_torque[i] + this->noise_dist(this->gen);
-        
+
         // Simple low-pass filter
-        const float alpha = 0.1f; // Filter coefficient
+        const float alpha = 0.1f;  // Filter coefficient
         this->filtered_readings[i] = alpha * noisy_torque + (1.0f - alpha) * this->filtered_readings[i];
     }
 }
@@ -72,4 +72,4 @@ void TTorqueSensors<num_of_sensors>::set_torque(uint8_t sensor_index, float torq
 
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_TORQUE_SENSORS_CPP 
+#endif  // MICRAS_PROXY_TORQUE_SENSORS_CPP

@@ -3,7 +3,7 @@
 
 #include "render/shader.hpp"
 
-#define GLFW_INCLUDE_NONE   // GLFW include guard
+#define GLFW_INCLUDE_NONE  // GLFW include guard
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
@@ -12,19 +12,17 @@
 
 namespace micrasverse::render {
 
-struct Vertex
-{
+struct Vertex {
     glm::vec3 position;
     glm::vec3 normal;
 
     static std::vector<Vertex> genList(float* vertices, int noVertices);
-
 };
 
 class Mesh {
 public:
-    unsigned int VAO = 0;
-    std::vector<Vertex> vertices;
+    unsigned int              VAO = 0;
+    std::vector<Vertex>       vertices;
     std::vector<unsigned int> indices;
 
     Mesh();
@@ -41,5 +39,5 @@ private:
     void setup();
 };
 
-} // micrasverse::render
-#endif // MESH_HPP
+}  // namespace micrasverse::render
+#endif  // MESH_HPP

@@ -13,7 +13,7 @@ Locomotion::Locomotion(const Config& config) : micrasBody(config.micrasBody) {
 void Locomotion::enable() {
     // Set both motors to active state
     if (micrasBody) {
-        micrasBody->getLeftMotor().setCommand(0.0f);  // Initialize with zero command
+        micrasBody->getLeftMotor().setCommand(0.0f);   // Initialize with zero command
         micrasBody->getRightMotor().setCommand(0.0f);  // Initialize with zero command
     }
 }

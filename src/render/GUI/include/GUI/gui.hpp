@@ -6,9 +6,15 @@
 #include "physics/box2d_micrasbody.hpp"
 #include "micras/proxy/proxy_bridge.hpp"
 #include "render/render_engine.hpp"
-#define GLFW_INCLUDE_NONE   // GLFW include guard
-#include "glad/glad.h"
+#define GLFW_INCLUDE_VULKAN  // GLFW include guard
 #include "GLFW/glfw3.h"
+
+#include "vulkan_engine/first_app.hpp"
+#include "vulkan_engine/simple_render_system.hpp"
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_vulkan.h"
 
 #include <vector>
 #include <string>
@@ -19,7 +25,7 @@ namespace micrasverse::render {
 
 class GUI {
 public:
-    GUI();
+    GUI(std::shared_ptr<lve::FirstApp> vulkanEngine, lve::SimpleRenderSystem& simpleRenderSystem);
     ~GUI() = default;
 
     void setSimulationEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine);
@@ -31,22 +37,26 @@ public:
     void render();
     void destroy();
 
+    ImGui_ImplVulkan_InitInfo getVulkanInitInfo(lve::FirstApp& app) const;
+
     bool isProxyBridgeInitialized() const { return proxyBridge != nullptr; }
 
 private:
-    bool showStyleEditor;
-    GLFWwindow* currentWindow;
+    bool                                                       showStyleEditor;
+    GLFWwindow*                                                currentWindow;
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
-    RenderEngine* renderEngine;
-    std::shared_ptr<micras::ProxyBridge> proxyBridge;
-    Plot plot;
-    
+    RenderEngine*                                              renderEngine;
+    std::shared_ptr<micras::ProxyBridge>                       proxyBridge;
+    std::shared_ptr<lve::FirstApp>                             vulkanEngine;
+    lve::SimpleRenderSystem&                                   simpleRenderSystem;
+    Plot                                                       plot;
+
     // Button timing variables
-    bool buttonTimerActive = false;
+    bool                                  buttonTimerActive = false;
     std::chrono::steady_clock::time_point buttonActivationTime;
-    float buttonDurations[3] = {0.5f, 1.5f, 3.0f}; // Duration in seconds for SHORT, LONG, EXTRA_LONG
+    float                                 buttonDurations[3] = {0.5f, 1.5f, 3.0f};  // Duration in seconds for SHORT, LONG, EXTRA_LONG
 };
 
-} // namespace micrasverse::render
+}  // namespace micrasverse::render
 
-#endif // GUI_HPP
+#endif  // GUI_HPP

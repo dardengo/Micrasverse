@@ -32,7 +32,6 @@ target_link_libraries(proxy_module PUBLIC
     micras_nav
     micras_core
     imgui
-    OpenGL::GL
 )
 
 # Create alias target

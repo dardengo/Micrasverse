@@ -14,8 +14,8 @@ struct Material {
     glm::vec3 ambient;
     glm::vec3 diffuse;
     glm::vec3 specular;
-    float shininess;
-    float alpha = 1.0f;  // Alpha channel for transparency (default: fully opaque)
+    float     shininess;
+    float     alpha = 1.0f;  // Alpha channel for transparency (default: fully opaque)
 
     /*
         static instances of common materials
@@ -51,6 +51,6 @@ struct Material {
     // function to mix two materials with a proportion
     static Material mix(Material m1, Material m2, float mix = 0.5f);
 };
-} // namespace micrasverse::render
+}  // namespace micrasverse::render
 
 #endif

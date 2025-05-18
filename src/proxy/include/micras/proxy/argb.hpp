@@ -21,9 +21,9 @@ public:
     std::vector<std::reference_wrapper<micrasverse::physics::Argb>> argbRefs;
 
     struct Config {
-        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;    
-        float uncertainty;
-        std::array<float, num_of_leds> brightness;
+        micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
+        float                                  uncertainty;
+        std::array<float, num_of_leds>         brightness;
     };
 
     /**
@@ -63,8 +63,8 @@ public:
 
 private:
     micrasverse::physics::Box2DMicrasBody* micrasBody;
-    float uncertainty;
-    std::array<float, num_of_leds> brightness;
+    float                                  uncertainty;
+    std::array<float, num_of_leds>         brightness;
 };
 }  // namespace micras::proxy
 

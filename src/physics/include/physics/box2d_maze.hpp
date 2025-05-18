@@ -12,20 +12,19 @@ namespace micrasverse::physics {
 
 class Maze {
 private:
-    b2WorldId worldId; // Box2d world ID
+    b2WorldId worldId;  // Box2d world ID
 
 public:
-
     struct Element {
-        char type;       // '|' for vertical walls, '-' for horizontal walls, 'o' for lattice points
-        b2Vec2 position; // Position of the element
-        b2Vec2 size;     // Size of the element
+        char   type;      // '|' for vertical walls, '-' for horizontal walls, 'o' for lattice points
+        b2Vec2 position;  // Position of the element
+        b2Vec2 size;      // Size of the element
     };
 
-    std::vector<Element> elements;  // List of maze elements
-    std::vector<b2BodyId> mazeBodies;  // List of maze bodies
-    std::vector<std::unique_ptr<RectangleBody>> mazeBodiesObjects; // List of maze bodies objects
-    
+    std::vector<Element>                        elements;           // List of maze elements
+    std::vector<b2BodyId>                       mazeBodies;         // List of maze bodies
+    std::vector<std::unique_ptr<RectangleBody>> mazeBodiesObjects;  // List of maze bodies objects
+
     // Constructor
     Maze(b2WorldId worldId, const std::string_view filename);
 
@@ -43,9 +42,8 @@ public:
     void destroy();
 
     void reloadFromFile(const std::string_view filename);
-
 };
 
-} // namespace micrasverse::physics
+}  // namespace micrasverse::physics
 
-#endif // MAZE_HPP
+#endif  // MAZE_HPP

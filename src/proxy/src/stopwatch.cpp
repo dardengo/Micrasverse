@@ -39,4 +39,4 @@ void Stopwatch::sleep_us(uint32_t time) {
     std::this_thread::sleep_for(std::chrono::microseconds(time));
 }
 
-}  // namespace micras::proxy 
+}  // namespace micras::proxy
