@@ -43,9 +43,12 @@ RectangleBody::RectangleBody(
 
 // Destructor
 RectangleBody::~RectangleBody() {
-    // Clean up the shape and body
-    b2DestroyShape(this->shapeId, true);
-    b2DestroyBody(this->bodyId);
+    if (b2Shape_IsValid(this->shapeId)) {
+        b2DestroyShape(this->shapeId, true);
+    }
+    if (b2Body_IsValid(this->bodyId)) {
+        b2DestroyBody(this->bodyId);
+    }
 }
 
 // Accessor for the Box2D body

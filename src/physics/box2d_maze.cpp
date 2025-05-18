@@ -109,7 +109,8 @@ void Maze::destroy() {
             b2DestroyBody(bodyId);  // Destroy the Box2D body
         }
     }
-    mazeBodies.clear();  // Clear the list of maze bodies
-    elements.clear();    // Clear the list of maze elements
+    mazeBodies.clear();         // Clear the list of maze bodies
+    mazeBodiesObjects.clear();  // Clear the list of maze body objects
+    elements.clear();           // Clear the list of maze elements
 }
 }  // namespace micrasverse::physics

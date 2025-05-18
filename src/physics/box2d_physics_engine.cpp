@@ -61,6 +61,7 @@ void Box2DPhysicsEngine::resetMicrasPosition() {
 // Destructor to ensure proper cleanup
 Box2DPhysicsEngine::~Box2DPhysicsEngine() {
     std::cout << "Box2DPhysicsEngine destructor called - destroying physics world" << std::endl;
+    b2World_DumpMemoryStats(p_World->getWorldId());
     p_Micras.reset();
     p_Maze.reset();
     p_World.reset();
