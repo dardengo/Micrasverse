@@ -53,8 +53,8 @@ LveImgui::LveImgui(LveWindow& window, LveDevice& device, VkRenderPass renderPass
     // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     // Setup Dear ImGui style
-    // ImGui::StyleColorsDark();
-    ImGui::StyleColorsClassic();
+    ImGui::StyleColorsDark();
+    // ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer backends
     // Initialize imgui for vulkan
