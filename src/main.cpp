@@ -41,7 +41,7 @@ int main() {
     // renderEngine->screen->setRenderEngine(renderEngine.get());
 
     // Simple counter for controlling render frequency
-    const int physicsStepsPerFrame = 20;
+    const int physicsStepsPerFrame = 40;
     int       stepCounter = 0;
 
     struct GlobalUbo {
@@ -94,7 +94,7 @@ int main() {
     // gui.init(vulkanEngine->lveWindow.window);
 
     // Main loop
-    while (/*not renderEngine->screen->shouldClose()*/ !glfwWindowShouldClose(vulkanEngine->lveWindow.window)) {
+    while (!glfwWindowShouldClose(vulkanEngine->lveWindow.window)) {
         glfwPollEvents();
 
         auto  newTime = std::chrono::high_resolution_clock::now();
@@ -111,11 +111,10 @@ int main() {
             simulationEngine->togglePause();
         }
 
-        if (/*!simulationEngine->isPaused*/ true) {
+        if (!simulationEngine->isPaused) {
             micrasController.update();
             simulationEngine->updateSimulation();
             stepCounter++;
-            std::cerr << "Step: " << stepCounter << '\n';
             if (stepCounter % physicsStepsPerFrame == 0) {
                 // renderEngine->update();
                 // renderEngine->renderFrame();
@@ -139,16 +138,33 @@ int main() {
                     lveImgui.render(commandBuffer);
                     vulkanEngine->lveRenderer.endSwapChainRenderPass(commandBuffer);
                     vulkanEngine->lveRenderer.endFrame();
-
-                    // gui.update();
-                    // gui.draw(micrasBody);
-                    // gui.render();
                 }
             }
         } else {
             // renderEngine->update();
             // renderEngine->renderFrame();
             // vulkanEngine->drawFrame();
+            vulkanEngine->updateRenderableModels();
+            if (auto commandBuffer = vulkanEngine->lveRenderer.beginFrame()) {
+                lveImgui.newFrame();
+                int frameIndex = vulkanEngine->lveRenderer.getFrameIndex();
+
+                lve::FrameInfo frameInfo{frameIndex, frameTime, commandBuffer, camera, globalDescriptorSets[frameIndex]};
+
+                // update
+                GlobalUbo ubo{};
+                ubo.projectionView = camera.getProjection() * camera.getView();
+                uboBuffers[frameIndex]->writeToBuffer(&ubo);
+                uboBuffers[frameIndex]->flush();
+
+                // render
+                vulkanEngine->lveRenderer.beginSwapChainRenderPass(commandBuffer);
+                simpleRenderSystem.renderGameObjects(frameInfo, vulkanEngine->gameObjects);
+                lveImgui.runExample(micrasBody);
+                lveImgui.render(commandBuffer);
+                vulkanEngine->lveRenderer.endSwapChainRenderPass(commandBuffer);
+                vulkanEngine->lveRenderer.endFrame();
+            }
         }
     }
     vkDeviceWaitIdle(vulkanEngine->lveDevice.device());
