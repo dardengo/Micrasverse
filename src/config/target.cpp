@@ -1,4 +1,5 @@
 #include "target.hpp"
+#include "constants.hpp"
 #include <filesystem>
 
 namespace micras {
@@ -56,7 +57,9 @@ proxy::RotarySensor::Config rotary_sensor_right_config = {
 };
 
 // Stopwatch configuration
-proxy::Stopwatch::Config stopwatch_config = {};
+proxy::Stopwatch::Config stopwatch_config = {
+    .looptime = micrasverse::STEP,  // Loop time in seconds
+};
 
 // Storage configuration
 proxy::Storage::Config maze_storage_config{.storage_path = std::filesystem::path{"storage/maze"}};

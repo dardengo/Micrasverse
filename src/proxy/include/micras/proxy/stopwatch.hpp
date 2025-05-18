@@ -8,7 +8,9 @@ namespace micras::proxy {
 
 class Stopwatch {
 public:
-    struct Config { };
+    struct Config {
+        float looptime{0.0F};  // Step size in seconds
+    };
 
     Stopwatch();
 
@@ -28,6 +30,7 @@ public:
 
 private:
     std::chrono::steady_clock::time_point start_time;
+    float                                 looptime{0.0F};  // Step size in seconds
 };
 
 }  // namespace micras::proxy

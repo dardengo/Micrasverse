@@ -7,7 +7,7 @@ Stopwatch::Stopwatch() {
     this->reset_ms();
 }
 
-Stopwatch::Stopwatch(const Config& config) {
+Stopwatch::Stopwatch(const Config& config) : looptime(config.looptime) {
     this->reset_ms();
 }
 
@@ -26,9 +26,7 @@ uint32_t Stopwatch::elapsed_time_ms() const {
 }
 
 uint32_t Stopwatch::elapsed_time_us() const {
-    auto current_time = std::chrono::steady_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(current_time - this->start_time);
-    return static_cast<uint32_t>(elapsed.count());
+    return static_cast<uint32_t>(this->looptime * 1000000.0F);
 }
 
 void Stopwatch::sleep_ms(uint32_t time) {

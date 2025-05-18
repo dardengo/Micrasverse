@@ -73,7 +73,7 @@ namespace micras {
 constexpr uint8_t  maze_width{16};
 constexpr uint8_t  maze_height{16};
 constexpr float    cell_size{0.18};
-constexpr uint32_t loop_time_us{1042};
+constexpr uint32_t loop_time_us = micrasverse::STEP * 1e6F;
 constexpr float    wall_thickness{0.0126F};
 constexpr float    start_offset{0.04F + wall_thickness / 2.0F};
 constexpr float    exploration_speed{0.25F};
