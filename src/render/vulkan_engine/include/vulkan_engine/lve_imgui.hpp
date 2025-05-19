@@ -56,6 +56,8 @@ public:
 
     bool isProxyBridgeInitialized() const { return proxyBridge != nullptr; }
 
+    int physicsStepsPerFrame{40};
+
 private:
     LveDevice&                                                 lveDevice;
     VkDescriptorPool                                           descriptorPool;

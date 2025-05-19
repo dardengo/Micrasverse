@@ -42,8 +42,7 @@ int main() {
     // renderEngine->screen->setRenderEngine(renderEngine.get());
 
     // Simple counter for controlling render frequency
-    const int physicsStepsPerFrame = 40;
-    int       stepCounter = 0;
+    int stepCounter = 0;
 
     struct GlobalUbo {
         glm::mat4 projectionView{1.f};
@@ -116,7 +115,7 @@ int main() {
             micrasController.update();
             simulationEngine->updateSimulation();
             stepCounter++;
-            if (stepCounter % physicsStepsPerFrame == 0) {
+            if (stepCounter % lveImgui.physicsStepsPerFrame == 0) {
                 // renderEngine->update();
                 // renderEngine->renderFrame();
                 vulkanEngine->updateRenderableModels();
