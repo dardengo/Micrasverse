@@ -4,6 +4,7 @@
 #include "physics/box2d_micrasbody.hpp"
 #include "micras/proxy/proxy_bridge.hpp"
 #include "micras/nav/grid_pose.hpp"
+#include "micras/nav/maze_graph.hpp"
 
 #include "imgui.h"
 #include "implot.h"
@@ -35,7 +36,7 @@ public:
         int to_node_id;
     };
 
-    void drawGraph(const std::vector<Node>& nodes, const std::vector<Edge>& edges);
+    void drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> graph);
 
     struct ScrollingBuffer {
         int              maxSize;

@@ -131,7 +131,7 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     // slider for physics steps per frame
-    ImGui::SliderInt("Physics Steps Per Frame", &physicsStepsPerFrame, 1, 100);
+    ImGui::SliderInt("Physics Steps Per Frame", &physicsStepsPerFrame, 1, 1000);
 
     /// Toggle simulation running
     if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {

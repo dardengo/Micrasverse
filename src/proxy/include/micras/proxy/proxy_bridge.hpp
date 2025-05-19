@@ -20,6 +20,7 @@
 #include "micras/nav/actions/base.hpp"
 #include <limits>
 #include <algorithm>
+#include <unordered_map>
 
 namespace micras {
 
@@ -210,6 +211,8 @@ public:
 
         return costs;
     }
+
+    std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> get_maze_graph() const { return micras.maze.graph.graph; }
 
     uint8_t get_min_maze_cost() const { return micras.maze.minimum_cost; }
 

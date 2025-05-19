@@ -356,7 +356,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
 
         std::vector<Edge> edges = {{1, 2}, {2, 3}, {3, 1}};
 
-        drawGraph(nodes, edges);
+        drawGraph(proxyBridge.get_maze_graph());
 
         ImGui::EndChild();
         return;
@@ -519,35 +519,33 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
     }
 }
 
-void Plot::drawGraph(const std::vector<Node>& nodes, const std::vector<Edge>& edges) {
+void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> graph) {
     if (ImPlot::BeginPlot("Maze Graph", ImVec2(-1, 800), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
         ImPlot::SetupAxes("X", "Y", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_NoTickLabels);
         ImPlot::SetupAxisLimits(ImAxis_X1, 0.0, 16.0, ImPlotCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 16.0, ImPlotCond_Always);
 
         // Create a map for quick node lookup
-        std::unordered_map<int, const Node*> nodeMap;
-        for (const auto& node : nodes) {
-            nodeMap[node.id] = &node;
+        std::unordered_map<micras::nav::GridPose, const micras::nav::MazeGraph::Node*> nodeMap;
+        std::vector<micras::nav::GridPose>                                             nodePoses;
+
+        // Collect all nodes and create lookup map
+        for (const auto& [pose, node] : graph) {
+            nodeMap[pose] = &node;
+            nodePoses.push_back(pose);
         }
 
         // Draw edges with arrows
-        for (const auto& edge : edges) {
-            auto from_it = nodeMap.find(edge.from_node_id);
-            auto to_it = nodeMap.find(edge.to_node_id);
-
-            if (from_it != nodeMap.end() && to_it != nodeMap.end()) {
-                const Node* from_node = from_it->second;
-                const Node* to_node = to_it->second;
-
+        for (const auto& [fromPose, fromNode] : graph) {
+            for (const auto& [toPose, cost] : fromNode.next_costs) {
                 // Draw main edge line
-                float x_coords[2] = {from_node->x, to_node->x};
-                float y_coords[2] = {from_node->y, to_node->y};
+                float x_coords[2] = {static_cast<float>(fromPose.position.x), static_cast<float>(toPose.position.x)};
+                float y_coords[2] = {static_cast<float>(fromPose.position.y), static_cast<float>(toPose.position.y)};
                 ImPlot::PlotLine("Edges", x_coords, y_coords, 2);
 
                 // Calculate direction vector
-                float dx = to_node->x - from_node->x;
-                float dy = to_node->y - from_node->y;
+                float dx = x_coords[1] - x_coords[0];
+                float dy = y_coords[1] - y_coords[0];
 
                 // Normalize direction vector
                 float length = std::sqrt(dx * dx + dy * dy);
@@ -559,8 +557,8 @@ void Plot::drawGraph(const std::vector<Node>& nodes, const std::vector<Edge>& ed
                     float arrow_size = 0.025f;
 
                     // Position arrow slightly before the end (80% along the edge)
-                    float arrow_x = from_node->x + dx * length * 0.8f;
-                    float arrow_y = from_node->y + dy * length * 0.8f;
+                    float arrow_x = x_coords[0] + dx * length * 0.8f;
+                    float arrow_y = y_coords[0] + dy * length * 0.8f;
 
                     // Create arrowhead (perpendicular to direction)
                     float arrow_dx = -dy;  // Perpendicular to direction
@@ -580,10 +578,13 @@ void Plot::drawGraph(const std::vector<Node>& nodes, const std::vector<Edge>& ed
         }
 
         // Draw nodes as circles with orientation arrows
-        for (const auto& node : nodes) {
+        for (const auto& pose : nodePoses) {
+            float node_x = static_cast<float>(pose.position.x);
+            float node_y = static_cast<float>(pose.position.y);
+
             // Draw the node as a scatter point (circle)
             ImPlot::PushStyleVar(ImPlotStyleVar_MarkerSize, 8);  // Larger circle
-            ImPlot::PlotScatter("Nodes", &node.x, &node.y, 1);
+            ImPlot::PlotScatter("Nodes", &node_x, &node_y, 1);
             ImPlot::PopStyleVar();
 
             // Draw orientation arrow inside the circle
@@ -591,7 +592,7 @@ void Plot::drawGraph(const std::vector<Node>& nodes, const std::vector<Edge>& ed
             float dx = 0, dy = 0;
             float arrow_length = 0.04f;  // REDUCED Length of orientation arrow
 
-            switch (node.orientation) {
+            switch (pose.orientation) {
                 case micras::nav::RIGHT:
                     dx = 1.0f;
                     dy = 0.0f;
@@ -611,17 +612,17 @@ void Plot::drawGraph(const std::vector<Node>& nodes, const std::vector<Edge>& ed
             }
 
             // Draw the orientation arrow
-            float arrow_x[2] = {node.x, node.x + dx * arrow_length};
-            float arrow_y[2] = {node.y, node.y + dy * arrow_length};
+            float arrow_x[2] = {node_x, node_x + dx * arrow_length};
+            float arrow_y[2] = {node_y, node_y + dy * arrow_length};
 
             // Use a different color for orientation arrows
             ImPlot::PushStyleColor(ImPlotCol_Line, ImVec4(0.8f, 0.0f, 0.0f, 1.0f));
             ImPlot::PlotLine("Orientation", arrow_x, arrow_y, 2);
 
             // Add a smaller arrowhead to the orientation arrow
-            float ah_size = 0.01f;  // REDUCED arrowhead size
-            float arrow_dx = -dy;   // Perpendicular to direction
-            float arrow_dy = dx;    // Perpendicular to direction
+            float ah_size = 0.1f;  // REDUCED arrowhead size
+            float arrow_dx = -dy;  // Perpendicular to direction
+            float arrow_dy = dx;   // Perpendicular to direction
 
             float ah_x1[2] = {arrow_x[1], arrow_x[1] - dx * ah_size + arrow_dx * ah_size};
             float ah_y1[2] = {arrow_y[1], arrow_y[1] - dy * ah_size + arrow_dy * ah_size};
