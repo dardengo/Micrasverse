@@ -218,6 +218,94 @@ void FirstApp::loadMazeWalls() {
     }
 }
 
+void FirstApp::loadFirmwareMazeWalls() {
+    if (!proxyBridge) {
+        return;
+    }
+
+    // We'll iterate through the maze width/height and create walls where detected by the robot
+    for (uint8_t y = 0; y < micras::maze_height; y++) {
+        for (uint8_t x = 0; x < micras::maze_width; x++) {
+            // For each cell, check if walls are detected in each direction
+            // We need to access the internal maze through the ProxyBridge
+
+            const micras::nav::GridPoint point{x, y};
+
+            // Check walls in all four directions
+            for (uint8_t dir = 0; dir < 4; dir++) {
+                micras::nav::GridPose                      pose{point, static_cast<micras::nav::Side>(dir)};
+                micras::nav::Costmap<16, 16, 2>::WallState wallState = proxyBridge->get_wall_state(pose);
+
+                if (this->walls_set.contains(pose)) {
+                    continue;
+                }
+
+                if (wallState == micras::nav::Costmap<16, 16, 2>::WallState::WALL or
+                    wallState == micras::nav::Costmap<16, 16, 2>::WallState::VIRTUAL) {
+                    walls_set.insert(pose);
+
+                    // Calculate wall position based on cell position and direction
+                    float posX = 0.0f, posY = 0.0f;
+                    float sizeX = 0.0f, sizeY = 0.0f;
+
+                    // Position calculation depends on wall direction
+                    switch (dir) {
+                        case micras::nav::Side::RIGHT:  // East (0)
+                            posX = (x + 1) * micrasverse::CELL_SIZE + (micrasverse::WALL_THICKNESS / 2.0f);
+                            posY = y * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE + micrasverse::WALL_THICKNESS) / 2.0f;
+                            sizeX = micrasverse::WALL_THICKNESS;
+                            sizeY = micrasverse::WALL_SIZE;
+                            break;
+
+                        case micras::nav::Side::UP:  // North (1)
+                            posX = x * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE + micrasverse::WALL_THICKNESS) / 2.0f;
+                            posY = (y + 1) * micrasverse::CELL_SIZE + (micrasverse::WALL_THICKNESS / 2.0f);
+                            sizeX = micrasverse::WALL_SIZE;
+                            sizeY = micrasverse::WALL_THICKNESS;
+                            break;
+
+                        case micras::nav::Side::LEFT:  // West (2)
+                            posX = x * micrasverse::CELL_SIZE + micrasverse::WALL_THICKNESS / 2.0f;
+                            posY = y * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE + micrasverse::WALL_THICKNESS) / 2.0f;
+                            sizeX = micrasverse::WALL_THICKNESS;
+                            sizeY = micrasverse::WALL_SIZE;
+                            break;
+
+                        case micras::nav::Side::DOWN:  // South (3)
+                            posX = x * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE + micrasverse::WALL_THICKNESS) / 2.0f;
+                            posY = y * micrasverse::CELL_SIZE + (micrasverse::WALL_THICKNESS / 2.0f);
+                            sizeX = micrasverse::WALL_SIZE;
+                            sizeY = micrasverse::WALL_THICKNESS;
+                            break;
+                    }
+
+                    auto wallState = proxyBridge->get_cell(point).walls[dir];
+
+                    glm::vec3 color;
+                    switch (wallState) {
+                        case micras::nav::Costmap<16, 16, 2>::WallState::WALL:
+                            color = glm::vec3(0.0f, 1.0f, 1.0f);
+                            break;
+                        case micras::nav::Costmap<16, 16, 2>::WallState::VIRTUAL:
+                            color = glm::vec3(1.0f, 1.0f, 0.0f);
+                            break;
+                            // case micras::nav::Costmap<16, 16, 2>::WallState::UNKNOWN:
+                            //     color = glm::vec3(1.0f, 1.0f, 1.0f);
+                            //     break;
+                    }
+
+                    std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, color);
+                    auto                      wallObject = LveGameObject::createGameObject();
+                    wallObject.model = lveModel;
+                    wallObject.transform.translation = glm::vec3(posX, -posY, -0.00001f);
+                    wallObject.transform.scale = glm::vec3(sizeX, sizeY, 0.0f);
+                    gameObjects.push_back(std::move(wallObject));
+                }
+            }
+        }
+    }
+}
+
 void FirstApp::loadMicras() {
     std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.0f, 0.5f, 0.0f});
     auto                      micras = LveGameObject::createGameObject();
@@ -285,6 +373,8 @@ void FirstApp::updateRenderableModels() {
         sensor.transform.rotation = glm::vec3(0.f, 0.f, -angle);
         sensor.transform.scale = glm::vec3(0.005f, simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getReading(), 0.0f);
     }
+
+    loadFirmwareMazeWalls();
 }
 
 }  // namespace lve

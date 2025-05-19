@@ -34,6 +34,7 @@ int main() {
     auto           proxyBridge = std::make_shared<micras::ProxyBridge>(micrasController, micrasBody);
 
     auto vulkanEngine = std::make_shared<lve::FirstApp>(simulationEngine);
+    vulkanEngine->setProxyBridge(proxyBridge);
 
     // auto renderEngine = std::make_shared<micrasverse::render::RenderEngine>(simulationEngine);
     // renderEngine->setProxyBridge(proxyBridge);

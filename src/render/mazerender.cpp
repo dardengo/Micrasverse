@@ -88,7 +88,14 @@ void MazeRender::updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>&
                 micras::nav::GridPose                      pose{point, static_cast<micras::nav::Side>(dir)};
                 micras::nav::Costmap<16, 16, 2>::WallState wallState = proxyBridge->get_wall_state(pose);
 
-                if (wallState != micras::nav::Costmap<16, 16, 2>::WallState::NO_WALL) {
+                if (this->walls_set.contains(pose)) {
+                    continue;
+                }
+
+                if (wallState == micras::nav::Costmap<16, 16, 2>::WallState::WALL or
+                    wallState == micras::nav::Costmap<16, 16, 2>::WallState::VIRTUAL) {
+                    walls_set.insert(pose);
+
                     // Calculate wall position based on cell position and direction
                     float posX = 0.0f, posY = 0.0f;
                     float sizeX = 0.0f, sizeY = 0.0f;
@@ -134,9 +141,9 @@ void MazeRender::updateFirmwareWalls(const std::shared_ptr<micras::ProxyBridge>&
                         case micras::nav::Costmap<16, 16, 2>::WallState::VIRTUAL:
                             material = Material::yellow_plastic;  // Transparent walls
                             break;
-                        case micras::nav::Costmap<16, 16, 2>::WallState::UNKNOWN:
-                            material = Material::white_plastic;  // Dotted walls for unknown
-                            break;
+                            // case micras::nav::Costmap<16, 16, 2>::WallState::UNKNOWN:
+                            //     material = Material::white_plastic;  // Dotted walls for unknown
+                            //     break;
                     }
 
                     // Create wall rectangle with the appropriate material

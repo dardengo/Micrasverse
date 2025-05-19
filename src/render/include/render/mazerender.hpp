@@ -6,6 +6,7 @@
 #include "micras/proxy/proxy_bridge.hpp"
 
 #include <vector>
+#include <unordered_set>
 
 namespace micrasverse::render {
 
@@ -36,7 +37,8 @@ public:
     bool showRouteMarkers = true;
 
 private:
-    std::vector<physics::Maze::Element> elements;
+    std::vector<physics::Maze::Element>       elements;
+    std::unordered_set<micras::nav::GridPose> walls_set;
 };
 
 }  // namespace micrasverse::render

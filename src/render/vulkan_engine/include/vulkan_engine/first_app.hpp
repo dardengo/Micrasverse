@@ -9,10 +9,12 @@
 #include "vulkan_engine/lve_camera.hpp"
 #include "vulkan_engine/keyboard_movement_controller.hpp"
 #include "vulkan_engine/simple_render_system.hpp"
+#include "micras/proxy/proxy_bridge.hpp"
 
 #include <memory>
 #include <vector>
 #include <chrono>
+#include <unordered_set>
 
 namespace lve {
 class FirstApp {
@@ -40,10 +42,13 @@ public:
 
     void updateRenderableModels();
 
+    void setProxyBridge(std::shared_ptr<micras::ProxyBridge> proxyBridge) { this->proxyBridge = proxyBridge; }
+
     LveWindow                                                  lveWindow{WIDTH, HEIGHT, "Vulkan Tutorial"};
     LveDevice                                                  lveDevice{lveWindow};
     LveRenderer                                                lveRenderer{lveWindow, lveDevice};
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;
+    std::shared_ptr<micras::ProxyBridge>                       proxyBridge;
     // note: order of declarations matters
     std::unique_ptr<LveDescriptorPool> globalPool{};
     std::vector<LveGameObject>         gameObjects;
@@ -56,5 +61,7 @@ public:
     uint16_t                                                    lidarIndex{0};
     uint16_t                                                    argbIndex{0};
     bool                                                        shouldClose{false};
+
+    std::unordered_set<micras::nav::GridPose> walls_set;
 };
 }  // namespace lve
