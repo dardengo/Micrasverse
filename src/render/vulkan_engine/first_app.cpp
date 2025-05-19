@@ -183,6 +183,22 @@ std::unique_ptr<LveModel> createRectModel(LveDevice& device, glm::vec3 offset, g
     return std::make_unique<LveModel>(device, modelBuilder);
 }
 
+std::unique_ptr<LveModel> createTriangleModel(LveDevice& device, glm::vec3 offset, glm::vec3 color) {
+    LveModel::Builder modelBuilder{};
+    modelBuilder.vertices = {
+        {{-.5f, .5f, 0.5f}, color},
+        {{.5f, .5f, 0.5f}, color},
+        {{.0f, -.5f, 0.5f}, color},
+    };
+    for (auto& v : modelBuilder.vertices) {
+        v.position += offset;
+    }
+
+    modelBuilder.indices = {0, 1, 2};
+
+    return std::make_unique<LveModel>(device, modelBuilder);
+}
+
 void FirstApp::loadGameObjects() {
     // std::shared_ptr<LveModel> lveModel = createCubeModel(lveDevice, {.0f, .0f, .0f});
     // auto cube = LveGameObject::createGameObject();
@@ -306,6 +322,54 @@ void FirstApp::loadFirmwareMazeWalls() {
     }
 }
 
+void FirstApp::loadBestRoute() {
+    if (!proxyBridge)
+        return;
+
+    // Get the best route from the maze
+    const auto& best_route = proxyBridge->get_best_route();
+
+    // Create a triangle in the center of each cell in the best route
+    for (const auto& grid_pose : best_route) {
+        if (this->best_route_set.contains(grid_pose)) {
+            continue;
+        }
+        this->best_route_set.insert(grid_pose);
+        // Calculate the center of the cell
+        float posX = grid_pose.position.x * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f);
+        float posY = grid_pose.position.y * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f);
+
+        // Triangle size (about 1/3 of the cell size)
+        float triangleSize = micrasverse::CELL_SIZE * 0.15f;
+
+        // Set rotation based on orientation
+        // Side enum: RIGHT(0), UP(1), LEFT(2), DOWN(3)
+        float rotationAngle = 0.0f;
+        switch (grid_pose.orientation) {
+            case micras::nav::Side::RIGHT:            // East (0)
+                rotationAngle = glm::radians(90.0f);  // Point right
+                break;
+            case micras::nav::Side::UP:              // North (1)
+                rotationAngle = glm::radians(0.0f);  // Point up
+                break;
+            case micras::nav::Side::LEFT:              // West (2)
+                rotationAngle = glm::radians(270.0f);  // Point left
+                break;
+            case micras::nav::Side::DOWN:              // South (3)
+                rotationAngle = glm::radians(180.0f);  // Point down
+                break;
+        }
+
+        std::shared_ptr<LveModel> lveModel = createTriangleModel(lveDevice, {.0f, .0f, .0f}, {0.0f, 1.0f, 0.0f});
+        auto                      wallObject = LveGameObject::createGameObject();
+        wallObject.model = lveModel;
+        wallObject.transform.translation = glm::vec3(posX, -posY, -0.00001f);
+        wallObject.transform.rotation = glm::vec3(0.f, 0.f, rotationAngle);
+        wallObject.transform.scale = glm::vec3(0.03f, 0.03f, 0.0f);
+        gameObjects.push_back(std::move(wallObject));
+    }
+}
+
 void FirstApp::loadMicras() {
     std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.0f, 0.5f, 0.0f});
     auto                      micras = LveGameObject::createGameObject();
@@ -375,6 +439,7 @@ void FirstApp::updateRenderableModels() {
     }
 
     loadFirmwareMazeWalls();
+    loadBestRoute();
 }
 
 }  // namespace lve

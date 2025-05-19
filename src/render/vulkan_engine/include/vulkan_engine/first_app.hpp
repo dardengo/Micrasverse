@@ -36,6 +36,7 @@ public:
     void loadMazeFloor();
     void loadMazeWalls();
     void loadFirmwareMazeWalls();
+    void loadBestRoute();
     void loadMicras();
     void loadARGB();
     void loadLidar();
@@ -63,5 +64,6 @@ public:
     bool                                                        shouldClose{false};
 
     std::unordered_set<micras::nav::GridPose> walls_set;
+    std::unordered_set<micras::nav::GridPose> best_route_set;
 };
 }  // namespace lve
