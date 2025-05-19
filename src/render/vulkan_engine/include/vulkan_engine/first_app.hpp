@@ -45,7 +45,7 @@ public:
 
     void setProxyBridge(std::shared_ptr<micras::ProxyBridge> proxyBridge) { this->proxyBridge = proxyBridge; }
 
-    LveWindow                                                  lveWindow{WIDTH, HEIGHT, "Vulkan Tutorial"};
+    LveWindow                                                  lveWindow{WIDTH, HEIGHT, "Micrasverse"};
     LveDevice                                                  lveDevice{lveWindow};
     LveRenderer                                                lveRenderer{lveWindow, lveDevice};
     std::shared_ptr<micrasverse::simulation::SimulationEngine> simulationEngine;

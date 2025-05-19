@@ -522,8 +522,8 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
 void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> graph) {
     if (ImPlot::BeginPlot("Maze Graph", ImVec2(-1, 800), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
         ImPlot::SetupAxes("X", "Y", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_NoTickLabels);
-        ImPlot::SetupAxisLimits(ImAxis_X1, 0.0, 16.0, ImPlotCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 16.0, ImPlotCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_X1, -0.5, 15.5, ImPlotCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, -0.5, 15.5, ImPlotCond_Always);
 
         // Create a map for quick node lookup
         std::unordered_map<micras::nav::GridPose, const micras::nav::MazeGraph::Node*> nodeMap;
@@ -599,7 +599,7 @@ void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::Maze
                     break;
                 case micras::nav::UP:
                     dx = 0.0f;
-                    dy = -1.0f;  // Y is inverted in most plotting systems
+                    dy = 1.0f;  // Y is inverted in most plotting systems
                     break;
                 case micras::nav::LEFT:
                     dx = -1.0f;
@@ -607,7 +607,7 @@ void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::Maze
                     break;
                 case micras::nav::DOWN:
                     dx = 0.0f;
-                    dy = 1.0f;  // Y is inverted in most plotting systems
+                    dy = -1.0f;  // Y is inverted in most plotting systems
                     break;
             }
 
