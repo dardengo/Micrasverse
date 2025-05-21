@@ -166,6 +166,8 @@ public:
 
     float get_angular_integrative_response() const { return get_angular_pid_error_acc() * get_angular_pid_ki() * get_angular_pid_kp(); }
 
+    float get_total_time() const { return micras.action_queuer.get_total_time(); }
+
     void reset_micras() { micras.reset(); }
 
     // Additional methods for wall following

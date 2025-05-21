@@ -162,6 +162,8 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         ImGui::Text("Micras Controller Goal: (%.2f, %.2f)", goal.x, goal.y);
         ImGui::Separator();
         ImGui::Text("Micras Body Linear Velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
+        ImGui::Separator();
+        ImGui::Text("Estimated time to complete: %.2f seconds", proxyBridge->get_total_time());
 
         // Add MicrasController objective and current_action
         if (proxyBridge) {

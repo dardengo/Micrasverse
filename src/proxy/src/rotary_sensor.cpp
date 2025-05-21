@@ -28,7 +28,8 @@ float RotarySensor::get_position() const {
     micrasverse::types::Vec2 delta_position = modifiable->global_position - modifiable->last_global_position;
     modifiable->last_global_position = modifiable->global_position;
 
-    float distance_sign = b2Dot((b2Vec2){delta_position.x, delta_position.y}, micrasBody->linearVelocity);
+    auto  forward_direction = b2Rot_GetYAxis(b2Body_GetRotation(micrasBody->getBodyId()));
+    float distance_sign = b2Dot((b2Vec2){delta_position.x, delta_position.y}, forward_direction);
 
     float distance = std::copysignf(delta_position.length(), distance_sign);
 

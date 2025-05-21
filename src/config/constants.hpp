@@ -76,9 +76,9 @@ constexpr float    cell_size{0.18};
 constexpr uint32_t loop_time_us = micrasverse::STEP * 1e6F;
 constexpr float    wall_thickness{0.012F};
 constexpr float    start_offset{0.04F + wall_thickness / 2.0F};
-constexpr float    exploration_speed{0.4F};
-constexpr float    max_linear_acceleration{1.0F};
-constexpr float    max_angular_acceleration{200.0F};
+constexpr float    max_linear_acceleration{10.0F};
+constexpr float    max_linear_deceleration{15.0F};
+constexpr float    max_angular_acceleration{300.0F};
 constexpr float    crash_acceleration{1000000.0F};
 
 constexpr core::WallSensorsIndex wall_sensors_index{
@@ -105,20 +105,20 @@ const nav::ActionQueuer::Config action_queuer_config{
     .start_offset = start_offset,
     .exploring =
         {
-            .max_linear_speed = exploration_speed,
+            .max_linear_speed = 0.4F,
             .max_linear_acceleration = max_linear_acceleration,
-            .max_linear_deceleration = max_linear_acceleration,
+            .max_linear_deceleration = max_linear_deceleration,
             .curve_radius = cell_size / 2.0F,
             .max_centrifugal_acceleration = 0.0F,
             .max_angular_acceleration = max_angular_acceleration,
         },
     .solving =
         {
-            .max_linear_speed = exploration_speed,
+            .max_linear_speed = 3.0F,
             .max_linear_acceleration = max_linear_acceleration,
-            .max_linear_deceleration = max_linear_acceleration,
+            .max_linear_deceleration = max_linear_deceleration,
             .curve_radius = cell_size / 2.0F,
-            .max_centrifugal_acceleration = 1.0F,
+            .max_centrifugal_acceleration = 5.0F,
             .max_angular_acceleration = max_angular_acceleration,
         },
 };
@@ -126,7 +126,7 @@ const nav::ActionQueuer::Config action_queuer_config{
 const nav::FollowWall::Config follow_wall_config{
     .pid =
         {
-            .kp = 40.0F,
+            .kp = 30.0F,
             .ki = 0.0F,
             .kd = 0.0F,
             .setpoint = 0.0F,
@@ -158,12 +158,12 @@ const nav::Odometry::Config odometry_config{
 };
 
 const nav::SpeedController::Config speed_controller_config{
-    .max_linear_acceleration = max_linear_acceleration,
+    .max_linear_acceleration = max_linear_deceleration,
     .max_angular_acceleration = max_angular_acceleration,
     .linear_pid =
         {
-            .kp = 8.0F,
-            .ki = 4.0F,
+            .kp = 10.0F,
+            .ki = 10.0F,
             .kd = 0.0F,
             .setpoint = 0.0F,
             .saturation = 20.0F,
@@ -171,8 +171,8 @@ const nav::SpeedController::Config speed_controller_config{
         },
     .angular_pid =
         {
-            .kp = 1.0F,
-            .ki = 6.0F,
+            .kp = 0.7F,
+            .ki = 5.0F,
             .kd = 0.0F,
             .setpoint = 0.0F,
             .saturation = 20.0F,
@@ -180,17 +180,17 @@ const nav::SpeedController::Config speed_controller_config{
         },
     .left_feed_forward =
         {
-            .linear_speed = 16.5F,
-            .linear_acceleration = 4.0F,  // 2.796F,
-            .angular_speed = -0.52F,
-            .angular_acceleration = -0.14F,  //-0.0258F,
+            .linear_speed = 16.4F,
+            .linear_acceleration = 3.98F,
+            .angular_speed = -0.55F,
+            .angular_acceleration = -0.143F,
         },
     .right_feed_forward =
         {
-            .linear_speed = 16.5F,
-            .linear_acceleration = 4.0F,  // 2.796F,
-            .angular_speed = +0.52F,
-            .angular_acceleration = +0.14F,  //-0.0258F,
+            .linear_speed = 16.4F,
+            .linear_acceleration = 3.98F,
+            .angular_speed = +0.55F,
+            .angular_acceleration = +0.143F,
         },
 };
 }  // namespace micras

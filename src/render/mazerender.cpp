@@ -179,8 +179,8 @@ void MazeRender::updateRouteMarkers(const std::shared_ptr<micras::ProxyBridge>& 
     // Create a triangle in the center of each cell in the best route
     for (const auto& grid_pose : best_route) {
         // Calculate the center of the cell
-        float posX = grid_pose.position.x * CELL_SIZE + (CELL_SIZE / 2.0f);
-        float posY = grid_pose.position.y * CELL_SIZE + (CELL_SIZE / 2.0f);
+        float posX = grid_pose.position.x * CELL_SIZE + (CELL_SIZE / 2.0f) + WALL_THICKNESS / 2.0f;
+        float posY = grid_pose.position.y * CELL_SIZE + (CELL_SIZE / 2.0f) + WALL_THICKNESS / 2.0f;
 
         // Triangle size (about 1/3 of the cell size)
         float triangleSize = CELL_SIZE * 0.15f;
