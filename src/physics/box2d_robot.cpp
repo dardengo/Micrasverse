@@ -149,28 +149,23 @@ void Box2DRobot::setupDistanceSensors() {
     const float sensorMaxDistance = 3.0f;
 
     // Front-right sensor
-    auto frontRightSensor = std::make_shared<Box2DDistanceSensor>(
-        b2Body_GetWorld(bodyId), bodyId, types::Vec2{0.028f, 0.045f}, types::Vec2{std::cos(B2_PI / 2.0f), std::sin(B2_PI / 2.0f)}, sensorMaxDistance
-    );
+    auto frontRightSensor =
+        std::make_shared<Box2DDistanceSensor>(b2Body_GetWorld(bodyId), bodyId, types::Vec2{0.028f, 0.045f}, B2_PI / 2.0f, sensorMaxDistance);
     sensors.push_back(frontRightSensor);
 
     // Front-left sensor
-    auto frontLeftSensor = std::make_shared<Box2DDistanceSensor>(
-        b2Body_GetWorld(bodyId), bodyId, types::Vec2{-0.028f, 0.045f}, types::Vec2{std::cos(B2_PI / 2.0f), std::sin(B2_PI / 2.0f)}, sensorMaxDistance
-    );
+    auto frontLeftSensor =
+        std::make_shared<Box2DDistanceSensor>(b2Body_GetWorld(bodyId), bodyId, types::Vec2{-0.028f, 0.045f}, B2_PI / 2.0f, sensorMaxDistance);
     sensors.push_back(frontLeftSensor);
 
     // Front-right diagonal sensor
-    auto frontRightDiagonal = std::make_shared<Box2DDistanceSensor>(
-        b2Body_GetWorld(bodyId), bodyId, types::Vec2{0.009f, 0.049f}, types::Vec2{std::cos(B2_PI / 6.0f), std::sin(B2_PI / 6.0f)}, sensorMaxDistance
-    );
+    auto frontRightDiagonal =
+        std::make_shared<Box2DDistanceSensor>(b2Body_GetWorld(bodyId), bodyId, types::Vec2{0.009f, 0.049f}, B2_PI / 6.0f, sensorMaxDistance);
     sensors.push_back(frontRightDiagonal);
 
     // Front-left diagonal sensor
-    auto frontLeftDiagonal = std::make_shared<Box2DDistanceSensor>(
-        b2Body_GetWorld(bodyId), bodyId, types::Vec2{-0.009f, 0.049f}, types::Vec2{std::cos(5.0f * B2_PI / 6.0f), std::sin(5.0f * B2_PI / 6.0f)},
-        sensorMaxDistance
-    );
+    auto frontLeftDiagonal =
+        std::make_shared<Box2DDistanceSensor>(b2Body_GetWorld(bodyId), bodyId, types::Vec2{-0.009f, 0.049f}, 5.0f * B2_PI / 6.0f, sensorMaxDistance);
     sensors.push_back(frontLeftDiagonal);
 }
 

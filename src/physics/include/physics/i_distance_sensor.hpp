@@ -66,20 +66,6 @@ public:
      * @return The current reading.
      */
     virtual float getReading() const = 0;
-
-    /**
-     * @brief Get the angle of the sensor.
-     *
-     * @return The angle of the sensor.
-     */
-    virtual float getAngle() const = 0;
-
-    /**
-     * @brief Set the angle of the sensor.
-     *
-     * @param angle The new angle of the sensor.
-     */
-    virtual void setAngle(float angle) = 0;
 };
 
 }  // namespace micrasverse::physics

@@ -39,14 +39,12 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
 
     for (size_t i = 0; i < 4; i++) {
         const auto& config = sensorConfigs[i];
-        b2Vec2      direction = {std::cos(config.angle), std::sin(config.angle)};
 
         // Convert b2Vec2 to types::Vec2 for the constructor
         micrasverse::types::Vec2 localPos = {config.local_position.x, config.local_position.y};
-        micrasverse::types::Vec2 directionVec = {direction.x, direction.y};
 
         distanceSensors.push_back(std::make_unique<Box2DDistanceSensor>(
-            worldId, bodyId, localPos, directionVec,
+            worldId, bodyId, localPos, config.angle,
             MAZE_FLOOR_WIDTH  // max distance
         ));
     }

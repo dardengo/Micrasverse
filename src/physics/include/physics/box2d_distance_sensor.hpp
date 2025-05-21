@@ -1,6 +1,8 @@
 #ifndef MICRASVERSE_PHYSICS_BOX2D_DISTANCE_SENSOR_HPP
 #define MICRASVERSE_PHYSICS_BOX2D_DISTANCE_SENSOR_HPP
 
+#include <array>
+
 #include "box2d/box2d.h"
 #include "micrasverse_core/types.hpp"
 #include "physics/i_distance_sensor.hpp"
@@ -9,10 +11,7 @@ namespace micrasverse::physics {
 
 class Box2DDistanceSensor : public IDistanceSensor {
 public:
-    Box2DDistanceSensor(
-        b2WorldId worldId, b2BodyId bodyId, const micrasverse::types::Vec2& localPosition, const micrasverse::types::Vec2& direction,
-        float maxDistance
-    );
+    Box2DDistanceSensor(b2WorldId worldId, b2BodyId bodyId, const micrasverse::types::Vec2& localPosition, float angle, float maxDistance);
 
     micrasverse::types::Vec2 getLocalPosition() const override;
 
@@ -30,10 +29,6 @@ public:
 
     float getReading() const override;
 
-    float getAngle() const override;
-
-    void setAngle(float angle) override;
-
     SensorType getType() const override { return SensorType::DISTANCE; }
 
     micrasverse::types::Vec2 getPosition() const override;
@@ -43,17 +38,18 @@ public:
     // private:
     void performRayCast();
 
-    b2WorldId worldId;
-    b2BodyId  bodyId;
-    b2Vec2    localPosition;
-    b2Vec2    localDirection;
-    b2Vec2    worldDirection;
-    float     maxDistance;
-    float     reading;
-    float     angle;
-    b2Vec2    rayMidPoint;
-    b2Vec2    rayDirection;
-    b2Vec2    intersectionPoint;
+    b2WorldId             worldId;
+    b2BodyId              bodyId;
+    b2Vec2                localPosition;
+    b2Vec2                localDirection;
+    std::array<b2Vec2, 4> rayDirections;
+    b2Vec2                worldDirection;
+    float                 maxDistance;
+    float                 reading;
+    float                 angle;
+    b2Vec2                rayMidPoint;
+    b2Vec2                rayDirection;
+    b2Vec2                intersectionPoint;
 };
 
 }  // namespace micrasverse::physics

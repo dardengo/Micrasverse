@@ -20,13 +20,10 @@ std::unique_ptr<IDipSwitch> Box2DPhysicsFactory::createDipSwitch(size_t numSwitc
 }
 
 std::unique_ptr<IDistanceSensor> Box2DPhysicsFactory::createDistanceSensor(const types::Vec2& localPosition, float angle) {
-    // Convert angle to direction vector
-    types::Vec2 direction = {std::cos(angle), std::sin(angle)};
-
     // Use a reasonable default max distance (1 meter)
     const float maxDistance = 1.0f;
 
-    return std::make_unique<Box2DDistanceSensor>(worldId, bodyId, localPosition, direction, maxDistance);
+    return std::make_unique<Box2DDistanceSensor>(worldId, bodyId, localPosition, angle, maxDistance);
 }
 
 std::unique_ptr<IMotor> Box2DPhysicsFactory::createMotor(
