@@ -520,27 +520,40 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
 }
 
 void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> graph) {
-    if (ImPlot::BeginPlot("Maze Graph", ImVec2(-1, 800), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
+    if (ImPlot::BeginPlot("Maze Graph", ImVec2(-1, 800), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle | ImPlotFlags_NoLegend)) {
         ImPlot::SetupAxes("X", "Y", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_NoTickLabels);
-        ImPlot::SetupAxisLimits(ImAxis_X1, -0.5, 15.5, ImPlotCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1, -0.5, 15.5, ImPlotCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_X1, 0.0, 16, ImPlotCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 16, ImPlotCond_Always);
 
         // Create a map for quick node lookup
-        std::unordered_map<micras::nav::GridPose, const micras::nav::MazeGraph::Node*> nodeMap;
-        std::vector<micras::nav::GridPose>                                             nodePoses;
+        std::unordered_map<micras::nav::GridPose, ImVec2> nodeMap;
 
         // Collect all nodes and create lookup map
         for (const auto& [pose, node] : graph) {
-            nodeMap[pose] = &node;
-            nodePoses.push_back(pose);
+            nodeMap[pose] = ImVec2(static_cast<float>(pose.position.x) + 0.5, static_cast<float>(pose.position.y) + 0.5);
+
+            switch (pose.orientation) {
+                case micras::nav::RIGHT:
+                    nodeMap[pose].x -= 0.25f;
+                    break;
+                case micras::nav::UP:
+                    nodeMap[pose].y -= 0.25f;
+                    break;
+                case micras::nav::LEFT:
+                    nodeMap[pose].x += 0.25f;
+                    break;
+                case micras::nav::DOWN:
+                    nodeMap[pose].y += 0.25f;
+                    break;
+            }
         }
 
         // Draw edges with arrows
         for (const auto& [fromPose, fromNode] : graph) {
             for (const auto& [toPose, cost] : fromNode.next_costs) {
                 // Draw main edge line
-                float x_coords[2] = {static_cast<float>(fromPose.position.x), static_cast<float>(toPose.position.x)};
-                float y_coords[2] = {static_cast<float>(fromPose.position.y), static_cast<float>(toPose.position.y)};
+                float x_coords[2] = {nodeMap[fromPose].x, nodeMap[toPose].x};
+                float y_coords[2] = {nodeMap[fromPose].y, nodeMap[toPose].y};
                 ImPlot::PlotLine("Edges", x_coords, y_coords, 2);
 
                 // Calculate direction vector
@@ -578,14 +591,9 @@ void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::Maze
         }
 
         // Draw nodes as circles with orientation arrows
-        for (const auto& pose : nodePoses) {
-            float node_x = static_cast<float>(pose.position.x);
-            float node_y = static_cast<float>(pose.position.y);
-
-            // Draw the node as a scatter point (circle)
-            ImPlot::PushStyleVar(ImPlotStyleVar_MarkerSize, 8);  // Larger circle
-            ImPlot::PlotScatter("Nodes", &node_x, &node_y, 1);
-            ImPlot::PopStyleVar();
+        for (const auto& [pose, point] : nodeMap) {
+            float node_x = point.x;
+            float node_y = point.y;
 
             // Draw orientation arrow inside the circle
             // Calculate arrow direction based on the node's orientation
@@ -610,6 +618,11 @@ void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::Maze
                     dy = -1.0f;  // Y is inverted in most plotting systems
                     break;
             }
+
+            // Draw the node as a scatter point (circle)
+            ImPlot::PushStyleVar(ImPlotStyleVar_MarkerSize, 6);  // Larger circle
+            ImPlot::PlotScatter("Nodes", &node_x, &node_y, 1);
+            ImPlot::PopStyleVar();
 
             // Draw the orientation arrow
             float arrow_x[2] = {node_x, node_x + dx * arrow_length};
