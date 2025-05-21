@@ -520,10 +520,15 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
 }
 
 void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> graph) {
+    ImPlot::PushStyleVar(ImPlotStyleVar_MinorGridSize, ImVec2(3.0f, 3.0f));
+
     if (ImPlot::BeginPlot("Maze Graph", ImVec2(-1, 800), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle | ImPlotFlags_NoLegend)) {
         ImPlot::SetupAxes("X", "Y", ImPlotAxisFlags_NoTickLabels, ImPlotAxisFlags_NoTickLabels);
         ImPlot::SetupAxisLimits(ImAxis_X1, 0.0, 16, ImPlotCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1, 0.0, 16, ImPlotCond_Always);
+
+        ImPlot::SetupAxisTicks(ImAxis_X1, 0, 16, 17);
+        ImPlot::SetupAxisTicks(ImAxis_Y1, 0, 16, 17);
 
         // Create a map for quick node lookup
         std::unordered_map<micras::nav::GridPose, ImVec2> nodeMap;
@@ -649,6 +654,7 @@ void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::Maze
         }
 
         ImPlot::EndPlot();
+        ImPlot::PopStyleVar(1);
     }
 }
 
