@@ -336,8 +336,8 @@ void FirstApp::loadBestRoute() {
         }
         this->best_route_set.insert(grid_pose);
         // Calculate the center of the cell
-        float posX = grid_pose.position.x * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f);
-        float posY = grid_pose.position.y * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f);
+        float posX = grid_pose.position.x * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f) + micrasverse::WALL_THICKNESS / 2.0f;
+        float posY = grid_pose.position.y * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f) + micrasverse::WALL_THICKNESS / 2.0f;
 
         // Triangle size (about 1/3 of the cell size)
         float triangleSize = micrasverse::CELL_SIZE * 0.15f;
@@ -348,15 +348,19 @@ void FirstApp::loadBestRoute() {
         switch (grid_pose.orientation) {
             case micras::nav::Side::RIGHT:            // East (0)
                 rotationAngle = glm::radians(90.0f);  // Point right
+                posX -= micrasverse::CELL_SIZE / 4.0f;
                 break;
             case micras::nav::Side::UP:              // North (1)
                 rotationAngle = glm::radians(0.0f);  // Point up
+                posY -= micrasverse::CELL_SIZE / 4.0f;
                 break;
             case micras::nav::Side::LEFT:              // West (2)
                 rotationAngle = glm::radians(270.0f);  // Point left
+                posX += micrasverse::CELL_SIZE / 4.0f;
                 break;
             case micras::nav::Side::DOWN:              // South (3)
                 rotationAngle = glm::radians(180.0f);  // Point down
+                posY += micrasverse::CELL_SIZE / 4.0f;
                 break;
         }
 
