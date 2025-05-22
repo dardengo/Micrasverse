@@ -555,7 +555,7 @@ void Plot::drawGraph(std::unordered_map<micras::nav::GridPose, micras::nav::Maze
 
         // Draw edges with arrows
         for (const auto& [fromPose, fromNode] : graph) {
-            for (const auto& [toPose, cost] : fromNode.next_costs) {
+            for (const auto& toPose : fromNode.next) {
                 // Draw main edge line
                 float x_coords[2] = {nodeMap[fromPose].x, nodeMap[toPose].x};
                 float y_coords[2] = {nodeMap[fromPose].y, nodeMap[toPose].y};
