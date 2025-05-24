@@ -40,6 +40,7 @@ public:
     b2Vec2                localPosition;
     b2Vec2                localDirection;
     std::array<b2Vec2, 4> rayDirections;
+    std::array<float, 4>  sensorWeights;
     b2Vec2                worldDirection;
     float                 maxDistance;
     float                 reading;
