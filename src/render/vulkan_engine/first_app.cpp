@@ -404,10 +404,10 @@ void FirstApp::loadLidar() {
         auto                      lidarObject = LveGameObject::createGameObject();
         lidarObject.model = lveModel;
         lidarObject.transform.translation = glm::vec3(
-            simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayMidPoint().x,
-            -simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayMidPoint().y, 0.0f
+            simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getVisualMidPoint().x,
+            -simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getVisualMidPoint().y, 0.0f
         );
-        lidarObject.transform.scale = glm::vec3(0.005f, simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).reading, 0.0f);
+        lidarObject.transform.scale = glm::vec3(0.005f, simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getReadingVisual(), 0.0f);
         gameObjects.push_back(std::move(lidarObject));
     }
     this->lidarIndex = gameObjects.size();
@@ -431,15 +431,15 @@ void FirstApp::updateRenderableModels() {
     for (size_t i = 0; i < simulationEngine->physicsEngine->getMicras().getDistanceSensorCount(); i++) {
         auto& sensor = gameObjects[lidarIndex - simulationEngine->physicsEngine->getMicras().getDistanceSensorCount() + i];
         sensor.transform.translation = glm::vec3(
-            simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayMidPoint().x,
-            -simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayMidPoint().y, 0.0f
+            simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getVisualMidPoint().x,
+            -simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getVisualMidPoint().y, 0.0f
         );
         float angle = std::atan2(
             simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayDirection().y,
             simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getRayDirection().x
         );
         sensor.transform.rotation = glm::vec3(0.f, 0.f, -angle);
-        sensor.transform.scale = glm::vec3(0.005f, simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getReading(), 0.0f);
+        sensor.transform.scale = glm::vec3(0.005f, simulationEngine->physicsEngine->getMicras().getDistanceSensor(i).getReadingVisual(), 0.0f);
     }
 
     loadFirmwareMazeWalls();

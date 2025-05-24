@@ -9,26 +9,20 @@
 
 namespace micrasverse::physics {
 
-class Box2DButton : public ISensor {
+class Box2DButton {
 public:
     Box2DButton(b2BodyId bodyId, const micrasverse::types::Vec2& localPosition, float radius);
 
     // ISensor interface implementation
-    SensorType getType() const override { return SensorType::TOUCH; }
+    SensorType getType() const { return SensorType::TOUCH; }
 
-    micrasverse::types::Vec2 getPosition() const override;
+    micrasverse::types::Vec2 getPosition() const;
 
-    micrasverse::types::Vec2 getDirection() const override { return {0.0f, 1.0f}; }  // Button points up
+    micrasverse::types::Vec2 getDirection() const { return {0.0f, 1.0f}; }  // Button points up
 
-    float getReading() const override { return isPressed() ? 1.0f : 0.0f; }
+    float getReading() const { return isPressed() ? 1.0f : 0.0f; }
 
-    void update() override;
-
-    micrasverse::types::Vec2 getRayMidPoint() const override { return getPosition(); }
-
-    micrasverse::types::Vec2 getRayDirection() const override { return getDirection(); }
-
-    float getReadingVisual() const override { return getReading(); }
+    void update();
 
     // Box2DButton specific methods
     bool                          isPressed() const;

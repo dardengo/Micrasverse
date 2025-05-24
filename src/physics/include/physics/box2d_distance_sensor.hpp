@@ -21,8 +21,6 @@ public:
 
     void setDirection(const micrasverse::types::Vec2& direction) override;
 
-    micrasverse::types::Vec2 getRayMidPoint() const override { return {rayMidPoint.x, rayMidPoint.y}; }
-
     micrasverse::types::Vec2 getRayDirection() const override;
 
     void update() override;
@@ -33,7 +31,9 @@ public:
 
     micrasverse::types::Vec2 getPosition() const override;
 
-    float getReadingVisual() const override { return reading; }
+    float getReadingVisual() const override { return this->visualReading; }
+
+    b2Vec2 getVisualMidPoint() const { return this->visualMidPoint; }
 
     // private:
     void performRayCast();
@@ -47,9 +47,10 @@ public:
     float                 maxDistance;
     float                 reading;
     float                 angle;
-    b2Vec2                rayMidPoint;
     b2Vec2                rayDirection;
     b2Vec2                intersectionPoint;
+    float                 visualReading;
+    b2Vec2                visualMidPoint;
 };
 
 }  // namespace micrasverse::physics

@@ -19,7 +19,6 @@ Box2DDistanceSensor::Box2DDistanceSensor(
     }},
     maxDistance(maxDistance),
     reading(0.0f),
-    rayMidPoint{0.0f, 0.0f},
     rayDirection{0.0f, 0.0f} {
     update();
 }
@@ -83,9 +82,12 @@ void Box2DDistanceSensor::performRayCast() {
 
     this->reading /= 5.0F;
 
-    this->rayMidPoint = b2Vec2{origin.x + (intersectionPoint.x - origin.x) * 0.5f, origin.y + (intersectionPoint.y - origin.y) * 0.5f};
-
     this->rayDirection = {-worldDirection.y, worldDirection.x};
+
+    // visual update
+    this->visualReading = b2Length(intersectionPoint - origin);
+
+    this->visualMidPoint = b2Vec2{origin.x + (intersectionPoint.x - origin.x) * 0.5f, origin.y + (intersectionPoint.y - origin.y) * 0.5f};
 }
 
 }  // namespace micrasverse::physics

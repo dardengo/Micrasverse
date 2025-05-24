@@ -42,13 +42,6 @@ public:
     virtual void setDirection(const micrasverse::types::Vec2& direction) = 0;
 
     /**
-     * @brief Get the midpoint of the ray.
-     *
-     * @return The midpoint of the ray.
-     */
-    virtual micrasverse::types::Vec2 getRayMidPoint() const = 0;
-
-    /**
      * @brief Get the direction of the ray.
      *
      * @return The direction of the ray.

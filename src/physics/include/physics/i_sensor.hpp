@@ -42,14 +42,6 @@ public:
     virtual float getReading() const = 0;
     virtual void  update() = 0;
 
-    // For visualization
-    /**
-     * @brief Get the midpoint of the ray.
-     *
-     * @return The midpoint of the ray.
-     */
-    virtual micrasverse::types::Vec2 getRayMidPoint() const = 0;
-
     /**
      * @brief Get the direction of the ray.
      *
