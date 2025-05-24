@@ -24,7 +24,7 @@
 - [Contact](#contact)
 
 ## Overview
-Micrasverse is an extensible, high-fidelity 2D micromouse simulation platform designed to prototype and test navigation algorithms on the Micras hardware before deployment. Powered by Box2D physics and OpenGL rendering, Micrasverse provides real-time visualization, modular sensors & actuators, and interactive data charts.
+Micrasverse is an extensible, high-fidelity 2D micromouse simulation platform designed to prototype and test navigation algorithms on the Micras hardware before deployment. Powered by Box2D physics and Vulkan rendering, Micrasverse provides real-time visualization, modular sensors & actuators, and interactive charts.
 
 ## Demo
 ![Micrasverse Demo](./docs/assets/Micrasverse%202025-04-27.gif)
@@ -32,8 +32,8 @@ Micrasverse is an extensible, high-fidelity 2D micromouse simulation platform de
 ## Features
 - **Custom Mazes**: Generate and edit maze layouts through simple `.txt` files.
 - **Modular Components**: Attach/detach sensors (distance sensors, DIP switches, addressable RGB LEDs) and actuators (motors, fans).
-- **Physics Simulation**: Realistic DC motor model and collision handling via Box2D.
-- **Interactive Charts**: Live plotting of motor current, velocity, position, sensor readings, and more with ImPlot.
+- **Physics Simulation**: Realistic DC motor model, dynamics and collisions.
+- **Interactive Charts**: Real-time plotting with ImPlot and ImPlot3D.
 - **User-Friendly GUI**: Control simulation parameters, start/pause/reset, and toggle components with ImGui.
 - **Cross-Platform**: Build and run on Linux and Windows.
 
@@ -41,17 +41,11 @@ Micrasverse is an extensible, high-fidelity 2D micromouse simulation platform de
 ### Prerequisites
 - CMake ≥ 3.14
 - C++17 compatible compiler (GCC, Clang, MSVC)
-- OpenGL development libraries
+- Vulkan SDK (only needed to compile in debug mode with validation layers)
 - [GLFW3](https://www.glfw.org/) (window/input)
 - [Box2D](https://github.com/erincatto/box2d) (2D physics)
-- [ImGui](https://github.com/ocornut/imgui) & [ImPlot](https://github.com/epezent/implot) (GUI & plotting)
+- [ImGui](https://github.com/ocornut/imgui), [ImPlot](https://github.com/epezent/implot) & [ImPlot3D](https://github.com/brenocq/implot3d) (GUI & plotting)
 - [GLM](https://github.com/g-truc/glm) (math)
-
-Clone the repository:
-```bash
-git clone https://github.com/Team-Micras/micras_simulation.git
-cd micras_simulation
-```
 
 ## Quick Start
 Build and run in Release mode:
@@ -59,7 +53,7 @@ Build and run in Release mode:
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
-./bin/micrasverse --maze ../docs/mazes/demo_maze.txt
+.build/bin/micrasverse
 ```
 
 ## Project Structure
@@ -78,14 +72,11 @@ micras_simulation/
 | ----------------- | ------------------------------ | ------------ |
 | Box2D             | Physics simulation             | MIT          |
 | GLFW              | Windowing & input              | zlib/libpng  |
+| Vulkan SDK        | Rendering                      | MIT          |
 | ImGui             | GUI overlay                    | MIT          |
 | ImPlot            | Data plotting                  | MIT          |
 | GLM               | Mathematics                    | MIT          |
 | Mazefiles         | Maze file parsing              | MIT          |
-
-## Building & Running
-Refer to [BUILD.md](BUILD.md) for detailed build configurations, platform-specific instructions, and advanced options.
-
 
 
 ## License
@@ -113,7 +104,6 @@ SOFTWARE.
 
 ## Acknowledgements
 - Inspired by [Artful Bytes' Bots2D](https://github.com/artfulbytes/bots2d)
-- OpenGL tutorials from [Michael Grieco](https://www.youtube.com/@MichaelGrieco)
 
 ## Contact
 - Maintained by [Team Micras](https://github.com/Team-Micras)

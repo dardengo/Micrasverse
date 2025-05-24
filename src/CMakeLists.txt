@@ -36,6 +36,6 @@ target_include_directories(micrasverse PRIVATE
     ${CMAKE_SOURCE_DIR}/src/physics/include
     ${CMAKE_SOURCE_DIR}/src/proxy/include
     ${CMAKE_SOURCE_DIR}/src/render/include
-#    ${CMAKE_SOURCE_DIR}/src/render/GUI/include
+    ${CMAKE_SOURCE_DIR}/src/render/plot/include
     ${CMAKE_SOURCE_DIR}/src/simulation/include
 ) 
