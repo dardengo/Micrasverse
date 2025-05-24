@@ -27,7 +27,7 @@
 Micrasverse is an extensible, high-fidelity 2D micromouse simulation platform designed to prototype and test navigation algorithms on the Micras hardware before deployment. Powered by Box2D physics and Vulkan rendering, Micrasverse provides real-time visualization, modular sensors & actuators, and interactive charts.
 
 ## Demo
-![Micrasverse Demo](./docs/assets/Micrasverse%202025-04-27.gif)
+![Micrasverse Demo](./docs/assets/Micrasverse-for-gif.gif)
 
 ## Features
 - **Custom Mazes**: Generate and edit maze layouts through simple `.txt` files.
