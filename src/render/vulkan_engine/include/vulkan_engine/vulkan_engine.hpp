@@ -10,6 +10,7 @@
 #include "vulkan_engine/keyboard_movement_controller.hpp"
 #include "vulkan_engine/simple_render_system.hpp"
 #include "micras/proxy/proxy_bridge.hpp"
+#include "micras/core/types.hpp"
 
 #include <memory>
 #include <vector>
@@ -69,5 +70,9 @@ public:
 
     int first_wall_index{0};
     int number_of_walls{0};
+
+    int                     first_route_marker_index{0};
+    int                     number_of_route_markers{0};
+    micras::core::Objective lastObjective = micras::core::Objective::EXPLORE;
 };
 }  // namespace lve

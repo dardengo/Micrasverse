@@ -253,15 +253,10 @@ void VulkanEngine::loadFirmwareMazeWalls() {
         return;
     }
 
-    // We'll iterate through the maze width/height and create walls where detected by the robot
     for (uint8_t y = 0; y < micras::maze_height; y++) {
         for (uint8_t x = 0; x < micras::maze_width; x++) {
-            // For each cell, check if walls are detected in each direction
-            // We need to access the internal maze through the ProxyBridge
-
             const micras::nav::GridPoint point{x, y};
 
-            // Check walls in all four directions
             for (uint8_t dir = 0; dir < 4; dir++) {
                 micras::nav::GridPose                      pose{point, static_cast<micras::nav::Side>(dir)};
                 micras::nav::Costmap<16, 16, 2>::WallState wallState = proxyBridge->get_wall_state(pose);
@@ -274,11 +269,9 @@ void VulkanEngine::loadFirmwareMazeWalls() {
                     wallState == micras::nav::Costmap<16, 16, 2>::WallState::VIRTUAL) {
                     walls_set.insert(pose);
 
-                    // Calculate wall position based on cell position and direction
                     float posX = 0.0f, posY = 0.0f;
                     float sizeX = 0.0f, sizeY = 0.0f;
 
-                    // Position calculation depends on wall direction
                     switch (dir) {
                         case micras::nav::Side::RIGHT:  // East (0)
                             posX = (x + 1) * micrasverse::CELL_SIZE + (micrasverse::WALL_THICKNESS / 2.0f);
@@ -319,9 +312,6 @@ void VulkanEngine::loadFirmwareMazeWalls() {
                         case micras::nav::Costmap<16, 16, 2>::WallState::VIRTUAL:
                             color = glm::vec3(1.0f, 1.0f, 0.0f);
                             break;
-                            // case micras::nav::Costmap<16, 16, 2>::WallState::UNKNOWN:
-                            //     color = glm::vec3(1.0f, 1.0f, 1.0f);
-                            //     break;
                     }
 
                     std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, color);
@@ -338,27 +328,28 @@ void VulkanEngine::loadFirmwareMazeWalls() {
 }
 
 void VulkanEngine::loadBestRoute() {
-    if (!proxyBridge)
+    if (!proxyBridge) {
         return;
+    }
 
-    // Get the best route from the maze
+    gameObjects.erase(gameObjects.begin() + first_route_marker_index, gameObjects.begin() + number_of_route_markers + first_route_marker_index);
+    this->number_of_route_markers = 0;
+    this->best_route_set.clear();
+
+    this->first_route_marker_index = gameObjects.size();
+
     const auto& best_route = proxyBridge->get_best_route();
 
-    // Create a triangle in the center of each cell in the best route
     for (const auto& grid_pose : best_route) {
         if (this->best_route_set.contains(grid_pose)) {
             continue;
         }
         this->best_route_set.insert(grid_pose);
-        // Calculate the center of the cell
         float posX = grid_pose.position.x * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f) + micrasverse::WALL_THICKNESS / 2.0f;
         float posY = grid_pose.position.y * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f) + micrasverse::WALL_THICKNESS / 2.0f;
 
-        // Triangle size (about 1/3 of the cell size)
         float triangleSize = micrasverse::CELL_SIZE * 0.15f;
 
-        // Set rotation based on orientation
-        // Side enum: RIGHT(0), UP(1), LEFT(2), DOWN(3)
         float rotationAngle = 0.0f;
         switch (grid_pose.orientation) {
             case micras::nav::Side::RIGHT:            // East (0)
@@ -385,6 +376,7 @@ void VulkanEngine::loadBestRoute() {
         wallObject.transform.translation = glm::vec3(posX, -posY, -0.00001f);
         wallObject.transform.rotation = glm::vec3(0.f, 0.f, rotationAngle);
         wallObject.transform.scale = glm::vec3(0.03f, 0.03f, 0.0f);
+        this->number_of_route_markers++;
         gameObjects.push_back(std::move(wallObject));
     }
 }
@@ -458,7 +450,14 @@ void VulkanEngine::updateRenderableModels() {
     }
 
     loadFirmwareMazeWalls();
-    loadBestRoute();
+
+    micras::core::Objective currentObjective = proxyBridge->get_objective();
+    bool                    objectiveChanged = (currentObjective != lastObjective);
+    lastObjective = currentObjective;
+
+    if (objectiveChanged) {
+        loadBestRoute();
+    }
 
     if (this->simulationEngine->wasReset) {
         this->reloadMazeWalls();
