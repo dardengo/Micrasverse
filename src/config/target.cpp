@@ -67,7 +67,8 @@ proxy::WallSensors::Config wall_sensors_config = {
     .base_readings = {0.5861f, 0.7594f, 0.7594f, 0.5861f},
     .K = 1.0f,
     .max_adc_reading = 1.0f,
-    .max_distance = 0.18f * 2.0f
+    .max_distance = 0.18f * 2.0f,
+    .filter_cutoff = 10.0f,
 };
 
 // Locomotion configuration

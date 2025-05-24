@@ -17,7 +17,7 @@ Box2DDistanceSensor::Box2DDistanceSensor(
         {std::cos(angle + B2_PI / 18.0F), std::sin(angle + B2_PI / 18.0F)},
         {std::cos(angle + B2_PI / 36.0F), std::sin(angle + B2_PI / 36.0F)},
     }},
-    sensor_weights{{
+    sensorWeights{{
         0.8F,
         0.97F,
         0.8F,

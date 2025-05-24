@@ -4,6 +4,7 @@
 #include "physics/box2d_micrasbody.hpp"
 #include "physics/box2d_distance_sensor.hpp"
 #include "micras/core/types.hpp"
+#include "micras/core/butterworth_filter.hpp"
 
 #include <array>
 #include <cstdint>
@@ -23,6 +24,7 @@ public:
         float                                  K;
         float                                  max_adc_reading;
         float                                  max_distance;
+        float                                  filter_cutoff;
     };
 
     explicit TWallSensors(const Config& config);
@@ -56,12 +58,13 @@ public:
     void calibrate_sensor(uint8_t sensor_index);
 
 private:
-    micrasverse::physics::Box2DMicrasBody* micrasBody;
-    float                                  uncertainty;
-    std::array<float, num_of_sensors>      base_readings{};
-    float                                  K;
-    float                                  max_adc_reading;
-    float                                  max_distance;
+    micrasverse::physics::Box2DMicrasBody*              micrasBody;
+    float                                               uncertainty;
+    std::array<float, num_of_sensors>                   base_readings{};
+    float                                               K;
+    float                                               max_adc_reading;
+    float                                               max_distance;
+    std::array<core::ButterworthFilter, num_of_sensors> filters;
 };
 
 }  // namespace micras::proxy
