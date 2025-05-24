@@ -20,8 +20,9 @@ Box2DPhysicsEngine::Box2DPhysicsEngine(const std::string_view mazePath) {
     b2WorldId worldId = p_World->getWorldId();
     p_Maze = std::make_unique<Maze>(worldId, mazePath);
     p_Micras = std::make_unique<Box2DMicrasBody>(
-        worldId, b2Vec2((CELL_SIZE + WALL_THICKNESS) / 2.0f, MICRAS_HALFHEIGHT + WALL_THICKNESS), b2Vec2(MICRAS_WIDTH, MICRAS_HEIGHT), b2_dynamicBody,
-        MICRAS_MASS, MICRAS_FRICTION, MICRAS_RESTITUTION
+        worldId, b2Vec2((CELL_SIZE + WALL_THICKNESS) / 2.0f, MICRAS_HALFHEIGHT + WALL_THICKNESS),
+        // b2Vec2((CELL_SIZE + WALL_THICKNESS) / 2.0f, CELL_SIZE + WALL_THICKNESS / 2.0f),
+        b2Vec2(MICRAS_WIDTH, MICRAS_HEIGHT), b2_dynamicBody, MICRAS_MASS, MICRAS_FRICTION, MICRAS_RESTITUTION
     );
 }
 

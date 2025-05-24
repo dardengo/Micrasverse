@@ -6,3 +6,5 @@ build/*
 # Ignore executable files
 *.exe
 *.ini
+
+storage/maze/*

@@ -63,12 +63,12 @@ proxy::TorqueSensors::Config torque_sensors_config = {
 // Wall Sensors configuration
 proxy::WallSensors::Config wall_sensors_config = {
     .micrasBody = nullptr,
-    .uncertainty = 0.8f,
-    .base_readings = {0.5861f, 0.7594f, 0.7594f, 0.5861f},
-    .K = 1.0f,
-    .max_adc_reading = 1.0f,
-    .max_distance = 0.18f * 2.0f,
-    .filter_cutoff = 10.0f,
+    .uncertainty = 0.5f,
+    .base_readings = {0.0631f, 0.1482f, 0.1482f, 0.0631f},
+    .max_sensor_reading = 0.6f,
+    .min_sensor_reading = 0.01f,
+    .max_sensor_distance = micrasverse::CELL_SIZE * 2.0f,
+    .filter_cutoff = 20.0f
 };
 
 // Locomotion configuration

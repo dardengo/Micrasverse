@@ -12,9 +12,8 @@ TWallSensors<num_of_sensors>::TWallSensors(const typename TWallSensors<num_of_se
     micrasBody{config.micrasBody},
     uncertainty{config.uncertainty},
     base_readings{config.base_readings},
-    K{config.K},
-    max_adc_reading{config.max_adc_reading},
-    max_distance{config.max_distance},
+    max_sensor_reading{config.max_sensor_reading},
+    c{-std::pow(config.max_sensor_distance, 2) * std::log(1 - config.min_sensor_reading / config.max_sensor_reading)},
     filters{core::make_array<core::ButterworthFilter, num_of_sensors>(config.filter_cutoff)} { }
 
 template <uint8_t num_of_sensors>
@@ -48,12 +47,9 @@ float TWallSensors<num_of_sensors>::get_reading(uint8_t sensor_index) const {
 
 template <uint8_t num_of_sensors>
 float TWallSensors<num_of_sensors>::get_adc_reading(uint8_t sensor_index) const {
-    float distance = micrasBody->getDistanceSensor(sensor_index).getReading();
-    if (distance >= max_distance) {
-        return 0;
-    }
-
-    float reading = (K * (1.0f - (distance / max_distance)));
+    float x = micrasBody->getDistanceSensor(sensor_index).getReading();
+    float intensity = 1 / std::pow(x, 2);
+    float reading = max_sensor_reading * (1 - std::exp(-c * intensity));
 
     return reading;
 }

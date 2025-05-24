@@ -105,6 +105,7 @@ void LveImgui::newFrame() {
 
 void LveImgui::setSimulationEngine(const std::shared_ptr<micrasverse::simulation::SimulationEngine>& simulationEngine) {
     this->simulationEngine = simulationEngine;
+    this->plot.setSimulationEngine(simulationEngine);
 }
 
 void LveImgui::setProxyBridge(const std::shared_ptr<micras::ProxyBridge>& proxyBridge) {

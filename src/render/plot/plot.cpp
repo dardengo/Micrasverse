@@ -70,8 +70,6 @@ Plot::Plot() {
     mazeCostColorScale = 1.0f;
     history = 30.0f;
 
-    // Initialize drag rectangle - will be updated in drawDragAndDrop
-    // We'll use a default width of 1/4 of the history
     dragRect = ImPlotRect(0.0f, history / 4.0f, -1.0f, 1.0f);
     dragRectClicked = false;
     dragRectHovered = false;
@@ -96,7 +94,6 @@ void Plot::drawDragAndDrop(micrasverse::physics::Box2DMicrasBody& micrasBody, mi
 
         // Add configurable settings for the DragRect behavior
         static bool autoRepositionRect = true;
-        ImGui::SameLine();
         ImGui::Checkbox("Auto-reposition rect when out of view", &autoRepositionRect);
 
         // Only reposition if the rect is completely out of view
@@ -112,7 +109,7 @@ void Plot::drawDragAndDrop(micrasverse::physics::Box2DMicrasBody& micrasBody, mi
     }
 
     // Control for plot history
-    ImGui::SliderFloat("History", &history, 1, 30, "%.1f s");
+    // ImGui::SliderFloat("History", &history, 1, 30, "%.1f s");
 
     // Add more control for the DragRect
     static ImPlotDragToolFlags dragFlags = ImPlotDragToolFlags_None;
@@ -175,7 +172,7 @@ void Plot::drawDragAndDrop(micrasverse::physics::Box2DMicrasBody& micrasBody, mi
     // Charts section
     ImGui::BeginChild("Charts", ImVec2(-1, 600), true);
 
-    static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
+    static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels | ImPlotAxisFlags_AutoFit;
 
     // Draw 5 line charts
     for (int chartIndex = 0; chartIndex < 5; chartIndex++) {
@@ -425,8 +422,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
 
     // Only add data points if simulation is not paused
     if (!simulationIsPaused) {
-        float deltaTime = ImGui::GetIO().DeltaTime;
-        t += deltaTime;
+        t = this->simulationEngine->getElapsedRunTime();
         // Add data points
         sdata1.addPoint(t, micrasBody.getRightMotor().getCurrent());
         sdata2.addPoint(t, micrasBody.getLeftMotor().getCurrent());
@@ -975,8 +971,7 @@ void Plot::initPlotVariables(micrasverse::physics::Box2DMicrasBody& micrasBody, 
 }
 
 void Plot::updatePlotVariables(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::ProxyBridge& proxyBridge) {
-    float deltaTime = ImGui::GetIO().DeltaTime;
-    t += deltaTime;
+    t = this->simulationEngine->getElapsedRunTime();
 
     for (auto& var : plotVariables) {
         float value = 0.0f;

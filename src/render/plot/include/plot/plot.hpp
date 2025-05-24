@@ -5,10 +5,13 @@
 #include "micras/proxy/proxy_bridge.hpp"
 #include "micras/nav/grid_pose.hpp"
 #include "micras/nav/maze_graph.hpp"
+#include "simulation/simulation_engine.hpp"
 
 #include "imgui.h"
 #include "implot.h"
 #include "implot3d.h"
+
+#include <memory>
 
 namespace micrasverse::render {
 
@@ -80,6 +83,8 @@ public:
 
     void drawMazeCost3DSurface(micras::ProxyBridge& proxyBridge);
 
+    void setSimulationEngine(std::shared_ptr<simulation::SimulationEngine> simulationEngine) { this->simulationEngine = simulationEngine; }
+
     void destroy();
 
     bool  showPlots;
@@ -98,6 +103,8 @@ public:
 private:
     void initPlotVariables(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::ProxyBridge& proxyBridge);
     void updatePlotVariables(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::ProxyBridge& proxyBridge);
+
+    std::shared_ptr<simulation::SimulationEngine> simulationEngine;
 
     std::vector<PlotVariable> plotVariables;
     std::vector<int>          selectedVariablesForCharts[5];

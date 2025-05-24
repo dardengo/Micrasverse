@@ -126,16 +126,17 @@ const nav::ActionQueuer::Config action_queuer_config{
 const nav::FollowWall::Config follow_wall_config{
     .pid =
         {
-            .kp = 30.0F,
+            .kp = 45.0F,
             .ki = 0.0F,
-            .kd = 0.0F,
+            .kd = 0.09F,
             .setpoint = 0.0F,
             .saturation = 20.0F,
             .max_integral = -1.0F,
         },
     .wall_sensor_index = wall_sensors_index,
     .max_linear_speed = 0.5F,
-    .post_threshold = 16.5F,
+    .max_angular_acceleration = max_angular_acceleration,
+    .post_threshold = 4.0F,
     .cell_size = cell_size,
     .post_clearance = 0.2F * cell_size,
 };
