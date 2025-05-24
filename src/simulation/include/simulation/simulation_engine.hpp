@@ -33,13 +33,21 @@ public:
 
     void setPhysicsEngine(std::shared_ptr<physics::IPhysicsEngine> engine);
 
+    void  updateRunTimer();
+    float getElapsedRunTime() const;
+
     bool                                     isPaused{true};
     bool                                     wasReset{false};
     std::shared_ptr<physics::IPhysicsEngine> physicsEngine;
+    int                                      stepCounter = 0;
 
 private:
     std::vector<std::string> mazePaths{};
     std::string              currentMazePath;
+
+    // Elapsed time tracking
+    int   runStartStep = -1;
+    float elapsedRunTime = 0.0f;
 };
 
 }  // namespace micrasverse::simulation

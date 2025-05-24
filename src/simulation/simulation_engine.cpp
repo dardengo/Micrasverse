@@ -71,6 +71,17 @@ void SimulationEngine::setPhysicsEngine(std::shared_ptr<physics::IPhysicsEngine>
     this->physicsEngine = std::move(engine);
 }
 
+void SimulationEngine::updateRunTimer() {
+    if (this->runStartStep == -1) {
+        this->runStartStep = this->stepCounter;
+    }
+
+    elapsedRunTime = (stepCounter - runStartStep) * micrasverse::STEP;
+}
+
+float SimulationEngine::getElapsedRunTime() const {
+    return elapsedRunTime;
+}
 }  // namespace micrasverse::simulation
 
 #endif  // SIMULATION_ENGINE_CPP

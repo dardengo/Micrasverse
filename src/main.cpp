@@ -41,9 +41,6 @@ int main() {
     // renderEngine->screen->setProxyBridge(proxyBridge);
     // renderEngine->screen->setRenderEngine(renderEngine.get());
 
-    // Simple counter for controlling render frequency
-    int stepCounter = 0;
-
     struct GlobalUbo {
         glm::mat4 projectionView{1.f};
     };
@@ -111,13 +108,15 @@ int main() {
             simulationEngine->togglePause();
         }
 
+        if (std::abs(proxyBridge->get_linear_speed()) > 0.01f) {
+            simulationEngine->updateRunTimer();
+        }
+
         if (!simulationEngine->isPaused) {
             micrasController.update();
             simulationEngine->updateSimulation();
-            stepCounter++;
-            if (stepCounter % lveImgui.physicsStepsPerFrame == 0) {
-                // renderEngine->update();
-                // renderEngine->renderFrame();
+            simulationEngine->stepCounter++;
+            if (simulationEngine->stepCounter % lveImgui.physicsStepsPerFrame == 0) {
                 vulkanEngine->updateRenderableModels();
                 if (auto commandBuffer = vulkanEngine->lveRenderer.beginFrame()) {
                     lveImgui.newFrame();
