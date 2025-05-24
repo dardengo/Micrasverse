@@ -1,5 +1,4 @@
 #include "micras/proxy/proxy_bridge.hpp"
-#include "physics/argb.hpp"
 #include <iostream>
 #include <algorithm>
 
@@ -197,13 +196,13 @@ void ProxyBridge::set_led_brightness(uint8_t index, uint8_t brightness) {
     // The Micrasverse implementation doesn't have a direct set_brightness method
     // For now, we'll just use the set_color method with the current color
     // This is a workaround until a proper set_brightness method is implemented
-    micrasverse::types::Color currentColor = micras.argb->argbRefs[index].get().getColor();
-    float                     brightnessFactor = brightness / 255.0f;
-    micrasverse::types::Color newColor{
-        static_cast<uint8_t>(currentColor.r * brightnessFactor), static_cast<uint8_t>(currentColor.g * brightnessFactor),
-        static_cast<uint8_t>(currentColor.b * brightnessFactor)
-    };
-    micras.argb->set_color(newColor, index);
+    // micrasverse::types::Color currentColor = micras.argb->argbRefs[index].get().getColor();
+    // float                     brightnessFactor = brightness / 255.0f;
+    // micrasverse::types::Color newColor{
+    //     static_cast<uint8_t>(currentColor.r * brightnessFactor), static_cast<uint8_t>(currentColor.g * brightnessFactor),
+    //     static_cast<uint8_t>(currentColor.b * brightnessFactor)
+    // };
+    // micras.argb->set_color(newColor, index);
 }
 
 void ProxyBridge::set_argb_color(const micrasverse::types::Color& color, uint8_t index) {

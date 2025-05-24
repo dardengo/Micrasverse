@@ -1,10 +1,6 @@
 #include "physics/box2d_micrasbody.hpp"
-#include "physics/box2d_dipswitch.hpp"
 #include "physics/box2d_distance_sensor.hpp"
 #include "physics/box2d_motor.hpp"
-#include "physics/box2d_button.hpp"
-#include "physics/box2d_led.hpp"
-#include "physics/argb.hpp"
 #include "physics/box2d_rectanglebody.hpp"
 #include "constants.hpp"
 #include "micrasverse_core/types.hpp"
@@ -57,37 +53,6 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
         bodyId, micrasverse::types::Vec2{MICRAS_HALFWIDTH, 0.0f},
         false  // isLeftWheel
     );
-
-    // Initialize button
-    button = std::make_unique<Box2DButton>(
-        bodyId, micrasverse::types::Vec2{0.0f, MICRAS_HALFHEIGHT - 0.01f},  // position
-        0.01f                                                               // radius
-    );
-
-    // Initialize DIP switches
-    dipSwitch = std::make_unique<Box2DDipSwitch>(4);
-
-    // Initialize LED
-    led = std::make_unique<Box2DLED>(
-        bodyId, micrasverse::types::Vec2{0.0f, MICRAS_HALFHEIGHT - 0.01f},  // position
-        micrasverse::types::Vec2{0.01f, 0.01f},                             // size
-        micrasverse::types::Color{255, 255, 255}                            // color
-    );
-
-    // Initialize ARGB - fix constructor parameters
-    micrasverse::types::Color defaultColor = {255, 255, 255};
-
-    argbs.push_back(std::make_unique<Argb>(
-        bodyId, b2Vec2{-0.01f, MICRAS_HALFHEIGHT / 2.0f},  // position
-        b2Vec2{0.0075f, 0.0075f},                          // size
-        defaultColor
-    ));
-
-    argbs.push_back(std::make_unique<Argb>(
-        bodyId, b2Vec2{0.01f, MICRAS_HALFHEIGHT / 2.0f},  // position
-        b2Vec2{0.0075f, 0.0075f},                         // size
-        defaultColor
-    ));
 }
 
 void Box2DMicrasBody::update(float deltaTime) {
@@ -111,14 +76,6 @@ void Box2DMicrasBody::update(float deltaTime) {
     // Update motors
     leftMotor->update(deltaTime);
     rightMotor->update(deltaTime);
-
-    // Update LEDs
-    led->update(deltaTime);
-
-    // Update ARGBs
-    for (auto& argb : argbs) {
-        argb->update();
-    }
 }
 
 void Box2DMicrasBody::processInput(float deltaTime) {
@@ -159,10 +116,6 @@ b2Vec2 Box2DMicrasBody::getLateralVelocity() const {
 // Explicit destructor definition
 Box2DMicrasBody::~Box2DMicrasBody() {
     // Explicitly destroy components in reverse order of creation
-    argbs.clear();
-    led.reset();
-    dipSwitch.reset();
-    button.reset();
     rightMotor.reset();
     leftMotor.reset();
     distanceSensors.clear();

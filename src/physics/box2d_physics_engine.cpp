@@ -4,10 +4,6 @@
 #include "physics/box2d_physics_engine.hpp"
 #include "physics/box2d_distance_sensor.hpp"
 #include "physics/box2d_motor.hpp"
-#include "physics/box2d_button.hpp"
-#include "physics/box2d_dipswitch.hpp"
-#include "physics/box2d_led.hpp"
-#include "physics/argb.hpp"
 #include "box2d/box2d.h"
 #include "micras/proxy/wall_sensors.hpp"
 #include "micras/proxy/locomotion.hpp"
@@ -50,9 +46,7 @@ void Box2DPhysicsEngine::resetMicrasPosition() {
         b2Body_SetLinearVelocity(bodyId, (b2Vec2){0.0f, 0.0f});
         b2Body_SetAngularVelocity(bodyId, 0.0f);
     }
-    for (size_t i = 0; i < 2; i++) {  // Assuming we have 2 argbs
-        p_Micras->getArgb(i).update();
-    }
+
     for (size_t i = 0; i < 4; i++) {
         p_Micras->getDistanceSensor(i).update();
     }

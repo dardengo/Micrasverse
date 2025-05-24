@@ -1,8 +1,9 @@
 #ifndef MICRAS_PROXY_WALL_SENSORS_HPP
 #define MICRAS_PROXY_WALL_SENSORS_HPP
 
+#include "physics/box2d_micrasbody.hpp"
+#include "physics/box2d_distance_sensor.hpp"
 #include "micras/core/types.hpp"
-#include "micras/proxy/box2d_sensor_adapter.hpp"
 
 #include <array>
 #include <cstdint>
@@ -10,10 +11,6 @@
 #include <memory>
 
 // Forward declaration
-namespace micrasverse::physics {
-class Box2DMicrasBody;
-}  // namespace micrasverse::physics
-
 namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
@@ -59,17 +56,17 @@ public:
     void calibrate_sensor(uint8_t sensor_index);
 
 private:
-    std::vector<std::unique_ptr<Box2DSensorAdapter>> sensors;
-    float                                            uncertainty;
-    std::array<float, num_of_sensors>                base_readings{};
-    float                                            K;
-    float                                            max_adc_reading;
-    float                                            max_distance;
+    micrasverse::physics::Box2DMicrasBody* micrasBody;
+    float                                  uncertainty;
+    std::array<float, num_of_sensors>      base_readings{};
+    float                                  K;
+    float                                  max_adc_reading;
+    float                                  max_distance;
 };
 
 }  // namespace micras::proxy
 
 // Include the template implementation
-#include "../src/wall_sensors.tpp"
+#include "../src/wall_sensors.cpp"
 
 #endif  // MICRAS_PROXY_WALL_SENSORS_HPP

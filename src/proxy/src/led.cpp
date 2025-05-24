@@ -1,6 +1,5 @@
 #include "micras/proxy/led.hpp"
 #include "physics/box2d_micrasbody.hpp"
-#include "physics/box2d_led.hpp"
 #include "micras/core/types.hpp"
 #include "micrasverse_core/types.hpp"
 
@@ -49,13 +48,13 @@ void Led::setState(bool state) {
 }
 
 void Led::updateColor() {
-    if (this->state) {
-        micrasBody->getLed().setColor(
-            micrasverse::types::Color{static_cast<float>(red) / 255.0f, static_cast<float>(green) / 255.0f, static_cast<float>(blue) / 255.0f}
-        );
-    } else {
-        micrasBody->getLed().setColor(micrasverse::types::Color{0.0f, 0.0f, 0.0f});
-    }
+    // if (this->state) {
+    //     micrasBody->getLed().setColor(
+    //         micrasverse::types::Color{static_cast<float>(red) / 255.0f, static_cast<float>(green) / 255.0f, static_cast<float>(blue) / 255.0f}
+    //     );
+    // } else {
+    //     micrasBody->getLed().setColor(micrasverse::types::Color{0.0f, 0.0f, 0.0f});
+    // }
 }
 
 }  // namespace micras::proxy

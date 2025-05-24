@@ -105,7 +105,6 @@ private:
     std::mt19937                           gen;
     std::normal_distribution<float>        noise_dist;
 };
-
 }  // namespace micras::proxy
 
 #include "../src/torque_sensors.cpp"  // NOLINT(bugprone-suspicious-include, misc-header-include-cycle)

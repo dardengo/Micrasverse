@@ -104,6 +104,7 @@ using Maze = TMaze<maze_width, maze_height>;
 const nav::ActionQueuer::Config action_queuer_config{
     .cell_size = cell_size,
     .start_offset = start_offset,
+    .curve_safety_margin = 0.0375F + 0.015F,
     .exploring =
         {
             .max_linear_speed = 0.4F,
@@ -120,9 +121,6 @@ const nav::ActionQueuer::Config action_queuer_config{
             .max_centrifugal_acceleration = 5.0F,
             .max_angular_acceleration = max_angular_acceleration,
         },
-    .radius_45 = cell_size / 2.0F,
-    .radius_90 = cell_size / 2.0F,
-    .radius_135 = cell_size / 2.0F,
 };
 
 const nav::FollowWall::Config follow_wall_config{

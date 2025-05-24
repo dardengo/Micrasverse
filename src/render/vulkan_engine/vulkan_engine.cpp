@@ -4,7 +4,6 @@
 #include "vulkan_engine/lve_buffer.hpp"
 #include "vulkan_engine/lve_camera.hpp"
 #include "vulkan_engine/simple_render_system.hpp"
-#include "physics/argb.hpp"
 #include "physics/box2d_micrasbody.hpp"
 #include "physics/box2d_distance_sensor.hpp"
 
@@ -394,15 +393,15 @@ void VulkanEngine::loadMicras() {
 }
 
 void VulkanEngine::loadARGB() {
-    for (auto& led : simulationEngine->physicsEngine->getMicras().getArgbs()) {
-        std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.3f, 0.3f, 0.3f});
-        auto                      ledObject = LveGameObject::createGameObject();
-        ledObject.model = lveModel;
-        ledObject.transform.translation = glm::vec3(led->worldPosition.x, -led->worldPosition.y, 0.0f);
-        ledObject.transform.scale = glm::vec3(led->size.x, led->size.y, 0.f);
-        gameObjects.push_back(std::move(ledObject));
-    }
-    this->argbIndex = gameObjects.size();
+    // for (auto& led : simulationEngine->physicsEngine->getMicras().getArgbs()) {
+    //     std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.3f, 0.3f, 0.3f});
+    //     auto                      ledObject = LveGameObject::createGameObject();
+    //     ledObject.model = lveModel;
+    //     ledObject.transform.translation = glm::vec3(led->worldPosition.x, -led->worldPosition.y, 0.0f);
+    //     ledObject.transform.scale = glm::vec3(led->size.x, led->size.y, 0.f);
+    //     gameObjects.push_back(std::move(ledObject));
+    // }
+    // this->argbIndex = gameObjects.size();
 }
 
 void VulkanEngine::loadLidar() {
@@ -426,14 +425,14 @@ void VulkanEngine::updateRenderableModels() {
         glm::vec3(simulationEngine->physicsEngine->getMicras().getPosition().x, -simulationEngine->physicsEngine->getMicras().getPosition().y, 0.0f);
     micras.transform.rotation = glm::vec3(0.f, 0.f, -simulationEngine->physicsEngine->getMicras().getAngle());
 
-    for (size_t i = 0; i < simulationEngine->physicsEngine->getMicras().getArgbs().size(); i++) {
-        auto& argb = gameObjects[argbIndex - simulationEngine->physicsEngine->getMicras().getArgbs().size() + i];
-        argb.transform.translation = glm::vec3(
-            simulationEngine->physicsEngine->getMicras().getArgbs()[i]->worldPosition.x,
-            -simulationEngine->physicsEngine->getMicras().getArgbs()[i]->worldPosition.y, 0.0f
-        );
-        argb.transform.rotation = glm::vec3(0.f, 0.f, -simulationEngine->physicsEngine->getMicras().getAngle());
-    }
+    // for (size_t i = 0; i < simulationEngine->physicsEngine->getMicras().getArgbs().size(); i++) {
+    //     auto& argb = gameObjects[argbIndex - simulationEngine->physicsEngine->getMicras().getArgbs().size() + i];
+    //     argb.transform.translation = glm::vec3(
+    //         simulationEngine->physicsEngine->getMicras().getArgbs()[i]->worldPosition.x,
+    //         -simulationEngine->physicsEngine->getMicras().getArgbs()[i]->worldPosition.y, 0.0f
+    //     );
+    //     argb.transform.rotation = glm::vec3(0.f, 0.f, -simulationEngine->physicsEngine->getMicras().getAngle());
+    // }
 
     for (size_t i = 0; i < simulationEngine->physicsEngine->getMicras().getDistanceSensorCount(); i++) {
         auto& sensor = gameObjects[lidarIndex - simulationEngine->physicsEngine->getMicras().getDistanceSensorCount() + i];

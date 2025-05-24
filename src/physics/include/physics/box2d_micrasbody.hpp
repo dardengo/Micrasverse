@@ -12,10 +12,6 @@ namespace micrasverse::physics {
 // Forward declarations for all component types used in this class
 class Box2DDistanceSensor;
 class Box2DMotor;
-class Box2DButton;
-class Box2DDipSwitch;
-class Box2DLED;
-class Argb;
 
 class Box2DMicrasBody {
 private:
@@ -30,10 +26,6 @@ private:
     std::vector<std::unique_ptr<Box2DDistanceSensor>> distanceSensors;
     std::unique_ptr<Box2DMotor>                       leftMotor;
     std::unique_ptr<Box2DMotor>                       rightMotor;
-    std::unique_ptr<Box2DButton>                      button;
-    std::unique_ptr<Box2DDipSwitch>                   dipSwitch;
-    std::unique_ptr<Box2DLED>                         led;
-    std::vector<std::unique_ptr<Argb>>                argbs;
 
     // Acceleration and velocity tracking
     float  linearSpeed = 0.0f;
@@ -92,18 +84,7 @@ public:
     Box2DMotor& getLeftMotor() { return *leftMotor; }
 
     Box2DMotor& getRightMotor() { return *rightMotor; }
-
-    Box2DButton& getButton() { return *button; }
-
-    Box2DDipSwitch& getDipSwitch() { return *dipSwitch; }
-
-    Box2DLED& getLed() { return *led; }
-
-    Argb& getArgb(size_t index) { return *argbs[index]; }
-
-    std::vector<std::unique_ptr<Argb>>& getArgbs() { return argbs; }
 };
-
 }  // namespace micrasverse::physics
 
 #endif  // BOX2D_MICRASBODY_HPP

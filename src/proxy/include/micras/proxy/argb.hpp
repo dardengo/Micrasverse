@@ -3,7 +3,6 @@
 
 #include "micrasverse_core/types.hpp"
 #include "micras/core/types.hpp"
-#include "physics/argb.hpp"
 #include "physics/box2d_micrasbody.hpp"
 
 #include <vector>
@@ -17,8 +16,6 @@ namespace micras::proxy {
 template <uint8_t num_of_leds>
 class TArgb {
 public:
-    std::vector<std::reference_wrapper<micrasverse::physics::Argb>> argbRefs;
-
     struct Config {
         micrasverse::physics::Box2DMicrasBody* micrasBody = nullptr;
         float                                  uncertainty;

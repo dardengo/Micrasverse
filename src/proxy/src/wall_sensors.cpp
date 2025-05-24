@@ -1,7 +1,6 @@
-#ifndef MICRAS_PROXY_WALL_SENSORS_TPP
-#define MICRAS_PROXY_WALL_SENSORS_TPP
+#ifndef MICRAS_PROXY_WALL_SENSORS_CPP
+#define MICRAS_PROXY_WALL_SENSORS_CPP
 
-#include "micras/proxy/box2d_sensor_adapter.hpp"
 #include "micras/proxy/wall_sensors.hpp"
 #include "micras/core/types.hpp"
 
@@ -9,15 +8,12 @@ namespace micras::proxy {
 
 template <uint8_t num_of_sensors>
 TWallSensors<num_of_sensors>::TWallSensors(const typename TWallSensors<num_of_sensors>::Config& config) :
+    micrasBody{config.micrasBody},
     uncertainty{config.uncertainty},
     base_readings{config.base_readings},
     K{config.K},
     max_adc_reading{config.max_adc_reading},
-    max_distance{config.max_distance} {
-    for (uint8_t i = 0; i < num_of_sensors; i++) {
-        sensors.push_back(std::make_unique<Box2DSensorAdapter>(config.micrasBody, i));
-    }
-}
+    max_distance{config.max_distance} { }
 
 template <uint8_t num_of_sensors>
 TWallSensors<num_of_sensors>::~TWallSensors() {
@@ -55,7 +51,7 @@ float TWallSensors<num_of_sensors>::get_reading(uint8_t sensor_index) const {
 template <uint8_t num_of_sensors>
 float TWallSensors<num_of_sensors>::get_adc_reading(uint8_t sensor_index) const {
     // Use the sensor adapter interface to get the reading
-    float distance = sensors.at(sensor_index)->getReading();
+    float distance = micrasBody->getDistanceSensor(sensor_index).getReading();
     if (distance >= max_distance) {
         return 0;
     }
@@ -93,4 +89,4 @@ void TWallSensors<num_of_sensors>::calibrate_sensor(uint8_t sensor_index) {
 
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_WALL_SENSORS_TPP
+#endif  // MICRAS_PROXY_WALL_SENSORS_CPP
