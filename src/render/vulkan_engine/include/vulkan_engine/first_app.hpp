@@ -35,6 +35,7 @@ public:
     void loadGameObjects();
     void loadMazeFloor();
     void loadMazeWalls();
+    void reloadMazeWalls();
     void loadFirmwareMazeWalls();
     void loadBestRoute();
     void loadMicras();
@@ -65,5 +66,8 @@ public:
 
     std::unordered_set<micras::nav::GridPose> walls_set;
     std::unordered_set<micras::nav::GridPose> best_route_set;
+
+    int first_wall_index{0};
+    int number_of_walls{0};
 };
 }  // namespace lve

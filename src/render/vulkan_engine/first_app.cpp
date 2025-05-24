@@ -224,14 +224,28 @@ void FirstApp::loadMazeFloor() {
 }
 
 void FirstApp::loadMazeWalls() {
+    this->first_wall_index = gameObjects.size();
+
     for (auto& wall : simulationEngine->physicsEngine->getMaze().getElements()) {
         std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.5f, 0.0f, 0.0f});
         auto                      wallObject = LveGameObject::createGameObject();
         wallObject.model = lveModel;
         wallObject.transform.translation = glm::vec3(wall.position.x, -wall.position.y, 0.0f);
         wallObject.transform.scale = glm::vec3(wall.size.x, wall.size.y, 0.f);
+        this->number_of_walls++;
         gameObjects.push_back(std::move(wallObject));
     }
+}
+
+void FirstApp::reloadMazeWalls() {
+    // remove walls from game objects
+    gameObjects.erase(gameObjects.begin() + first_wall_index, gameObjects.begin() + number_of_walls + first_wall_index);
+    // run loadMazeWalls
+    this->number_of_walls = 0;
+    this->walls_set.clear();
+
+    this->loadMazeWalls();
+    this->loadMazeFloor();
 }
 
 void FirstApp::loadFirmwareMazeWalls() {
@@ -315,6 +329,7 @@ void FirstApp::loadFirmwareMazeWalls() {
                     wallObject.model = lveModel;
                     wallObject.transform.translation = glm::vec3(posX, -posY, -0.00001f);
                     wallObject.transform.scale = glm::vec3(sizeX, sizeY, 0.0f);
+                    number_of_walls++;
                     gameObjects.push_back(std::move(wallObject));
                 }
             }
@@ -444,6 +459,11 @@ void FirstApp::updateRenderableModels() {
 
     loadFirmwareMazeWalls();
     loadBestRoute();
+
+    if (this->simulationEngine->wasReset) {
+        this->reloadMazeWalls();
+        this->simulationEngine->wasReset = false;
+    }
 }
 
 }  // namespace lve
