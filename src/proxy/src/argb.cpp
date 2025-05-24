@@ -9,7 +9,6 @@
 namespace micras::proxy {
 template <uint8_t num_of_leds>
 TArgb<num_of_leds>::TArgb(const Config& config) : micrasBody(config.micrasBody), uncertainty(config.uncertainty), brightness(config.brightness) {
-    // Connect to physical ARGBs from Box2DMicrasBody
     if (micrasBody) {
         auto& physicalArgbs = micrasBody->getArgbs();
         for (size_t i = 0; i < physicalArgbs.size(); ++i) {
@@ -27,9 +26,7 @@ TArgb<num_of_leds>::TArgb(const Config& config) : micrasBody(config.micrasBody),
 }
 
 template <uint8_t num_of_leds>
-TArgb<num_of_leds>::~TArgb() {
-    // No cleanup needed for references
-}
+TArgb<num_of_leds>::~TArgb() { }
 
 template <uint8_t num_of_leds>
 void TArgb<num_of_leds>::turn_on() {
@@ -46,15 +43,10 @@ void TArgb<num_of_leds>::turn_off() {
 }
 
 template <uint8_t num_of_leds>
-void TArgb<num_of_leds>::update() {
-    // Physical ARGBs are updated by the physics system
-    // We don't need to update them here
-}
+void TArgb<num_of_leds>::update() { }
 
 template <uint8_t num_of_leds>
 void TArgb<num_of_leds>::attachArgb(b2Vec2 localPosition, b2Vec2 size, micrasverse::types::Color color) {
-    // This method is no longer needed since we use physical ARGBs
-    // However, we keep it for API compatibility
     std::cerr << "Warning: attachArgb called on proxy, but it has no effect. ARGBs are managed by Box2DMicrasBody" << std::endl;
 }
 

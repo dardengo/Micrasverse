@@ -17,16 +17,16 @@
 #include <unordered_set>
 
 namespace lve {
-class FirstApp {
+class VulkanEngine {
 public:
     static constexpr int WIDTH = 800;
     static constexpr int HEIGHT = 600;
 
-    FirstApp(std::shared_ptr<micrasverse::simulation::SimulationEngine> engine);
-    ~FirstApp();
+    VulkanEngine(std::shared_ptr<micrasverse::simulation::SimulationEngine> engine);
+    ~VulkanEngine();
 
-    FirstApp(const FirstApp&) = delete;
-    FirstApp& operator=(const FirstApp&) = delete;
+    VulkanEngine(const VulkanEngine&) = delete;
+    VulkanEngine& operator=(const VulkanEngine&) = delete;
 
     void init();
     void run();

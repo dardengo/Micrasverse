@@ -1,10 +1,8 @@
 #ifndef MICRAS_PROXY_WALL_SENSORS_TPP
 #define MICRAS_PROXY_WALL_SENSORS_TPP
 
-// Note: We only need the adapter declaration, not its implementation
 #include "micras/proxy/box2d_sensor_adapter.hpp"
 #include "micras/proxy/wall_sensors.hpp"
-// The path is relative to the include directories in CMakeLists.txt
 #include "micras/core/types.hpp"
 
 namespace micras::proxy {
@@ -16,7 +14,6 @@ TWallSensors<num_of_sensors>::TWallSensors(const typename TWallSensors<num_of_se
     K{config.K},
     max_adc_reading{config.max_adc_reading},
     max_distance{config.max_distance} {
-    // Initialize the wall sensors with adapters
     for (uint8_t i = 0; i < num_of_sensors; i++) {
         sensors.push_back(std::make_unique<Box2DSensorAdapter>(config.micrasBody, i));
     }
@@ -43,10 +40,10 @@ void TWallSensors<num_of_sensors>::update() {
 }
 
 template <uint8_t num_of_sensors>
-bool TWallSensors<num_of_sensors>::get_wall(uint8_t sensor_index, bool disturbed) const {   
+bool TWallSensors<num_of_sensors>::get_wall(uint8_t sensor_index, bool disturbed) const {
     float reading = this->get_reading(sensor_index);
-    float threshold = this->base_readings.at(sensor_index)*uncertainty;
-    
+    float threshold = this->base_readings.at(sensor_index) * uncertainty;
+
     return reading > threshold;
 }
 
@@ -64,7 +61,7 @@ float TWallSensors<num_of_sensors>::get_adc_reading(uint8_t sensor_index) const 
     }
 
     float reading = (K * (1.0f - (distance / max_distance)));
-        
+
     return reading;
 }
 
@@ -94,7 +91,6 @@ void TWallSensors<num_of_sensors>::calibrate_sensor(uint8_t sensor_index) {
     this->base_readings.at(sensor_index) = this->get_reading(sensor_index);
 }
 
-
 }  // namespace micras::proxy
 
-#endif  // MICRAS_PROXY_WALL_SENSORS_TPP 
+#endif  // MICRAS_PROXY_WALL_SENSORS_TPP

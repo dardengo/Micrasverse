@@ -80,6 +80,7 @@ constexpr float    max_linear_acceleration{10.0F};
 constexpr float    max_linear_deceleration{15.0F};
 constexpr float    max_angular_acceleration{300.0F};
 constexpr float    crash_acceleration{1000000.0F};
+constexpr float    fan_speed{100.0F};
 
 constexpr core::WallSensorsIndex wall_sensors_index{
     .left_front = 0,

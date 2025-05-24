@@ -2,7 +2,7 @@
 #define MICRAS_PROXY_WALL_SENSORS_HPP
 
 #include "micras/core/types.hpp"
-#include "micras/proxy/i_distance_sensor.hpp"
+#include "micras/proxy/box2d_sensor_adapter.hpp"
 
 #include <array>
 #include <cstdint>
@@ -53,27 +53,18 @@ public:
 
     void calibrate_right_wall();
 
-    // Additional methods for Micrasverse (for backward compatibility)
-    void calibrate_front_free_space();
-
-    void calibrate_left_free_space();
-
-    void calibrate_right_free_space();
-
-    void update_thresholds();
-
     /**
      * @brief Calibrate a wall sensor base reading.
      */
     void calibrate_sensor(uint8_t sensor_index);
 
 private:
-    std::vector<std::unique_ptr<IDistanceSensor>> sensors;
-    float                                         uncertainty;
-    std::array<float, num_of_sensors>             base_readings{};
-    float                                         K;
-    float                                         max_adc_reading;
-    float                                         max_distance;
+    std::vector<std::unique_ptr<Box2DSensorAdapter>> sensors;
+    float                                            uncertainty;
+    std::array<float, num_of_sensors>                base_readings{};
+    float                                            K;
+    float                                            max_adc_reading;
+    float                                            max_distance;
 };
 
 }  // namespace micras::proxy

@@ -3,7 +3,6 @@
 
 #include "box2d/box2d.h"
 #include "micrasverse_core/types.hpp"
-#include "physics/i_sensor.hpp"
 #include "micras/proxy/button.hpp"
 #include <chrono>
 
@@ -12,9 +11,6 @@ namespace micrasverse::physics {
 class Box2DButton {
 public:
     Box2DButton(b2BodyId bodyId, const micrasverse::types::Vec2& localPosition, float radius);
-
-    // ISensor interface implementation
-    SensorType getType() const { return SensorType::TOUCH; }
 
     micrasverse::types::Vec2 getPosition() const;
 

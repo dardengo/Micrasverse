@@ -32,15 +32,6 @@ proxy::Imu::Config imu_config = {.micrasBody = nullptr, .gyroscope_noise = 0.0f,
 // LED configuration
 proxy::Led::Config led_config = {.micrasBody = nullptr, .initial_state = false, .red = 255, .green = 255, .blue = 255};
 
-// Motor configuration
-proxy::Motor::Config motor_config = {
-    .micrasBody = nullptr,
-    .isLeftWheel = true,    // Will be set per motor
-    .max_speed = 100.0f,    // Maximum speed in RPM
-    .max_torque = 0.0008f,  // Maximum torque in Nm
-    .gear_ratio = 2.5f      // Gear ratio
-};
-
 // Rotary Sensor configuration
 proxy::RotarySensor::Config rotary_sensor_left_config = {
     .micrasBody = nullptr,
@@ -91,7 +82,6 @@ void initializeProxyConfigs(micrasverse::physics::Box2DMicrasBody* body) {
     fan_config.micrasBody = body;
     imu_config.micrasBody = body;
     led_config.micrasBody = body;
-    motor_config.micrasBody = body;
     rotary_sensor_left_config.micrasBody = body;
     rotary_sensor_right_config.micrasBody = body;
     torque_sensors_config.micrasBody = body;

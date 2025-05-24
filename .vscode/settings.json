@@ -74,5 +74,8 @@
         "*.tpp": "cpp",
         "cassert": "cpp"
     },
-    "cmake.sourceDirectory": "/home/darde/repos/Micrasverse"
+    "cmake.sourceDirectory": "/home/darde/repos/Micrasverse",
+    "cSpell.words": [
+        "serializables"
+    ]
 }

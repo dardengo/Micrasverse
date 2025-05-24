@@ -1,8 +1,6 @@
 #ifndef MICRASVERSE_PHYSICS_ARGB_HPP
 #define MICRASVERSE_PHYSICS_ARGB_HPP
 
-#include "physics/i_actuator.hpp"
-#include "physics/i_argb.hpp"
 #include "micrasverse_core/types.hpp"
 #include "box2d/box2d.h"
 #include <memory>
@@ -10,7 +8,7 @@
 
 namespace micrasverse::physics {
 
-class Argb : public IArgb {
+class Argb {
 public:
     // Default constructor
     Argb() = default;
@@ -20,28 +18,26 @@ public:
 
     virtual ~Argb() = default;
 
-    // IArgb methods
-    void         update() override;
-    void         setColor(const types::Color& color) override;
-    types::Color getColor() const override;
-    void         turnOn() override;
-    void         turnOn(const types::Color& color) override;
-    void         turnOff() override;
-    void         toggle() override;
-    bool         isOn() const override;
-    types::Vec2  getWorldPosition() const override;
-    types::Vec2  getSize() const override;
-    void         attachArgb(types::Vec2 localPosition, types::Vec2 size, types::Color color) override;
-    void         set_color(const types::Color& color, uint8_t index) override;
-    void         set_colors(const std::array<types::Color, 8>& colors) override;
-    void         encode_color(const types::Color& color, uint8_t index) override;
+    void         update();
+    void         setColor(const types::Color& color);
+    types::Color getColor() const;
+    void         turnOn();
+    void         turnOn(const types::Color& color);
+    void         turnOff();
+    void         toggle();
+    bool         isOn() const;
+    types::Vec2  getWorldPosition() const;
+    types::Vec2  getSize() const;
+    void         attachArgb(types::Vec2 localPosition, types::Vec2 size, types::Color color);
+    void         set_color(const types::Color& color, uint8_t index);
+    void         set_colors(const std::array<types::Color, 8>& colors);
+    void         encode_color(const types::Color& color, uint8_t index);
 
-    // IActuator methods
-    types::Vec2 getPosition() const override;
-    void        setCommand(float command) override;
-    float       getCommand() const override;
-    bool        isActive() const override;
-    void        update(float deltaTime) override;
+    types::Vec2 getPosition() const;
+    void        setCommand(float command);
+    float       getCommand() const;
+    bool        isActive() const;
+    void        update(float deltaTime);
 
     // Additional getter methods
     const std::array<float, 3>& getLightColorArray() const { return lightColorArray; }

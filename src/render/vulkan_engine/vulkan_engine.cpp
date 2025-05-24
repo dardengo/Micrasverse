@@ -1,4 +1,4 @@
-#include "vulkan_engine/first_app.hpp"
+#include "vulkan_engine/vulkan_engine.hpp"
 
 #include "vulkan_engine/keyboard_movement_controller.hpp"
 #include "vulkan_engine/lve_buffer.hpp"
@@ -29,7 +29,7 @@ struct GlobalUbo {
     glm::mat4 projectionView{1.f};
 };
 
-FirstApp::FirstApp(std::shared_ptr<micrasverse::simulation::SimulationEngine> engine) : simulationEngine(engine) {
+VulkanEngine::VulkanEngine(std::shared_ptr<micrasverse::simulation::SimulationEngine> engine) : simulationEngine(engine) {
     globalPool = LveDescriptorPool::Builder(lveDevice)
                      .setMaxSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT)
                      .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, LveSwapChain::MAX_FRAMES_IN_FLIGHT)
@@ -37,9 +37,9 @@ FirstApp::FirstApp(std::shared_ptr<micrasverse::simulation::SimulationEngine> en
     loadGameObjects();
 }
 
-FirstApp::~FirstApp() { }
+VulkanEngine::~VulkanEngine() { }
 
-void FirstApp::init() {
+void VulkanEngine::init() {
     // std::vector<std::unique_ptr<LveBuffer>> uboBuffers(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
     // for (int i = 0; i < uboBuffers.size(); i++) {
     //   uboBuffers[i] = std::make_unique<LveBuffer>(
@@ -76,7 +76,7 @@ void FirstApp::init() {
     // this->currentTime = std::chrono::high_resolution_clock::now();
 }
 
-void FirstApp::run() {
+void VulkanEngine::run() {
     // while (!lveWindow.shouldClose()) {
     //   glfwPollEvents();
 
@@ -199,7 +199,7 @@ std::unique_ptr<LveModel> createTriangleModel(LveDevice& device, glm::vec3 offse
     return std::make_unique<LveModel>(device, modelBuilder);
 }
 
-void FirstApp::loadGameObjects() {
+void VulkanEngine::loadGameObjects() {
     // std::shared_ptr<LveModel> lveModel = createCubeModel(lveDevice, {.0f, .0f, .0f});
     // auto cube = LveGameObject::createGameObject();
     // cube.model = lveModel;
@@ -214,7 +214,7 @@ void FirstApp::loadGameObjects() {
     loadMazeFloor();
 }
 
-void FirstApp::loadMazeFloor() {
+void VulkanEngine::loadMazeFloor() {
     std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.f, 0.f, 0.f});
     auto                      floor = LveGameObject::createGameObject();
     floor.model = lveModel;
@@ -223,7 +223,7 @@ void FirstApp::loadMazeFloor() {
     gameObjects.push_back(std::move(floor));
 }
 
-void FirstApp::loadMazeWalls() {
+void VulkanEngine::loadMazeWalls() {
     this->first_wall_index = gameObjects.size();
 
     for (auto& wall : simulationEngine->physicsEngine->getMaze().getElements()) {
@@ -237,7 +237,7 @@ void FirstApp::loadMazeWalls() {
     }
 }
 
-void FirstApp::reloadMazeWalls() {
+void VulkanEngine::reloadMazeWalls() {
     // remove walls from game objects
     gameObjects.erase(gameObjects.begin() + first_wall_index, gameObjects.begin() + number_of_walls + first_wall_index);
     // run loadMazeWalls
@@ -248,7 +248,7 @@ void FirstApp::reloadMazeWalls() {
     this->loadMazeFloor();
 }
 
-void FirstApp::loadFirmwareMazeWalls() {
+void VulkanEngine::loadFirmwareMazeWalls() {
     if (!proxyBridge) {
         return;
     }
@@ -337,7 +337,7 @@ void FirstApp::loadFirmwareMazeWalls() {
     }
 }
 
-void FirstApp::loadBestRoute() {
+void VulkanEngine::loadBestRoute() {
     if (!proxyBridge)
         return;
 
@@ -389,7 +389,7 @@ void FirstApp::loadBestRoute() {
     }
 }
 
-void FirstApp::loadMicras() {
+void VulkanEngine::loadMicras() {
     std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.0f, 0.5f, 0.0f});
     auto                      micras = LveGameObject::createGameObject();
     micras.model = lveModel;
@@ -401,7 +401,7 @@ void FirstApp::loadMicras() {
     gameObjects.push_back(std::move(micras));
 }
 
-void FirstApp::loadARGB() {
+void VulkanEngine::loadARGB() {
     for (auto& led : simulationEngine->physicsEngine->getMicras().getArgbs()) {
         std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.3f, 0.3f, 0.3f});
         auto                      ledObject = LveGameObject::createGameObject();
@@ -413,7 +413,7 @@ void FirstApp::loadARGB() {
     this->argbIndex = gameObjects.size();
 }
 
-void FirstApp::loadLidar() {
+void VulkanEngine::loadLidar() {
     for (size_t i = 0; i < simulationEngine->physicsEngine->getMicras().getDistanceSensorCount(); i++) {
         std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {1.0f, 0.1f, 0.1f});
         auto                      lidarObject = LveGameObject::createGameObject();
@@ -428,7 +428,7 @@ void FirstApp::loadLidar() {
     this->lidarIndex = gameObjects.size();
 }
 
-void FirstApp::updateRenderableModels() {
+void VulkanEngine::updateRenderableModels() {
     auto& micras = gameObjects[micrasIndex];
     micras.transform.translation =
         glm::vec3(simulationEngine->physicsEngine->getMicras().getPosition().x, -simulationEngine->physicsEngine->getMicras().getPosition().y, 0.0f);

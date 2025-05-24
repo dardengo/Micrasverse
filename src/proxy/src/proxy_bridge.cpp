@@ -231,6 +231,18 @@ bool ProxyBridge::get_dip_switch_state(uint8_t index) const {
     return micras.dip_switch->get_switch_state(index);
 }
 
+std::vector<bool> ProxyBridge::get_dip_switch_states() const {
+    std::vector<bool> states;
+    for (uint8_t i = 0; i < 4; ++i) {
+        states.push_back(micras.dip_switch->get_switch_state(i));
+    }
+    return states;
+}
+
+void ProxyBridge::set_dip_switch_state(uint8_t index, bool state) {
+    micras.dip_switch->set_switch_state(index, state);
+}
+
 // Stopwatch access
 void ProxyBridge::reset_stopwatch() {
     micras.loop_stopwatch.reset_us();

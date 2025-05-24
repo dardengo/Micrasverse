@@ -9,10 +9,7 @@ Box2DLED::Box2DLED(b2BodyId bodyId, const types::Vec2& localPosition, const type
     isLedOn(false),
     baseColor(types::Color(176.0f, 198.0f, 214.0f)),  // Light gray base color
     lightColor(lightColor) {
-    // Initialize world position
     worldPosition = b2Body_GetWorldPoint(bodyId, this->localPosition);
-
-    // Set up color arrays for rendering
     baseColorArray = baseColor.toArray();
     lightColorArray = lightColor.toArray();
 }
@@ -22,8 +19,6 @@ types::Vec2 Box2DLED::getPosition() const {
 }
 
 void Box2DLED::setCommand(float command) {
-    // LEDs don't use typical commands, but we could interpret a command
-    // as a brightness level for future enhancement
     if (command > 0.1f) {
         turnOn();
     } else {

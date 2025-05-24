@@ -1,15 +1,13 @@
 #ifndef BOX2D_MOTOR_HPP
 #define BOX2D_MOTOR_HPP
 
-#include "physics/i_actuator.hpp"
-#include "physics/i_motor.hpp"
 #include "box2d/box2d.h"
 #include "constants.hpp"
 #include "micrasverse_core/types.hpp"
 
 namespace micrasverse::physics {
 
-class Box2DMotor : public IMotor {
+class Box2DMotor {
 public:
     Box2DMotor(
         b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, float angle = B2_PI / 2.0f, float R = MOTOR_RESISTANCE,
@@ -17,37 +15,35 @@ public:
     );
     virtual ~Box2DMotor() = default;
 
-    // IActuator interface implementation
-    ActuatorType getType() const override { return ActuatorType::MOTOR; }
+    types::Vec2 getPosition() const;
 
-    types::Vec2 getPosition() const override;
+    void setCommand(float command);
 
-    void setCommand(float command) override;
+    float getCommand() const { return inputCommand; }
 
-    float getCommand() const override { return inputCommand; }
+    bool isActive() const { return std::abs(inputCommand) > 0.1f; }
 
-    bool isActive() const override { return std::abs(inputCommand) > 0.1f; }
+    void update(float deltaTime) { update(deltaTime, isFanOn); }
 
-    void update(float deltaTime) override { update(deltaTime, isFanOn); }
+    void update(float deltaTime, bool isFanOn);
 
-    void update(float deltaTime, bool isFanOn) override;
+    float getCurrent() const { return current; }
 
-    // IMotor interface implementation
-    float getCurrent() const override { return current; }
+    float getAngularVelocity() const { return rotorAngularVelocity; }
 
-    float getAngularVelocity() const override { return rotorAngularVelocity; }
+    float getAppliedForce() const { return appliedForce; }
 
-    float getAppliedForce() const override { return appliedForce; }
+    float getTorque() const { return torque; }
 
-    float getTorque() const override { return torque; }
+    float getBodyLinearVelocity() const { return bodyLinearVelocity; }
 
-    float getBodyLinearVelocity() const override { return bodyLinearVelocity; }
+    float getBodyAngularVelocity() const { return bodyAngularVelocity; }
 
-    float getBodyAngularVelocity() const override { return bodyAngularVelocity; }
+    bool isLeftWheel() const { return leftWheel; }
 
-    bool isLeftWheel() const override { return leftWheel; }
+    bool getFanState() const { return isFanOn; }
 
-    bool getFanState() const override { return isFanOn; }
+    bool isFanOn{false};  // Is the fan on?
 
 private:
     float resistance;            // Motor resistance (R)
@@ -64,7 +60,6 @@ private:
     float bodyLinearVelocity;    // Linear velocity of the body
     float bodyAngularVelocity;   // Angular velocity of the body
     bool  leftWheel;             // Is this a left wheel?
-    bool  isFanOn;               // Is the fan on?
 
     // Box2D specific properties
     b2BodyId bodyId;          // Body to apply the force to

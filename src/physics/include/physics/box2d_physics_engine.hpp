@@ -1,7 +1,6 @@
 #ifndef MICRASVERSE_PHYSICS_BOX2D_PHYSICS_ENGINE_HPP
 #define MICRASVERSE_PHYSICS_BOX2D_PHYSICS_ENGINE_HPP
 
-#include "physics/i_physics_engine.hpp"
 #include "physics/box2d_world.hpp"
 #include "physics/box2d_maze.hpp"
 #include "physics/box2d_micrasbody.hpp"
@@ -12,20 +11,20 @@
 
 namespace micrasverse::physics {
 
-class Box2DPhysicsEngine : public IPhysicsEngine {
+class Box2DPhysicsEngine {
 public:
     Box2DPhysicsEngine(const std::string_view mazePath = DEFAULT_MAZE_PATH);
-    ~Box2DPhysicsEngine() override;
+    ~Box2DPhysicsEngine();
 
-    void update(float step = STEP) override;
-    void loadMaze(const std::string_view mazePath) override;
-    void resetMicrasPosition() override;
+    void update(float step = STEP);
+    void loadMaze(const std::string_view mazePath);
+    void resetMicrasPosition();
 
     World& getWorld() { return *p_World; }
 
-    Maze& getMaze() override { return *p_Maze; }
+    Maze& getMaze() { return *p_Maze; }
 
-    Box2DMicrasBody& getMicras() override { return *p_Micras; }
+    Box2DMicrasBody& getMicras() { return *p_Micras; }
 
 private:
     std::unique_ptr<World>           p_World;

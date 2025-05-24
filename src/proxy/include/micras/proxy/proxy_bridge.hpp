@@ -21,6 +21,8 @@
 #include <limits>
 #include <algorithm>
 #include <unordered_map>
+#include <vector>
+#include "constants.hpp"
 
 namespace micras {
 
@@ -104,8 +106,10 @@ public:
     void turn_off_argb();
 
     // Dip switch access
-    bool    get_dip_switch_state(uint8_t index) const;
-    uint8_t get_dip_switch_value() const;
+    bool              get_dip_switch_state(uint8_t index) const;
+    std::vector<bool> get_dip_switch_states() const;
+    void              set_dip_switch_state(uint8_t index, bool state);
+    uint8_t           get_dip_switch_value() const;
 
     // Stopwatch access
     void     reset_stopwatch();
@@ -170,14 +174,11 @@ public:
 
     void reset_micras() { micras.reset(); }
 
-    // Additional methods for wall following
     std::string get_follow_wall_type_string() const;
 
-    // Position and goal access
     micras::core::Vector get_current_goal() const;
     micras::nav::Pose    get_current_pose() const;
 
-    // Maze access
     bool has_wall(const micras::nav::GridPose& pose, bool consider_virtual = false) const {
         return micras.maze.costmap.has_wall(pose, consider_virtual);
     }
@@ -188,21 +189,15 @@ public:
 
     micras::nav::Costmap<16, 16, 2>::Cell get_cell(const micras::nav::GridPoint& point) const { return micras.maze.costmap.get_cell(point); }
 
-    // Maze cost access for 3D plotting
-    int get_maze_width() const {
-        return 16;  // Default maze width (usually 16x16 for classic mazes)
-    }
+    int get_maze_width() const { return micras::maze_width; }
 
-    int get_maze_height() const {
-        return 16;  // Default maze height (usually 16x16 for classic mazes)
-    }
+    int get_maze_height() const { return micras::maze_height; }
 
     std::vector<int16_t> get_maze_cell_costs() const {
         const int            width = get_maze_width();
         const int            height = get_maze_height();
         std::vector<int16_t> costs(width * height);
 
-        // Fill with costs from the maze
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int16_t cost = micras.maze.costmap.get_cost(micras::nav::GridPoint(x, y), micras::nav::Maze::Layer::EXPLORE) +
@@ -218,10 +213,8 @@ public:
 
     uint8_t get_min_maze_cost() const { return micras.maze.minimum_cost; }
 
-    // Access the best route from the maze
     const std::list<micras::nav::GridPose>& get_best_route() const { return micras.maze.get_best_route(); }
 
-    // Interface event access
     void send_event(Interface::Event event);
     bool acknowledge_event(Interface::Event event);
     bool peek_event(Interface::Event event) const;
@@ -229,8 +222,6 @@ public:
 private:
     Micras&                                micras;
     micrasverse::physics::Box2DMicrasBody& micrasBody;
-
-    // Default to NONE when no actual follow wall type is available
 };
 
 }  // namespace micras

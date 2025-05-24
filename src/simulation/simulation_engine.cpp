@@ -67,7 +67,7 @@ void SimulationEngine::resetSimulation(const std::string& mazeFilePath) {
     this->wasReset = true;
 }
 
-void SimulationEngine::setPhysicsEngine(std::shared_ptr<physics::IPhysicsEngine> engine) {
+void SimulationEngine::setPhysicsEngine(std::shared_ptr<physics::Box2DPhysicsEngine> engine) {
     this->physicsEngine = std::move(engine);
 }
 

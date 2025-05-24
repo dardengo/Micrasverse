@@ -1,19 +1,16 @@
 #include "constants.hpp"
 #include "simulation/simulation_engine.hpp"
-#include "render/render_engine.hpp"
 #include "micras/micras.hpp"
 #include "micras/proxy/proxy_bridge.hpp"
 #include "target.hpp"
 #include "box2d/box2d.h"
 #include "io/keyboard.hpp"
-#include "models/rectangle.hpp"
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include "vulkan_engine/first_app.hpp"
+#include "vulkan_engine/vulkan_engine.hpp"
 #include "vulkan_engine/simple_render_system.hpp"
-#include "GUI/gui.hpp"
 #include "vulkan_engine/lve_imgui.hpp"
 
 #include <imgui.h>
@@ -33,21 +30,12 @@ int main() {
     micras::Micras micrasController;
     auto           proxyBridge = std::make_shared<micras::ProxyBridge>(micrasController, micrasBody);
 
-    auto vulkanEngine = std::make_shared<lve::FirstApp>(simulationEngine);
+    auto vulkanEngine = std::make_shared<lve::VulkanEngine>(simulationEngine);
     vulkanEngine->setProxyBridge(proxyBridge);
-
-    // auto renderEngine = std::make_shared<micrasverse::render::RenderEngine>(simulationEngine);
-    // renderEngine->setProxyBridge(proxyBridge);
-    // renderEngine->screen->setProxyBridge(proxyBridge);
-    // renderEngine->screen->setRenderEngine(renderEngine.get());
 
     struct GlobalUbo {
         glm::mat4 projectionView{1.f};
     };
-
-    // Initial render
-    // renderEngine->update();
-    // renderEngine->renderFrame();
 
     std::vector<std::unique_ptr<lve::LveBuffer>> uboBuffers(lve::LveSwapChain::MAX_FRAMES_IN_FLIGHT);
     for (int i = 0; i < uboBuffers.size(); i++) {
@@ -84,11 +72,6 @@ int main() {
     auto viewerObject = lve::LveGameObject::createGameObject();
     auto currentTime = std::chrono::high_resolution_clock::now();
     viewerObject.transform.translation = {-0.25f, -micrasverse::MAZE_FLOOR_HALFHEIGHT, -4.0f};
-
-    // micrasverse::render::GUI gui(vulkanEngine, simpleRenderSystem);
-
-    // gui.setSimulationEngine(simulationEngine);
-    // gui.init(vulkanEngine->lveWindow.window);
 
     // Main loop
     while (!glfwWindowShouldClose(vulkanEngine->lveWindow.window)) {
@@ -140,9 +123,6 @@ int main() {
                 }
             }
         } else {
-            // renderEngine->update();
-            // renderEngine->renderFrame();
-            // vulkanEngine->drawFrame();
             vulkanEngine->updateRenderableModels();
             if (auto commandBuffer = vulkanEngine->lveRenderer.beginFrame()) {
                 lveImgui.newFrame();

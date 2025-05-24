@@ -1,20 +1,19 @@
 #ifndef BOX2D_DIPSWITCH_HPP
 #define BOX2D_DIPSWITCH_HPP
 
-#include "physics/i_dipswitch.hpp"
 #include <vector>
 
 namespace micrasverse::physics {
 
-class Box2DDipSwitch : public IDipSwitch {
+class Box2DDipSwitch {
 public:
     explicit Box2DDipSwitch(size_t numSwitches);
 
-    bool readSwitch(size_t switchIndex) const override;
+    bool readSwitch(size_t switchIndex) const;
 
-    void setSwitch(size_t switchIndex, bool state) override;
+    void setSwitch(size_t switchIndex, bool state);
 
-    void toggleSwitch(size_t switchIndex) override;
+    void toggleSwitch(size_t switchIndex);
 
 private:
     std::vector<bool> switchStates;

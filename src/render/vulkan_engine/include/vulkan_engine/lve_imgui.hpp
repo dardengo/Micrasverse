@@ -3,7 +3,7 @@
 #include "lve_device.hpp"
 #include "lve_window.hpp"
 #include "simulation/simulation_engine.hpp"
-#include "GUI/plot.hpp"
+#include "plot/plot.hpp"
 #include "physics/box2d_micrasbody.hpp"
 
 // libs

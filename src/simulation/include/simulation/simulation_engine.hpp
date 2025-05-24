@@ -1,7 +1,7 @@
 #ifndef SIMULATION_ENGINE_HPP
 #define SIMULATION_ENGINE_HPP
 
-#include "physics/i_physics_engine.hpp"
+#include "physics/box2d_physics_engine.hpp"
 #include "constants.hpp"
 #include <string>
 #include <memory>
@@ -31,15 +31,15 @@ public:
 
     void resetSimulation(const std::string& mazeFilePath);
 
-    void setPhysicsEngine(std::shared_ptr<physics::IPhysicsEngine> engine);
+    void setPhysicsEngine(std::shared_ptr<physics::Box2DPhysicsEngine> engine);
 
     void  updateRunTimer();
     float getElapsedRunTime() const;
 
-    bool                                     isPaused{true};
-    bool                                     wasReset{false};
-    std::shared_ptr<physics::IPhysicsEngine> physicsEngine;
-    int                                      stepCounter = 0;
+    bool                                         isPaused{false};
+    bool                                         wasReset{false};
+    std::shared_ptr<physics::Box2DPhysicsEngine> physicsEngine;
+    int                                          stepCounter = 0;
 
 private:
     std::vector<std::string> mazePaths{};

@@ -12,19 +12,15 @@ Battery::Battery(const Config& config) :
     max_voltage{config.voltage * config.voltage_divider} { }
 
 void Battery::update() {
-    // Add noise to simulate real battery behavior
     static std::random_device              rd;
     static std::mt19937                    gen(rd());
     static std::normal_distribution<float> noise_dist(0.0f, noise);
 
-    // Simulate battery voltage with noise
     float noisy_voltage = voltage + noise_dist(gen);
 
-    // Calculate raw reading (0-1 range)
     raw_reading = std::clamp(noisy_voltage / max_voltage, 0.0f, 1.0f);
 
-    // Simple low-pass filter
-    const float alpha = 0.1f;  // Filter coefficient
+    const float alpha = 0.1f;
     filtered_reading = alpha * raw_reading + (1.0f - alpha) * filtered_reading;
 }
 

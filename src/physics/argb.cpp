@@ -61,7 +61,6 @@ types::Vec2 Argb::getSize() const {
     return {this->size.x, this->size.y};
 }
 
-// IActuator methods
 types::Vec2 Argb::getPosition() const {
     return types::Vec2{this->worldPosition.x, this->worldPosition.y};
 }

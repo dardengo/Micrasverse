@@ -1,4 +1,4 @@
-#include "GUI/plot.hpp"
+#include "plot/plot.hpp"
 #include "physics/box2d_motor.hpp"
 #include "physics/box2d_distance_sensor.hpp"
 #include "implot.h"

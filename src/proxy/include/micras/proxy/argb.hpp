@@ -17,7 +17,6 @@ namespace micras::proxy {
 template <uint8_t num_of_leds>
 class TArgb {
 public:
-    // Changed from direct objects to references to the physical ARGBs
     std::vector<std::reference_wrapper<micrasverse::physics::Argb>> argbRefs;
 
     struct Config {

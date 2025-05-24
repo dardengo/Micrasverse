@@ -3,8 +3,8 @@
 file(GLOB_RECURSE RENDER_HEADERS "include/*.hpp")
 
 # Get GUI sources separately
-file(GLOB_RECURSE GUI_SOURCES "GUI/plot.cpp")
-file(GLOB_RECURSE GUI_HEADERS "GUI/include/plot.hpp")
+file(GLOB_RECURSE PLOT_SOURCES "plot/plot.cpp")
+file(GLOB_RECURSE PLOT_HEADERS "plot/include/*.hpp")
 
 file(GLOB_RECURSE LVE_SOURCES "vulkan_engine/*.cpp")
 file(GLOB_RECURSE LVE_HEADERS "vulkan_engine/include/*.hpp")
@@ -15,8 +15,8 @@ find_package(Vulkan REQUIRED)
 add_library(render_engine STATIC 
     ${RENDER_SOURCES} 
     ${RENDER_HEADERS}
-    ${GUI_SOURCES}
-    ${GUI_HEADERS}
+    ${PLOT_SOURCES}
+    ${PLOT_HEADERS}
     ${LVE_SOURCES}
     ${LVE_HEADERS}
 )
@@ -32,7 +32,7 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders/frag.spv
 
 target_include_directories(render_engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/GUI/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/plot/include
     ${CMAKE_CURRENT_SOURCE_DIR}/vulkan_engine/include
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/external/glm

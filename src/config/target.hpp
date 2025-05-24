@@ -15,7 +15,6 @@
 #include "micras/proxy/storage.hpp"
 #include "micras/proxy/torque_sensors.hpp"
 #include "micras/proxy/wall_sensors.hpp"
-#include "micras/proxy/motor.hpp"
 #include "box2d/box2d.h"
 #include <filesystem>
 #include "physics/box2d_micrasbody.hpp"
@@ -60,9 +59,6 @@ extern proxy::Imu::Config imu_config;
 
 // LED configuration
 extern proxy::Led::Config led_config;
-
-// Motor configuration
-extern proxy::Motor::Config motor_config;
 
 // Rotary Sensor configuration
 extern proxy::RotarySensor::Config rotary_sensor_left_config;

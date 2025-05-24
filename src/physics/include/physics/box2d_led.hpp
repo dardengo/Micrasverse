@@ -1,40 +1,35 @@
 #ifndef BOX2D_LED_HPP
 #define BOX2D_LED_HPP
 
-#include "physics/i_actuator.hpp"
-#include "physics/i_led.hpp"
 #include "box2d/box2d.h"
 #include "micrasverse_core/types.hpp"
 
 namespace micrasverse::physics {
 
-class Box2DLED : public ILED {
+class Box2DLED {
 public:
     Box2DLED(b2BodyId bodyId, const types::Vec2& localPosition, const types::Vec2& size, const types::Color& color);
     virtual ~Box2DLED() = default;
 
-    // IActuator interface implementation
-    ActuatorType getType() const override { return ActuatorType::LED; }
+    types::Vec2 getPosition() const;
 
-    types::Vec2 getPosition() const override;
+    void setCommand(float command);  // Not used for LEDs
 
-    void setCommand(float command) override;  // Not used for LEDs
+    float getCommand() const { return 0.0f; }
 
-    float getCommand() const override { return 0.0f; }
+    bool isActive() const { return isLedOn; }
 
-    bool isActive() const override { return isLedOn; }
-
-    void update(float deltaTime) override;
+    void update(float deltaTime);
 
     // ILED interface implementation
-    void         setColor(const types::Color& color) override;
-    types::Color getColor() const override;
-    void         turnOn() override;
-    void         turnOn(const types::Color& color) override;
-    void         turnOff() override;
-    void         toggle() override;
-    bool         isOn() const override;
-    types::Vec2  getSize() const override;
+    void         setColor(const types::Color& color);
+    types::Color getColor() const;
+    void         turnOn();
+    void         turnOn(const types::Color& color);
+    void         turnOff();
+    void         toggle();
+    bool         isOn() const;
+    types::Vec2  getSize() const;
 
     // Box2D specific getters for rendering
     b2Vec2                      getWorldPosition() const;

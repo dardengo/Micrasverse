@@ -5,6 +5,7 @@
 
 #include "constants.hpp"
 #include "io/keyboard.hpp"
+#include "physics/box2d_motor.hpp"
 
 // libs
 #include <imgui.h>
@@ -13,6 +14,7 @@
 
 // std
 #include <stdexcept>
+#include <array>
 
 namespace lve {
 
@@ -148,6 +150,8 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     ImGui::SameLine();
 
     ImGui::Text("Simulation is %s", simulationEngine->isPaused ? "Paused" : "Running");
+
+    ImGui::Text("Fan is %s", simulationEngine->physicsEngine->getMicras().getRightMotor().isFanOn ? "ON" : "OFF");
 
     // Robot Status Section
     if (ImGui::CollapsingHeader("Robot Status", ImGuiTreeNodeFlags_DefaultOpen)) {
@@ -332,17 +336,22 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     }
 
     // DIP Switch Controls Section
-    if (ImGui::CollapsingHeader("DIP Switches")) {
+    if (ImGui::CollapsingHeader("DIP Switches", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Columns(4, "dipswitches", false);
 
-        for (size_t i = 0; i < 4; ++i) {
-            bool switchState = proxyBridge->get_dip_switch_state(i);
-            if (ImGui::Checkbox(("Switch " + std::to_string(i)).c_str(), &switchState)) {
-                // Note: DIP switches are read-only through the proxy bridge
-                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "DIP switches are read-only");
+        std::vector<bool>  switches = proxyBridge->get_dip_switch_states();
+        std::vector<char*> s_names = {"FAN", "DIAGONAL", "BOOST", "RISKY"};
+
+        for (size_t i = 0; i < switches.size(); ++i) {
+            bool value = switches.at(i);
+            if (ImGui::Checkbox(s_names.at(i), &value)) {
+                proxyBridge->set_dip_switch_state(i, value);
+            } else {
+                proxyBridge->set_dip_switch_state(i, value);
             }
             ImGui::NextColumn();
         }
+
         ImGui::Columns(1);
     }
 

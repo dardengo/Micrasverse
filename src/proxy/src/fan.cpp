@@ -1,4 +1,6 @@
 #include "micras/proxy/fan.hpp"
+#include "physics/box2d_motor.hpp"
+
 #include <algorithm>
 
 namespace micras::proxy {
@@ -13,11 +15,14 @@ Fan::Fan(const Config& config) :
 
 void Fan::enable() {
     this->enabled = true;
+    this->micrasBody->getLeftMotor().isFanOn = true;
+    this->micrasBody->getRightMotor().isFanOn = true;
 }
 
 void Fan::disable() {
     this->enabled = false;
-    this->stop();
+    this->micrasBody->getLeftMotor().isFanOn = false;
+    this->micrasBody->getRightMotor().isFanOn = false;
 }
 
 void Fan::set_speed(float speed) {

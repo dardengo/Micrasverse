@@ -5,33 +5,30 @@
 
 #include "box2d/box2d.h"
 #include "micrasverse_core/types.hpp"
-#include "physics/i_distance_sensor.hpp"
 
 namespace micrasverse::physics {
 
-class Box2DDistanceSensor : public IDistanceSensor {
+class Box2DDistanceSensor {
 public:
     Box2DDistanceSensor(b2WorldId worldId, b2BodyId bodyId, const micrasverse::types::Vec2& localPosition, float angle, float maxDistance);
 
-    micrasverse::types::Vec2 getLocalPosition() const override;
+    micrasverse::types::Vec2 getLocalPosition() const;
 
-    micrasverse::types::Vec2 getDirection() const override;
+    micrasverse::types::Vec2 getDirection() const;
 
-    void setLocalPosition(const micrasverse::types::Vec2& localPosition) override;
+    void setLocalPosition(const micrasverse::types::Vec2& localPosition);
 
-    void setDirection(const micrasverse::types::Vec2& direction) override;
+    void setDirection(const micrasverse::types::Vec2& direction);
 
-    micrasverse::types::Vec2 getRayDirection() const override;
+    micrasverse::types::Vec2 getRayDirection() const;
 
-    void update() override;
+    void update();
 
-    float getReading() const override;
+    float getReading() const;
 
-    SensorType getType() const override { return SensorType::DISTANCE; }
+    micrasverse::types::Vec2 getPosition() const;
 
-    micrasverse::types::Vec2 getPosition() const override;
-
-    float getReadingVisual() const override { return this->visualReading; }
+    float getReadingVisual() const { return this->visualReading; }
 
     b2Vec2 getVisualMidPoint() const { return this->visualMidPoint; }
 

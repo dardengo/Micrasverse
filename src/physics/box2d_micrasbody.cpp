@@ -6,11 +6,9 @@
 #include "physics/box2d_led.hpp"
 #include "physics/argb.hpp"
 #include "physics/box2d_rectanglebody.hpp"
-#include "physics/box2d_physics_factory.hpp"
 #include "constants.hpp"
 #include "micrasverse_core/types.hpp"
 #include "io/keyboard.hpp"
-#include "physics/physics_types.hpp"
 
 #include <cstdint>
 #include <vector>
