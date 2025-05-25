@@ -75,7 +75,7 @@ constexpr uint8_t  maze_height{16};
 constexpr float    cell_size{0.18};
 constexpr uint32_t loop_time_us = micrasverse::STEP * 1e6F;
 constexpr float    wall_thickness{0.012F};
-constexpr float    start_offset{0.04F + wall_thickness / 2.0F};
+constexpr float    start_offset{0.05F + wall_thickness / 2.0F};
 constexpr float    max_linear_acceleration{10.0F};
 constexpr float    max_linear_deceleration{15.0F};
 constexpr float    max_angular_acceleration{300.0F};
