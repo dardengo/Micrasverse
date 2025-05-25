@@ -157,17 +157,8 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
 
     // Robot Status Section
     if (ImGui::CollapsingHeader("Robot Status", ImGuiTreeNodeFlags_DefaultOpen)) {
-        ImGui::Text(
-            "Micras Body Pose: (%.2f, %.2f, %.2f)", micrasBody.getPosition().x - micrasverse::WALL_THICKNESS / 2.0f,
-            micrasBody.getPosition().y - micrasverse::WALL_THICKNESS / 2.0f, micrasBody.getAngle() + B2_PI / 2.0f
-        );
-        auto pose = proxyBridge->get_current_pose();
-        ImGui::Text("Micras Controller Pose: (%.2f, %.2f, %.2f)", pose.position.x, pose.position.y, pose.orientation);
-        ImGui::Separator();
-        auto goal = proxyBridge->get_current_goal();
-        ImGui::Text("Micras Controller Goal: (%.2f, %.2f)", goal.x, goal.y);
-        ImGui::Separator();
-        ImGui::Text("Micras Body Linear Velocity: (%.2f, %.2f)", micrasBody.getLinearVelocity().x, micrasBody.getLinearVelocity().y);
+        auto pose = proxyBridge->get_current_pose().to_grid(micras::cell_size);
+        ImGui::Text("Micras Controller Pose: (%d, %d, %s)", pose.position.x, pose.position.y, proxyBridge->get_side_string(pose.orientation).c_str());
         ImGui::Separator();
         ImGui::Text("Estimated time to complete: %.2f seconds", proxyBridge->get_total_time());
         ImGui::Separator();

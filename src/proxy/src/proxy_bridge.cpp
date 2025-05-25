@@ -297,13 +297,6 @@ std::string ProxyBridge::get_action_type_string() const {
     }
 }
 
-micras::core::Vector ProxyBridge::get_current_goal() const {
-    // Since we don't have access to the Action's internal point anymore,
-    // return the current position or zero as a fallback
-    auto pose = get_current_pose();
-    return {pose.position.x, pose.position.y};
-}
-
 micras::nav::Pose ProxyBridge::get_current_pose() const {
     micras::nav::State state = micras.odometry.get_state();
     return state.pose;

@@ -219,6 +219,27 @@ public:
         return offset;
     }
 
+    core::Vector getOdometryOffset() const {
+        micras::nav::Pose pose = micras.odometry.get_state().pose;
+        core::Vector      offset = pose.to_cell(micras::cell_size);
+        return offset;
+    }
+
+    static std::string get_side_string(micras::nav::Side side) {
+        switch (side) {
+            case micras::nav::Side::UP:
+                return "UP";
+            case micras::nav::Side::RIGHT:
+                return "RIGHT";
+            case micras::nav::Side::DOWN:
+                return "DOWN";
+            case micras::nav::Side::LEFT:
+                return "LEFT";
+            default:
+                return "UNKNOWN";
+        }
+    }
+
     std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> get_maze_graph() const { return micras.maze.graph.graph; }
 
     uint8_t get_min_maze_cost() const { return micras.maze.minimum_cost; }

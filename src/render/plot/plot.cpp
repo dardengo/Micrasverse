@@ -455,6 +455,9 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
 
         rdata23.addPoint(t, proxyBridge.getOffset().x);
         rdata24.addPoint(t, proxyBridge.getOffset().y);
+
+        rdata25.addPoint(t, proxyBridge.getOdometryOffset().x);
+        rdata26.addPoint(t, proxyBridge.getOdometryOffset().y);
     }
 
     static ImPlotAxisFlags flags = ImPlotAxisFlags_NoInitialFit | ImPlotAxisFlags_AutoFit;
@@ -512,6 +515,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
         ImPlot::PlotLine("X Offset", &rdata23.data[0].x, &rdata23.data[0].y, rdata23.data.size(), 0, rdata23.offset, 2 * sizeof(float));
+        ImPlot::PlotLine("X Odometry Offset", &rdata25.data[0].x, &rdata25.data[0].y, rdata25.data.size(), 0, rdata25.offset, 2 * sizeof(float));
         ImPlot::EndPlot();
     }
 
@@ -519,6 +523,7 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
         ImPlot::PlotLine("Y Offset", &rdata24.data[0].x, &rdata24.data[0].y, rdata24.data.size(), 0, rdata24.offset, 2 * sizeof(float));
+        ImPlot::PlotLine("Y Odometry Offset", &rdata26.data[0].x, &rdata26.data[0].y, rdata26.data.size(), 0, rdata26.offset, 2 * sizeof(float));
         ImPlot::EndPlot();
     }
 }
