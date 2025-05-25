@@ -209,6 +209,16 @@ public:
         return costs;
     }
 
+    core::Vector getOffset() const {
+        micras::nav::Pose pose;
+        pose.position = {
+            micrasBody.getPosition().x - micrasverse::WALL_THICKNESS / 2.0f, micrasBody.getPosition().y - micrasverse::WALL_THICKNESS / 2.0f
+        };
+        pose.orientation = micrasBody.getAngle() + B2_PI / 2.0f;
+        core::Vector offset = pose.to_cell(micras::cell_size);
+        return offset;
+    }
+
     std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> get_maze_graph() const { return micras.maze.graph.graph; }
 
     uint8_t get_min_maze_cost() const { return micras.maze.minimum_cost; }

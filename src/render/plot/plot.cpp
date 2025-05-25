@@ -453,12 +453,8 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         rdata21.addPoint(t, proxyBridge.get_linear_integrative_response());
         rdata22.addPoint(t, proxyBridge.get_angular_integrative_response());
 
-        rdata23.addPoint(
-            t, static_cast<float>(static_cast<int>(micrasBody.getPosition().x * 100) % static_cast<int>(CELL_SIZE * 100)) / 100.0f - 0.09f
-        );
-        rdata24.addPoint(
-            t, static_cast<float>(static_cast<int>(micrasBody.getPosition().y * 100) % static_cast<int>(CELL_SIZE * 100)) / 100.0f - 0.09f
-        );
+        rdata23.addPoint(t, proxyBridge.getOffset().x);
+        rdata24.addPoint(t, proxyBridge.getOffset().y);
     }
 
     static ImPlotAxisFlags flags = ImPlotAxisFlags_NoInitialFit | ImPlotAxisFlags_AutoFit;

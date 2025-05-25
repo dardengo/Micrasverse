@@ -160,7 +160,7 @@ const nav::Maze::Config maze_config{
 const nav::Odometry::Config odometry_config{
     .linear_cutoff_frequency = 50.0F,
     .wheel_radius = 0.0112F,
-    .initial_pose = {{0.0F, 0.0F}, 0.0F},
+    .initial_pose = {{cell_size / 2.0f, start_offset}, std::numbers::pi_v<float> / 2.0f},
 };
 
 const nav::SpeedController::Config speed_controller_config{

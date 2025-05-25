@@ -15,6 +15,7 @@
 // std
 #include <stdexcept>
 #include <array>
+#include <string>
 
 namespace lve {
 
@@ -157,8 +158,8 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     // Robot Status Section
     if (ImGui::CollapsingHeader("Robot Status", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Text(
-            "Micras Body Pose: (%.2f, %.2f, %.2f)", micrasBody.getPosition().x - micrasverse::WALL_THICKNESS,
-            micrasBody.getPosition().y - micrasverse::WALL_THICKNESS, micrasBody.getAngle() + B2_PI / 2.0f
+            "Micras Body Pose: (%.2f, %.2f, %.2f)", micrasBody.getPosition().x - micrasverse::WALL_THICKNESS / 2.0f,
+            micrasBody.getPosition().y - micrasverse::WALL_THICKNESS / 2.0f, micrasBody.getAngle() + B2_PI / 2.0f
         );
         auto pose = proxyBridge->get_current_pose();
         ImGui::Text("Micras Controller Pose: (%.2f, %.2f, %.2f)", pose.position.x, pose.position.y, pose.orientation);
@@ -340,12 +341,12 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     if (ImGui::CollapsingHeader("DIP Switches", ImGuiTreeNodeFlags_DefaultOpen)) {
         ImGui::Columns(4, "dipswitches", false);
 
-        std::vector<bool>  switches = proxyBridge->get_dip_switch_states();
-        std::vector<char*> s_names = {"FAN", "DIAGONAL", "BOOST", "RISKY"};
+        std::vector<bool>        switches = proxyBridge->get_dip_switch_states();
+        std::vector<std::string> s_names = {"FAN", "DIAGONAL", "BOOST", "RISKY"};
 
         for (size_t i = 0; i < switches.size(); ++i) {
             bool value = switches.at(i);
-            if (ImGui::Checkbox(s_names.at(i), &value)) {
+            if (ImGui::Checkbox(s_names.at(i).c_str(), &value)) {
                 proxyBridge->set_dip_switch_state(i, value);
             } else {
                 proxyBridge->set_dip_switch_state(i, value);

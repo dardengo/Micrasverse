@@ -13,7 +13,7 @@ TWallSensors<num_of_sensors>::TWallSensors(const typename TWallSensors<num_of_se
     uncertainty{config.uncertainty},
     base_readings{config.base_readings},
     max_sensor_reading{config.max_sensor_reading},
-    c{-std::pow(config.max_sensor_distance, 2) * std::log(1 - config.min_sensor_reading / config.max_sensor_reading)},
+    c{static_cast<float>(-std::pow(config.max_sensor_distance, 2) * std::log(1.0f - config.min_sensor_reading / config.max_sensor_reading))},
     filters{core::make_array<core::ButterworthFilter, num_of_sensors>(config.filter_cutoff)} { }
 
 template <uint8_t num_of_sensors>
