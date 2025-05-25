@@ -68,7 +68,7 @@ proxy::WallSensors::Config wall_sensors_config = {
     .max_sensor_reading = 0.6f,
     .min_sensor_reading = 0.01f,
     .max_sensor_distance = micrasverse::CELL_SIZE * 2.0f,
-    .filter_cutoff = 20.0f
+    .filter_cutoff = 10.0f
 };
 
 // Locomotion configuration

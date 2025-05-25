@@ -110,7 +110,7 @@ const nav::ActionQueuer::Config action_queuer_config{
             .max_linear_speed = 0.4F,
             .max_linear_acceleration = max_linear_acceleration,
             .max_linear_deceleration = max_linear_deceleration,
-            .max_centrifugal_acceleration = 2.78F,
+            .max_centrifugal_acceleration = 2.0F,
             .max_angular_acceleration = max_angular_acceleration,
         },
     .solving =
@@ -126,9 +126,9 @@ const nav::ActionQueuer::Config action_queuer_config{
 const nav::FollowWall::Config follow_wall_config{
     .pid =
         {
-            .kp = 45.0F,
+            .kp = 65.0F,
             .ki = 0.0F,
-            .kd = 0.09F,
+            .kd = 0.015F,
             .setpoint = 0.0F,
             .saturation = 20.0F,
             .max_integral = -1.0F,
@@ -136,9 +136,10 @@ const nav::FollowWall::Config follow_wall_config{
     .wall_sensor_index = wall_sensors_index,
     .max_linear_speed = 0.5F,
     .max_angular_acceleration = max_angular_acceleration,
-    .post_threshold = 4.0F,
     .cell_size = cell_size,
+    .post_threshold = 2.0F,
     .post_clearance = 0.2F * cell_size,
+    .post_reference = 0.5F * cell_size,
 };
 
 const nav::Maze::Config maze_config{
