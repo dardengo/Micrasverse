@@ -9,14 +9,12 @@
                 "${workspaceFolder}/external/imgui",
                 "${workspaceFolder}/external/imgui/backends",
                 "${workspaceFolder}/external/implot",
-                "${workspaceFolder}/external/box2d/build/_deps/glfw-src/deps",
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/src/render/include",
                 "${workspaceFolder}/src/physics/include",
                 "${workspaceFolder}/src/core/include",
                 "${workspaceFolder}/src/config",
                 "${workspaceFolder}/src/proxy/include",
-                "${workspaceFolder}/src/render/GUI/include"
+                "${workspaceFolder}/src/render/plot/include"
             ],
             "defines": [
                 "_DEBUG",
@@ -40,7 +38,7 @@
                 "${workspaceFolder}/src/physics/include",
                 "${workspaceFolder}/src/core/include",
                 "${workspaceFolder}/src/proxy/include",
-                "${workspaceFolder}/src/render/GUI/include"
+                "${workspaceFolder}/src/render/plot/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

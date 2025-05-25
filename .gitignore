@@ -8,3 +8,5 @@ build/*
 *.ini
 
 storage/maze/*
+
+.vscode/

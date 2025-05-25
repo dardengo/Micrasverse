@@ -108,10 +108,6 @@ void Plot::drawDragAndDrop(micrasverse::physics::Box2DMicrasBody& micrasBody, mi
         }
     }
 
-    // Control for plot history
-    // ImGui::SliderFloat("History", &history, 1, 30, "%.1f s");
-
-    // Add more control for the DragRect
     static ImPlotDragToolFlags dragFlags = ImPlotDragToolFlags_None;
     ImGui::SameLine();
     if (ImGui::Button("Reset Drag Rect")) {
@@ -145,7 +141,7 @@ void Plot::drawDragAndDrop(micrasverse::physics::Box2DMicrasBody& micrasBody, mi
         }
     }
     // Variables pool section
-    ImGui::BeginChild("Variables", ImVec2(200, 600), true);
+    ImGui::BeginChild("Variables", ImVec2(200, -1), true);
     ImGui::Text("Variables Pool");
     ImGui::Separator();
 
@@ -170,16 +166,16 @@ void Plot::drawDragAndDrop(micrasverse::physics::Box2DMicrasBody& micrasBody, mi
     ImGui::SameLine();
 
     // Charts section
-    ImGui::BeginChild("Charts", ImVec2(-1, 600), true);
+    ImGui::BeginChild("Charts", ImVec2(-1, -1), true);
 
-    static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels | ImPlotAxisFlags_AutoFit;
+    static ImPlotAxisFlags flags = 0;
 
     // Draw 5 line charts
     for (int chartIndex = 0; chartIndex < 5; chartIndex++) {
         char plotLabel[32];
         snprintf(plotLabel, sizeof(plotLabel), "##Chart%d", chartIndex);
 
-        if (ImPlot::BeginPlot(plotLabel, ImVec2(-1, 80), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
+        if (ImPlot::BeginPlot(plotLabel, ImVec2(-1, 150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
             ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
             ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
 
@@ -291,13 +287,13 @@ void Plot::drawDragAndDrop(micrasverse::physics::Box2DMicrasBody& micrasBody, mi
     char  details[256];
     float timeSpan = dragRect.X.Max - dragRect.X.Min;
     float valueSpan = dragRect.Y.Max - dragRect.Y.Min;
-    snprintf(
-        details, sizeof(details), "Selection: t=[%.2f to %.2f] (%.2f s), y=[%.2f to %.2f] (range: %.2f)", dragRect.X.Min, dragRect.X.Max, timeSpan,
-        dragRect.Y.Min, dragRect.Y.Max, valueSpan
-    );
+    // snprintf(
+    //     details, sizeof(details), "Selection: t=[%.2f to %.2f] (%.2f s), y=[%.2f to %.2f] (range: %.2f)", dragRect.X.Min, dragRect.X.Max, timeSpan,
+    //     dragRect.Y.Min, dragRect.Y.Max, valueSpan
+    // );
     ImGui::TextColored(ImVec4(1, 1, 1, 1), "%s", details);
 
-    if (ImPlot::BeginPlot("##DetailView", ImVec2(-1, 100), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
+    if (ImPlot::BeginPlot("##DetailView", ImVec2(-1, 150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
         ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1, dragRect.X.Min, dragRect.X.Max, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1, dragRect.Y.Min, dragRect.Y.Max, ImGuiCond_Always);
@@ -316,9 +312,9 @@ void Plot::drawDragAndDrop(micrasverse::physics::Box2DMicrasBody& micrasBody, mi
 
     ImPlot::PopStyleColor();
 
-    ImGui::Text(
-        "Drag rectangle: %sclicked, %shovered, %sheld", dragRectClicked ? "" : "not ", dragRectHovered ? "" : "not ", dragRectHeld ? "" : "not "
-    );
+    // ImGui::Text(
+    //     "Drag rectangle: %sclicked, %shovered, %sheld", dragRectClicked ? "" : "not ", dragRectHovered ? "" : "not ", dragRectHeld ? "" : "not "
+    // );
 
     ImGui::EndChild();
 }
@@ -348,10 +344,6 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         drawMazeCost3DSurface(proxyBridge);
 
         ImGui::Columns(1);
-
-        std::vector<Node> nodes = {{1, 1.f, 1.f, micras::nav::RIGHT}, {2, 1.f, 2.f, micras::nav::UP}, {3, 2.f, 2.f, micras::nav::LEFT}};
-
-        std::vector<Edge> edges = {{1, 2}, {2, 3}, {3, 1}};
 
         drawGraph(proxyBridge.get_maze_graph());
 
@@ -450,7 +442,6 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         rdata11.addPoint(t, micrasBody.getRightMotor().getAppliedForce());
         rdata12.addPoint(t, micrasBody.getLeftMotor().getAppliedForce());
 
-        // PID controller data
         rdata13.addPoint(t, proxyBridge.get_linear_pid_setpoint());
         rdata14.addPoint(t, proxyBridge.get_angular_pid_setpoint());
         rdata15.addPoint(t, proxyBridge.get_linear_pid_last_response());
@@ -461,6 +452,13 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
 
         rdata21.addPoint(t, proxyBridge.get_linear_integrative_response());
         rdata22.addPoint(t, proxyBridge.get_angular_integrative_response());
+
+        rdata23.addPoint(
+            t, static_cast<float>(static_cast<int>(micrasBody.getPosition().x * 100) % static_cast<int>(CELL_SIZE * 100)) / 100.0f - 0.09f
+        );
+        rdata24.addPoint(
+            t, static_cast<float>(static_cast<int>(micrasBody.getPosition().y * 100) % static_cast<int>(CELL_SIZE * 100)) / 100.0f - 0.09f
+        );
     }
 
     static ImPlotAxisFlags flags = ImPlotAxisFlags_NoInitialFit | ImPlotAxisFlags_AutoFit;
@@ -511,6 +509,20 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         ImPlot::PlotLine(
             "Right feed forward response", &rdata18.data[0].x, &rdata18.data[0].y, rdata18.data.size(), 0, rdata18.offset, 2 * sizeof(float)
         );
+        ImPlot::EndPlot();
+    }
+
+    if (!sdata1.data.empty() && ImPlot::BeginPlot("X Offset error", ImVec2(-1, 150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
+        ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
+        ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
+        ImPlot::PlotLine("X Offset", &rdata23.data[0].x, &rdata23.data[0].y, rdata23.data.size(), 0, rdata23.offset, 2 * sizeof(float));
+        ImPlot::EndPlot();
+    }
+
+    if (!sdata1.data.empty() && ImPlot::BeginPlot("Y Offset error", ImVec2(-1, 150), ImPlotFlags_NoFrame | ImPlotFlags_NoTitle)) {
+        ImPlot::SetupAxes(nullptr, nullptr, ImPlotAxisFlags_NoTickLabels, flags);
+        ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
+        ImPlot::PlotLine("Y Offset", &rdata24.data[0].x, &rdata24.data[0].y, rdata24.data.size(), 0, rdata24.offset, 2 * sizeof(float));
         ImPlot::EndPlot();
     }
 }

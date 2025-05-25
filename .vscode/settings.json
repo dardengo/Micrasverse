@@ -76,6 +76,9 @@
     },
     "cmake.sourceDirectory": "/home/darde/repos/Micrasverse",
     "cSpell.words": [
-        "serializables"
+        "colormaps",
+        "serializables",
+        "shovered",
+        "Viridis"
     ]
 }
