@@ -429,15 +429,10 @@ void Plot::draw(micrasverse::physics::Box2DMicrasBody& micrasBody, micras::Proxy
         rdata19.addPoint(t, proxyBridge.get_angular_speed());
         rdata20.addPoint(t, micrasBody.getLinearSpeed());
 
-        rdata7.addPoint(t, proxyBridge.get_wall_sensor_reading(0));
-        rdata8.addPoint(t, proxyBridge.get_wall_sensor_reading(1));
-        rdata9.addPoint(t, -proxyBridge.get_wall_sensor_reading(2));
-        rdata10.addPoint(t, proxyBridge.get_wall_sensor_reading(3));
-
-        sdata7.addPoint(t, proxyBridge.get_wall_sensor_reading(0));
-        sdata8.addPoint(t, proxyBridge.get_wall_sensor_reading(1));
-        sdata9.addPoint(t, -proxyBridge.get_wall_sensor_reading(2));
-        sdata10.addPoint(t, proxyBridge.get_wall_sensor_reading(3));
+        sdata7.addPoint(t, proxyBridge.get_wall_sensor_adc_reading(0));
+        sdata8.addPoint(t, proxyBridge.get_wall_sensor_adc_reading(1));
+        sdata9.addPoint(t, -proxyBridge.get_wall_sensor_adc_reading(2));
+        sdata10.addPoint(t, proxyBridge.get_wall_sensor_adc_reading(3));
 
         rdata11.addPoint(t, micrasBody.getRightMotor().getAppliedForce());
         rdata12.addPoint(t, micrasBody.getLeftMotor().getAppliedForce());
@@ -1011,13 +1006,13 @@ void Plot::updatePlotVariables(micrasverse::physics::Box2DMicrasBody& micrasBody
         else if (var.name == "linearSpeed")
             value = micrasBody.getLinearSpeed();
         else if (var.name == "wallSensor0")
-            value = proxyBridge.get_wall_sensor_reading(0);
+            value = proxyBridge.get_wall_sensor_adc_reading(0);
         else if (var.name == "wallSensor1")
-            value = proxyBridge.get_wall_sensor_reading(1);
+            value = proxyBridge.get_wall_sensor_adc_reading(1);
         else if (var.name == "wallSensor2")
-            value = -proxyBridge.get_wall_sensor_reading(2);
+            value = -proxyBridge.get_wall_sensor_adc_reading(2);
         else if (var.name == "wallSensor3")
-            value = proxyBridge.get_wall_sensor_reading(3);
+            value = proxyBridge.get_wall_sensor_adc_reading(3);
         else if (var.name == "rightAppliedForce")
             value = micrasBody.getRightMotor().getAppliedForce();
         else if (var.name == "leftAppliedForce")

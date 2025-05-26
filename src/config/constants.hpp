@@ -76,8 +76,8 @@ constexpr float    cell_size{0.18};
 constexpr uint32_t loop_time_us = micrasverse::STEP * 1e6F;
 constexpr float    wall_thickness{0.012F};
 constexpr float    start_offset{0.05F + wall_thickness / 2.0F};
-constexpr float    max_linear_acceleration{10.0F};
-constexpr float    max_linear_deceleration{15.0F};
+constexpr float    max_linear_acceleration{9.0F};
+constexpr float    max_linear_deceleration{9.0F};
 constexpr float    max_angular_acceleration{300.0F};
 constexpr float    crash_acceleration{1000000.0F};
 constexpr float    fan_speed{100.0F};
@@ -126,20 +126,20 @@ const nav::ActionQueuer::Config action_queuer_config{
 const nav::FollowWall::Config follow_wall_config{
     .pid =
         {
-            .kp = 65.0F,
+            .kp = 15.0F,
             .ki = 0.0F,
-            .kd = 0.015F,
+            .kd = 0.008F,
             .setpoint = 0.0F,
-            .saturation = 20.0F,
+            .saturation = 1.0F,
             .max_integral = -1.0F,
         },
     .wall_sensor_index = wall_sensors_index,
     .max_linear_speed = 0.5F,
     .max_angular_acceleration = max_angular_acceleration,
     .cell_size = cell_size,
-    .post_threshold = 2.0F,
-    .post_clearance = 0.2F * cell_size,
-    .post_reference = 0.5F * cell_size,
+    .post_threshold = 4.0F,
+    .post_reference = 0.44F * cell_size,
+    .post_clearance = 0.035F,
 };
 
 const nav::Maze::Config maze_config{
@@ -165,8 +165,6 @@ const nav::Odometry::Config odometry_config{
 };
 
 const nav::SpeedController::Config speed_controller_config{
-    .max_linear_acceleration = max_linear_deceleration,
-    .max_angular_acceleration = max_angular_acceleration,
     .linear_pid =
         {
             .kp = 10.0F,

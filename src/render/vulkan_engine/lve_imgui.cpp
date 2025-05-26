@@ -135,7 +135,9 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     // slider for physics steps per frame
-    ImGui::SliderInt("Physics Steps Per Frame", &physicsStepsPerFrame, 1, 1000);
+    ImGui::Text("Physics Steps Per Frame");
+    ImGui::SetNextItemWidth(-1);
+    ImGui::SliderInt("##", &physicsStepsPerFrame, 1, 1000);
 
     /// Toggle simulation running
     if (ImGui::Button(simulationEngine->isPaused ? "Start" : "Pause")) {
@@ -571,7 +573,7 @@ void LveImgui::runExample(micrasverse::physics::Box2DMicrasBody& micrasBody) {
         for (size_t i = 0; i < 4; ++i) {
             ImGui::Text("Sensor %zu:", i);
             ImGui::NextColumn();
-            ImGui::Text("%.4f", proxyBridge->get_wall_sensor_reading(i));
+            ImGui::Text("%.4f", proxyBridge->get_wall_sensor_adc_reading(i));
             ImGui::NextColumn();
         }
         ImGui::Columns(1);

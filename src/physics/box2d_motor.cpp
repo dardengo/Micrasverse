@@ -69,7 +69,7 @@ void Box2DMotor::update(float deltaTime, bool fanState) {
     // Compute force applied at each wheel
     float force = (this->torque * MICRAS_GEAR_RATIO) / (MICRAS_WHEEL_RADIUS);
 
-    float fanEffect = isFanOn ? 4.0f : 1.0f;
+    float fanEffect = isFanOn ? 5.0f : 1.0f;
 
     // Compute maximum frictional force
     float maxFrictionForce = fanEffect * MICRAS_FRICTION * MICRAS_MASS * 9.81f;

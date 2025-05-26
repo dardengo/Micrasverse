@@ -15,9 +15,7 @@ void Stopwatch::reset_ms() {
     this->start_time = std::chrono::steady_clock::now();
 }
 
-void Stopwatch::reset_us() {
-    this->start_time = std::chrono::steady_clock::now();
-}
+void Stopwatch::reset_us() { }
 
 uint32_t Stopwatch::elapsed_time_ms() const {
     auto current_time = std::chrono::steady_clock::now();

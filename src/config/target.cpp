@@ -22,8 +22,6 @@ proxy::DipSwitch::Config dip_switch_config = {.micrasBody = nullptr, .initial_st
 // Fan configuration
 proxy::Fan::Config fan_config = {
     .micrasBody = nullptr,
-    .max_acceleration = 100.0f,  // Maximum acceleration in speed units per second
-    .max_speed = 100.0f          // Maximum speed in speed units
 };
 
 // IMU configuration
@@ -68,7 +66,7 @@ proxy::WallSensors::Config wall_sensors_config = {
     .max_sensor_reading = 0.6f,
     .min_sensor_reading = 0.01f,
     .max_sensor_distance = micrasverse::CELL_SIZE * 2.0f,
-    .filter_cutoff = 10.0f
+    .filter_cutoff = 20.0f
 };
 
 // Locomotion configuration
