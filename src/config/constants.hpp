@@ -76,9 +76,7 @@ constexpr float    cell_size{0.18};
 constexpr uint32_t loop_time_us = micrasverse::STEP * 1e6F;
 constexpr float    wall_thickness{0.012F};
 constexpr float    start_offset{0.05F + wall_thickness / 2.0F};
-constexpr float    max_linear_acceleration{9.0F};
-constexpr float    max_linear_deceleration{9.0F};
-constexpr float    max_angular_acceleration{300.0F};
+constexpr float    max_angular_acceleration{400.0F};
 constexpr float    crash_acceleration{1000000.0F};
 constexpr float    fan_speed{100.0F};
 
@@ -108,17 +106,17 @@ const nav::ActionQueuer::Config action_queuer_config{
     .exploring =
         {
             .max_linear_speed = 0.4F,
-            .max_linear_acceleration = max_linear_acceleration,
-            .max_linear_deceleration = max_linear_deceleration,
+            .max_linear_acceleration = 9.0F,
+            .max_linear_deceleration = 9.0F,
             .max_centrifugal_acceleration = 2.0F,
-            .max_angular_acceleration = max_angular_acceleration,
+            .max_angular_acceleration = 300.0F,
         },
     .solving =
         {
-            .max_linear_speed = 3.0F,
-            .max_linear_acceleration = max_linear_acceleration,
-            .max_linear_deceleration = max_linear_deceleration,
-            .max_centrifugal_acceleration = 5.0F,
+            .max_linear_speed = 5.0F,
+            .max_linear_acceleration = 12.0F,
+            .max_linear_deceleration = 20.0F,
+            .max_centrifugal_acceleration = 40.0F,
             .max_angular_acceleration = max_angular_acceleration,
         },
 };
@@ -126,7 +124,7 @@ const nav::ActionQueuer::Config action_queuer_config{
 const nav::FollowWall::Config follow_wall_config{
     .pid =
         {
-            .kp = 15.0F,
+            .kp = 30.0F,
             .ki = 0.0F,
             .kd = 0.008F,
             .setpoint = 0.0F,
@@ -134,7 +132,6 @@ const nav::FollowWall::Config follow_wall_config{
             .max_integral = -1.0F,
         },
     .wall_sensor_index = wall_sensors_index,
-    .max_linear_speed = 0.5F,
     .max_angular_acceleration = max_angular_acceleration,
     .cell_size = cell_size,
     .post_threshold = 4.0F,
