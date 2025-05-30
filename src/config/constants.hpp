@@ -102,7 +102,7 @@ using Maze = TMaze<maze_width, maze_height>;
 const nav::ActionQueuer::Config action_queuer_config{
     .cell_size = cell_size,
     .start_offset = start_offset,
-    .curve_safety_margin = 0.0375F + 0.015F,
+    .curve_safety_margin = 0.053F,
     .exploring =
         {
             .max_linear_speed = 0.4F,
@@ -113,10 +113,10 @@ const nav::ActionQueuer::Config action_queuer_config{
         },
     .solving =
         {
-            .max_linear_speed = 5.0F,
+            .max_linear_speed = 4.0F,
             .max_linear_acceleration = 12.0F,
             .max_linear_deceleration = 20.0F,
-            .max_centrifugal_acceleration = 40.0F,
+            .max_centrifugal_acceleration = 25.0F,
             .max_angular_acceleration = max_angular_acceleration,
         },
 };
