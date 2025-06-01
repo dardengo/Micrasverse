@@ -25,10 +25,10 @@ Box2DMicrasBody::Box2DMicrasBody(b2WorldId worldId, b2Vec2 position, b2Vec2 size
 
     // Initialize distance sensors
     SensorConfig sensorConfigs[4] = {
-        {B2_PI / 2.0f, {-0.028f, 0.045f + MICRAS_CENTER_OF_MASS_OFFSET}},
-        {5.0f * B2_PI / 6.0f, {-0.009f, 0.055f + MICRAS_CENTER_OF_MASS_OFFSET}},
-        {B2_PI / 6.0f, {0.009f, 0.055f + MICRAS_CENTER_OF_MASS_OFFSET}},
-        {B2_PI / 2.0f, {0.028f, 0.045f + MICRAS_CENTER_OF_MASS_OFFSET}}
+        {B2_PI / 2.0f, {-MICRAS_HALFWIDTH, MICRAS_HALFHEIGHT}},
+        {5.0f * B2_PI / 6.0f, {-MICRAS_HALFWIDTH / 2, MICRAS_HALFHEIGHT}},
+        {B2_PI / 6.0f, {MICRAS_HALFWIDTH / 2, MICRAS_HALFHEIGHT}},
+        {B2_PI / 2.0f, {MICRAS_HALFWIDTH, MICRAS_HALFHEIGHT}}
     };
 
     for (size_t i = 0; i < 4; i++) {

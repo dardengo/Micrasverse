@@ -4,12 +4,14 @@
 namespace micrasverse::physics {
 
 Box2DMotor::Box2DMotor(
-    b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, float angle, float R, float ke, float kt, float maxVoltage
+    b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, float angle, float R, float ke, float kt, float maxCommandVoltage,
+    float nominalVoltage
 ) :
     resistance(R),
     ke(ke),
     kt(kt),
-    maxVoltage(maxVoltage),
+    maxCommandVoltage(maxCommandVoltage),
+    nominalVoltage(nominalVoltage),
     inputCommand(0.0f),
     current(0.0f),
     rotorAngularVelocity(0.0f),
@@ -43,7 +45,7 @@ void Box2DMotor::setCommand(float command) {
 
 void Box2DMotor::update(float deltaTime, bool fanState) {
     // Calculate input voltage based on the command
-    float inputVoltage = this->maxVoltage * (this->inputCommand / 100.0f);
+    float inputVoltage = this->maxCommandVoltage * (this->inputCommand / 100.0f);
 
     // Compute back EMF
     float angularVelocitySign = (this->leftWheel ? -1.0f : +1.0f);

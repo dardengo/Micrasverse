@@ -240,11 +240,9 @@ public:
         }
     }
 
-    std::unordered_map<micras::nav::GridPose, micras::nav::MazeGraph::Node> get_maze_graph() const { return micras.maze.graph.graph; }
-
     uint8_t get_min_maze_cost() const { return micras.maze.minimum_cost; }
 
-    const std::list<micras::nav::GridPose>& get_best_route() const { return micras.maze.get_best_route(); }
+    const std::list<micras::nav::GridPoint>& get_best_route() const { return micras.maze.get_best_route(); }
 
     void send_event(Interface::Event event);
     bool acknowledge_event(Interface::Event event);

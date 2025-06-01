@@ -65,8 +65,8 @@ public:
     uint16_t                                                    argbIndex{0};
     bool                                                        shouldClose{false};
 
-    std::unordered_set<micras::nav::GridPose> walls_set;
-    std::unordered_set<micras::nav::GridPose> best_route_set;
+    std::unordered_set<micras::nav::GridPose>  walls_set;
+    std::unordered_set<micras::nav::GridPoint> best_route_set;
 
     int first_wall_index{0};
     int number_of_walls{0};

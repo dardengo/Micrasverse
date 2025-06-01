@@ -20,26 +20,27 @@ constexpr float MAZE_FLOOR_HEIGHT = CELL_SIZE * MAZE_CELLS_HEIGHT + WALL_THICKNE
 constexpr float MAZE_FLOOR_HALFHEIGHT = MAZE_FLOOR_HEIGHT / 2.0f;                    // meters
 
 // Micras robot physical dimensions and properties
-constexpr float MICRAS_WIDTH = 0.067f;                                     // meters
-constexpr float MICRAS_HALFWIDTH = MICRAS_WIDTH / 2.0f;                    // meters
-constexpr float MICRAS_HEIGHT = 0.1f;                                      // meters
-constexpr float MICRAS_HALFHEIGHT = MICRAS_HEIGHT / 2.0f;                  // meters
-constexpr float MICRAS_MASS = 0.110f;                                      // kilograms
-constexpr float MICRAS_RESTITUTION = 0.0f;                                 // bounciness (0-1)
-constexpr float MICRAS_FRICTION = 0.95f;                                   // friction coefficient
-constexpr float MICRAS_WHEEL_RADIUS = 0.0112f;                             // meters
-constexpr float MICRAS_GEAR_RATIO = 2.5f;                                  // reduction ratio
-constexpr float MICRAS_TRACK_WIDTH = 0.067f;                               // meters (distance between wheels)
-constexpr float MICRAS_CENTER_OF_MASS_OFFSET = 0.04f - MICRAS_HALFHEIGHT;  // meters (offset from center of body)
+constexpr float MICRAS_WIDTH = 0.05f;                                        // meters
+constexpr float MICRAS_HALFWIDTH = MICRAS_WIDTH / 2.0f;                      // meters
+constexpr float MICRAS_HEIGHT = 0.08f;                                       // meters
+constexpr float MICRAS_HALFHEIGHT = MICRAS_HEIGHT / 2.0f;                    // meters
+constexpr float MICRAS_MASS = 0.090f;                                        // kilograms
+constexpr float MICRAS_RESTITUTION = 0.0f;                                   // bounciness (0-1)
+constexpr float MICRAS_FRICTION = 0.95f;                                     // friction coefficient
+constexpr float MICRAS_WHEEL_RADIUS = 0.0125f;                               // meters
+constexpr float MICRAS_WHEEL_WIDTH = 0.008f;                                 // meters
+constexpr float MICRAS_GEAR_RATIO = 7.0f;                                    // reduction ratio
+constexpr float MICRAS_TRACK_WIDTH = MICRAS_WIDTH - MICRAS_WHEEL_WIDTH / 2;  // meters (distance between wheels)
 
 // Motor characteristics
-constexpr float MOTOR_MAX_VOLTAGE = 12.0f;                                          // volts
-constexpr float MOTOR_STALL_TORQUE = 0.00063f * 9.81f;                              // newton-meters
-constexpr float MOTOR_STALL_CURRENT = 2.0f;                                         // amperes
-constexpr float MOTOR_MAX_RPM = 13000.0f;                                           // revolutions per minute
+constexpr float MOTOR_MAX_COMMAND_VOLTAGE = 12.0f;                                  // volts
+constexpr float MOTOR_NOMINAL_VOLTAGE = 2.4f;                                       // volts
+constexpr float MOTOR_STALL_TORQUE = 0.00113f;                                      // newton-meters
+constexpr float MOTOR_STALL_CURRENT = 0.581f;                                       // amperes
+constexpr float MOTOR_MAX_RPM = 11500.0f;                                           // revolutions per minute
 constexpr float MOTOR_MAX_ANGULAR_VELOCITY = MOTOR_MAX_RPM * 2.0f * B2_PI / 60.0f;  // radians/second
-constexpr float MOTOR_RESISTANCE = MOTOR_MAX_VOLTAGE / MOTOR_STALL_CURRENT;         // ohms
-constexpr float MOTOR_KE = MOTOR_MAX_VOLTAGE / MOTOR_MAX_ANGULAR_VELOCITY;          // volts/(radians/second)
+constexpr float MOTOR_RESISTANCE = MOTOR_NOMINAL_VOLTAGE / MOTOR_STALL_CURRENT;     // ohms
+constexpr float MOTOR_KE = MOTOR_NOMINAL_VOLTAGE / MOTOR_MAX_ANGULAR_VELOCITY;      // volts/(radians/second)
 constexpr float MOTOR_KT = MOTOR_STALL_TORQUE / MOTOR_STALL_CURRENT;                // newton-meters/ampere
 
 // Simulation parameters
@@ -75,8 +76,8 @@ constexpr uint8_t  maze_height{16};
 constexpr float    cell_size{0.18};
 constexpr uint32_t loop_time_us = micrasverse::STEP * 1e6F;
 constexpr float    wall_thickness{0.012F};
-constexpr float    start_offset{0.05F + wall_thickness / 2.0F};
-constexpr float    max_angular_acceleration{400.0F};
+constexpr float    start_offset{micrasverse::MICRAS_HALFHEIGHT + wall_thickness / 2.0F};
+constexpr float    max_angular_acceleration{1600.0F};
 constexpr float    crash_acceleration{1000000.0F};
 constexpr float    fan_speed{100.0F};
 
@@ -113,10 +114,10 @@ const nav::ActionQueuer::Config action_queuer_config{
         },
     .solving =
         {
-            .max_linear_speed = 4.0F,
-            .max_linear_acceleration = 12.0F,
-            .max_linear_deceleration = 20.0F,
-            .max_centrifugal_acceleration = 25.0F,
+            .max_linear_speed = 5.8F,
+            .max_linear_acceleration = 40.0F,
+            .max_linear_deceleration = 45.0F,
+            .max_centrifugal_acceleration = 45.0F,
             .max_angular_acceleration = max_angular_acceleration,
         },
 };
@@ -124,7 +125,7 @@ const nav::ActionQueuer::Config action_queuer_config{
 const nav::FollowWall::Config follow_wall_config{
     .pid =
         {
-            .kp = 30.0F,
+            .kp = 0.0F,
             .ki = 0.0F,
             .kd = 0.008F,
             .setpoint = 0.0F,
@@ -134,8 +135,8 @@ const nav::FollowWall::Config follow_wall_config{
     .wall_sensor_index = wall_sensors_index,
     .max_angular_acceleration = max_angular_acceleration,
     .cell_size = cell_size,
-    .post_threshold = 4.0F,
-    .post_reference = 0.44F * cell_size,
+    .post_threshold = 400.0F,
+    .post_reference = 0.48F * cell_size,
     .post_clearance = 0.035F,
 };
 
@@ -148,16 +149,12 @@ const nav::Maze::Config maze_config{
         {(maze_width - 1) / 2, (maze_height - 1) / 2},
     }},
     .cost_margin = 1.2F,
-    .graph_config =
-        {
-            .cell_size = cell_size,
-            .cost_params = action_queuer_config.solving,
-        },
+    .action_queuer_config = action_queuer_config,
 };
 
 const nav::Odometry::Config odometry_config{
     .linear_cutoff_frequency = 50.0F,
-    .wheel_radius = 0.0112F,
+    .wheel_radius = micrasverse::MICRAS_WHEEL_RADIUS,
     .initial_pose = {{cell_size / 2.0f, start_offset}, std::numbers::pi_v<float> / 2.0f},
 };
 
@@ -182,17 +179,17 @@ const nav::SpeedController::Config speed_controller_config{
         },
     .left_feed_forward =
         {
-            .linear_speed = 16.4F,
-            .linear_acceleration = 3.98F,
-            .angular_speed = -0.55F,
-            .angular_acceleration = -0.143F,
+            .linear_speed = 9.301F,
+            .linear_acceleration = 1.415F,
+            .angular_speed = -0.2140F,
+            .angular_acceleration = -0.04203F,
         },
     .right_feed_forward =
         {
-            .linear_speed = 16.4F,
-            .linear_acceleration = 3.98F,
-            .angular_speed = +0.55F,
-            .angular_acceleration = +0.143F,
+            .linear_speed = 9.301F,
+            .linear_acceleration = 1.415F,
+            .angular_speed = 0.2140F,
+            .angular_acceleration = 0.04203F,
         },
 };
 }  // namespace micras

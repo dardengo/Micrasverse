@@ -11,7 +11,7 @@ class Box2DMotor {
 public:
     Box2DMotor(
         b2BodyId bodyId, const types::Vec2& localPosition, bool leftWheel, float angle = B2_PI / 2.0f, float R = MOTOR_RESISTANCE,
-        float ke = MOTOR_KE, float kt = MOTOR_KT, float maxVoltage = MOTOR_MAX_VOLTAGE
+        float ke = MOTOR_KE, float kt = MOTOR_KT, float maxCommandVoltage = MOTOR_MAX_COMMAND_VOLTAGE, float nominalVoltage = MOTOR_NOMINAL_VOLTAGE
     );
     virtual ~Box2DMotor() = default;
 
@@ -49,7 +49,8 @@ private:
     float resistance;            // Motor resistance (R)
     float ke;                    // Back EMF constant
     float kt;                    // Torque constant
-    float maxVoltage;            // Maximum input voltage
+    float nominalVoltage;        // Nominal voltage of the motor
+    float maxCommandVoltage;     // Maximum input voltage
     float inputCommand;          // Motor command (-100 to +100)
     float current;               // Current through the motor
     float rotorAngularVelocity;  // Angular velocity of the rotor

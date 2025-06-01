@@ -339,41 +339,18 @@ void VulkanEngine::loadBestRoute() {
 
     const auto& best_route = proxyBridge->get_best_route();
 
-    for (const auto& grid_pose : best_route) {
-        if (this->best_route_set.contains(grid_pose)) {
+    for (const auto& grid_point : best_route) {
+        if (this->best_route_set.contains(grid_point)) {
             continue;
         }
-        this->best_route_set.insert(grid_pose);
-        float posX = grid_pose.position.x * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f) + micrasverse::WALL_THICKNESS / 2.0f;
-        float posY = grid_pose.position.y * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f) + micrasverse::WALL_THICKNESS / 2.0f;
+        this->best_route_set.insert(grid_point);
+        float posX = grid_point.x * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f) + micrasverse::WALL_THICKNESS / 2.0f;
+        float posY = grid_point.y * micrasverse::CELL_SIZE + (micrasverse::CELL_SIZE / 2.0f) + micrasverse::WALL_THICKNESS / 2.0f;
 
-        float triangleSize = micrasverse::CELL_SIZE * 0.15f;
-
-        float rotationAngle = 0.0f;
-        switch (grid_pose.orientation) {
-            case micras::nav::Side::RIGHT:            // East (0)
-                rotationAngle = glm::radians(90.0f);  // Point right
-                posX -= micrasverse::CELL_SIZE / 4.0f;
-                break;
-            case micras::nav::Side::UP:              // North (1)
-                rotationAngle = glm::radians(0.0f);  // Point up
-                posY -= micrasverse::CELL_SIZE / 4.0f;
-                break;
-            case micras::nav::Side::LEFT:              // West (2)
-                rotationAngle = glm::radians(270.0f);  // Point left
-                posX += micrasverse::CELL_SIZE / 4.0f;
-                break;
-            case micras::nav::Side::DOWN:              // South (3)
-                rotationAngle = glm::radians(180.0f);  // Point down
-                posY += micrasverse::CELL_SIZE / 4.0f;
-                break;
-        }
-
-        std::shared_ptr<LveModel> lveModel = createTriangleModel(lveDevice, {.0f, .0f, .0f}, {0.0f, 1.0f, 0.0f});
+        std::shared_ptr<LveModel> lveModel = createRectModel(lveDevice, {.0f, .0f, .0f}, {0.0f, 1.0f, 0.0f});
         auto                      wallObject = LveGameObject::createGameObject();
         wallObject.model = lveModel;
         wallObject.transform.translation = glm::vec3(posX, -posY, -0.00001f);
-        wallObject.transform.rotation = glm::vec3(0.f, 0.f, rotationAngle);
         wallObject.transform.scale = glm::vec3(0.03f, 0.03f, 0.0f);
         this->number_of_route_markers++;
         gameObjects.push_back(std::move(wallObject));
